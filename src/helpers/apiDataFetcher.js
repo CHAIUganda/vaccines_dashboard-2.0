@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 
 // const proxyurl = "https://cors-anywhere.herokuapp.com/";
-const apiEndpoint = "http://localhost:9000/coverage/";
+// const apiEndpoint = "http://localhost:9000/coverage/";
+const apiEndpoint = require("../env_config").default;
 
 export const useVaccineDosesForCoverageByMonth = (
   endYear,
@@ -10,13 +11,8 @@ export const useVaccineDosesForCoverageByMonth = (
   vaccine,
   district
 ) => {
-  const vaccineDosesByPeriodURL =
-    apiEndpoint +
-    `api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`;
-
-  const vaccineDosesForMapURL =
-    apiEndpoint +
-    `api/vaccinedoses_by_period?dataType=map&endYear=${startYear}`;
+  const vaccineDosesByPeriodURL = `${apiEndpoint}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`;
+  const vaccineDosesForMapURL = `${apiEndpoint}/coverage/api/vaccinedoses_by_period?dataType=map&endYear=${startYear}`;
 
   const [isLoadingCoverageByMonth, setIsLoadingCoverageByMonth] = useState(
     false
@@ -73,9 +69,7 @@ export const useVaccineDosesForCoverageByYear = (
   vaccine,
   district
 ) => {
-  const vaccineDosesByPeriodURL =
-    apiEndpoint +
-    `api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`;
+  const vaccineDosesByPeriodURL = `${apiEndpoint}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`;
 
   const [isLoadingCoverageByYear, setIsLoadingCoverageByYear] = useState(false);
   const [
@@ -116,13 +110,9 @@ export const useVaccineDosesForDropoutRate = (
   vaccine,
   district
 ) => {
-  const vaccineDosesByPeriodURL =
-    apiEndpoint +
-    `api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`;
+  const vaccineDosesByPeriodURL = `${apiEndpoint}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`;
 
-  const vaccineDosesForMapURL =
-    apiEndpoint +
-    `api/vaccinedoses_by_period?dataType=map&endYear=${startYear}`;
+  const vaccineDosesForMapURL = `${apiEndpoint}/coverage/api/vaccinedoses_by_period?dataType=map&endYear=${startYear}`;
 
   const [isLoadingDropoutRate, setIsLoadingDropoutRate] = useState(false);
   const [
@@ -185,17 +175,9 @@ export const useVaccineDosesForRedCategory = (
   vaccine,
   district
 ) => {
-  const vaccineDosesByPeriodRedCategoryURL =
-    apiEndpoint +
-    `api/vaccinedoses_by_period?district=${district}&dose=${dose}&enableDistrictGrouping=1&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`;
+  const vaccineDosesByPeriodRedCategoryURL = `${apiEndpoint}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&enableDistrictGrouping=1&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`;
 
-  // const vaccineDosesByPeriodURL =
-  // apiEndpoint +
-  // `api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`;
-
-  const vaccineDosesForMapURL =
-    apiEndpoint +
-    `api/vaccinedoses_by_period?dataType=map&endYear=${startYear}`;
+  const vaccineDosesForMapURL = `${apiEndpoint}/coverage/api/vaccinedoses_by_period?dataType=map&endYear=${startYear}`;
 
   const [isLoadingRedCategory, setIsLoadingRedCategory] = useState(false);
   const [
@@ -254,7 +236,7 @@ export const useVaccineDosesForRedCategory = (
 };
 
 export const useGetDistricts = district => {
-  const districtsURL = "http://localhost:9000/api/districts";
+  const districtsURL = `${apiEndpoint}/api/districts`;
   const [isLoadingDistricts, setIsLoadingDistricts] = useState(false);
   const [districts, setDistricts] = useState(null);
   useEffect(() => {
