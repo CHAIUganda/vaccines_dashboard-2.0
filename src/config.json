@@ -1,4 +1,4 @@
 {
-  "STAGING_URL": "http://35.226.24.173/",
-  "LOCAL_URL": "http://localhost:9000"
+  "STAGING_URL": "35.226.24.173",
+  "LOCAL_URL": "localhost"
 }
