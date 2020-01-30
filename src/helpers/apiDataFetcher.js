@@ -15,8 +15,6 @@ export const useVaccineDosesForCoverageByMonth = (
   const vaccineDosesByPeriodURL = `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`;
   const vaccineDosesForMapURL = `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?dataType=map&endYear=${startYear}`;
 
-  console.log(vaccineDosesByPeriodURL);
-
   const [isLoadingCoverageByMonth, setIsLoadingCoverageByMonth] = useState(
     false
   );
