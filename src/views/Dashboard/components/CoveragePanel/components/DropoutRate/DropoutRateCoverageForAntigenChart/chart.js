@@ -176,7 +176,6 @@ export const dropoutRateCoverageFY = (
       title: {
         text: "Percentage (%)"
       }
-      // min: 0
     },
     ...commonChartPlotOptions,
     series: [...chartData]

@@ -14,7 +14,6 @@ import {
 } from "./chart";
 
 // Utils
-
 import { generateChartTitle } from "../../../../../../../common/utils/utils";
 
 const CoverageForAntigensChart = props => {

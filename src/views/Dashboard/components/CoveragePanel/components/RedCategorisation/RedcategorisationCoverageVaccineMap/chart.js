@@ -16,9 +16,8 @@ import {
 } from "../../../../../../../common/utils/mapUtils";
 
 //  Map
-
-let ugandaMap = require("./map.json");
-// let ugandaMap2 = require("./map2.json");
+const ugandaMap = require("../../../../../../../common/maps/map.json");
+const ugandaMap2 = require("../../../../../../../common/maps/map2.json");
 
 export const redcategorisationCoverageMap = (
   data,
@@ -47,7 +46,7 @@ export const redcategorisationCoverageMap = (
 
     // Data District name is in format `District District`.
     // We only want the mane minus the word district at the end for our map
-    const districtName = district.replace(/ District/g, "");
+    const districtName = district.replace(/ District/g, "").toUpperCase();
 
     mapData.push([districtName, coverageRate]);
   }
@@ -55,7 +54,7 @@ export const redcategorisationCoverageMap = (
   return {
     ...commonChartOptions,
     chart: {
-      map: ugandaMap,
+      map: ugandaMap2,
       height: 100 + "%"
     },
 
@@ -108,7 +107,7 @@ export const redcategorisationCoverageMap = (
       formatter: function() {
         return (
           "<b><u>" +
-          this.point.properties.name +
+          this.point.properties.DName2018 +
           "</u></b><br/><br/>" +
           +Highcharts.numberFormat(this.point.value, 2)
         );
@@ -118,8 +117,8 @@ export const redcategorisationCoverageMap = (
     series: [
       {
         data: mapData,
-        keys: ["name", "value"],
-        joinBy: "name",
+        keys: ["DName2018", "value"],
+        joinBy: "DName2018",
         borderColor: "grey",
         borderWidth: 0.5,
         states: {
