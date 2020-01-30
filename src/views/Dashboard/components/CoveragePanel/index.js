@@ -126,6 +126,7 @@ const useStyles = makeStyles(theme => ({
     borderRadius: "5px"
   },
   selectorLables: {
+    position: "inherit",
     color: "#28354A",
     fontSize: 20,
     marginLeft: "-15px"

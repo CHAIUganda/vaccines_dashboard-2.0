@@ -73,7 +73,7 @@ const useStyles = makeStyles(theme => ({
   },
   section: {
     paddingTop: 40,
-    height: 645
+    height: 630
   }
 }));
 
@@ -134,7 +134,7 @@ export default function RedCategorisation(props) {
       </AppBar>
       <TabPanel value={value} index={0}>
         <Grid container spacing={3} className={classes.section}>
-          <Grid item lg={4} md={4} xl={4} xs={4}>
+          <Grid item lg={5} md={5} xl={5} xs={5}>
             <RedCategprCoverageForVaccineMap
               data={vacineDataForMap && vacineDataForMap}
               tabTitle={"Annualized (CY)"}
@@ -144,7 +144,7 @@ export default function RedCategorisation(props) {
               isLoading={isLoading && isLoading}
             />
           </Grid>
-          <Grid item lg={8} md={8} xl={8} xs={8}>
+          <Grid item lg={7} md={7} xl={7} xs={7}>
             <RedCategorisationForAntigensChart
               data={vaccineDosesForChart && vaccineDosesForChart}
               tabTitle={"Annualized (CY)"}
@@ -160,7 +160,7 @@ export default function RedCategorisation(props) {
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Grid container spacing={3} className={classes.section}>
-          <Grid item lg={4} md={4} xl={4} xs={4}>
+          <Grid item lg={5} md={5} xl={5} xs={5}>
             <RedCategprCoverageForVaccineMap
               data={vacineDataForMap && vacineDataForMap}
               tabTitle={"Monthly (CY)"}
@@ -171,7 +171,7 @@ export default function RedCategorisation(props) {
               reportYear={"CY"}
             />
           </Grid>
-          <Grid item lg={8} md={8} xl={8} xs={8}>
+          <Grid item lg={7} md={7} xl={7} xs={7}>
             <RedCategorisationForAntigensChart
               data={vaccineDosesForChart && vaccineDosesForChart}
               tabTitle={"Monthly (CY)"}
@@ -187,7 +187,7 @@ export default function RedCategorisation(props) {
       </TabPanel>
       <TabPanel value={value} index={2}>
         <Grid container spacing={3} className={classes.section}>
-          <Grid item lg={4} md={4} xl={4} xs={4}>
+          <Grid item lg={5} md={5} xl={5} xs={5}>
             <RedCategprCoverageForVaccineMap
               data={vacineDataForMap && vacineDataForMap}
               tabTitle={"Annualized (FY)"}
@@ -198,7 +198,7 @@ export default function RedCategorisation(props) {
               reportYear={"FY"}
             />
           </Grid>
-          <Grid item lg={8} md={8} xl={8} xs={8}>
+          <Grid item lg={7} md={7} xl={7} xs={7}>
             <RedCategorisationForAntigensChart
               data={vaccineDosesForChart && vaccineDosesForChart}
               tabTitle={"Annualized (FY)"}
@@ -213,7 +213,7 @@ export default function RedCategorisation(props) {
       </TabPanel>
       <TabPanel value={value} index={3}>
         <Grid container spacing={3} className={classes.section}>
-          <Grid item lg={4} md={4} xl={4} xs={4}>
+          <Grid item lg={5} md={5} xl={5} xs={5}>
             <RedCategprCoverageForVaccineMap
               data={vacineDataForMap && vacineDataForMap}
               tabTitle={"Monthly (FY)"}
@@ -224,7 +224,7 @@ export default function RedCategorisation(props) {
               reportYear={"FY"}
             />
           </Grid>
-          <Grid item lg={8} md={8} xl={8} xs={8}>
+          <Grid item lg={7} md={7} xl={7} xs={7}>
             <RedCategorisationForAntigensChart
               data={vaccineDosesForChart && vaccineDosesForChart}
               tabTitle={"Monthly (FY)"}

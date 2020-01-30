@@ -96,7 +96,14 @@ export const antigensAnnualizedCoverageCY = (
       },
       min: 0
     },
-    ...commonChartPlotOptions,
+    plotOptions: {
+      line: {
+        lineWidth: 1,
+        marker: {
+          enabled: false
+        }
+      }
+    },
     series: [...chartData]
   };
 };
@@ -159,7 +166,14 @@ export const antigensAnnualizedCoverageFY = (
       },
       min: 0
     },
-    ...commonChartPlotOptions,
+    plotOptions: {
+      line: {
+        lineWidth: 1,
+        marker: {
+          enabled: false
+        }
+      }
+    },
     series: [...chartData]
   };
 };

@@ -22,47 +22,47 @@ const commonChartOptions = {
 
 const commonChartPlotOptions = {
   plotOptions: {
-    area: {
-      lineWidth: 1,
-      marker: {
-        enabled: false
-      }
-    },
-    series: {
-      fillOpacity: 0.8,
-      pointWidth: 4,
-      pointPadding: 0.5,
-      turboThreshold: 10000
-    },
+    // area: {
+    //   lineWidth: 1,
+    //   marker: {
+    //     enabled: false
+    //   }
+    // },
+    // series: {
+    //   fillOpacity: 0.8,
+    //   pointWidth: 4,
+    //   pointPadding: 0.5,
+    //   turboThreshold: 10000
+    // },
     line: {
-      lineWidth: 1,
+      lineWidth: 2,
       marker: {
         enabled: false
       }
     },
-    spline: {
-      lineWidth: 0.8,
-      marker: {
-        enabled: false
-      }
-    },
-    areaspline: {
-      lineWidth: 0.4,
-      marker: {
-        enabled: false
-      }
-    },
+    // spline: {
+    //   lineWidth: 0.8,
+    //   marker: {
+    //     enabled: false
+    //   }
+    // },
+    // areaspline: {
+    //   lineWidth: 0.4,
+    //   marker: {
+    //     enabled: false
+    //   }
+    // },
     column: {
       pointPadding: 0.2,
       pointWidth: 10,
       borderWidth: 0,
       shadow: false
-    },
-    bar: {
-      dataLabels: {
-        enabled: true
-      }
     }
+    // bar: {
+    //   dataLabels: {
+    //     enabled: true
+    //   }
+    // }
   },
 
   mapNavigation: {

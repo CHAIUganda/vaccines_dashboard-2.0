@@ -59,7 +59,7 @@ export const vaccineAnnualizedCoverage = (
     ...commonChartOptions,
     chart: {
       map: ugandaMap2,
-      height: 80 + "%"
+      height: 79 + "%"
     },
 
     title: {
@@ -73,13 +73,18 @@ export const vaccineAnnualizedCoverage = (
         text: "Legend"
       },
       align: "left",
-      verticalAlign: "bottom",
+      verticalAlign: "top",
       floating: true,
       layout: "vertical",
       valueDecimals: 0,
       backgroundColor: "rgba(255,255,255,0.9)",
       symbolRadius: 0,
-      symbolHeight: 14
+      symbolHeight: 14,
+      // x: 90,
+      y: 45,
+      labelFormatter: function() {
+        return this.name + "  ";
+      }
     },
     colorAxis: {
       dataClasses: [

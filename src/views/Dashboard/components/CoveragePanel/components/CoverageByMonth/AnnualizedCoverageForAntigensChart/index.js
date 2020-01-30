@@ -34,7 +34,7 @@ const CoverageForAntigensChart = props => {
   ] = useState();
 
   const [chartTitle, setChartTitle] = useState();
-  // const [dataState, setDataState] = useState(true);
+  const [dataState, setDataState] = useState(true);
 
   useMemo(() => {
     if (data && data) {
@@ -59,6 +59,14 @@ const CoverageForAntigensChart = props => {
         )
       );
       // Check if we have series data in the chart so we can appropriately display a message when there is no data returned
+      // if (
+      //   annualizedCoverageForAntigensChart &&
+      //   annualizedCoverageForAntigensChart.series
+      // )
+      //   console.log(
+      //     annualizedCoverageForAntigensChart &&
+      //       annualizedCoverageForAntigensChart
+      //   );
     }
   }, [data, vaccineName, tabTitle, dose, startYear, endYear]);
 

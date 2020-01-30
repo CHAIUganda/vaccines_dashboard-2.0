@@ -47,7 +47,7 @@ export const dropoutRateCoverageMap = (
 
     // Data District name is in format `District District`.
     // We only want the mane minus the word district at the end for our map
-    const districtName = district.replace(/ District/g, "").toUpperCase();;
+    const districtName = district.replace(/ District/g, "").toUpperCase();
 
     mapData.push([districtName, coverageRate]);
   }
@@ -56,7 +56,7 @@ export const dropoutRateCoverageMap = (
     ...commonChartOptions,
     chart: {
       map: ugandaMap2,
-      height: 80 + "%"
+      height: 79 + "%"
     },
 
     title: {
@@ -71,13 +71,18 @@ export const dropoutRateCoverageMap = (
         text: "Legend"
       },
       align: "left",
-      verticalAlign: "bottom",
+      verticalAlign: "top",
       floating: true,
       layout: "vertical",
       valueDecimals: 0,
       backgroundColor: "rgba(255,255,255,0.9)",
       symbolRadius: 0,
-      symbolHeight: 14
+      symbolHeight: 14,
+      // x: 90,
+      y: 45,
+      labelFormatter: function() {
+        return this.name + "  ";
+      }
     },
 
     colorAxis: {
