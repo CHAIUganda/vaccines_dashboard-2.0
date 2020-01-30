@@ -93,7 +93,6 @@ const useStyles = makeStyles(theme => ({
   },
   labelContainer: {
     width: "auto"
-    // padding: 15
   },
 
   iconLabelWrapper: {
@@ -105,7 +104,6 @@ const useStyles = makeStyles(theme => ({
 
   verticalIconLabelWrapper: {
     color: "white"
-    // marginLeft: 0
   },
   verticalBar: {
     backgroundColor: "#28354A",
@@ -120,7 +118,6 @@ const useStyles = makeStyles(theme => ({
   verticalIconSpacing: {
     marginTop: 50,
     minWidth: 0
-    // width: 20
   },
 
   verticalIcon: {
@@ -128,7 +125,6 @@ const useStyles = makeStyles(theme => ({
     color: "white",
     fontSize: 40,
     minWidth: 0
-    // style={{ color: "white", fontSize: 40, minWidth: "0px" }}
   },
 
   iconSpacing: {
@@ -296,7 +292,7 @@ export function Dashboard() {
             icon={<LocalShippingIcon className={classes.verticalIcon} />}
             href="/stock-management"
             {...a11yProps(2)}
-            // disabled={true}
+            disabled={true}
           />
           <LinkTab
             classes={{
@@ -306,10 +302,10 @@ export function Dashboard() {
             icon={<BusinessIcon className={classes.verticalIcon} />}
             href="/cold-chain"
             {...a11yProps(3)}
-            // disabled={true}
+            disabled={true}
           />
         </Tabs>
-        {/* </List> */}
+
       </Drawer>
       <Box component="span" m={1}>
         <Container maxWidth="xl">

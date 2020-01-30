@@ -126,7 +126,6 @@ const useStyles = makeStyles(theme => ({
     borderRadius: "5px"
   },
   selectorLables: {
-    // position: "inherit",
     color: "#28354A",
     fontSize: 20,
     marginLeft: "-15px"
@@ -137,8 +136,6 @@ const TabStyle = withStyles(theme => ({
   root: {
     textTransform: "none",
     fontWeight: theme.typography.fontWeightBold,
-    // fontSize: "1.2rem",
-    // fontFamily: ["-apple-system", "BlinkMacSystemFont", "Roboto"].join(","),
     "&:hover": {
       backgroundColor: "#F8E658",
       color: "#28354A",
@@ -156,11 +153,9 @@ const TabStyle = withStyles(theme => ({
 export function CoveragePanel() {
   const classes = useStyles();
   const [value, setValue] = useState(0);
-  // const [startYear, setStartYear] = useState(years[1]);
   const [endYear, setEndYear] = useState(years.slice(-4)[0]);
   const [district, setDistrict] = useState("National");
   const [dose, setDose] = useState(DOSES[2]);
-  // const [vaccine, setVaccine] = useState("ALL");
 
   // -----------------------------------------------------------------------
   // Coverage By Month state data

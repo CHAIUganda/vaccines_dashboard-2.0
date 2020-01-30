@@ -11,7 +11,6 @@ import { Chart } from "../../../../../../../../src/components";
 import { coverageRate } from "./chart";
 
 // Utils
-
 import { getYearFromData } from "../../../../../../../common/utils/utils";
 
 const AntigenCoverageChart = ({

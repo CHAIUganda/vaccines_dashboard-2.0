@@ -16,8 +16,8 @@ import {
 } from "../../../../../../../common/utils/mapUtils";
 
 //  Map
-
-let ugandaMap = require("./map.json");
+const ugandaMap = require("../../../../../../../common/maps/map.json");
+const ugandaMap2 = require("../../../../../../../common/maps/map2.json");
 
 export const dropoutRateCoverageMap = (
   data,
@@ -47,7 +47,7 @@ export const dropoutRateCoverageMap = (
 
     // Data District name is in format `District District`.
     // We only want the mane minus the word district at the end for our map
-    const districtName = district.replace(/ District/g, "");
+    const districtName = district.replace(/ District/g, "").toUpperCase();;
 
     mapData.push([districtName, coverageRate]);
   }
@@ -55,7 +55,7 @@ export const dropoutRateCoverageMap = (
   return {
     ...commonChartOptions,
     chart: {
-      map: ugandaMap,
+      map: ugandaMap2,
       height: 80 + "%"
     },
 
@@ -104,7 +104,7 @@ export const dropoutRateCoverageMap = (
       formatter: function() {
         return (
           "<b><u>" +
-          this.point.properties.name +
+          this.point.properties.DName2018 +
           "</u></b><br/><br/>" +
           +Highcharts.numberFormat(this.point.value, 1) +
           " %"
@@ -115,8 +115,8 @@ export const dropoutRateCoverageMap = (
     series: [
       {
         data: mapData,
-        keys: ["name", "value"],
-        joinBy: "name",
+        keys: ["DName2018", "value"],
+        joinBy: "DName2018",
         borderColor: "grey",
         borderWidth: 0.5,
         states: {
