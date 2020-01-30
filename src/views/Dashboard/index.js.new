@@ -1,0 +1,175 @@
+import React from "react";
+import PropTypes from "prop-types";
+
+// Material UI compoents
+import { makeStyles } from "@material-ui/core/styles";
+import { Grid } from "@material-ui/core";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import Link from "@material-ui/core/Link";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Box from "@material-ui/core/Box";
+import Avatar from "@material-ui/core/Avatar";
+import { Container } from "@material-ui/core";
+
+// Material icons
+import HomeIcon from "@material-ui/icons/Home";
+import PieChartIcon from "@material-ui/icons/PieChart";
+import LocalShippingIcon from "@material-ui/icons/LocalShipping";
+import BusinessIcon from "@material-ui/icons/Business";
+
+// Dashboard components
+import { OverviewPanel } from "../Dashboard/components/OverviewPanel/index";
+import { ColdChainPanel } from "../Dashboard/components/ColdChainPanel/index";
+import { CoveragePanel } from "./components/CoveragePanel/index";
+import { StockManagementPanel } from "./components/StockManagementPanel/index";
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1,
+    backgroundColor: "#F9F9FC"
+  },
+  title: {
+    flexGrow: 1
+  },
+  iconLabelWrapper: {
+    flexDirection: "row"
+  },
+  iconSpacing: {
+    marginRight: 5,
+    display: "flex",
+    alignItems: "center"
+  },
+  links: {
+    marginRight: 20,
+    color: "#28354A",
+    ...theme.typography.button,
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(1),
+    marginTop: 10,
+    fontSize: 16
+  },
+
+  barCorlor: {
+    color: "white",
+    backgroundColor: "black"
+  },
+  courtOfArms: {
+    width: 30,
+    height: 30,
+    paddingRight: 8
+  }
+}));
+
+export function Dashboard() {
+  const classes = useStyles();
+  const preventDefault = event => event.preventDefault();
+  return (
+    <div className={classes.root}>
+      <AppBar position="static" color={classes.barCorlor}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+          >
+            <MenuIcon />
+          </IconButton>
+          <Avatar
+            alt="Court of arms"
+            src="/uganda-court-of-arms.jpg"
+            className={classes.courtOfArms}
+          />
+          <Typography variant="h6" className={classes.title}>
+            MINISTRY OF HEALTH: UNEPI DASHBOARD
+          </Typography>
+
+          <Link
+            href="/overview"
+            onClick={preventDefault}
+            className={classes.links}
+          >
+            <Grid container direction="row" alignItems="center">
+              <Grid item>
+                <HomeIcon className={classes.iconSpacing} />
+              </Grid>
+              <Grid item>Overview</Grid>
+            </Grid>
+          </Link>
+
+          <Link
+            href="/coverage"
+            onClick={preventDefault}
+            className={classes.links}
+          >
+            <Grid container direction="row" alignItems="center">
+              <Grid item>
+                <PieChartIcon className={classes.iconSpacing} />
+              </Grid>
+              <Grid item>Coverage</Grid>
+            </Grid>
+          </Link>
+
+          <Link
+            href="/stock-management"
+            onClick={preventDefault}
+            className={classes.links}
+          >
+            <Grid container direction="row" alignItems="center">
+              <Grid item>
+                <BusinessIcon className={classes.iconSpacing} />
+              </Grid>
+              <Grid item> Stock Management</Grid>
+            </Grid>
+          </Link>
+
+          <Link
+            href="/cold-chain"
+            onClick={preventDefault}
+            className={classes.links}
+          >
+            <Grid container direction="row" alignItems="center">
+              <Grid item>
+                <LocalShippingIcon className={classes.iconSpacing} />
+              </Grid>
+              <Grid item> Cold Chain</Grid>
+            </Grid>
+          </Link>
+
+          {/* <Typography variant="h6" className={classes.links}>
+            <Link href="/overview" onClick={preventDefault}>
+              <HomeIcon className={classes.iconSpacing} />
+              Overview
+            </Link>
+          </Typography>
+
+          <Typography variant="h6" className={classes.links}>
+            <Link href="/coverage" onClick={preventDefault}>
+              <LocalShippingIcon className={classes.iconSpacing} />
+              Coverage
+            </Link>
+          </Typography>
+
+          <Typography variant="h6" className={classes.links}>
+            <Link href="/stock-management" onClick={preventDefault}>
+              <BusinessIcon className={classes.iconSpacing} />
+              Stock Management
+            </Link>
+          </Typography>
+
+          <Typography variant="h6" className={classes.links}>
+            <Link href="/cold-chain" onClick={preventDefault}>
+              <PieChartIcon className={classes.iconSpacing} />
+              Cold Chain
+            </Link>
+          </Typography> */}
+        </Toolbar>
+      </AppBar>
+    </div>
+  );
+}
