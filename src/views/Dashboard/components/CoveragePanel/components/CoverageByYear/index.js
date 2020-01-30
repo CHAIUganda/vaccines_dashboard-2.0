@@ -16,7 +16,8 @@ const useStyles = makeStyles(theme => ({
     padding: "1rem 1rem",
     flexGrow: 1,
     backgroundColor: "#F9F9FC",
-    fontFamily: "Open Sans"
+    fontFamily: "Open Sans",
+    height: 630
   }
 }));
 

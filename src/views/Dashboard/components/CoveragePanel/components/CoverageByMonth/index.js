@@ -72,7 +72,7 @@ const useStyles = makeStyles(theme => ({
   },
   section: {
     paddingTop: 40,
-    height: 645
+    height: 630
   }
 }));
 

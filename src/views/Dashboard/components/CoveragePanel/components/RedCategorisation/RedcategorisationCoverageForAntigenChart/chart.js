@@ -107,6 +107,14 @@ export const redCategorisationCoverageChart = (
       },
       min: 0
     },
+    plotOptions: {
+      line: {
+        lineWidth: 1,
+        marker: {
+          enabled: false
+        }
+      }
+    },
     series: [...chartData]
   };
 };

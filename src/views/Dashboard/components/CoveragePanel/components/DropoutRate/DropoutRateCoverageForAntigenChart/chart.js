@@ -85,7 +85,14 @@ export const dropoutRateCoverageCY = (
       }
       // min: 0
     },
-    ...commonChartPlotOptions,
+    plotOptions: {
+      line: {
+        lineWidth: 1,
+        marker: {
+          enabled: false
+        }
+      }
+    },
     series: [...chartData]
   };
 };
@@ -177,7 +184,14 @@ export const dropoutRateCoverageFY = (
         text: "Percentage (%)"
       }
     },
-    ...commonChartPlotOptions,
+    plotOptions: {
+      line: {
+        lineWidth: 1,
+        marker: {
+          enabled: false
+        }
+      }
+    },
     series: [...chartData]
   };
 };
