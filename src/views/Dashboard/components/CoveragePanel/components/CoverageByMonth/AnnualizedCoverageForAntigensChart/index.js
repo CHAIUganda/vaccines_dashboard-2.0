@@ -38,7 +38,7 @@ const CoverageForAntigensChart = props => {
 
   useMemo(() => {
     if (data && data) {
-      if (tabTitle === "Annualized (CY)" || tabTitle === "Monthly (CY)") {
+      if (tabTitle === "Cummulative (CY)" || tabTitle === "Monthly (CY)") {
         setAnnualizedCoverageForAntigensChart(
           antigensAnnualizedCoverageCY(data, startYear, endYear, dose, tabTitle)
         );

@@ -126,9 +126,9 @@ export default function DropoutRate(props) {
           aria-label="Dropout rate tabs"
           TabIndicatorProps={{ style: { backgroundColor: "#B2C0D6" } }}
         >
-          <TabStyle {...a11yProps(0)} label="Annualized (CY)" />
+          <TabStyle {...a11yProps(0)} label="Cummulative (CY)" />
           <TabStyle {...a11yProps(1)} label="Monthly (CY)" />
-          <TabStyle {...a11yProps(2)} label="Annualized (FY)" />
+          <TabStyle {...a11yProps(2)} label="Cummulative (FY)" />
           <TabStyle {...a11yProps(3)} label="Monthly (FY)" />
         </Tabs>
       </AppBar>
@@ -138,7 +138,7 @@ export default function DropoutRate(props) {
             {" "}
             <DropoutRateCoverageForVaccineMap
               data={vacineDataForMap && vacineDataForMap}
-              tabTitle={"Annualized (CY)"}
+              tabTitle={"Cummulative (CY)"}
               dose={dose && dose}
               startYear={startYear}
               endYear={endYear}
@@ -149,7 +149,7 @@ export default function DropoutRate(props) {
           <Grid item lg={7} md={7} xl={7} xs={7}>
             <DropoutRateForAntigensChart
               data={vaccineDosesForChart && vaccineDosesForChart}
-              tabTitle={"Annualized (CY)"}
+              tabTitle={"Cummulative (CY)"}
               vaccineName={vaccineName && vaccineName}
               dose={dose && dose}
               isLoading={isLoading && isLoading}
@@ -195,7 +195,7 @@ export default function DropoutRate(props) {
             {" "}
             <DropoutRateCoverageForVaccineMap
               data={vacineDataForMap && vacineDataForMap}
-              tabTitle={"Annualized (FY)"}
+              tabTitle={"Cummulative (FY)"}
               dose={dose && dose}
               endYear={endYear}
               vaccineName={vaccineName && vaccineName}
@@ -207,7 +207,7 @@ export default function DropoutRate(props) {
           <Grid item lg={7} md={7} xl={7} xs={7}>
             <DropoutRateForAntigensChart
               data={vaccineDosesForChart && vaccineDosesForChart}
-              tabTitle={"Annualized (FY)"}
+              tabTitle={"Cummulative (FY)"}
               vaccineName={vaccineName && vaccineName}
               dose={dose && dose}
               isLoading={isLoading && isLoading}

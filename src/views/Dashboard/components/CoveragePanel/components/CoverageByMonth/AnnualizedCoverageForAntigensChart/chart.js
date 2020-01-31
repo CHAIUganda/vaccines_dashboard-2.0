@@ -36,7 +36,7 @@ export const antigensAnnualizedCoverageCY = (
   let chartData;
 
   switch (tabTitle) {
-    case "Annualized (CY)":
+    case "Cummulative (CY)":
       chartData = getChartData(
         data,
         startYear,

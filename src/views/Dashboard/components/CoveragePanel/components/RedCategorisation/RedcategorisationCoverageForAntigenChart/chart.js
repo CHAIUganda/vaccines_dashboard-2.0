@@ -33,7 +33,7 @@ export const redCategorisationCoverageChart = (
   let chartData;
 
   switch (tabTitle) {
-    case "Annualized (CY)":
+    case "Cummulative (CY)":
       chartData = getChartData(
         data,
         startYear,
@@ -57,7 +57,7 @@ export const redCategorisationCoverageChart = (
       );
       break;
 
-    case "Annualized (FY)":
+    case "Cummulative (FY)":
       chartData = getChartData(
         data,
         startYear,

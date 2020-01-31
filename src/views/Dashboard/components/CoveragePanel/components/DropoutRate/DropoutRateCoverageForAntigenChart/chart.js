@@ -36,7 +36,7 @@ export const dropoutRateCoverageCY = (
   let chartData;
 
   switch (tabTitle) {
-    case "Annualized (CY)":
+    case "Cummulative (CY)":
       chartData = getChartData(
         data,
         startYear,
@@ -123,7 +123,7 @@ export const dropoutRateCoverageFY = (
   let chartData;
 
   switch (tabTitle) {
-    case "Annualized (FY)":
+    case "Cummulative (FY)":
       chartData = getChartData(
         data,
         startYear,

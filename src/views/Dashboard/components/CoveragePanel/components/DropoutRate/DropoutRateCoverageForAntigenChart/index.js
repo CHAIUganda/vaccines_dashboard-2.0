@@ -35,7 +35,7 @@ const DropoutRateForAntigensChart = props => {
 
   useMemo(() => {
     if (data && data) {
-      if (tabTitle === "Annualized (CY)" || tabTitle === "Monthly (CY)") {
+      if (tabTitle === "Cummulative (CY)" || tabTitle === "Monthly (CY)") {
         setDropoutRateCoverageForAntigensChart(
           dropoutRateCoverageCY(data, startYear, endYear, dose, tabTitle)
         );

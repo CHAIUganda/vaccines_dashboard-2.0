@@ -542,7 +542,7 @@ const generateChartTitle = (
   reportYear,
   year
 ) => {
-  const duration = tabTitle[0] === "A" ? "Annualized" : "Monthly";
+  const duration = tabTitle[0] === "C" ? "Cummulative" : "Monthly";
   const vaccine = vaccineName === "ALL" ? "antigens" : vaccineName;
   let doseNumber = dose.replace("Dose ", "");
   if (vaccineName === "ALL") doseNumber = "";

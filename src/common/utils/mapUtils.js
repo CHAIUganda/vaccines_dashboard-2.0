@@ -105,7 +105,7 @@ const getPeriodList = (data, endYear, tabTitle) => {
       lastValue = getLastValue(data[endYear], 12);
       periodList.push([endYear.toString(), lastValue]);
     }
-  } else if (tabTitle === "Annualized (CY)") {
+  } else if (tabTitle === "Cummulative (CY)") {
     periodList.push.apply(
       periodList,
       getValuesInRange(
@@ -116,7 +116,7 @@ const getPeriodList = (data, endYear, tabTitle) => {
         getLastValue(data[endYear], 12)
       )
     );
-  } else if (tabTitle === "Annualized (FY)") {
+  } else if (tabTitle === "Cummulative (FY)") {
     const nextYear = endYear + 1;
 
     if (nextYear in data) {
