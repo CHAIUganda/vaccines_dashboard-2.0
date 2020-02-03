@@ -156,7 +156,7 @@ const useStyles = makeStyles(theme => ({
 
 export function Dashboard() {
   const classes = useStyles();
-  const [value, setValue] = React.useState(1);
+  const [value, setValue] = React.useState(2);
 
   function handleChange(event, newValue) {
     setValue(newValue);
@@ -227,7 +227,7 @@ export function Dashboard() {
               label="Stock Management"
               href="/stock-management"
               {...a11yProps(2)}
-              disabled={true}
+              disabled={false}
             />
             <LinkTab
               classes={{
@@ -305,7 +305,6 @@ export function Dashboard() {
             disabled={true}
           />
         </Tabs>
-
       </Drawer>
       <Box component="span" m={1}>
         <Container maxWidth="xl">

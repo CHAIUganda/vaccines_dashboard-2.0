@@ -249,17 +249,149 @@ export const useGetDistricts = district => {
       return Promise.all([districtsReq()]);
     };
 
-    getAllData().then(([, districts]) => {
+    getAllData().then(([districts]) => {
       setDistricts(districts);
 
       setIsLoadingDistricts(false);
     });
   }, [district]);
 
+  debugger;
   return [
     {
       districts,
       isLoadingDistricts
+    }
+  ];
+};
+
+export const useGetMonths = () => {
+  const monthsURL = `http://${apiEndpoint}${port}/api/months`;
+  const [isLoadingMonthsData, setIsLoadingMonthsData] = useState(false);
+  const [monthsData, setMonthsData] = useState(null);
+  useEffect(() => {
+    setIsLoadingMonthsData(true);
+    const monthsDataReq = async () => {
+      const response = await fetch(monthsURL);
+      return await response.json();
+    };
+
+    const getAllData = () => {
+      return Promise.all([monthsDataReq()]);
+    };
+
+    getAllData().then(([monthsData]) => {
+      setMonthsData(monthsData);
+
+      setIsLoadingMonthsData(false);
+    });
+  }, [monthsURL]);
+
+  return [
+    {
+      monthsData,
+      isLoadingMonthsData
+    }
+  ];
+};
+
+export const useGetDistrictStockLevels = (
+  district,
+  endMonth,
+  startMonth,
+  vaccine
+) => {
+  const atHandStockByDistrictURL = `http://${apiEndpoint}${port}/api/stock/athandbydistrict?district=${district}&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}`;
+
+  const [
+    isLoadingDistrictStockLevels,
+    setIsLoadingDistrictStockLevels
+  ] = useState(false);
+
+  const [
+    atHandStockByDistrictStockLevels,
+    setAtHandStockByDistrictStockLevels
+  ] = useState(null);
+
+  useEffect(() => {
+    setIsLoadingDistrictStockLevels(true);
+
+    const atHandStockByDistrictStockLevelsReq = async () => {
+      const response = await fetch(atHandStockByDistrictURL);
+      return await response.json();
+    };
+
+    const getAllData = () => {
+      return Promise.all([atHandStockByDistrictStockLevelsReq()]);
+    };
+    getAllData().then(([atHandStockByDistrictStockLevels]) => {
+      setAtHandStockByDistrictStockLevels(atHandStockByDistrictStockLevels);
+      setIsLoadingDistrictStockLevels(false);
+    });
+  }, [endMonth, startMonth, vaccine, district]);
+
+  return [
+    {
+      atHandStockByDistrictStockLevels,
+      isLoadingDistrictStockLevels
+    }
+  ];
+};
+
+export const useGetRefillRateData = (
+  district,
+  endMonth,
+  startMonth,
+  vaccine
+) => {
+  const stockByDistrictVaccineURL = `http://${apiEndpoint}${port}/api/stock/stockbydistrictvaccine?district=${district}&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}`;
+  const atHandStockByDistrictURL = `http://${apiEndpoint}${port}/api/stock/athandbydistrict?district=&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}`;
+
+  const [isLoadingRefillRateData, setIsLoadingRefillRateData] = useState(false);
+
+  const [
+    stockByDistrictVaccineRefillData,
+    setStockByDistrictVaccineRefillData
+  ] = useState(null);
+
+  const [
+    atHandStockByDistrictRefillData,
+    setAtHandStockByDistrictRefillData
+  ] = useState(null);
+
+  useEffect(() => {
+    setIsLoadingRefillRateData(true);
+
+    const stockByDistrictVaccineRefillDataReq = async () => {
+      const response = await fetch(stockByDistrictVaccineURL);
+      return await response.json();
+    };
+
+    const atHandStockByDistrictRefillDataReq = async () => {
+      const response = await fetch(atHandStockByDistrictURL);
+      return await response.json();
+    };
+
+    const getAllData = () => {
+      return Promise.all([
+        stockByDistrictVaccineRefillDataReq(),
+        atHandStockByDistrictRefillDataReq()
+      ]);
+    };
+    getAllData().then(
+      ([stockByDistrictVaccineRefillData, atHandStockByDistrictRefillData]) => {
+        setStockByDistrictVaccineRefillData(stockByDistrictVaccineRefillData);
+        setAtHandStockByDistrictRefillData(atHandStockByDistrictRefillData);
+        setIsLoadingRefillRateData(false);
+      }
+    );
+  }, [endMonth, startMonth, vaccine, district]);
+
+  return [
+    {
+      stockByDistrictVaccineRefillData,
+      atHandStockByDistrictRefillData,
+      isLoadingRefillRateData
     }
   ];
 };
