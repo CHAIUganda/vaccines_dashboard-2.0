@@ -32,20 +32,19 @@ const convertToTimeSeries = period => {
 
 export const getStockChartData = (
   data,
-  isLoading,
   endMonth,
   startMonth,
   district,
   vaccine,
   type
 ) => {
-  let tabledata_so = [];
-  let tabledata_bm = [];
-  let tabledata_wr = [];
-  let tabledata_am = [];
-  let tabledata_search = [];
-
   if (type === "table") {
+    let tabledata_so = [];
+    let tabledata_bm = [];
+    let tabledata_wr = [];
+    let tabledata_am = [];
+    let tabledata_search = [];
+
     tabledata_so = data.filter(value => value.at_hand === 0);
 
     tabledata_am = data.filter(function(value) {
@@ -69,7 +68,7 @@ export const getStockChartData = (
     });
 
     return [{ tabledata_so, tabledata_am, tabledata_wr, tabledata_bm }];
-  } else if (type === "chart") {
+  } else if (type === "piechart") {
     // calculate totals
     let nothing = 0;
     let within = 0;
@@ -186,5 +185,84 @@ export const getStockChartData = (
     });
 
     return graphdataDistribution;
+  } else if (type === "column") {
+    let graphdataUptake = [];
+    let seriesUptake = [];
+    let stockData = [];
+    let immunisationData = [];
+    let monthlyTargetData = [];
+    let forceStartZeroData = [];
+    let maxMonthlyTarget = 0;
+
+    let uptake = "0";
+
+    let periodIndexes = [];
+
+    for (let i = 0; i < data.length; i++) {
+      let item = data[i];
+      /* Certain data had invalid periods like 20172 instead of
+            201702 which were causing errors. Hence the filter below. */
+      if (item.period.toString().length === 5) continue;
+
+      let periodIndex = convertToTimeSeries(item.period);
+      let atHand =
+        item.at_hand === undefined ? item.total_at_hand : item.at_hand;
+      let received =
+        item.received === undefined ? item.total_received : item.received;
+      let consumed =
+        item.consumed === undefined ? item.total_consumed : item.consumed;
+      let monthlyTarget =
+        item.stock_requirement__target === undefined
+          ? item.total_target
+          : item.stock_requirement__target;
+      let totalStock = atHand + received;
+
+      maxMonthlyTarget = Math.max(
+        maxMonthlyTarget,
+        Number(monthlyTarget.toFixed(0))
+      );
+      stockData.push({ x: periodIndex, y: Number(totalStock.toFixed(0)) });
+      immunisationData.push({ x: periodIndex, y: Number(consumed.toFixed(0)) });
+      monthlyTargetData.push({
+        x: periodIndex,
+        y: Number(monthlyTarget.toFixed(0))
+      });
+      forceStartZeroData.push({ x: periodIndex, y: 0 });
+
+      if (data[i].month === getMonthNumber(endMonth.split(" ")[0])) {
+        uptake =
+          received === 0 && atHand === 0
+            ? 0
+            : Math.round((consumed / totalStock) * 100);
+      }
+    }
+
+    graphdataUptake.push({
+      name: "Available Stock (Stock balance + Issues)",
+      type: "column",
+      color: "green",
+      data: stockData
+    });
+    graphdataUptake.push({
+      name: "Children Immunised",
+      type: "column",
+      color: "DodgerBlue",
+      data: immunisationData
+    });
+    graphdataUptake.push({
+      name: "Monthly Targets",
+      type: "line",
+      data: monthlyTargetData,
+      color: "red"
+    });
+    graphdataUptake.push({
+      name: "",
+      type: "line",
+      // yAxis: 1,
+      // strokeWidth: 0,
+      data: forceStartZeroData
+    });
+
+    return graphdataUptake;
   }
 };

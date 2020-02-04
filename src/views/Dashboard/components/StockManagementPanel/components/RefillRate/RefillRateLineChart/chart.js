@@ -2,17 +2,13 @@
 import Highcharts from "highcharts";
 
 // Chart Options
-import {
-  commonChartOptions,
-  commonChartPlotOptions
-} from "../../../../../../../common/chartOptions/chartOptions";
+import { commonChartOptions } from "../../../../../../../common/chartOptions/chartOptions";
 
 // Utility functions
 import { getStockChartData } from "../../../../../../../common/utils/stockmanagement/utils";
 
 export const RefillRateLineChartTemplate = (
   data,
-  isLoading,
   endMonth,
   startMonth,
   district,
@@ -20,29 +16,12 @@ export const RefillRateLineChartTemplate = (
 ) => {
   const chartData = getStockChartData(
     data,
-    isLoading,
     endMonth,
     startMonth,
     district,
     vaccine,
     "line"
   );
-
-  const monthsInYear = [
-    "",
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sept",
-    "Oct",
-    "Nov",
-    "Dec"
-  ];
 
   return {
     ...commonChartOptions,

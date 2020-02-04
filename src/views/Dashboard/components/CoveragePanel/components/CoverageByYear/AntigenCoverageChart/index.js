@@ -8,10 +8,7 @@ import HighchartsReact from "highcharts-react-official";
 import { Chart } from "../../../../../../../../src/components";
 
 // Chart Template
-import { coverageRate } from "./chart";
-
-// Utils
-import { getYearFromData } from "../../../../../../../common/utils/utils";
+import { coverageRateChartTemplate } from "./chart";
 
 const AntigenCoverageChart = ({
   data,
@@ -35,7 +32,7 @@ const AntigenCoverageChart = ({
 
   useMemo(() => {
     if (data && data) {
-      setCoverageRateBarChart(coverageRate(data, vaccineName));
+      setCoverageRateBarChart(coverageRateChartTemplate(data, vaccineName));
       setChartTile(_setChartTile(startYear, endYear));
     }
   }, [data, startYear, endYear, vaccineName, district]);

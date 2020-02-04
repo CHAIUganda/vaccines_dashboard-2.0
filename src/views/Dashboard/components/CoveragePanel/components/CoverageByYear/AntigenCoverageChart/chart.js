@@ -12,7 +12,7 @@ import {
   aggregateYearAntigenData
 } from "../../../../../../../common/utils/utils";
 
-export const coverageRate = (data, vaccineName) => {
+export const coverageRateChartTemplate = (data, vaccineName) => {
   const years = getYearFromData(data);
 
   const antigenData = aggregateYearAntigenData(data, vaccineName);
