@@ -21,13 +21,15 @@ import {
   useGetMonths,
   useGetDistrictStockLevels,
   useGetRefillRateData,
-  useGetUptakeRateData
+  useGetUptakeRateData,
+  useGetDistrictStockTrendData
 } from "../../../../helpers/apiDataFetcher";
 
 // Import Stockmanaggement components
 import DistrictsStockLevels from "./components/DistrictsStockLevels/index";
 import RefillRate from "./components/RefillRate/index";
 import UptakeRate from "./components/UptakeRate/index";
+import DistrictStockTrends from "./components/DistrictStockTrends";
 
 // Variables
 const date = new Date(),
@@ -220,6 +222,24 @@ export function StockManagementPanel() {
   const [uptakeRateDistrict, setUptakeRateDistrict] = useState("National");
 
   // -----------------------------------------------------------------------
+  // District Stock Trends state data
+  // -------------------------------------------------------------------------
+
+  const [
+    districtStockTrendStartMonth,
+    setDistrictStockTrendStartMonth
+  ] = useState("Jan 2019");
+  const [districtStockTrendEndMonth, setDistrictStockTrendEndMonth] = useState(
+    "Jun 2019"
+  );
+  const [districtStockTrendVaccine, setDistrictStockTrendVaccine] = useState(
+    "PENTA"
+  );
+  const [districtStockTrendDistrict, setDistrictStockTrendDistrict] = useState(
+    "National"
+  );
+
+  // -----------------------------------------------------------------------
   // Fetch Districts
   // -----------------------------------------------------------------------
   const [{ districts, isLoadingDistricts }] = useGetDistricts("ALL");
@@ -268,6 +288,23 @@ export function StockManagementPanel() {
     uptakeRateEndMonth,
     uptakeRateStartMonth,
     uptakeRateVaccine
+  );
+
+  // -----------------------------------------------------------------------
+  // Fetch District Stock Trends Data
+  // -----------------------------------------------------------------------
+
+  const [
+    {
+      stockByDistrictVaccineStockTrendData,
+      atHandStockByDistrictStockTrendData,
+      isLoadingStockTrendData
+    }
+  ] = useGetDistrictStockTrendData(
+    districtStockTrendDistrict,
+    districtStockTrendEndMonth,
+    districtStockTrendStartMonth,
+    districtStockTrendVaccine
   );
 
   // -----------------------------------------------------------------------
@@ -388,6 +425,56 @@ export function StockManagementPanel() {
   ));
 
   const uptakeRateDataDistrictsFilter =
+    districts &&
+    districts.map(district => (
+      <MenuItem value={district.name} key={district.name}>
+        {district.name}
+      </MenuItem>
+    ));
+
+  // -----------------------------------------------------------------------
+  // Uptake Rate data filters
+  // -----------------------------------------------------------------------
+
+  const districtStockTrendStartMonthFilter =
+    groupedMonths &&
+    Object.keys(groupedMonths)
+      .filter(year => year !== "2020")
+      .map(year => (
+        <>
+          {" "}
+          <optgroup label={year}></optgroup>
+          {Object.values(groupedMonths[year]).map(y => (
+            <>
+              <option value={y.name}>{y.name}</option>
+            </>
+          ))}
+        </>
+      ));
+
+  const districtStockTrendEndMonthFilter =
+    groupedMonths &&
+    Object.keys(groupedMonths)
+      .filter(year => year === lastYear.toString())
+      .map(year => (
+        <>
+          {" "}
+          <optgroup label={year}></optgroup>
+          {Object.values(groupedMonths[year]).map(y => (
+            <>
+              <option value={y.name}>{y.name}</option>
+            </>
+          ))}
+        </>
+      ));
+
+  const districtStockTrendVaccinesFilter = VACCINES.map(vaccine => (
+    <MenuItem value={vaccine} key={vaccine}>
+      {vaccine}
+    </MenuItem>
+  ));
+
+  const districtStockTrendDistrictsFilter =
     districts &&
     districts.map(district => (
       <MenuItem value={district.name} key={district.name}>
@@ -669,6 +756,110 @@ export function StockManagementPanel() {
             </FormControl>
           </form>
         </TabPanel>
+
+        <TabPanel value={value} index={3}>
+          <form className={classes.container} noValidate>
+            <FormControl
+              className={classes.formControl}
+              variant="outlined"
+              margin="dense"
+            >
+              <InputLabel
+                htmlFor="startMonth"
+                className={classes.selectorLables}
+              >
+                Start Month
+              </InputLabel>
+              <Select
+                value={districtStockTrendStartMonth}
+                native
+                defaultValue="Jan 2019"
+                input={<Input id="grouped-select" />}
+                onChange={event =>
+                  setDistrictStockTrendStartMonth(event.target.value)
+                }
+                inputProps={{
+                  name: "DST_start_month_selector",
+                  id: "DST_start_month_selector"
+                }}
+              >
+                {districtStockTrendStartMonthFilter}
+              </Select>
+            </FormControl>
+
+            <FormControl
+              className={classes.formControl}
+              variant="outlined"
+              margin="dense"
+            >
+              <InputLabel
+                htmlFor="startMonth"
+                className={classes.selectorLables}
+              >
+                End Month
+              </InputLabel>
+              <Select
+                value={districtStockTrendEndMonth}
+                native
+                defaultValue="Jan 2019"
+                input={<Input id="grouped-select" />}
+                onChange={event =>
+                  setDistrictStockTrendEndMonth(event.target.value)
+                }
+                inputProps={{
+                  name: "DST_end_month_selector",
+                  id: "DST_end_month_selector"
+                }}
+              >
+                {districtStockTrendEndMonthFilter}
+              </Select>
+            </FormControl>
+
+            <FormControl
+              className={classes.formControl}
+              variant="outlined"
+              margin="dense"
+            >
+              <InputLabel htmlFor="Vaccine" className={classes.selectorLables}>
+                Vaccine
+              </InputLabel>
+              <Select
+                value={districtStockTrendVaccine}
+                onChange={event =>
+                  setDistrictStockTrendVaccine(event.target.value)
+                }
+                inputProps={{
+                  name: "DSL_vaccine_name_selector",
+                  id: "DSL_vaccine_name_selector"
+                }}
+              >
+                {districtStockTrendVaccinesFilter}
+              </Select>
+            </FormControl>
+
+            <FormControl
+              className={classes.formControl}
+              variant="outlined"
+              margin="dense"
+            >
+              <InputLabel htmlFor="District" className={classes.selectorLables}>
+                District
+              </InputLabel>
+              <Select
+                value={districtStockTrendDistrict}
+                onChange={event =>
+                  setDistrictStockTrendDistrict(event.target.value)
+                }
+                inputProps={{
+                  name: "DSL_district_name_selector",
+                  id: "DSL_district_name_selector"
+                }}
+              >
+                {districtStockTrendDistrictsFilter}
+              </Select>
+            </FormControl>
+          </form>
+        </TabPanel>
       </Grid>
       <Grid item xs={12}>
         <Divider variant="middle" className={classes.divider} />
@@ -694,6 +885,7 @@ export function StockManagementPanel() {
             vaccine={refillRateVaccine}
           />
         </TabPanel>
+
         <TabPanel value={value} index={2}>
           <UptakeRate
             stockByDistrictVaccineUptakeData={stockByDistrictVaccineUptakeData}
@@ -703,6 +895,22 @@ export function StockManagementPanel() {
             startMonth={uptakeRateStartMonth}
             district={uptakeRateDistrict}
             vaccine={uptakeRateVaccine}
+          />
+        </TabPanel>
+
+        <TabPanel value={value} index={3}>
+          <DistrictStockTrends
+            stockByDistrictVaccineStockTrendData={
+              stockByDistrictVaccineStockTrendData
+            }
+            atHandStockByDistrictStockTrendData={
+              atHandStockByDistrictStockTrendData
+            }
+            isLoading={isLoadingStockTrendData}
+            endMonth={districtStockTrendEndMonth}
+            startMonth={districtStockTrendStartMonth}
+            district={districtStockTrendDistrict}
+            vaccine={districtStockTrendVaccine}
           />
         </TabPanel>
       </Grid>

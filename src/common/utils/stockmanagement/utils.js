@@ -27,7 +27,8 @@ const convertToTimeSeries = period => {
   // Extract Month
   const month = str_period.substring(5, 6);
 
-  return Date.UTC(year, month, 1);
+  // We subtract - 1 because JS reads months from 0
+  return Date.UTC(year, month - 1, 1);
 };
 
 export const getStockChartData = (
@@ -185,7 +186,7 @@ export const getStockChartData = (
     });
 
     return graphdataDistribution;
-  } else if (type === "column") {
+  } else if (type === "column_uptake_rate") {
     let graphdataUptake = [];
     let seriesUptake = [];
     let stockData = [];
@@ -264,5 +265,41 @@ export const getStockChartData = (
     });
 
     return graphdataUptake;
+  } else if (type === "column_district_stock_trends") {
+    let graphData = [];
+    let stockData = [];
+    let supplyData = [];
+    let orderedData = [];
+
+    let periodIndexes = [];
+
+    for (let i = 0; i < data.length; i++) {
+      let item = data[i];
+      /* Certain data had invalid periods like 20172 instead of
+                201702 which were causing errors. Hence the filter below. */
+      if (item.period.toString().length == 5) continue;
+
+      //var monthIndex = appHelpers.getMonthIndexFromPeriod(item.period, 'CY');
+      let periodIndex = convertToTimeSeries(item.period);
+      var atHand =
+        item.at_hand === undefined ? item.total_at_hand : item.at_hand;
+      var ordered =
+        item.ordered === undefined ? item.total_ordered : item.ordered;
+      var received =
+        item.received === undefined ? item.total_received : item.received;
+
+      stockData.push({ x: periodIndex, y: Number(atHand.toFixed(0)) });
+      orderedData.push({ x: periodIndex, y: Number(ordered.toFixed(0)) });
+      supplyData.push({ x: periodIndex, y: Number(received.toFixed(0)) });
+    }
+
+    graphData.push({ name: "Stock Balance", color: "green", data: stockData });
+    graphData.push({ name: "Orders", color: "DodgerBlue", data: orderedData });
+    graphData.push({
+      name: "Supply By NMS",
+      color: "Orange",
+      data: supplyData
+    });
+    return graphData;
   }
 };

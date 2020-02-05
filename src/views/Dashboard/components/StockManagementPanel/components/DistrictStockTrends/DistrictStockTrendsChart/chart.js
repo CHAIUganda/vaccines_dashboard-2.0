@@ -10,7 +10,7 @@ import {
 // Utility functions
 import { getStockChartData } from "../../../../../../../common/utils/stockmanagement/utils";
 
-export const uptakeRateChartTemplate = (
+export const districtStockTrendsChartTemplate = (
   data,
   endMonth,
   startMonth,
@@ -23,7 +23,7 @@ export const uptakeRateChartTemplate = (
     startMonth,
     district,
     vaccine,
-    "column_uptake_rate"
+    "column_district_stock_trends"
   );
 
   return {
