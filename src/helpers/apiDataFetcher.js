@@ -452,6 +452,71 @@ export const useGetUptakeRateData = (
   ];
 };
 
+export const useGetDistrictStockTrendData = (
+  district,
+  endMonth,
+  startMonth,
+  vaccine
+) => {
+  const stockByDistrictVaccineURL = `http://${apiEndpoint}${port}/api/stock/stockbydistrictvaccine?district=${district}&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}`;
+  const atHandStockByDistrictURL = `http://${apiEndpoint}${port}/api/stock/athandbydistrict?district=&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}`;
+
+  const [isLoadingStockTrendData, setIsLoadingStockTrendData] = useState(false);
+
+  const [
+    stockByDistrictVaccineStockTrendData,
+    setStockByDistrictVaccineStockTrendData
+  ] = useState(null);
+
+  const [
+    atHandStockByDistrictStockTrendData,
+    setAtHandStockByDistrictStockTrendData
+  ] = useState(null);
+
+  useEffect(() => {
+    setIsLoadingStockTrendData(true);
+
+    const stockByDistrictVaccineStockTrendDataReq = async () => {
+      const response = await fetch(stockByDistrictVaccineURL);
+      return await response.json();
+    };
+
+    const atHandStockByDistrictStockTrendDataReq = async () => {
+      const response = await fetch(atHandStockByDistrictURL);
+      return await response.json();
+    };
+
+    const getAllData = () => {
+      return Promise.all([
+        stockByDistrictVaccineStockTrendDataReq(),
+        atHandStockByDistrictStockTrendDataReq()
+      ]);
+    };
+    getAllData().then(
+      ([
+        stockByDistrictVaccineStockTrendData,
+        atHandStockByDistrictStockTrendData
+      ]) => {
+        setStockByDistrictVaccineStockTrendData(
+          stockByDistrictVaccineStockTrendData
+        );
+        setAtHandStockByDistrictStockTrendData(
+          atHandStockByDistrictStockTrendData
+        );
+        setIsLoadingStockTrendData(false);
+      }
+    );
+  }, [endMonth, startMonth, vaccine, district]);
+
+  return [
+    {
+      stockByDistrictVaccineStockTrendData,
+      atHandStockByDistrictStockTrendData,
+      isLoadingStockTrendData
+    }
+  ];
+};
+
 // export const useApiDataFetch = (
 //   endYear,
 //   startYear,
