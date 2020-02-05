@@ -120,13 +120,11 @@ function a11yProps(index) {
 
 const StockBalancesTable = ({
   data,
-  endYear,
-  tabTitle,
-  dose,
-  vaccineName,
   isLoading,
-  reportYear,
-  startYear
+  endMonth,
+  startMonth,
+  district,
+  vaccine
 }) => {
   const [value, setValue] = useState(0);
   const classes = useStyles();

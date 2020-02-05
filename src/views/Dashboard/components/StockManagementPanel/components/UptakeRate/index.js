@@ -5,7 +5,7 @@ import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 // Custom components
-import AntigenCoverageChart from "./AntigenCoverageChart/index";
+import UptakeRateChart from "./UptakeRateChart/index";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,14 +20,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function CoverageByYear(props) {
+export default function UptakeRate(props) {
   const classes = useStyles();
   const {
-    vacineData,
-    startYear,
-    endYear,
+    stockByDistrictVaccineUptakeData,
+    startMonth,
+    endMonth,
     isLoading,
-    vaccineName,
+    vaccine,
     district
   } = props;
 
@@ -44,12 +44,15 @@ export default function CoverageByYear(props) {
               xs={12}
               style={{ height: 720, padding: "0.9rem" }}
             >
-              <AntigenCoverageChart
-                data={vacineData && vacineData}
-                startYear={startYear && startYear}
-                endYear={endYear && endYear}
+              <UptakeRateChart
+                data={
+                  stockByDistrictVaccineUptakeData &&
+                  stockByDistrictVaccineUptakeData
+                }
+                startMonth={startMonth && startMonth}
+                endMonth={endMonth && endMonth}
                 isLoading={isLoading && isLoading}
-                vaccineName={vaccineName && vaccineName}
+                vaccine={vaccine && vaccine}
                 district={district && district}
               />
             </Grid>

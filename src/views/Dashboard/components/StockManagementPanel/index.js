@@ -11,7 +11,6 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import ListSubheader from "@material-ui/core/ListSubheader";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Input from "@material-ui/core/Input";
@@ -21,12 +20,14 @@ import {
   useGetDistricts,
   useGetMonths,
   useGetDistrictStockLevels,
-  useGetRefillRateData
+  useGetRefillRateData,
+  useGetUptakeRateData
 } from "../../../../helpers/apiDataFetcher";
 
 // Import Stockmanaggement components
 import DistrictsStockLevels from "./components/DistrictsStockLevels/index";
 import RefillRate from "./components/RefillRate/index";
+import UptakeRate from "./components/UptakeRate/index";
 
 // Variables
 const date = new Date(),
@@ -200,18 +201,28 @@ export function StockManagementPanel() {
     "PENTA"
   );
 
+  // -----------------------------------------------------------------------
+  // Refill Rate  state data
+  // -------------------------------------------------------------------------
+
   const [refillRateStartMonth, setRefillRateStartMonth] = useState("Jan 2019");
   const [refillRateEndMonth, setRefillRateEndMonth] = useState("Jun 2019");
   const [refillRateVaccine, setRefillRateVaccine] = useState("PENTA");
   const [refillRateDistrict, setRefillRateDistrict] = useState("Abim District");
 
   // -----------------------------------------------------------------------
+  // Uptake Rate  state data
+  // -------------------------------------------------------------------------
+
+  const [uptakeRateStartMonth, setUptakeRateStartMonth] = useState("Jan 2019");
+  const [uptakeRateEndMonth, setUptakeRateEndMonth] = useState("Jun 2019");
+  const [uptakeRateVaccine, setUptakeRateVaccine] = useState("PENTA");
+  const [uptakeRateDistrict, setUptakeRateDistrict] = useState("National");
+
+  // -----------------------------------------------------------------------
   // Fetch Districts
   // -----------------------------------------------------------------------
-  // debugger;
   const [{ districts, isLoadingDistricts }] = useGetDistricts("ALL");
-
-  console.log(districts && districts);
 
   // -----------------------------------------------------------------------
   // Fetch Districts Stock Levels Data
@@ -225,6 +236,10 @@ export function StockManagementPanel() {
     districtStockLevelsVaccine
   );
 
+  // -----------------------------------------------------------------------
+  // Fetch Refill Rate Data
+  // -----------------------------------------------------------------------
+
   const [
     {
       stockByDistrictVaccineRefillData,
@@ -236,6 +251,23 @@ export function StockManagementPanel() {
     refillRateEndMonth,
     refillRateStartMonth,
     refillRateVaccine
+  );
+
+  // -----------------------------------------------------------------------
+  // Fetch Uptake Rate Data
+  // -----------------------------------------------------------------------
+
+  const [
+    {
+      stockByDistrictVaccineUptakeData,
+      atHandStockByDistrictUptakeData,
+      isLoadingUptakeRateData
+    }
+  ] = useGetUptakeRateData(
+    uptakeRateDistrict,
+    uptakeRateEndMonth,
+    uptakeRateStartMonth,
+    uptakeRateVaccine
   );
 
   // -----------------------------------------------------------------------
@@ -306,6 +338,56 @@ export function StockManagementPanel() {
   ));
 
   const refillRateDataDistrictsFilter =
+    districts &&
+    districts.map(district => (
+      <MenuItem value={district.name} key={district.name}>
+        {district.name}
+      </MenuItem>
+    ));
+
+  // -----------------------------------------------------------------------
+  // Uptake Rate data filters
+  // -----------------------------------------------------------------------
+
+  const uptakeRateDataStartMonthFilter =
+    groupedMonths &&
+    Object.keys(groupedMonths)
+      .filter(year => year !== "2020")
+      .map(year => (
+        <>
+          {" "}
+          <optgroup label={year}></optgroup>
+          {Object.values(groupedMonths[year]).map(y => (
+            <>
+              <option value={y.name}>{y.name}</option>
+            </>
+          ))}
+        </>
+      ));
+
+  const uptakeRateEndMonthFilter =
+    groupedMonths &&
+    Object.keys(groupedMonths)
+      .filter(year => year === lastYear.toString())
+      .map(year => (
+        <>
+          {" "}
+          <optgroup label={year}></optgroup>
+          {Object.values(groupedMonths[year]).map(y => (
+            <>
+              <option value={y.name}>{y.name}</option>
+            </>
+          ))}
+        </>
+      ));
+
+  const uptakeRateDataVaccinesFilter = VACCINES.map(vaccine => (
+    <MenuItem value={vaccine} key={vaccine}>
+      {vaccine}
+    </MenuItem>
+  ));
+
+  const uptakeRateDataDistrictsFilter =
     districts &&
     districts.map(district => (
       <MenuItem value={district.name} key={district.name}>
@@ -404,7 +486,7 @@ export function StockManagementPanel() {
               margin="dense"
             >
               <InputLabel
-                htmlFor="startNibtg"
+                htmlFor="startMonth"
                 className={classes.selectorLables}
               >
                 Start Month
@@ -430,7 +512,7 @@ export function StockManagementPanel() {
               margin="dense"
             >
               <InputLabel
-                htmlFor="startNibtg"
+                htmlFor="startMonth"
                 className={classes.selectorLables}
               >
                 End Month
@@ -491,6 +573,102 @@ export function StockManagementPanel() {
             </FormControl>
           </form>
         </TabPanel>
+
+        <TabPanel value={value} index={2}>
+          <form className={classes.container} noValidate>
+            <FormControl
+              className={classes.formControl}
+              variant="outlined"
+              margin="dense"
+            >
+              <InputLabel
+                htmlFor="startMonth"
+                className={classes.selectorLables}
+              >
+                Start Month
+              </InputLabel>
+              <Select
+                value={uptakeRateStartMonth}
+                native
+                defaultValue="Jan 2019"
+                input={<Input id="grouped-select" />}
+                onChange={event => setUptakeRateStartMonth(event.target.value)}
+                inputProps={{
+                  name: "UR_start_month_selector",
+                  id: "UR_start_month_selector"
+                }}
+              >
+                {uptakeRateDataStartMonthFilter}
+              </Select>
+            </FormControl>
+
+            <FormControl
+              className={classes.formControl}
+              variant="outlined"
+              margin="dense"
+            >
+              <InputLabel
+                htmlFor="startMonth"
+                className={classes.selectorLables}
+              >
+                End Month
+              </InputLabel>
+              <Select
+                value={uptakeRateEndMonth}
+                native
+                defaultValue="Jan 2019"
+                input={<Input id="grouped-select" />}
+                onChange={event => setUptakeRateEndMonth(event.target.value)}
+                inputProps={{
+                  name: "UR_end_month_selector",
+                  id: "UR_end_month_selector"
+                }}
+              >
+                {uptakeRateEndMonthFilter}
+              </Select>
+            </FormControl>
+
+            <FormControl
+              className={classes.formControl}
+              variant="outlined"
+              margin="dense"
+            >
+              <InputLabel htmlFor="Vaccine" className={classes.selectorLables}>
+                Vaccine
+              </InputLabel>
+              <Select
+                value={refillRateVaccine}
+                onChange={event => setUptakeRateVaccine(event.target.value)}
+                inputProps={{
+                  name: "UR_vaccine_name_selector",
+                  id: "UR_vaccine_name_selector"
+                }}
+              >
+                {uptakeRateDataVaccinesFilter}
+              </Select>
+            </FormControl>
+
+            <FormControl
+              className={classes.formControl}
+              variant="outlined"
+              margin="dense"
+            >
+              <InputLabel htmlFor="District" className={classes.selectorLables}>
+                District
+              </InputLabel>
+              <Select
+                value={uptakeRateDistrict}
+                onChange={event => setUptakeRateDistrict(event.target.value)}
+                inputProps={{
+                  name: "UR_district_name_selector",
+                  id: "UR_district_name_selector"
+                }}
+              >
+                {uptakeRateDataDistrictsFilter}
+              </Select>
+            </FormControl>
+          </form>
+        </TabPanel>
       </Grid>
       <Grid item xs={12}>
         <Divider variant="middle" className={classes.divider} />
@@ -514,6 +692,17 @@ export function StockManagementPanel() {
             startMonth={refillRateStartMonth}
             district={refillRateDistrict}
             vaccine={refillRateVaccine}
+          />
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          <UptakeRate
+            stockByDistrictVaccineUptakeData={stockByDistrictVaccineUptakeData}
+            atHandStockByDistrictUptakeData={atHandStockByDistrictUptakeData}
+            isLoading={isLoadingUptakeRateData}
+            endMonth={uptakeRateEndMonth}
+            startMonth={uptakeRateStartMonth}
+            district={uptakeRateDistrict}
+            vaccine={uptakeRateVaccine}
           />
         </TabPanel>
       </Grid>

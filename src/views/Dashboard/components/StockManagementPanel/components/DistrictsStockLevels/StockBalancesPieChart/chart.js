@@ -1,31 +1,20 @@
-// Highcharts
-import Highcharts from "highcharts";
-
-// Chart Options
-import {
-  commonChartOptions,
-  commonChartPlotOptions
-} from "../../../../../../../common/chartOptions/chartOptions";
-
 // Utility functions
 import { getStockChartData } from "../../../../../../../common/utils/stockmanagement/utils";
 
 export const StockBalancesPieChartTemplate = (
   data,
-  isLoading,
   endMonth,
   startMonth,
   district,
   vaccine
 ) => {
-  const chattData = getStockChartData(
+  const chartData = getStockChartData(
     data,
-    isLoading,
     endMonth,
     startMonth,
     district,
     vaccine,
-    "chart"
+    "piechart"
   );
 
   return {
@@ -49,7 +38,7 @@ export const StockBalancesPieChartTemplate = (
         showInLegend: true
       }
     },
-    // ...commonChartOptions,
-    series: [chattData]
+
+    series: [chartData]
   };
 };

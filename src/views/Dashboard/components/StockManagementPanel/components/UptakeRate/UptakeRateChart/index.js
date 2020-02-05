@@ -5,12 +5,12 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
 // Shared componenrs
-import { Chart } from "../../../../../../../components";
+import { Chart } from "../../../../../../../../src/components";
 
 // Chart Template
-import { StockBalancesPieChartTemplate } from "./chart";
+import { uptakeRateChartTemplate } from "./chart";
 
-const StockBalancesPieChart = ({
+const UptakeRateChart = ({
   data,
   isLoading,
   endMonth,
@@ -20,28 +20,26 @@ const StockBalancesPieChart = ({
 }) => {
   const [chart, setChart] = useState();
 
+  const chartTitle = `Uptake Rate of ${vaccine} for ${district}`;
+
   useMemo(() => {
     if (data && data) {
       setChart(
-        StockBalancesPieChartTemplate(
-          data,
-          endMonth,
-          startMonth,
-          district,
-          vaccine
-        )
+        uptakeRateChartTemplate(data, endMonth, startMonth, district, vaccine)
       );
     }
-  }, [data, endMonth, startMonth, district, vaccine]);
+  }, [data, startMonth, endMonth, vaccine, district]);
 
   return (
     <Chart
+      title={chartTitle}
       chart={
         <HighchartsReact highcharts={Highcharts} options={chart && chart} />
       }
       isLoading={isLoading && isLoading}
+      centerTitle={true}
     />
   );
 };
 
-export default StockBalancesPieChart;
+export default UptakeRateChart;

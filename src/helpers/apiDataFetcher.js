@@ -255,8 +255,6 @@ export const useGetDistricts = district => {
       setIsLoadingDistricts(false);
     });
   }, [district]);
-
-  debugger;
   return [
     {
       districts,
@@ -392,6 +390,64 @@ export const useGetRefillRateData = (
       stockByDistrictVaccineRefillData,
       atHandStockByDistrictRefillData,
       isLoadingRefillRateData
+    }
+  ];
+};
+
+export const useGetUptakeRateData = (
+  district,
+  endMonth,
+  startMonth,
+  vaccine
+) => {
+  const stockByDistrictVaccineURL = `http://${apiEndpoint}${port}/api/stock/stockbydistrictvaccine?district=${district}&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}`;
+  const atHandStockByDistrictURL = `http://${apiEndpoint}${port}/api/stock/athandbydistrict?district=&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}`;
+
+  const [isLoadingUptakeRateData, setIsLoadingUptakeRateData] = useState(false);
+
+  const [
+    stockByDistrictVaccineUptakeData,
+    setStockByDistrictVaccineUptakeData
+  ] = useState(null);
+
+  const [
+    atHandStockByDistrictUptakeData,
+    setAtHandStockByDistrictUptakeData
+  ] = useState(null);
+
+  useEffect(() => {
+    setIsLoadingUptakeRateData(true);
+
+    const stockByDistrictVaccineUptakeDataReq = async () => {
+      const response = await fetch(stockByDistrictVaccineURL);
+      return await response.json();
+    };
+
+    const atHandStockByDistrictUptakeDataReq = async () => {
+      const response = await fetch(atHandStockByDistrictURL);
+      return await response.json();
+    };
+
+    const getAllData = () => {
+      return Promise.all([
+        stockByDistrictVaccineUptakeDataReq(),
+        atHandStockByDistrictUptakeDataReq()
+      ]);
+    };
+    getAllData().then(
+      ([stockByDistrictVaccineUptakeData, atHandStockByDistrictUptakeData]) => {
+        setStockByDistrictVaccineUptakeData(stockByDistrictVaccineUptakeData);
+        setAtHandStockByDistrictUptakeData(atHandStockByDistrictUptakeData);
+        setIsLoadingUptakeRateData(false);
+      }
+    );
+  }, [endMonth, startMonth, vaccine, district]);
+
+  return [
+    {
+      stockByDistrictVaccineUptakeData,
+      atHandStockByDistrictUptakeData,
+      isLoadingUptakeRateData
     }
   ];
 };

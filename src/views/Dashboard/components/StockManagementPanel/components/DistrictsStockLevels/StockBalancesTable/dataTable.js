@@ -139,7 +139,6 @@ export const DataTable = props => {
       setTableData(
         getStockChartData(
           data,
-          isLoading,
           endMonth,
           startMonth,
           district,
