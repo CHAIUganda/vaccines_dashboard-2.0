@@ -9,5 +9,4 @@ function env_config() {
 }
 let addr = env_config();
 
-console.log(addr);
 export default addr;

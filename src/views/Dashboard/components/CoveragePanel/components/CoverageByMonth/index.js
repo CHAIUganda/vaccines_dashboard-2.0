@@ -107,7 +107,8 @@ export default function CoverageByMonth(props) {
     dose,
     isLoading,
     startYear,
-    endYear
+    endYear,
+    district
   } = props;
 
   const handleChange = (event, newValue) => {
@@ -132,114 +133,190 @@ export default function CoverageByMonth(props) {
       </AppBar>
       <TabPanel value={value} index={0}>
         <Grid container spacing={3} className={classes.section}>
-          <Grid item lg={5} md={5} xl={5} xs={5}>
-            <AnnualizedCoverageForVaccineMap
-              data={vacineDataForMap && vacineDataForMap}
-              tabTitle={"Annualized (CY)"}
-              dose={dose && dose}
-              startYear={startYear}
-              endYear={endYear}
-              vaccineName={vaccineName && vaccineName}
-              isLoading={isLoading && isLoading}
-              reportYear={"CY"}
-            />
-          </Grid>
-          <Grid item lg={7} md={7} xl={7} xs={7}>
-            <CoverageForAntigensChart
-              data={vaccineDosesForChart && vaccineDosesForChart}
-              tabTitle={"Annualized (CY)"}
-              vaccineName={vaccineName && vaccineName}
-              dose={dose && dose}
-              isLoading={isLoading && isLoading}
-              startYear={startYear}
-              endYear={endYear}
-              reportYear={"CY"}
-            />
-          </Grid>
+          {district === "National" ? (
+            <>
+              <Grid item lg={5} md={5} xl={5} xs={5}>
+                <AnnualizedCoverageForVaccineMap
+                  data={vacineDataForMap && vacineDataForMap}
+                  tabTitle={"Annualized (CY)"}
+                  dose={dose && dose}
+                  startYear={startYear}
+                  endYear={endYear}
+                  vaccineName={vaccineName && vaccineName}
+                  isLoading={isLoading && isLoading}
+                  reportYear={"CY"}
+                />
+              </Grid>
+              <Grid item lg={7} md={7} xl={7} xs={7}>
+                <CoverageForAntigensChart
+                  data={vaccineDosesForChart && vaccineDosesForChart}
+                  tabTitle={"Annualized (CY)"}
+                  vaccineName={vaccineName && vaccineName}
+                  dose={dose && dose}
+                  isLoading={isLoading && isLoading}
+                  startYear={startYear}
+                  endYear={endYear}
+                  reportYear={"CY"}
+                />
+              </Grid>
+            </>
+          ) : (
+            <>
+              <Grid item lg={12} md={12} xl={12} xs={12}>
+                <CoverageForAntigensChart
+                  data={vaccineDosesForChart && vaccineDosesForChart}
+                  tabTitle={"Annualized (CY)"}
+                  vaccineName={vaccineName && vaccineName}
+                  dose={dose && dose}
+                  isLoading={isLoading && isLoading}
+                  startYear={startYear}
+                  endYear={endYear}
+                  reportYear={"CY"}
+                />
+              </Grid>
+            </>
+          )}
         </Grid>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Grid container spacing={3} className={classes.section}>
-          <Grid item lg={5} md={5} xl={5} xs={5}>
-            <AnnualizedCoverageForVaccineMap
-              data={vacineDataForMap && vacineDataForMap}
-              tabTitle={"Monthly (CY)"}
-              dose={dose && dose}
-              endYear={endYear}
-              vaccineName={vaccineName && vaccineName}
-              isLoading={isLoading && isLoading}
-              reportYear={"CY"}
-              startYear={startYear}
-            />
-          </Grid>
-          <Grid item lg={7} md={7} xl={7} xs={7}>
-            <CoverageForAntigensChart
-              data={vaccineDosesForChart && vaccineDosesForChart}
-              tabTitle={"Monthly (CY)"}
-              vaccineName={vaccineName && vaccineName}
-              dose={dose && dose}
-              isLoading={isLoading && isLoading}
-              startYear={startYear}
-              endYear={endYear}
-              reportYear={"CY"}
-            />
-          </Grid>
+          {district === "National" ? (
+            <>
+              <Grid item lg={5} md={5} xl={5} xs={5}>
+                <AnnualizedCoverageForVaccineMap
+                  data={vacineDataForMap && vacineDataForMap}
+                  tabTitle={"Monthly (CY)"}
+                  dose={dose && dose}
+                  endYear={endYear}
+                  vaccineName={vaccineName && vaccineName}
+                  isLoading={isLoading && isLoading}
+                  reportYear={"CY"}
+                  startYear={startYear}
+                />
+              </Grid>
+              <Grid item lg={7} md={7} xl={7} xs={7}>
+                <CoverageForAntigensChart
+                  data={vaccineDosesForChart && vaccineDosesForChart}
+                  tabTitle={"Monthly (CY)"}
+                  vaccineName={vaccineName && vaccineName}
+                  dose={dose && dose}
+                  isLoading={isLoading && isLoading}
+                  startYear={startYear}
+                  endYear={endYear}
+                  reportYear={"CY"}
+                />
+              </Grid>
+            </>
+          ) : (
+            <>
+              <Grid item lg={12} md={12} xl={12} xs={12}>
+                <CoverageForAntigensChart
+                  data={vaccineDosesForChart && vaccineDosesForChart}
+                  tabTitle={"Monthly (CY)"}
+                  vaccineName={vaccineName && vaccineName}
+                  dose={dose && dose}
+                  isLoading={isLoading && isLoading}
+                  startYear={startYear}
+                  endYear={endYear}
+                  reportYear={"CY"}
+                />
+              </Grid>
+            </>
+          )}
         </Grid>
       </TabPanel>
       <TabPanel value={value} index={2}>
         <Grid container spacing={3} className={classes.section}>
-          <Grid item lg={5} md={5} xl={5} xs={5}>
-            <AnnualizedCoverageForVaccineMap
-              data={vacineDataForMap && vacineDataForMap}
-              tabTitle={"Annualized (FY)"}
-              dose={dose && dose}
-              endYear={endYear}
-              vaccineName={vaccineName && vaccineName}
-              isLoading={isLoading && isLoading}
-              reportYear={"FY"}
-              startYear={startYear}
-            />
-          </Grid>
-          <Grid item lg={7} md={7} xl={7} xs={7}>
-            <CoverageForAntigensChart
-              data={vaccineDosesForChart && vaccineDosesForChart}
-              tabTitle={"Annualized (FY)"}
-              vaccineName={vaccineName && vaccineName}
-              dose={dose && dose}
-              isLoading={isLoading && isLoading}
-              startYear={startYear}
-              endYear={endYear}
-              reportYear={"FY"}
-            />
-          </Grid>
+          {district === "National" ? (
+            <>
+              <Grid item lg={5} md={5} xl={5} xs={5}>
+                <AnnualizedCoverageForVaccineMap
+                  data={vacineDataForMap && vacineDataForMap}
+                  tabTitle={"Annualized (FY)"}
+                  dose={dose && dose}
+                  endYear={endYear}
+                  vaccineName={vaccineName && vaccineName}
+                  isLoading={isLoading && isLoading}
+                  reportYear={"FY"}
+                  startYear={startYear}
+                />
+              </Grid>
+              <Grid item lg={7} md={7} xl={7} xs={7}>
+                <CoverageForAntigensChart
+                  data={vaccineDosesForChart && vaccineDosesForChart}
+                  tabTitle={"Annualized (FY)"}
+                  vaccineName={vaccineName && vaccineName}
+                  dose={dose && dose}
+                  isLoading={isLoading && isLoading}
+                  startYear={startYear}
+                  endYear={endYear}
+                  reportYear={"FY"}
+                />
+              </Grid>
+            </>
+          ) : (
+            <>
+              <Grid item lg={12} md={12} xl={12} xs={12}>
+                <CoverageForAntigensChart
+                  data={vaccineDosesForChart && vaccineDosesForChart}
+                  tabTitle={"Annualized (FY)"}
+                  vaccineName={vaccineName && vaccineName}
+                  dose={dose && dose}
+                  isLoading={isLoading && isLoading}
+                  startYear={startYear}
+                  endYear={endYear}
+                  reportYear={"FY"}
+                />
+              </Grid>
+            </>
+          )}
         </Grid>
       </TabPanel>
       <TabPanel value={value} index={3}>
         <Grid container spacing={3} className={classes.section}>
-          <Grid item lg={5} md={5} xl={5} xs={5}>
-            <AnnualizedCoverageForVaccineMap
-              data={vacineDataForMap && vacineDataForMap}
-              tabTitle={"Monthly (FY)"}
-              dose={dose && dose}
-              endYear={endYear}
-              vaccineName={vaccineName && vaccineName}
-              isLoading={isLoading && isLoading}
-              reportYear={"FY"}
-              startYear={startYear}
-            />
-          </Grid>
-          <Grid item lg={7} md={7} xl={7} xs={7}>
-            <CoverageForAntigensChart
-              data={vaccineDosesForChart && vaccineDosesForChart}
-              tabTitle={"Monthly (FY)"}
-              vaccineName={vaccineName && vaccineName}
-              dose={dose && dose}
-              isLoading={isLoading && isLoading}
-              startYear={startYear}
-              endYear={endYear}
-              reportYear={"FY"}
-            />
-          </Grid>
+          {district === "National" ? (
+            <>
+              <Grid item lg={5} md={5} xl={5} xs={5}>
+                <AnnualizedCoverageForVaccineMap
+                  data={vacineDataForMap && vacineDataForMap}
+                  tabTitle={"Monthly (FY)"}
+                  dose={dose && dose}
+                  endYear={endYear}
+                  vaccineName={vaccineName && vaccineName}
+                  isLoading={isLoading && isLoading}
+                  reportYear={"FY"}
+                  startYear={startYear}
+                />
+              </Grid>
+              <Grid item lg={7} md={7} xl={7} xs={7}>
+                <CoverageForAntigensChart
+                  data={vaccineDosesForChart && vaccineDosesForChart}
+                  tabTitle={"Monthly (FY)"}
+                  vaccineName={vaccineName && vaccineName}
+                  dose={dose && dose}
+                  isLoading={isLoading && isLoading}
+                  startYear={startYear}
+                  endYear={endYear}
+                  reportYear={"FY"}
+                />
+              </Grid>
+            </>
+          ) : (
+            <>
+              <Grid item lg={12} md={12} xl={12} xs={12}>
+                <CoverageForAntigensChart
+                  data={vaccineDosesForChart && vaccineDosesForChart}
+                  tabTitle={"Monthly (FY)"}
+                  vaccineName={vaccineName && vaccineName}
+                  dose={dose && dose}
+                  isLoading={isLoading && isLoading}
+                  startYear={startYear}
+                  endYear={endYear}
+                  reportYear={"FY"}
+                />
+              </Grid>
+            </>
+          )}
         </Grid>
       </TabPanel>
     </div>
