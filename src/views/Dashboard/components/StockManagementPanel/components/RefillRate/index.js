@@ -73,7 +73,6 @@ export default function RefillRate(props) {
               xs={12}
               style={{ height: 720, padding: "0.9rem" }}
             >
-              {/* Hi */}
               <RefillRateTable
                 data={atHandStockByDistrictRefillData}
                 isLoading={isLoading && isLoading}

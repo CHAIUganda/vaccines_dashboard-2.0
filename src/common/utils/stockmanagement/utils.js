@@ -17,6 +17,19 @@ const getMonthNumber = function(month) {
   return months[month];
 };
 
+// For highcharts to plot a timeseried data for our charts, we need to sort the data in ascending order
+// https://www.highcharts.com/errors/15/
+
+const dataSorter = data => {
+  if (Array.isArray(data[0])) {
+    return data.sort();
+  } else {
+    return data.sort(function(a, b) {
+      return a.x - b.x;
+    });
+  }
+};
+
 const convertToTimeSeries = period => {
   // Convert to number so we can get the year
   const str_period = period.toString();
@@ -28,6 +41,7 @@ const convertToTimeSeries = period => {
   const month = str_period.substring(5, 6);
 
   // We subtract - 1 because JS reads months from 0
+  // with Jan = 0, Feb = 1 etc.
   return Date.UTC(year, month - 1, 1);
 };
 
@@ -139,10 +153,6 @@ export const getStockChartData = (
     let refreshrate = 0;
 
     for (var i = 0; i < data.length; i++) {
-      const test = convertToTimeSeries(data[i].period);
-
-      console.log(test);
-
       seriesDistribution.push([
         convertToTimeSeries(data[i].period),
         parseInt(data[i].received)
@@ -163,32 +173,40 @@ export const getStockChartData = (
             : (data[i].received / data[i].ordered) * 100;
       }
     }
+
+    const sortedMin_seriesDistribution = dataSorter(min_seriesDistribution);
+
+    const sortedSeriesDistribution = dataSorter(seriesDistribution);
+
+    const sortedSeriesOrders = dataSorter(seriesOrders);
+
+    const sortedMax_seriesDistribution = dataSorter(max_seriesDistribution);
+
     graphdataDistribution.push({
       name: "Min",
-      data: min_seriesDistribution,
+      data: sortedMin_seriesDistribution,
       color: "#A5E816"
     });
     graphdataDistribution.push({
       name: "Issued",
-      data: seriesDistribution,
+      data: sortedSeriesDistribution,
       color: "#1F77B4"
     });
     graphdataDistribution.push({
       name: "Ordered",
-      data: seriesOrders,
+      data: sortedSeriesOrders,
       color: "red"
     });
 
     graphdataDistribution.push({
       name: "Max",
-      data: max_seriesDistribution,
+      data: sortedMax_seriesDistribution,
       color: "#FF7F0E"
     });
 
     return graphdataDistribution;
   } else if (type === "column_uptake_rate") {
     let graphdataUptake = [];
-    let seriesUptake = [];
     let stockData = [];
     let immunisationData = [];
     let monthlyTargetData = [];
@@ -196,8 +214,6 @@ export const getStockChartData = (
     let maxMonthlyTarget = 0;
 
     let uptake = "0";
-
-    let periodIndexes = [];
 
     for (let i = 0; i < data.length; i++) {
       let item = data[i];
@@ -238,30 +254,37 @@ export const getStockChartData = (
       }
     }
 
+    const sortedStockData = dataSorter(stockData);
+
+    const sortedImmunisationData = dataSorter(immunisationData);
+
+    const sortedMonthlyTargetData = dataSorter(monthlyTargetData);
+
+    const sortedForceStartZeroData = dataSorter(forceStartZeroData);
+
     graphdataUptake.push({
       name: "Available Stock (Stock balance + Issues)",
       type: "column",
       color: "green",
-      data: stockData
+      data: sortedStockData
     });
     graphdataUptake.push({
       name: "Children Immunised",
       type: "column",
       color: "DodgerBlue",
-      data: immunisationData
+      data: sortedImmunisationData
     });
     graphdataUptake.push({
       name: "Monthly Targets",
       type: "line",
-      data: monthlyTargetData,
+      data: sortedMonthlyTargetData,
       color: "red"
     });
     graphdataUptake.push({
       name: "",
       type: "line",
-      // yAxis: 1,
-      // strokeWidth: 0,
-      data: forceStartZeroData
+      color: "white", // strokeWidth: 0,
+      data: sortedForceStartZeroData
     });
 
     return graphdataUptake;
@@ -277,9 +300,8 @@ export const getStockChartData = (
       let item = data[i];
       /* Certain data had invalid periods like 20172 instead of
                 201702 which were causing errors. Hence the filter below. */
-      if (item.period.toString().length == 5) continue;
+      if (item.period.toString().length === 5) continue;
 
-      //var monthIndex = appHelpers.getMonthIndexFromPeriod(item.period, 'CY');
       let periodIndex = convertToTimeSeries(item.period);
       var atHand =
         item.at_hand === undefined ? item.total_at_hand : item.at_hand;
@@ -293,12 +315,26 @@ export const getStockChartData = (
       supplyData.push({ x: periodIndex, y: Number(received.toFixed(0)) });
     }
 
-    graphData.push({ name: "Stock Balance", color: "green", data: stockData });
-    graphData.push({ name: "Orders", color: "DodgerBlue", data: orderedData });
+    const sortedStockData = dataSorter(stockData);
+
+    const sortedOrderedData = dataSorter(orderedData);
+
+    const sortedSupplyData = dataSorter(supplyData);
+
+    graphData.push({
+      name: "Stock Balance",
+      color: "green",
+      data: sortedStockData
+    });
+    graphData.push({
+      name: "Orders",
+      color: "DodgerBlue",
+      data: sortedOrderedData
+    });
     graphData.push({
       name: "Supply By NMS",
       color: "Orange",
-      data: supplyData
+      data: sortedSupplyData
     });
     return graphData;
   }

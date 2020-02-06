@@ -1,6 +1,9 @@
 // Utility functions
 import { getStockChartData } from "../../../../../../../common/utils/stockmanagement/utils";
 
+// Chart Options
+import { commonChartOptions } from "../../../../../../../common/chartOptions/chartOptions";
+
 export const StockBalancesPieChartTemplate = (
   data,
   endMonth,
@@ -18,27 +21,18 @@ export const StockBalancesPieChartTemplate = (
   );
 
   return {
+    ...commonChartOptions,
     chart: {
       plotBackgroundColor: null,
       plotBorderWidth: null,
       plotShadow: false,
-      type: "pie"
+      type: "pie",
+      height: 550
     },
     title: "Pie Chart",
     tooltip: {
       pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
     },
-    plotOptions: {
-      pie: {
-        allowPointSelect: true,
-        cursor: "pointer",
-        dataLabels: {
-          enabled: false
-        },
-        showInLegend: true
-      }
-    },
-
     series: [chartData]
   };
 };

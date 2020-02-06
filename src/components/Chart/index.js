@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 
 // Material components
 import { makeStyles } from "@material-ui/core/styles";
@@ -20,7 +20,17 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const CustomeChartPaper = props => {
-  const { children, isLoading, centerTitle, ...rest } = props;
+  const { children, isLoading, centerTitle, chartData, ...rest } = props;
+
+  // Used to store state of the series chart data.
+  // If empty, means no data and we render appropriate message
+  const [dataState, setDataState] = useState();
+  useMemo(() => {
+    if (chartData && chartData)
+      setDataState(
+        chartData.series === undefined || chartData.series.length === 0
+      );
+  }, [chartData]);
 
   const classes = useStyles();
 
@@ -52,7 +62,20 @@ const CustomeChartPaper = props => {
               {props.description} {props.totals}
             </Typography>
             <Typography component="div" style={{ height: 100 }}>
-              {props.chart}
+              {dataState ? (
+                <p
+                  style={{
+                    margin: 200,
+                    marginLeft: 300,
+                    fontSize: 20,
+                    color: "red"
+                  }}
+                >
+                  No Data Available for the selected filter
+                </p>
+              ) : (
+                <> {props.chart}</>
+              )}
             </Typography>
           </>
         )}
