@@ -779,6 +779,7 @@ export function CoveragePanel() {
             isLoading={isLoadingCoverageByMonth && isLoadingCoverageByMonth}
             startYear={coverageByMonthStartYear}
             endYear={endYear}
+            district={coverageByMonthDistrict && coverageByMonthDistrict}
           />
         </TabPanel>
         <TabPanel value={value} index={1}>
@@ -810,6 +811,9 @@ export function CoveragePanel() {
             isLoading={isLoadingDropoutRate && isLoadingDropoutRate}
             startYear={coverageDropoutRateYear}
             endYear={endYear}
+            district={
+              coverageDropoutRateDistrict && coverageDropoutRateDistrict
+            }
           />
         </TabPanel>
         <TabPanel value={value} index={3}>
