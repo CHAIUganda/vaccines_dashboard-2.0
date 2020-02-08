@@ -43,7 +43,6 @@ for (let i = year; i > year - 5; i--) {
 
 // Get last year
 const lastYear = new Date().getFullYear() - 1;
-console.log(lastYear);
 
 const VACCINES = [
   "HPV",
@@ -65,8 +64,8 @@ function TabPanel(props) {
       component="div"
       role="tabpanel"
       hidden={value !== index}
-      id={`keymetrics-tabpanel-${index}`}
-      aria-labelledby={`keymetrics-tab-${index}`}
+      id={`stock-management-keymetrics-tabpanel-${index}`}
+      aria-labelledby={`stock-management-keymetrics-tab-${index}`}
       {...other}
     >
       {value === index && <Box p={1}>{children}</Box>}
@@ -76,8 +75,8 @@ function TabPanel(props) {
 
 function a11yProps(index) {
   return {
-    id: `keymetrics-tab-${index}`,
-    "aria-controls": `keymetrics-tabpanel-${index}`
+    id: `stock-management-keymetrics-tab-${index}`,
+    "aria-controls": `stock-management-keymetrics-tabpanel-${index}`
   };
 }
 
@@ -319,7 +318,7 @@ export function StockManagementPanel() {
   const districtStockLevelsEndMonthFilter =
     groupedMonths &&
     Object.keys(groupedMonths)
-      .filter(year => year === lastYear.toString())
+      .filter(year => year !== "2020")
       .map(year => (
         <>
           {" "}
@@ -405,7 +404,7 @@ export function StockManagementPanel() {
   const uptakeRateEndMonthFilter =
     groupedMonths &&
     Object.keys(groupedMonths)
-      .filter(year => year === lastYear.toString())
+      .filter(year => year !== "2020")
       .map(year => (
         <>
           {" "}
@@ -455,7 +454,7 @@ export function StockManagementPanel() {
   const districtStockTrendEndMonthFilter =
     groupedMonths &&
     Object.keys(groupedMonths)
-      .filter(year => year === lastYear.toString())
+      .filter(year => year !== "2020")
       .map(year => (
         <>
           {" "}
@@ -526,9 +525,9 @@ export function StockManagementPanel() {
                 End Month
               </InputLabel>
               <Select
+                value={districtStockLevelsEndMonth}
                 native
                 defaultValue="Jun 2019"
-                value={districtStockLevelsEndMonth}
                 input={<Input id="grouped-select" />}
                 onChange={event =>
                   setDistrictStockLevelsEndMonth(event.target.value)

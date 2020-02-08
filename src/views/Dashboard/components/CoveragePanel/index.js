@@ -60,8 +60,8 @@ function TabPanel(props) {
       component="div"
       role="tabpanel"
       hidden={value !== index}
-      id={`keymetrics-tabpanel-${index}`}
-      aria-labelledby={`keymetrics-tab-${index}`}
+      id={`coverage-panel-keymetrics-tabpanel-${index}`}
+      aria-labelledby={`coverage-panel-keymetrics-tab-${index}`}
       {...other}
     >
       {value === index && <Box p={1}>{children}</Box>}
@@ -71,8 +71,8 @@ function TabPanel(props) {
 
 function a11yProps(index) {
   return {
-    id: `keymetrics-tab-${index}`,
-    "aria-controls": `keymetrics-tabpanel-${index}`
+    id: `coverage-panel-keymetrics-tab-${index}`,
+    "aria-controls": `coverage-panel-keymetrics-tabpanel-${index}`
   };
 }
 

@@ -21,20 +21,13 @@ function TabPanel(props) {
       component="div"
       role="tabpanel"
       hidden={value !== index}
-      id={`coverage-by-months-tabpanel-${index}`}
-      aria-labelledby={`coverage-by-months-tab-${index}`}
+      id={`district-stock-levels-tabpanel-${index}`}
+      aria-labelledby={`district-stock-levels-tab-${index}`}
       {...other}
     >
       {value === index && <Box p={1}>{children}</Box>}
     </Typography>
   );
-}
-
-function a11yProps(index) {
-  return {
-    id: `coverage-by-months-tab-${index}`,
-    "aria-controls": `coverage-by-months-tabpanel-${index}`
-  };
 }
 
 const useStyles = makeStyles(theme => ({
@@ -75,43 +68,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const TabStyle = withStyles(theme => ({
-  root: {
-    padding: "1rem 0",
-    textTransform: "none",
-    fontWeight: theme.typography.fontWeightRegular,
-    // fontSize: "1.2rem",
-    // fontFamily: ["-apple-system", "BlinkMacSystemFont", "Roboto"].join(","),
-    "&:hover": {
-      backgroundColor: "#B2C0D6",
-      color: "black",
-      opacity: 1
-    },
-    "&$selected": {
-      backgroundColor: "#B2C0D6",
-      color: "black",
-      fontWeight: theme.typography.fontWeightMedium
-    }
-  },
-  selected: {}
-}))(props => <Tab {...props} />);
-
 export default function DistrictsStockLevels(props) {
   const classes = useStyles();
   const [value, setValue] = useState(0);
   const {
     atHandStockLevelsData,
-    stockByDistrictVaccineData,
     isLoading,
     endMonth,
     startMonth,
     district,
     vaccine
   } = props;
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
   return (
     <div className={classes.tabsDiv}>
@@ -136,90 +103,6 @@ export default function DistrictsStockLevels(props) {
               district={district}
               vaccine={vaccine}
             />
-          </Grid>
-        </Grid>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <Grid container spacing={3} className={classes.section}>
-          <Grid item lg={5} md={5} xl={5} xs={5}>
-            {/* <AnnualizedCoverageForVaccineMap
-              data={vacineDataForMap && vacineDataForMap}
-              tabTitle={"Monthly (CY)"}
-              dose={dose && dose}
-              endYear={endYear}
-              vaccineName={vaccineName && vaccineName}
-              isLoading={isLoading && isLoading}
-              reportYear={"CY"}
-              startYear={startYear}
-            /> */}
-          </Grid>
-          <Grid item lg={7} md={7} xl={7} xs={7}>
-            {/* <CoverageForAntigensChart
-              data={vaccineDosesForChart && vaccineDosesForChart}
-              tabTitle={"Monthly (CY)"}
-              vaccineName={vaccineName && vaccineName}
-              dose={dose && dose}
-              isLoading={isLoading && isLoading}
-              startYear={startYear}
-              endYear={endYear}
-              reportYear={"CY"}
-            /> */}
-          </Grid>
-        </Grid>
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        <Grid container spacing={3} className={classes.section}>
-          <Grid item lg={5} md={5} xl={5} xs={5}>
-            {/* <AnnualizedCoverageForVaccineMap
-              data={vacineDataForMap && vacineDataForMap}
-              tabTitle={"Annualized (FY)"}
-              dose={dose && dose}
-              endYear={endYear}
-              vaccineName={vaccineName && vaccineName}
-              isLoading={isLoading && isLoading}
-              reportYear={"FY"}
-              startYear={startYear}
-            /> */}
-          </Grid>
-          <Grid item lg={7} md={7} xl={7} xs={7}>
-            {/* <CoverageForAntigensChart
-              data={vaccineDosesForChart && vaccineDosesForChart}
-              tabTitle={"Annualized (FY)"}
-              vaccineName={vaccineName && vaccineName}
-              dose={dose && dose}
-              isLoading={isLoading && isLoading}
-              startYear={startYear}
-              endYear={endYear}
-              reportYear={"FY"}
-            /> */}
-          </Grid>
-        </Grid>
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        <Grid container spacing={3} className={classes.section}>
-          <Grid item lg={5} md={5} xl={5} xs={5}>
-            {/* <AnnualizedCoverageForVaccineMap
-              data={vacineDataForMap && vacineDataForMap}
-              tabTitle={"Monthly (FY)"}
-              dose={dose && dose}
-              endYear={endYear}
-              vaccineName={vaccineName && vaccineName}
-              isLoading={isLoading && isLoading}
-              reportYear={"FY"}
-              startYear={startYear}
-            /> */}
-          </Grid>
-          <Grid item lg={7} md={7} xl={7} xs={7}>
-            {/* <CoverageForAntigensChart
-              data={vaccineDosesForChart && vaccineDosesForChart}
-              tabTitle={"Monthly (FY)"}
-              vaccineName={vaccineName && vaccineName}
-              dose={dose && dose}
-              isLoading={isLoading && isLoading}
-              startYear={startYear}
-              endYear={endYear}
-              reportYear={"FY"}
-            /> */}
           </Grid>
         </Grid>
       </TabPanel>

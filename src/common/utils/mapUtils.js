@@ -77,8 +77,6 @@ const getAggregates = (data, periodList) => {
     }
   );
 
-  //   console.log(result);
-
   return result;
 };
 

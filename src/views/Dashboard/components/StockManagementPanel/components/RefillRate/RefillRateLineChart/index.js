@@ -10,10 +10,6 @@ import { Chart } from "../../../../../../../components";
 // Chart Template
 import { RefillRateLineChartTemplate } from "./chart";
 
-// Utils
-
-// import { generateMapTitle } from "../../../../../../../common/utils/mapUtils";
-
 const RefillRateLineChart = ({
   data,
   isLoading,
