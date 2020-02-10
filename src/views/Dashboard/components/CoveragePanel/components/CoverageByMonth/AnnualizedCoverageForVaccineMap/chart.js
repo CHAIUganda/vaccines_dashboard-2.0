@@ -59,7 +59,7 @@ export const vaccineAnnualizedCoverage = (
     ...commonChartOptions,
     chart: {
       map: ugandaMap2,
-      height: 79 + "%"
+      height: 74 + "%"
     },
 
     title: {
