@@ -23,7 +23,8 @@ const DropoutRateForAntigensChart = props => {
     isLoading,
     startYear,
     endYear,
-    reportYear
+    reportYear,
+    district
   } = props;
 
   const [
@@ -37,11 +38,25 @@ const DropoutRateForAntigensChart = props => {
     if (data && data) {
       if (tabTitle === "Annualized (CY)" || tabTitle === "Monthly (CY)") {
         setDropoutRateCoverageForAntigensChart(
-          dropoutRateCoverageCY(data, startYear, endYear, dose, tabTitle)
+          dropoutRateCoverageCY(
+            data,
+            startYear,
+            endYear,
+            dose,
+            tabTitle,
+            district
+          )
         );
       } else {
         setDropoutRateCoverageForAntigensChart(
-          dropoutRateCoverageFY(data, startYear, endYear, dose, tabTitle)
+          dropoutRateCoverageFY(
+            data,
+            startYear,
+            endYear,
+            dose,
+            tabTitle,
+            district
+          )
         );
       }
 

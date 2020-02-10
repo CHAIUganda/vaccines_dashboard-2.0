@@ -51,7 +51,6 @@ const useStyles = makeStyles(theme => ({
     marginBottom: 20
   },
   tabsDiv: {
-    padding: "1rem 1rem",
     flexGrow: 1,
     backgroundColor: "#F9F9FC",
     fontFamily: "Open Sans"
@@ -72,7 +71,7 @@ const useStyles = makeStyles(theme => ({
   },
   section: {
     paddingTop: 40,
-    height: 630
+    height: 582
   }
 }));
 
@@ -81,8 +80,6 @@ const TabStyle = withStyles(theme => ({
     padding: "1rem 0",
     textTransform: "none",
     fontWeight: theme.typography.fontWeightRegular,
-    // fontSize: "1.2rem",
-    // fontFamily: ["-apple-system", "BlinkMacSystemFont", "Roboto"].join(","),
     "&:hover": {
       backgroundColor: "#B2C0D6",
       color: "black",
@@ -157,6 +154,7 @@ export default function CoverageByMonth(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"CY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -172,6 +170,7 @@ export default function CoverageByMonth(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"CY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -204,6 +203,7 @@ export default function CoverageByMonth(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"CY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -219,6 +219,7 @@ export default function CoverageByMonth(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"CY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -251,6 +252,7 @@ export default function CoverageByMonth(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"FY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -266,6 +268,7 @@ export default function CoverageByMonth(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"FY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -286,6 +289,7 @@ export default function CoverageByMonth(props) {
                   isLoading={isLoading && isLoading}
                   reportYear={"FY"}
                   startYear={startYear}
+                  district={district}
                 />
               </Grid>
               <Grid item lg={7} md={7} xl={7} xs={7}>
@@ -298,6 +302,7 @@ export default function CoverageByMonth(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"FY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -313,6 +318,7 @@ export default function CoverageByMonth(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"FY"}
+                  district={district}
                 />
               </Grid>
             </>

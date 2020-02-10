@@ -2,10 +2,7 @@
 import Highcharts from "highcharts";
 
 // Chart Options
-import {
-  commonChartOptions,
-  commonChartPlotOptions
-} from "../../../../../../../common/chartOptions/chartOptions";
+import { commonChartOptions } from "../../../../../../../common/chartOptions/chartOptions";
 
 // Utility functions
 import { getChartData } from "../../../../../../../common/utils/utils";
@@ -15,7 +12,8 @@ export const dropoutRateCoverageCY = (
   startYear,
   endYear,
   dose,
-  tabTitle
+  tabTitle,
+  district
 ) => {
   const monthsInYear = [
     "",
@@ -73,6 +71,9 @@ export const dropoutRateCoverageCY = (
 
   return {
     ...commonChartOptions,
+    chart: {
+      ...(district === "National" ? { height: 50 + "%" } : { height: 28 + "%" })
+    },
     title: {
       text: ""
     },
@@ -102,7 +103,8 @@ export const dropoutRateCoverageFY = (
   startYear,
   endYear,
   dose,
-  tabTitle
+  tabTitle,
+  district
 ) => {
   const monthsFinancialYear = [
     "",
@@ -162,6 +164,9 @@ export const dropoutRateCoverageFY = (
 
   return {
     ...commonChartOptions,
+    chart: {
+      ...(district === "National" ? { height: 50 + "%" } : { height: 28 + "%" })
+    },
     title: {
       text: ""
     },

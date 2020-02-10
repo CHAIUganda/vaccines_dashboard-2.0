@@ -292,7 +292,7 @@ export function Dashboard() {
             icon={<LocalShippingIcon className={classes.verticalIcon} />}
             href="/stock-management"
             {...a11yProps(2)}
-            disabled={true}
+            disabled={false}
           />
           <LinkTab
             classes={{
@@ -307,7 +307,7 @@ export function Dashboard() {
         </Tabs>
       </Drawer>
       <Box component="span" m={1}>
-        <Container maxWidth="xl">
+        <Container maxWidth="xl" style={{ paddingLeft: 100 }}>
           <TabPanel value={value} index={0}>
             <OverviewPanel />
           </TabPanel>

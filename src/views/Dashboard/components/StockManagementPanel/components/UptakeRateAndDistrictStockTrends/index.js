@@ -13,7 +13,6 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1
   },
   chartDiv: {
-    padding: "1rem 1rem",
     flexGrow: 1,
     backgroundColor: "#F9F9FC",
     fontFamily: "Open Sans",
@@ -44,7 +43,7 @@ export default function UptakeRateAndDistrictStockTrends(props) {
               md={12}
               xl={12}
               xs={12}
-              style={{ height: 720, padding: "0.9rem" }}
+              style={{ height: 650, padding: "0.9rem" }}
             >
               {tab === "uptake-rate" ? (
                 <>

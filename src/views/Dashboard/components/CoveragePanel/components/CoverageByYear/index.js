@@ -12,11 +12,10 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1
   },
   tabsDiv: {
-    padding: "1rem 1rem",
     flexGrow: 1,
     backgroundColor: "#F9F9FC",
     fontFamily: "Open Sans",
-    height: 630
+    height: 500
   }
 }));
 
@@ -42,7 +41,7 @@ export default function CoverageByYear(props) {
               md={12}
               xl={12}
               xs={12}
-              style={{ height: 720, padding: "0.9rem" }}
+              style={{ height: 650, padding: "0.9rem" }}
             >
               <AntigenCoverageChart
                 data={vacineData && vacineData}

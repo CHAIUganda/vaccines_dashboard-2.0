@@ -52,7 +52,6 @@ const useStyles = makeStyles(theme => ({
     marginBottom: 20
   },
   tabsDiv: {
-    padding: "1rem 1rem",
     flexGrow: 1,
     backgroundColor: "#F9F9FC",
     fontFamily: "Open Sans"
@@ -73,7 +72,7 @@ const useStyles = makeStyles(theme => ({
   },
   section: {
     paddingTop: 40,
-    height: 630
+    height: 582
   }
 }));
 
