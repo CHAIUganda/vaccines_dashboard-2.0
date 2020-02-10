@@ -29,7 +29,7 @@ import {
 import DistrictsStockLevels from "./components/DistrictsStockLevels/index";
 import RefillRate from "./components/RefillRate/index";
 import UptakeRate from "./components/UptakeRate/index";
-// import DistrictStockTrends from "./components/DistrictStockTrends";
+import DistrictStockTrends from "./components/DistrictStockTrends";
 
 // Variables
 const date = new Date(),
@@ -887,20 +887,21 @@ export function StockManagementPanel() {
 
         <TabPanel value={value} index={2}>
           <UptakeRate
-            data={stockByDistrictVaccineUptakeData}
+            stockByDistrictVaccineUptakeData={stockByDistrictVaccineUptakeData}
             atHandStockByDistrictUptakeData={atHandStockByDistrictUptakeData}
             isLoading={isLoadingUptakeRateData}
             endMonth={uptakeRateEndMonth}
             startMonth={uptakeRateStartMonth}
             district={uptakeRateDistrict}
             vaccine={uptakeRateVaccine}
-            tab={"uptake-rate"}
           />
         </TabPanel>
 
         <TabPanel value={value} index={3}>
-          <UptakeRate
-            data={stockByDistrictVaccineStockTrendData}
+          <DistrictStockTrends
+            stockByDistrictVaccineStockTrendData={
+              stockByDistrictVaccineStockTrendData
+            }
             atHandStockByDistrictStockTrendData={
               atHandStockByDistrictStockTrendData
             }
@@ -909,7 +910,6 @@ export function StockManagementPanel() {
             startMonth={districtStockTrendStartMonth}
             district={districtStockTrendDistrict}
             vaccine={districtStockTrendVaccine}
-            tab={"district-stock-trends"}
           />
         </TabPanel>
       </Grid>

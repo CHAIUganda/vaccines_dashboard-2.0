@@ -21,6 +21,7 @@ const DistrictStockTrendsChart = ({
   const [chart, setChart] = useState();
 
   const chartTitle = `${district} stock level monthly trends for ${vaccine}`;
+
   useMemo(() => {
     if (data && data) {
       setChart(

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 // Material components
 import { Grid } from "@material-ui/core";
@@ -6,7 +6,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 // Custom components
 import UptakeRateChart from "./UptakeRateChart/index";
-import DistrictStockTrendsChart from "../DistrictStockTrends/DistrictStockTrendsChart/index";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,13 +23,12 @@ const useStyles = makeStyles(theme => ({
 export default function UptakeRate(props) {
   const classes = useStyles();
   const {
-    data,
+    stockByDistrictVaccineUptakeData,
     startMonth,
     endMonth,
     isLoading,
     vaccine,
-    district,
-    tab
+    district
   } = props;
 
   return (
@@ -46,29 +44,17 @@ export default function UptakeRate(props) {
               xs={12}
               style={{ height: 720, padding: "0.9rem" }}
             >
-              {tab === "uptake-rate" ? (
-                <>
-                  <UptakeRateChart
-                    data={data && data}
-                    startMonth={startMonth && startMonth}
-                    endMonth={endMonth && endMonth}
-                    isLoading={isLoading && isLoading}
-                    vaccine={vaccine && vaccine}
-                    district={district && district}
-                  />
-                </>
-              ) : (
-                <>
-                  <DistrictStockTrendsChart
-                    data={data && data}
-                    startMonth={startMonth && startMonth}
-                    endMonth={endMonth && endMonth}
-                    isLoading={isLoading && isLoading}
-                    vaccine={vaccine && vaccine}
-                    district={district && district}
-                  />
-                </>
-              )}
+              <UptakeRateChart
+                data={
+                  stockByDistrictVaccineUptakeData &&
+                  stockByDistrictVaccineUptakeData
+                }
+                startMonth={startMonth && startMonth}
+                endMonth={endMonth && endMonth}
+                isLoading={isLoading && isLoading}
+                vaccine={vaccine && vaccine}
+                district={district && district}
+              />
             </Grid>
           </Grid>
         </Grid>
