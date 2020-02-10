@@ -5,7 +5,7 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
 // Shared componenrs
-import { Chart } from "../../../../../../../../src/components";
+import { Chart } from "../../../../../../../components";
 
 // Chart Template
 import { uptakeRateChartTemplate } from "./chart";
