@@ -898,7 +898,7 @@ export function StockManagementPanel() {
         </TabPanel>
 
         <TabPanel value={value} index={3}>
-          <DistrictStockTrends
+          {/* <DistrictStockTrends
             stockByDistrictVaccineStockTrendData={
               stockByDistrictVaccineStockTrendData
             }
@@ -910,7 +910,7 @@ export function StockManagementPanel() {
             startMonth={districtStockTrendStartMonth}
             district={districtStockTrendDistrict}
             vaccine={districtStockTrendVaccine}
-          />
+          /> */}
         </TabPanel>
       </Grid>
     </Grid>
