@@ -2,10 +2,7 @@
 import Highcharts from "highcharts";
 
 // Chart Options
-import {
-  commonChartOptions,
-  commonChartPlotOptions
-} from "../../../../../../../common/chartOptions/chartOptions";
+import { commonChartOptions } from "../../../../../../../common/chartOptions/chartOptions";
 
 //  Map utilities
 
@@ -56,7 +53,7 @@ export const dropoutRateCoverageMap = (
     ...commonChartOptions,
     chart: {
       map: ugandaMap2,
-      height: 79 + "%"
+      height: 74 + "%"
     },
 
     title: {

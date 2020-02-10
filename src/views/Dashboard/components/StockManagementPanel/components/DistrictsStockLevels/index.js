@@ -3,8 +3,7 @@ import PropTypes from "prop-types";
 
 // Material components
 import { Grid } from "@material-ui/core";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import Tab from "@material-ui/core/Tab";
+import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
@@ -43,7 +42,6 @@ const useStyles = makeStyles(theme => ({
     marginBottom: 20
   },
   tabsDiv: {
-    padding: "1rem 1rem",
     flexGrow: 1,
     backgroundColor: "#F9F9FC",
     fontFamily: "Open Sans"
@@ -64,7 +62,7 @@ const useStyles = makeStyles(theme => ({
   },
   section: {
     paddingTop: 40,
-    height: 630
+    height: 636
   }
 }));
 

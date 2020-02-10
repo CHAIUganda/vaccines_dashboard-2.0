@@ -28,21 +28,18 @@ const CoverageForAntigensChart = props => {
     reportYear
   } = props;
 
-  const [
-    annualizedCoverageForAntigensChart,
-    setAnnualizedCoverageForAntigensChart
-  ] = useState();
+  const [chart, setChart] = useState();
 
   const [chartTitle, setChartTitle] = useState();
 
   useMemo(() => {
     if (data && data) {
       if (tabTitle === "Annualized (CY)" || tabTitle === "Monthly (CY)") {
-        setAnnualizedCoverageForAntigensChart(
+        setChart(
           antigensAnnualizedCoverageCY(data, startYear, endYear, dose, tabTitle)
         );
       } else {
-        setAnnualizedCoverageForAntigensChart(
+        setChart(
           antigensAnnualizedCoverageFY(data, startYear, endYear, dose, tabTitle)
         );
       }
@@ -64,18 +61,10 @@ const CoverageForAntigensChart = props => {
     <Chart
       title={chartTitle}
       chart={
-        <HighchartsReact
-          highcharts={Highcharts}
-          options={
-            annualizedCoverageForAntigensChart &&
-            annualizedCoverageForAntigensChart
-          }
-        />
+        <HighchartsReact highcharts={Highcharts} options={chart && chart} />
       }
       isLoading={isLoading && isLoading}
-      chartData={
-        annualizedCoverageForAntigensChart && annualizedCoverageForAntigensChart
-      }
+      chartData={chart && chart}
     />
   );
 };

@@ -133,7 +133,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
     fontFamily: "Open Sans",
-    width: 640,
+    width: 650,
     paddingBottom: 1
   },
   tabs: {

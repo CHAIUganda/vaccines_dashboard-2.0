@@ -2,10 +2,7 @@
 import Highcharts from "highcharts";
 
 // Chart Options
-import {
-  commonChartOptions,
-  commonChartPlotOptions
-} from "../../../../../../../common/chartOptions/chartOptions";
+import { commonChartOptions } from "../../../../../../../common/chartOptions/chartOptions";
 
 // Utility functions
 import { getChartData } from "../../../../../../../common/utils/utils";
@@ -73,6 +70,9 @@ export const dropoutRateCoverageCY = (
 
   return {
     ...commonChartOptions,
+    chart: {
+      height: 50 + "%"
+    },
     title: {
       text: ""
     },
@@ -162,6 +162,9 @@ export const dropoutRateCoverageFY = (
 
   return {
     ...commonChartOptions,
+    chart: {
+      height: 50 + "%"
+    },
     title: {
       text: ""
     },

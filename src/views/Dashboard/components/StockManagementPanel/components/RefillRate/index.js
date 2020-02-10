@@ -1,12 +1,8 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 
 // Material components
 import { Grid } from "@material-ui/core";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
+import { makeStyles } from "@material-ui/core/styles";
 
 // Custom components
 import RefillRateLineChart from "./RefillRateLineChart/index";
@@ -17,7 +13,6 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1
   },
   tabsDiv: {
-    padding: "1rem 1rem",
     flexGrow: 1,
     backgroundColor: "#F9F9FC",
     fontFamily: "Open Sans",
@@ -49,7 +44,7 @@ export default function RefillRate(props) {
               md={12}
               xl={12}
               xs={12}
-              style={{ height: 720, padding: "0.9rem" }}
+              style={{ height: 650, padding: "0.9rem" }}
             >
               <RefillRateLineChart
                 data={stockByDistrictVaccineRefillData}
@@ -71,7 +66,7 @@ export default function RefillRate(props) {
               md={12}
               xl={12}
               xs={12}
-              style={{ height: 720, padding: "0.9rem" }}
+              style={{ height: 650, padding: "0.9rem" }}
             >
               <RefillRateTable
                 data={atHandStockByDistrictRefillData}

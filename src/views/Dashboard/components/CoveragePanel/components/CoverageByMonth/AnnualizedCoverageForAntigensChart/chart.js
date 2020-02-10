@@ -74,6 +74,10 @@ export const antigensAnnualizedCoverageCY = (
 
   return {
     ...commonChartOptions,
+    chart: {
+      height: 50 + "%"
+    },
+
     title: {
       text: ""
     },
@@ -142,6 +146,9 @@ export const antigensAnnualizedCoverageFY = (
 
   return {
     ...commonChartOptions,
+    chart: {
+      height: 50 + "%"
+    },
     title: {
       text: ""
     },

@@ -57,8 +57,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1
   },
   appBar: {
-    backgroundColor: "white",
-    borderRadius: "10px"
+    backgroundColor: "white"
   },
   search: {
     position: "relative",
@@ -88,7 +87,6 @@ const useStyles = makeStyles(theme => ({
     color: "#28354A",
     border: "1px solid #FC6F6F !important",
     borderRadius: "5px"
-    // fontSize: 20
   },
 
   inputInput: {
@@ -101,11 +99,9 @@ const useStyles = makeStyles(theme => ({
     }
   },
   tabs: {
-    padding: "0rem",
     color: "#484848",
     backgroundColor: "white",
-    fontFamily: "Open Sans",
-    fontSize: "10rem",
+    fontSize: "1rem",
     border: "1px solid #FC6F6F !important",
     borderRadius: "5px"
   }
@@ -118,14 +114,7 @@ function a11yProps(index) {
   };
 }
 
-const StockBalancesTable = ({
-  data,
-  isLoading,
-  endMonth,
-  startMonth,
-  district,
-  vaccine
-}) => {
+const StockBalancesTable = ({ data, isLoading }) => {
   const [value, setValue] = useState(0);
   const classes = useStyles();
 
@@ -152,7 +141,7 @@ const StockBalancesTable = ({
                 <TabStyle {...a11yProps(3)} label="Above MAX" />
               </Tabs>
 
-              <div className={classes.search}>
+              {/* <div className={classes.search}>
                 <div className={classes.searchIcon}>
                   <SearchIcon style={{ color: "#28354A" }} />
                 </div>
@@ -164,7 +153,7 @@ const StockBalancesTable = ({
                   }}
                   inputProps={{ "aria-label": "search" }}
                 />
-              </div>
+              </div> */}
             </Toolbar>
           </AppBar>
           <TabPanel value={value} index={0}>
