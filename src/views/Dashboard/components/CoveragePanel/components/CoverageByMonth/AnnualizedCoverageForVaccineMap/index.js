@@ -32,8 +32,6 @@ const AnnualizedCoverageForVaccineMap = ({
     setAnnualizedVaccineCoverageMap
   ] = useState();
 
-  // const [dataState, setDataState] = useState(true);
-
   const [mapTitle, setMapTitle] = useState(
     "Annualized Coverage of PENTA3 for June 2019"
   );
@@ -64,16 +62,6 @@ const AnnualizedCoverageForVaccineMap = ({
     }
   }, [data, tabTitle, dose, vaccineName, startYear, endYear]);
 
-  // const dataState = () => {
-  //   if (
-  //     (annualizedVaccineCoverageMap && !annualizedVaccineCoverageMap.series) ||
-  //     (annualizedVaccineCoverageMap &&
-  //       !annualizedVaccineCoverageMap.series.length)
-  //   ) {
-  //     return false;
-  //   }
-  // };
-
   return (
     <Chart
       title={mapTitle}
@@ -85,7 +73,6 @@ const AnnualizedCoverageForVaccineMap = ({
         />
       }
       isLoading={isLoading && isLoading}
-      // dataState={dataState()}
     />
   );
 };

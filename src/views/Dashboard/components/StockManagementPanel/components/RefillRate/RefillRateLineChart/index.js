@@ -41,6 +41,7 @@ const RefillRateLineChart = ({
         <HighchartsReact highcharts={Highcharts} options={chart && chart} />
       }
       isLoading={isLoading && isLoading}
+      chartData={chart && chart}
     />
   );
 };

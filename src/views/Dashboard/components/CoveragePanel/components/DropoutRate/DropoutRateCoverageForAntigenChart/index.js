@@ -27,17 +27,14 @@ const DropoutRateForAntigensChart = props => {
     district
   } = props;
 
-  const [
-    dropoutRateCoverageForAntigensChart,
-    setDropoutRateCoverageForAntigensChart
-  ] = useState();
+  const [chart, setChart] = useState();
 
   const [chartTitle, setChartTitle] = useState();
 
   useMemo(() => {
     if (data && data) {
       if (tabTitle === "Annualized (CY)" || tabTitle === "Monthly (CY)") {
-        setDropoutRateCoverageForAntigensChart(
+        setChart(
           dropoutRateCoverageCY(
             data,
             startYear,
@@ -48,7 +45,7 @@ const DropoutRateForAntigensChart = props => {
           )
         );
       } else {
-        setDropoutRateCoverageForAntigensChart(
+        setChart(
           dropoutRateCoverageFY(
             data,
             startYear,
@@ -77,15 +74,10 @@ const DropoutRateForAntigensChart = props => {
     <Chart
       title={chartTitle}
       chart={
-        <HighchartsReact
-          highcharts={Highcharts}
-          options={
-            dropoutRateCoverageForAntigensChart &&
-            dropoutRateCoverageForAntigensChart
-          }
-        />
+        <HighchartsReact highcharts={Highcharts} options={chart && chart} />
       }
       isLoading={isLoading && isLoading}
+      chartData={chart && chart}
     />
   );
 };

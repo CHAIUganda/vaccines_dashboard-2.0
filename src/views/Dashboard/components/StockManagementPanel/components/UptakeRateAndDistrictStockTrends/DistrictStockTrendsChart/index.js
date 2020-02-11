@@ -44,6 +44,7 @@ const DistrictStockTrendsChart = ({
       }
       isLoading={isLoading && isLoading}
       centerTitle={true}
+      chartData={chart && chart}
     />
   );
 };
