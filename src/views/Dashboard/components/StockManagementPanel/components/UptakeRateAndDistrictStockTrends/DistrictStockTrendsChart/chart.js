@@ -27,18 +27,35 @@ export const districtStockTrendsChartTemplate = (
   );
 
   return {
-    ...commonChartOptions,
+    credits: {
+      ...commonChartOptions.credits
+    },
     chart: {
       type: "column",
-      height: 500
+      ...commonChartOptions.chart
+    },
+    exporting: {
+      ...commonChartOptions.exporting,
+      chartOptions: {
+        ...commonChartOptions.exporting.chartOptions,
+        title: {
+          text: `${district} stock level monthly trends for ${vaccine}`
+        }
+      }
     },
     title: {
       text: ""
     },
     xAxis: {
-      type: "datetime"
+      type: "datetime",
+      labels: {
+        ...commonChartOptions.labels
+      }
     },
     yAxis: {
+      labels: {
+        ...commonChartOptions.labels
+      },
       min: 0
     },
     plotOptions: {
@@ -46,9 +63,13 @@ export const districtStockTrendsChartTemplate = (
         ...commonChartPlotOptions.plotOptions.column,
         dataLabels: {
           enabled: true,
-          format: "{y}"
+          format: "{y:,.0f}",
+          ...commonChartOptions.labels
         }
       }
+    },
+    tooltip: {
+      ...commonChartOptions.lineTooltip
     },
     legend: {
       layout: "vertical",

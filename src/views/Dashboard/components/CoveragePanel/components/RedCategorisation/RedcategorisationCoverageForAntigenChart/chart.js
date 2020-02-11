@@ -1,5 +1,8 @@
 // Chart Options
-import { commonChartOptions } from "../../../../../../../common/chartOptions/chartOptions";
+import {
+  commonChartOptions,
+  commonChartPlotOptions
+} from "../../../../../../../common/chartOptions/chartOptions";
 
 // Utility functions
 import { getChartData } from "../../../../../../../common/utils/utils";
@@ -99,22 +102,27 @@ export const redCategorisationCoverageChart = (
       text: ""
     },
     xAxis: {
-      categories: monthsInYear
+      categories: monthsInYear,
+      labels: {
+        ...commonChartOptions.labels
+      }
     },
     yAxis: {
       title: {
         text: "Percentage (%)"
       },
+      labels: {
+        ...commonChartOptions.labels
+      },
       min: 0
     },
     plotOptions: {
       line: {
-        lineWidth: 1,
-        marker: {
-          enabled: false
-        }
+        ...commonChartPlotOptions.plotOptions.line
       }
     },
+    tooltip: { ...commonChartOptions.lineTooltip },
+
     series: [...chartData]
   };
 };

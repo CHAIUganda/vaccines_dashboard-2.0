@@ -29,6 +29,8 @@ import { ColdChainPanel } from "../Dashboard/components/ColdChainPanel/index";
 import { CoveragePanel } from "./components/CoveragePanel/index";
 import { StockManagementPanel } from "./components/StockManagementPanel/index";
 
+import FlagStripImage from "../../common/image/flag-ug.png";
+
 // Importing this at the top to provide pdf export functionality
 import Highcharts from "highcharts";
 require("highcharts/modules/exporting")(Highcharts);
@@ -90,7 +92,12 @@ const useStyles = makeStyles(theme => ({
   title: {
     flexGrow: 1,
     color: "#28354A",
-    marginLeft: 25
+    marginLeft: 25,
+    width: 150
+  },
+  subTitle: {
+    flexGrow: 1,
+    color: "red"
   },
   barCorlor: {
     color: "white",
@@ -154,18 +161,24 @@ const useStyles = makeStyles(theme => ({
     flexShrink: 0
   },
   drawerPaper: {
-    width: drawerWidth
+    width: drawerWidth,
+    top: 87
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3)
   },
-  toolbar: theme.mixins.toolbar
+  toolbar: theme.mixins.toolbar,
+  flagStrip: {
+    width: "auto",
+    minHeight: "15px",
+    backgroundImage: `url(${FlagStripImage})`
+  }
 }));
 
 export function Dashboard() {
   const classes = useStyles();
-  const [value, setValue] = React.useState(2);
+  const [value, setValue] = React.useState(1);
 
   function handleChange(event, newValue) {
     setValue(newValue);
@@ -173,6 +186,7 @@ export function Dashboard() {
 
   return (
     <div className={classes.root}>
+      <Box className={classes.flagStrip}></Box>
       <AppBar
         position="static"
         color={classes.barCorlor}
@@ -187,6 +201,7 @@ export function Dashboard() {
           >
             <DashboardIcon />
           </IconButton>
+
           <Avatar
             alt="Court of arms"
             src="/uganda-court-of-arms.jpg"
@@ -195,8 +210,15 @@ export function Dashboard() {
           <Typography variant="h6" className={classes.title}>
             MINISTRY OF HEALTH: UNEPI DASHBOARD
           </Typography>
+          <Typography
+            variant="button"
+            display="block"
+            className={classes.subTitle}
+          >
+            REPUBLIC OF UGANDA
+          </Typography>
           <Tabs
-            style={{ marginRight: "250px" }}
+            style={{ marginRight: "80px" }}
             indicatorColor="primary"
             value={value}
             onChange={handleChange}
@@ -272,7 +294,7 @@ export function Dashboard() {
           paper: classes.drawerPaper
         }}
       >
-        <div className={classes.toolbar} style={{ minHeight: 72 }} />
+        <div className={classes.toolbar} style={{ minHeight: 0 }} />
 
         <Tabs
           className={classes.verticalBar}

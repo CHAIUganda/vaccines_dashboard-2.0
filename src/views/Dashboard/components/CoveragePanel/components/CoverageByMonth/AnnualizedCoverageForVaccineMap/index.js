@@ -10,10 +10,6 @@ import { Chart } from "../../../../../../../components";
 // Chart Template
 import { vaccineAnnualizedCoverage } from "./chart";
 
-// Utils
-
-import { generateMapTitle } from "../../../../../../../common/utils/mapUtils";
-
 // High Maps components
 require("highcharts/modules/map")(Highcharts);
 
@@ -27,18 +23,19 @@ const AnnualizedCoverageForVaccineMap = ({
   reportYear,
   startYear
 }) => {
-  const [
-    annualizedVaccineCoverageMap,
-    setAnnualizedVaccineCoverageMap
-  ] = useState();
+  const [map, setMap] = useState();
 
-  const [mapTitle, setMapTitle] = useState(
-    "Annualized Coverage of PENTA3 for June 2019"
-  );
+  const mapTitle = `${
+    tabTitle === "Annualized (CY)" || tabTitle === "Annualized (FY)"
+      ? "Annualized"
+      : "Monthly"
+  } Coverage of ${
+    vaccineName === "ALL" ? "PENTA3" : vaccineName
+  } for ${startYear}`;
 
   useMemo(() => {
     if (data && data) {
-      setAnnualizedVaccineCoverageMap(
+      setMap(
         vaccineAnnualizedCoverage(
           data,
           startYear,
@@ -48,17 +45,6 @@ const AnnualizedCoverageForVaccineMap = ({
           vaccineName
         )
       );
-
-      // setMapTitle(
-      //   generateMapTitle(
-      //     tabTitle && tabTitle,
-      //     vaccineName && vaccineName,
-      //     dose && dose,
-      //     "Coverage",
-      //     reportYear && reportYear,
-      //     startYear
-      //   )
-      // );
     }
   }, [data, tabTitle, dose, vaccineName, startYear, endYear]);
 
@@ -68,7 +54,7 @@ const AnnualizedCoverageForVaccineMap = ({
       chart={
         <HighchartsReact
           highcharts={Highcharts}
-          options={annualizedVaccineCoverageMap && annualizedVaccineCoverageMap}
+          options={map && map}
           constructorType={"mapChart"}
         />
       }

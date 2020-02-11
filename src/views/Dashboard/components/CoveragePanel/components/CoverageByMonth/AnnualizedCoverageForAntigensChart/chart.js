@@ -1,6 +1,3 @@
-// Highcharts
-import Highcharts from "highcharts";
-
 // Chart Options
 import {
   commonChartOptions,
@@ -74,39 +71,47 @@ export const antigensAnnualizedCoverageCY = (
   }
 
   return {
-    ...commonChartOptions,
+    credits: {
+      ...commonChartOptions.credits
+    },
     chart: {
       ...(district === "National" ? { height: 50 + "%" } : { height: 28 + "%" })
+    },
+    exporting: {
+      ...commonChartOptions.exporting,
+      chartOptions: {
+        ...commonChartOptions.exporting.chartOptions,
+        title: {
+          text: `Trend of Annualized Coverage of antigens for ${startYear} Calendar Year`
+        }
+      }
     },
 
     title: {
       text: ""
     },
     xAxis: {
-      categories: monthsInYear
-    },
-    tooltip: {
-      formatter: function() {
-        return (
-          "<br/>" +
-          this.point.series.name +
-          ": " +
-          Highcharts.numberFormat(this.point.y, 1)
-        );
+      categories: monthsInYear,
+      labels: {
+        ...commonChartOptions.labels
       }
     },
+    tooltip: {
+      ...commonChartOptions.lineTooltip
+    },
+
     yAxis: {
       title: {
         text: "Percentage (%)"
+      },
+      labels: {
+        ...commonChartOptions.labels
       },
       min: 0
     },
     plotOptions: {
       line: {
-        lineWidth: 1,
-        marker: {
-          enabled: false
-        }
+        ...commonChartPlotOptions.plotOptions.line
       }
     },
     series: [...chartData]
@@ -118,6 +123,7 @@ export const antigensAnnualizedCoverageFY = (
   startYear,
   endYear,
   dose,
+  tabTitle,
   district
 ) => {
   const monthsFinancialYear = [
@@ -151,29 +157,37 @@ export const antigensAnnualizedCoverageFY = (
     chart: {
       ...(district === "National" ? { height: 50 + "%" } : { height: 28 + "%" })
     },
+    exporting: {
+      ...commonChartOptions.exporting,
+      chartOptions: {
+        ...commonChartOptions.exporting.chartOptions,
+        title: {
+          text: `Trend of Annualized Coverage of antigens for ${startYear} Financial Year`
+        }
+      }
+    },
     title: {
       text: ""
     },
     xAxis: {
-      categories: monthsFinancialYear
+      categories: monthsFinancialYear,
+      labels: {
+        ...commonChartOptions.labels
+      }
     },
 
     tooltip: {
-      formatter: function() {
-        return (
-          "<br/>" +
-          this.point.series.name +
-          ": " +
-          Highcharts.numberFormat(this.point.y, 1)
-        );
-      }
+      ...commonChartOptions.tooltip
     },
 
     yAxis: {
       title: {
         text: "Percentage (%)"
       },
-      min: 0
+      min: 0,
+      labels: {
+        ...commonChartOptions.labels
+      }
     },
     plotOptions: {
       line: {

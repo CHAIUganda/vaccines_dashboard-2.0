@@ -223,15 +223,31 @@ const aggregateYearAntigenData = (data, vaccineName) => {
 
     if (vaccineName !== "ALL") {
       /* Show coverages for the different doses */
-      chartData.push({ name: "Dose 1", data: vaccineData.cR1 });
+      chartData.push({
+        name: "Dose 1",
+        data: vaccineData.cR1,
+        maxPointWidth: 50
+      });
 
       if (["PENTA", "PCV", "OPV", "HPV", "TT"].includes(vaccine))
-        chartData.push({ name: "Dose 2", data: vaccineData.cR2 });
+        chartData.push({
+          name: "Dose 2",
+          data: vaccineData.cR2,
+          maxPointWidth: 50
+        });
 
       if (["PENTA", "PCV", "OPV", "DPT"].includes(vaccineName))
-        chartData.push({ name: "Dose 3", data: vaccineData.cR3 });
+        chartData.push({
+          name: "Dose 3",
+          data: vaccineData.cR3,
+          maxPointWidth: 50
+        });
     } else {
-      chartData.push({ name: vaccine, data: vaccineData.cR });
+      chartData.push({
+        name: vaccine,
+        data: vaccineData.cR,
+        maxPointWidth: 50
+      });
     }
   }
 
@@ -500,39 +516,6 @@ const getChartData = (
 const calculateCoverageRate = (consumption, planned) => {
   return Math.round((consumption / planned) * 100);
 };
-
-// const calculateCoverageRate = (consumption, planned) => {
-//   const consumptionTotal = consumption.reduce((acc, curr) => acc + curr, 0);
-//   const plannedTotal = planned.reduce((acc, curr) => acc + curr, 0);
-
-//   const percentageCoverage = Math.round(
-//     (consumptionTotal / plannedTotal) * 100
-//   );
-
-//   return [percentageCoverage];
-// };
-
-// vm.getChartTitle = function(vaccine) {
-//   var duration = vm.activeReportToggle[0] == 'A' ? "Annualized" : "Monthly";
-//   var vaccineName = (vaccine == "ALL") ? "antigens" : vaccine;
-//   var doseNumber = vm.activeDose.replace("Dose ", "");
-//   if (vaccine == "ALL") doseNumber = "";
-//   var antigenLabel = vm.activeDose != undefined ?
-//       `${vaccineName}${doseNumber}` : vaccineName;
-
-//   var yearType = vm.activeReportYear == 'CY' ? 'Calendar Year' : 'Financial year';
-
-//   var tab = undefined;
-//   if (vm.path=="/coverage/dropoutrate")
-//       tab = "Dropout Rate";
-//   else if (vm.path=="/coverage/redcategory")
-//       tab = "Red Categorization";
-//   else
-//       tab = "Coverage";
-
-//   return "Trend of " + duration + " " + tab + " of " +
-//       antigenLabel + " for " + vm.activeCoverageYear + " " + yearType;
-// };
 
 const generateChartTitle = (
   tabTitle,
