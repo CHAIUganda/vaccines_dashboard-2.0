@@ -21,6 +21,7 @@ import HomeIcon from "@material-ui/icons/Home";
 import PieChartIcon from "@material-ui/icons/PieChart";
 import LocalShippingIcon from "@material-ui/icons/LocalShipping";
 import BusinessIcon from "@material-ui/icons/Business";
+import TimelineIcon from "@material-ui/icons/Timeline";
 
 // Dashboard components
 import { OverviewPanel } from "../Dashboard/components/OverviewPanel/index";
@@ -99,7 +100,7 @@ const useStyles = makeStyles(theme => ({
     color: "#28354A",
     flexDirection: "row",
     fontWeight: "fontWeightBold",
-    fontSize: "h6.fontSize"
+    fontSize: 12
   },
 
   verticalIconLabelWrapper: {
@@ -134,7 +135,11 @@ const useStyles = makeStyles(theme => ({
   courtOfArms: {
     width: 45,
     height: 45,
-    marginLeft: 10
+    marginLeft: 20
+  },
+
+  mapOfUganda: {
+    height: 80
   },
 
   appBar: {
@@ -187,13 +192,14 @@ export function Dashboard() {
             MINISTRY OF HEALTH: UNEPI DASHBOARD
           </Typography>
           <Tabs
+            style={{ marginRight: "250px" }}
             indicatorColor="primary"
             value={value}
             onChange={handleChange}
             aria-label="Dashboard navigation tabs"
             TabIndicatorProps={{
               style: {
-                height: "4px"
+                height: "2px"
               }
             }}
           >
@@ -240,7 +246,19 @@ export function Dashboard() {
               {...a11yProps(3)}
               disabled={true}
             />
+            <LinkTab
+              classes={{
+                wrapper: classes.iconLabelWrapper,
+                labelContainer: classes.labelContainer
+              }}
+              icon={<TimelineIcon className={classes.iconSpacing} />}
+              label="Performance Management"
+              href="/performance-management"
+              {...a11yProps(4)}
+              disabled={true}
+            />
           </Tabs>
+          <Avatar alt="Map of Uganda" src="/uganda-flag.png" variant="square" />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -302,6 +320,16 @@ export function Dashboard() {
             icon={<BusinessIcon className={classes.verticalIcon} />}
             href="/cold-chain"
             {...a11yProps(3)}
+            disabled={true}
+          />
+          <LinkTab
+            classes={{
+              verticalIconLabelWrapper: classes.verticalIconLabelWrapper,
+              verticalLabelContainer: classes.verticalLabelContainer
+            }}
+            icon={<TimelineIcon className={classes.verticalIcon} />}
+            href="/performance-management"
+            {...a11yProps(4)}
             disabled={true}
           />
         </Tabs>
