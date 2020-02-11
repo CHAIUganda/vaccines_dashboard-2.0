@@ -15,7 +15,8 @@ export const antigensAnnualizedCoverageCY = (
   startYear,
   endYear,
   dose,
-  tabTitle
+  tabTitle,
+  district
 ) => {
   const monthsInYear = [
     "",
@@ -75,7 +76,7 @@ export const antigensAnnualizedCoverageCY = (
   return {
     ...commonChartOptions,
     chart: {
-      height: 50 + "%"
+      ...(district === "National" ? { height: 50 + "%" } : { height: 28 + "%" })
     },
 
     title: {
@@ -116,7 +117,8 @@ export const antigensAnnualizedCoverageFY = (
   data,
   startYear,
   endYear,
-  dose
+  dose,
+  district
 ) => {
   const monthsFinancialYear = [
     "",
@@ -147,7 +149,7 @@ export const antigensAnnualizedCoverageFY = (
   return {
     ...commonChartOptions,
     chart: {
-      height: 50 + "%"
+      ...(district === "National" ? { height: 50 + "%" } : { height: 28 + "%" })
     },
     title: {
       text: ""

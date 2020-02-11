@@ -157,6 +157,7 @@ export default function DropoutRate(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"CY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -172,6 +173,7 @@ export default function DropoutRate(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"CY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -204,6 +206,7 @@ export default function DropoutRate(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"CY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -219,6 +222,7 @@ export default function DropoutRate(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"CY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -251,6 +255,7 @@ export default function DropoutRate(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"FY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -266,6 +271,7 @@ export default function DropoutRate(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"FY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -298,6 +304,7 @@ export default function DropoutRate(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"FY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -313,6 +320,7 @@ export default function DropoutRate(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"FY"}
+                  district={district}
                 />
               </Grid>
             </>

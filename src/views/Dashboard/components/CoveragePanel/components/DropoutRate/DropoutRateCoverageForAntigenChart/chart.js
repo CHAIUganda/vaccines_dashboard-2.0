@@ -12,7 +12,8 @@ export const dropoutRateCoverageCY = (
   startYear,
   endYear,
   dose,
-  tabTitle
+  tabTitle,
+  district
 ) => {
   const monthsInYear = [
     "",
@@ -71,7 +72,7 @@ export const dropoutRateCoverageCY = (
   return {
     ...commonChartOptions,
     chart: {
-      height: 50 + "%"
+      ...(district === "National" ? { height: 50 + "%" } : { height: 28 + "%" })
     },
     title: {
       text: ""
@@ -102,7 +103,8 @@ export const dropoutRateCoverageFY = (
   startYear,
   endYear,
   dose,
-  tabTitle
+  tabTitle,
+  district
 ) => {
   const monthsFinancialYear = [
     "",
@@ -163,7 +165,7 @@ export const dropoutRateCoverageFY = (
   return {
     ...commonChartOptions,
     chart: {
-      height: 50 + "%"
+      ...(district === "National" ? { height: 50 + "%" } : { height: 28 + "%" })
     },
     title: {
       text: ""

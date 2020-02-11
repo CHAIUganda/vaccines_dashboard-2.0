@@ -154,6 +154,7 @@ export default function CoverageByMonth(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"CY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -169,6 +170,7 @@ export default function CoverageByMonth(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"CY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -201,6 +203,7 @@ export default function CoverageByMonth(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"CY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -216,6 +219,7 @@ export default function CoverageByMonth(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"CY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -248,6 +252,7 @@ export default function CoverageByMonth(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"FY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -263,6 +268,7 @@ export default function CoverageByMonth(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"FY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -283,6 +289,7 @@ export default function CoverageByMonth(props) {
                   isLoading={isLoading && isLoading}
                   reportYear={"FY"}
                   startYear={startYear}
+                  district={district}
                 />
               </Grid>
               <Grid item lg={7} md={7} xl={7} xs={7}>
@@ -295,6 +302,7 @@ export default function CoverageByMonth(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"FY"}
+                  district={district}
                 />
               </Grid>
             </>
@@ -310,6 +318,7 @@ export default function CoverageByMonth(props) {
                   startYear={startYear}
                   endYear={endYear}
                   reportYear={"FY"}
+                  district={district}
                 />
               </Grid>
             </>

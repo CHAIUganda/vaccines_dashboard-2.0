@@ -25,7 +25,8 @@ const CoverageForAntigensChart = props => {
     isLoading,
     startYear,
     endYear,
-    reportYear
+    reportYear,
+    district
   } = props;
 
   const [chart, setChart] = useState();
@@ -36,11 +37,25 @@ const CoverageForAntigensChart = props => {
     if (data && data) {
       if (tabTitle === "Annualized (CY)" || tabTitle === "Monthly (CY)") {
         setChart(
-          antigensAnnualizedCoverageCY(data, startYear, endYear, dose, tabTitle)
+          antigensAnnualizedCoverageCY(
+            data,
+            startYear,
+            endYear,
+            dose,
+            tabTitle,
+            district
+          )
         );
       } else {
         setChart(
-          antigensAnnualizedCoverageFY(data, startYear, endYear, dose, tabTitle)
+          antigensAnnualizedCoverageFY(
+            data,
+            startYear,
+            endYear,
+            dose,
+            tabTitle,
+            district
+          )
         );
       }
 
@@ -55,7 +70,7 @@ const CoverageForAntigensChart = props => {
         )
       );
     }
-  }, [data, vaccineName, tabTitle, dose, startYear, endYear]);
+  }, [data, vaccineName, tabTitle, dose, startYear, endYear, district]);
 
   return (
     <Chart
