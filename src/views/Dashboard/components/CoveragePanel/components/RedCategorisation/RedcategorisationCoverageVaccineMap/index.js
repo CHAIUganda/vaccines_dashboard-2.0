@@ -32,8 +32,6 @@ const DropoutRateCoverageForVaccineMap = ({
     setRedcategorisationCoverageMap
   ] = useState();
 
-  // const [dataState, setDataState] = useState(true);
-
   const [mapTitle, setMapTitle] = useState(
     "Annualized Coverage of PENTA3 for June 2019"
   );

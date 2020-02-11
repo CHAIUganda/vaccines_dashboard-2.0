@@ -18,7 +18,7 @@ const AntigenCoverageChart = ({
   vaccineName,
   district
 }) => {
-  const [coverageRateBarChart, setCoverageRateBarChart] = useState();
+  const [chart, setChart] = useState();
   const [chartTitle, setChartTile] = useState();
 
   const _setChartTile = (startYear, endYear) => {
@@ -32,7 +32,7 @@ const AntigenCoverageChart = ({
 
   useMemo(() => {
     if (data && data) {
-      setCoverageRateBarChart(coverageRateChartTemplate(data, vaccineName));
+      setChart(coverageRateChartTemplate(data, vaccineName));
       setChartTile(_setChartTile(startYear, endYear));
     }
   }, [data, startYear, endYear, vaccineName, district]);
@@ -41,13 +41,11 @@ const AntigenCoverageChart = ({
     <Chart
       title={chartTitle}
       chart={
-        <HighchartsReact
-          highcharts={Highcharts}
-          options={coverageRateBarChart && coverageRateBarChart}
-        />
+        <HighchartsReact highcharts={Highcharts} options={chart && chart} />
       }
       isLoading={isLoading && isLoading}
       centerTitle={true}
+      chartData={chart && chart}
     />
   );
 };

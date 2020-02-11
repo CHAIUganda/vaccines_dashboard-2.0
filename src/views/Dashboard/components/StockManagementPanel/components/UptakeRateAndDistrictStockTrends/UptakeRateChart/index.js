@@ -38,6 +38,7 @@ const UptakeRateChart = ({
       }
       isLoading={isLoading && isLoading}
       centerTitle={true}
+      chartData={chart && chart}
     />
   );
 };
