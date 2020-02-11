@@ -6,6 +6,7 @@ const commonChartOptions = {
     height: 500
   },
   exporting: {
+    width: 1200,
     chartOptions: {
       // specific options for the exported image
       plotOptions: {
