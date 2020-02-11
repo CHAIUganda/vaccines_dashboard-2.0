@@ -21,15 +21,36 @@ export const StockBalancesPieChartTemplate = (
   );
 
   return {
-    ...commonChartOptions,
+    credits: { ...commonChartOptions.credits },
     chart: {
+      type: "pie",
       plotBackgroundColor: null,
       plotBorderWidth: null,
       plotShadow: false,
-      type: "pie",
-      height: 550
+      ...commonChartOptions.chart
     },
-    title: "Pie Chart",
+    exporting: {
+      ...commonChartOptions.exporting,
+      chartOptions: {
+        ...commonChartOptions.exporting.chartOptions,
+        title: {
+          text: `Stock Balances of ${vaccine} at the beginning of ${startMonth}`
+        }
+      }
+    },
+    plotOptions: {
+      pie: {
+        dataLabels: {
+          enabled: true,
+
+          formatter: function() {
+            return this.point.name + " " + this.percentage.toFixed(0) + "%";
+          }
+        }
+      }
+    },
+
+    title: "",
     tooltip: {
       pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
     },

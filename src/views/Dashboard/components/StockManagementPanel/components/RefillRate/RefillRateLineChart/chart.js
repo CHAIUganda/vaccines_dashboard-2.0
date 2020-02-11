@@ -24,12 +24,22 @@ export const RefillRateLineChartTemplate = (
   );
 
   return {
-    ...commonChartOptions,
+    credits: {
+      ...commonChartOptions.credits
+    },
+    exporting: {
+      ...commonChartOptions.exporting,
+      chartOptions: {
+        ...commonChartOptions.exporting.chartOptions,
+        title: {
+          text: `Distribution of ${vaccine} for ${district}`
+        }
+      }
+    },
     title: {
       text: ""
     },
     xAxis: {
-      //   categories: monthsInYear
       type: "datetime"
     },
 
@@ -45,9 +55,6 @@ export const RefillRateLineChartTemplate = (
     },
 
     yAxis: {
-      title: {
-        text: "Percentage (%)"
-      },
       min: 0
     },
     plotOptions: {

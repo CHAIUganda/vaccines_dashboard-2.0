@@ -29,6 +29,10 @@ import { ColdChainPanel } from "../Dashboard/components/ColdChainPanel/index";
 import { CoveragePanel } from "./components/CoveragePanel/index";
 import { StockManagementPanel } from "./components/StockManagementPanel/index";
 
+// Importing this at the top to provide pdf export functionality
+import Highcharts from "highcharts";
+require("highcharts/modules/exporting")(Highcharts);
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
