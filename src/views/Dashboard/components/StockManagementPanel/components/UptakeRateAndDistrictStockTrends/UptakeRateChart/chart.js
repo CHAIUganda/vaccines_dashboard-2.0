@@ -27,10 +27,22 @@ export const uptakeRateChartTemplate = (
   );
 
   return {
-    ...commonChartOptions,
+    credits: {
+      ...commonChartOptions.credits
+    },
     chart: {
       type: "column",
-      height: 500
+      ...commonChartOptions.chart
+    },
+    exporting: {
+      ...commonChartOptions.exporting,
+      chartOptions: {
+        ...commonChartOptions.exporting.chartOptions,
+        title: {
+          // text: `Stock Balances of ${vaccine} at the beginning of ${startMonth}`
+          text: `Uptake rate of ${vaccine} for ${district}`
+        }
+      }
     },
     title: {
       text: ""

@@ -2,10 +2,7 @@
 import Highcharts from "highcharts";
 
 // Chart Options
-import {
-  commonChartOptions,
-  commonChartPlotOptions
-} from "../../../../../../../common/chartOptions/chartOptions";
+import { commonChartOptions } from "../../../../../../../common/chartOptions/chartOptions";
 
 // Utility functions
 import { getChartData } from "../../../../../../../common/utils/utils";
@@ -74,9 +71,20 @@ export const antigensAnnualizedCoverageCY = (
   }
 
   return {
-    ...commonChartOptions,
+    credits: {
+      ...commonChartOptions.credits
+    },
     chart: {
       ...(district === "National" ? { height: 50 + "%" } : { height: 28 + "%" })
+    },
+    exporting: {
+      ...commonChartOptions.exporting,
+      chartOptions: {
+        ...commonChartOptions.exporting.chartOptions,
+        title: {
+          text: `Trend of Annualized Coverage of antigens for ${endYear} Calendar Year`
+        }
+      }
     },
 
     title: {
@@ -103,7 +111,7 @@ export const antigensAnnualizedCoverageCY = (
     },
     plotOptions: {
       line: {
-        lineWidth: 1,
+        lineWidth: 2,
         marker: {
           enabled: false
         }

@@ -27,10 +27,21 @@ export const districtStockTrendsChartTemplate = (
   );
 
   return {
-    ...commonChartOptions,
+    credits: {
+      ...commonChartOptions.credits
+    },
     chart: {
       type: "column",
-      height: 500
+      ...commonChartOptions.chart
+    },
+    exporting: {
+      ...commonChartOptions.exporting,
+      chartOptions: {
+        ...commonChartOptions.exporting.chartOptions,
+        title: {
+          text: `${district} stock level monthly trends for ${vaccine}`
+        }
+      }
     },
     title: {
       text: ""

@@ -6,15 +6,20 @@ const commonChartOptions = {
     height: 500
   },
   exporting: {
-    width: 1200,
+    scale: 2,
+    width: 720,
     chartOptions: {
-      // specific options for the exported image
       plotOptions: {
         series: {
           dataLabels: {
             enabled: true
           }
         }
+      }
+    },
+    buttons: {
+      contextButton: {
+        menuItems: ["downloadPDF"]
       }
     },
     fallbackToExportServer: false
