@@ -32,7 +32,9 @@ const AntigenCoverageChart = ({
 
   useMemo(() => {
     if (data && data) {
-      setChart(coverageRateChartTemplate(data, vaccineName));
+      setChart(
+        coverageRateChartTemplate(data, vaccineName, startYear, district)
+      );
       setChartTile(_setChartTile(startYear, endYear));
     }
   }, [data, startYear, endYear, vaccineName, district]);

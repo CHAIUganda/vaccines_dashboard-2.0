@@ -39,7 +39,6 @@ export const uptakeRateChartTemplate = (
       chartOptions: {
         ...commonChartOptions.exporting.chartOptions,
         title: {
-          // text: `Stock Balances of ${vaccine} at the beginning of ${startMonth}`
           text: `Uptake rate of ${vaccine} for ${district}`
         }
       }
@@ -48,9 +47,15 @@ export const uptakeRateChartTemplate = (
       text: ""
     },
     xAxis: {
-      type: "datetime"
+      type: "datetime",
+      labels: {
+        ...commonChartOptions.labels
+      }
     },
     yAxis: {
+      labels: {
+        ...commonChartOptions.labels
+      },
       min: 0
     },
     plotOptions: {
@@ -58,9 +63,13 @@ export const uptakeRateChartTemplate = (
         ...commonChartPlotOptions.plotOptions.column,
         dataLabels: {
           enabled: true,
-          format: "{y}"
+          format: "{y:,.0f}",
+          ...commonChartOptions.labels
         }
       }
+    },
+    tooltip: {
+      ...commonChartOptions.lineTooltip
     },
     legend: {
       layout: "vertical",

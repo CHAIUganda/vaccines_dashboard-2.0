@@ -1,33 +1,47 @@
 // Chart Options
-import {
-  commonChartOptions,
-  commonChartPlotOptions
-} from "../../../../../../../common/chartOptions/chartOptions";
+import { commonChartOptions } from "../../../../../../../common/chartOptions/chartOptions";
 
 // Utility functions
 import {
-  aggregateData,
-  calculateCoverageRate,
   getYearFromData,
   aggregateYearAntigenData
 } from "../../../../../../../common/utils/utils";
 
-export const coverageRateChartTemplate = (data, vaccineName) => {
+export const coverageRateChartTemplate = (
+  data,
+  vaccineName,
+  startYear,
+  district
+) => {
   const years = getYearFromData(data);
 
   const antigenData = aggregateYearAntigenData(data, vaccineName);
 
   let chart = {
-    ...commonChartOptions,
+    credits: { ...commonChartOptions.credits },
     chart: {
       type: "column",
-      height: 500
+      height: { ...commonChartOptions.chart }
+    },
+    exporting: {
+      ...commonChartOptions.exporting,
+      chartOptions: {
+        ...commonChartOptions.exporting.chartOptions,
+        title: {
+          text: `Antigen Coverage for ${startYear} for ${
+            district === "National" ? "National Level" : district
+          }`
+        }
+      }
     },
     title: {
       text: ""
     },
     xAxis: {
-      categories: years
+      categories: years,
+      labels: {
+        ...commonChartOptions.labels
+      }
     },
     yAxis: {
       min: 0,
@@ -36,17 +50,21 @@ export const coverageRateChartTemplate = (data, vaccineName) => {
         align: "middle"
       },
       labels: {
+        ...commonChartOptions.labels,
         overflow: "justify"
       }
     },
     plotOptions: {
       column: {
-        ...commonChartPlotOptions.plotOptions.column,
         dataLabels: {
           enabled: true,
-          format: "{y} %"
+          format: "{y} %",
+          ...commonChartOptions.labels
         }
       }
+    },
+    tooltip: {
+      ...commonChartOptions.lineTooltip
     },
     series: [...antigenData]
   };

@@ -193,8 +193,13 @@ export const DataTable = props => {
               <>
                 {tableDataStockedOut &&
                   tableDataStockedOut.map(row => (
-                    <TableRow hover key={row.district_name}>
-                      <TableCell>{row.district_name}</TableCell>
+                    <TableRow
+                      hover
+                      key={row.district_name.replace(/ District/g, "")}
+                    >
+                      <TableCell>
+                        {row.district_name.replace(/ District/g, "")}
+                      </TableCell>
                       <TableCell>{row.at_hand}</TableCell>
                       <TableCell>{row.stock_requirement__minimum}</TableCell>
                       <TableCell>{row.stock_requirement__maximum}</TableCell>
@@ -205,8 +210,13 @@ export const DataTable = props => {
               <>
                 {tableDataBelowMIN &&
                   tableDataBelowMIN.map(row => (
-                    <TableRow hover key={row.district_name}>
-                      <TableCell>{row.district_name}</TableCell>
+                    <TableRow
+                      hover
+                      key={row.district_name.replace(/ District/g, "")}
+                    >
+                      <TableCell>
+                        {row.district_name.replace(/ District/g, "")}
+                      </TableCell>
                       <TableCell>{row.at_hand}</TableCell>
                       <TableCell>{row.stock_requirement__minimum}</TableCell>
                       <TableCell>{row.stock_requirement__maximum}</TableCell>
@@ -218,8 +228,13 @@ export const DataTable = props => {
                 {" "}
                 {tableDataWithinRANGE &&
                   tableDataWithinRANGE.map(row => (
-                    <TableRow hover key={row.district_name}>
-                      <TableCell>{row.district_name}</TableCell>
+                    <TableRow
+                      hover
+                      key={row.district_name.replace(/ District/g, "")}
+                    >
+                      <TableCell>
+                        {row.district_name.replace(/ District/g, "")}
+                      </TableCell>
                       <TableCell>{row.at_hand}</TableCell>
                       <TableCell>{row.stock_requirement__minimum}</TableCell>
                       <TableCell>{row.stock_requirement__maximum}</TableCell>
@@ -230,8 +245,13 @@ export const DataTable = props => {
               <>
                 {tableDataAboveMAX &&
                   tableDataAboveMAX.map(row => (
-                    <TableRow hover key={row.district_name}>
-                      <TableCell>{row.district_name}</TableCell>
+                    <TableRow
+                      hover
+                      key={row.district_name.replace(/ District/g, "")}
+                    >
+                      <TableCell>
+                        {row.district_name.replace(/ District/g, "")}
+                      </TableCell>
                       <TableCell>{row.at_hand}</TableCell>
                       <TableCell>{row.stock_requirement__minimum}</TableCell>
                       <TableCell>{row.stock_requirement__maximum}</TableCell>

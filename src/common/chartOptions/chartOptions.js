@@ -1,3 +1,6 @@
+// Highcharts
+import Highcharts from "highcharts";
+
 const commonChartOptions = {
   credits: {
     enabled: false
@@ -23,6 +26,72 @@ const commonChartOptions = {
       }
     },
     fallbackToExportServer: false
+  },
+
+  // Axis labels
+  labels: {
+    style: {
+      fontSize: "18px"
+    }
+  },
+
+  // Line tool tips
+  lineTooltip: {
+    style: {
+      fontSize: "20px"
+    },
+
+    formatter: function() {
+      return (
+        "<br/>" +
+        this.point.series.name +
+        ": " +
+        Highcharts.numberFormat(this.point.y, 0)
+      );
+    }
+  },
+
+  mapTooltip: {
+    style: {
+      fontSize: "20px"
+    },
+    formatter: function() {
+      return (
+        "<b>" +
+        this.point.properties.DName2018 +
+        "</b><br/><br/>" +
+        +Highcharts.numberFormat(this.point.value, 0) +
+        " %"
+      );
+    }
+  },
+
+  pieToolTip: {
+    style: {
+      fontSize: "20px"
+    },
+    pointFormat: "{series.name}: <b>{point.percentage:.0f}%</b>"
+  }
+};
+
+const mapLegend = {
+  title: {
+    text: ""
+  },
+  align: "left",
+  verticalAlign: "top",
+  floating: true,
+  layout: "vertical",
+  valueDecimals: 0,
+  backgroundColor: "rgba(255,255,255,0.9)",
+  symbolRadius: 0,
+  symbolHeight: 14,
+  borderWidth: 1,
+  shadow: true,
+  width: 160,
+  y: 30,
+  labelFormatter: function() {
+    return this.legendName + " : (" + this.count + ") <br/>";
   }
 };
 
@@ -41,7 +110,7 @@ const commonChartPlotOptions = {
     //   turboThreshold: 10000
     // },
     line: {
-      lineWidth: 2,
+      lineWidth: 3,
       marker: {
         enabled: false
       }
@@ -60,7 +129,7 @@ const commonChartPlotOptions = {
     // },
     column: {
       pointPadding: 0.2,
-      pointWidth: 10,
+      pointWidth: 35,
       borderWidth: 0,
       shadow: false
     }
@@ -97,4 +166,4 @@ const commonChartPlotOptions = {
   }
 };
 
-export { commonChartOptions, commonChartPlotOptions };
+export { commonChartOptions, commonChartPlotOptions, mapLegend };

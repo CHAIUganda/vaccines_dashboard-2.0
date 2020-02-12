@@ -42,7 +42,7 @@ export const StockBalancesPieChartTemplate = (
       pie: {
         dataLabels: {
           enabled: true,
-
+          ...commonChartOptions.labels,
           formatter: function() {
             return this.point.name + " " + this.percentage.toFixed(0) + "%";
           }
@@ -52,7 +52,7 @@ export const StockBalancesPieChartTemplate = (
 
     title: "",
     tooltip: {
-      pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
+      ...commonChartOptions.pieToolTip
     },
     series: [chartData]
   };

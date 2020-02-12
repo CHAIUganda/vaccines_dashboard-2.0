@@ -2,7 +2,10 @@
 import Highcharts from "highcharts";
 
 // Chart Options
-import { commonChartOptions } from "../../../../../../../common/chartOptions/chartOptions";
+import {
+  commonChartOptions,
+  mapLegend
+} from "../../../../../../../common/chartOptions/chartOptions";
 
 //  Map utilities
 
@@ -19,9 +22,7 @@ const ugandaMap2 = require("../../../../../../../common/maps/map2.json");
 export const dropoutRateCoverageMap = (
   data,
   startYear,
-
   tabTitle,
-
   vaccineName
 ) => {
   let activeVaccine = vaccineName;
@@ -49,13 +50,53 @@ export const dropoutRateCoverageMap = (
     mapData.push([districtName, coverageRate]);
   }
 
+  // Calculate legend values
+  const values = mapData.map(v => v[1]);
+
+  const between_negative_10_to_0 = values.filter(
+    a => a >= -10 && a <= 0 && a !== undefined
+  ).length;
+
+  const between_0_and_10 = values.filter(
+    a => a >= 0 && a <= 10 && a !== undefined
+  ).length;
+
+  const between_negative_10_to_20 = values.filter(
+    a => a >= -10 && a <= 20 && a !== undefined
+  ).length;
+
   return {
-    ...commonChartOptions,
+    credits: {
+      ...commonChartOptions.credits
+    },
     chart: {
       map: ugandaMap2,
       height: 74 + "%"
     },
-
+    exporting: {
+      scale: 2,
+      width: 1200,
+      chartOptions: {
+        plotOptions: {
+          series: {
+            dataLabels: {
+              enabled: true,
+              format: "{point.value:.0f} %"
+            }
+          }
+        },
+        title: {
+          text: `${tabTitle === "Annualized (CY)" ||
+            tabTitle === "Annualized (FY)"} Dropout Rate  of ${
+            vaccineName === "ALL" ? "PENTA3" : vaccineName
+          } for ${startYear}`
+        }
+      },
+      buttons: {
+        ...commonChartOptions.exporting.buttons
+      },
+      fallbackToExportServer: false
+    },
     title: {
       text: ""
     },
@@ -64,22 +105,7 @@ export const dropoutRateCoverageMap = (
     },
 
     legend: {
-      title: {
-        text: "Legend"
-      },
-      align: "left",
-      verticalAlign: "top",
-      floating: true,
-      layout: "vertical",
-      valueDecimals: 0,
-      backgroundColor: "rgba(255,255,255,0.9)",
-      symbolRadius: 0,
-      symbolHeight: 14,
-      // x: 90,
-      y: 45,
-      labelFormatter: function() {
-        return this.name + "  ";
-      }
+      ...mapLegend
     },
 
     colorAxis: {
@@ -87,31 +113,29 @@ export const dropoutRateCoverageMap = (
         {
           from: -10,
           to: 20,
-          color: "yellow"
+          color: "yellow",
+          count: between_negative_10_to_20,
+          legendName: "<- 10 & < 20"
         },
         {
           from: -10 - 0,
-          to: 10 - 20,
-          color: "red"
+          to: -10,
+          color: "red",
+          count: between_negative_10_to_0,
+          legendName: "(-10-0) & (10-20)"
         },
         {
           from: 0,
           to: 10,
-          color: "green"
+          color: "green",
+          count: between_0_and_10,
+          legendName: "0-10"
         }
       ]
     },
 
     tooltip: {
-      formatter: function() {
-        return (
-          "<b><u>" +
-          this.point.properties.DName2018 +
-          "</u></b><br/><br/>" +
-          +Highcharts.numberFormat(this.point.value, 1) +
-          " %"
-        );
-      }
+      ...commonChartOptions.mapTooltip
     },
 
     series: [

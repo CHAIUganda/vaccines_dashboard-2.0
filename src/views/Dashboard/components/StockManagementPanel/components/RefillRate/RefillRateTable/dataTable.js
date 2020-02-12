@@ -152,8 +152,13 @@ export const DataTable = props => {
           <TableBody>
             {data &&
               data.map(row => (
-                <TableRow hover key={row.district_name}>
-                  <TableCell>{row.district_name}</TableCell>
+                <TableRow
+                  hover
+                  key={row.district_name.replace(/ District/g, "")}
+                >
+                  <TableCell>
+                    {row.district_name.replace(/ District/g, "")}
+                  </TableCell>
                   <TableCell>
                     {" "}
                     {new Intl.NumberFormat("lg-UG").format(row.received)}

@@ -47,9 +47,15 @@ export const districtStockTrendsChartTemplate = (
       text: ""
     },
     xAxis: {
-      type: "datetime"
+      type: "datetime",
+      labels: {
+        ...commonChartOptions.labels
+      }
     },
     yAxis: {
+      labels: {
+        ...commonChartOptions.labels
+      },
       min: 0
     },
     plotOptions: {
@@ -57,9 +63,13 @@ export const districtStockTrendsChartTemplate = (
         ...commonChartPlotOptions.plotOptions.column,
         dataLabels: {
           enabled: true,
-          format: "{y}"
+          format: "{y:,.0f}",
+          ...commonChartOptions.labels
         }
       }
+    },
+    tooltip: {
+      ...commonChartOptions.lineTooltip
     },
     legend: {
       layout: "vertical",

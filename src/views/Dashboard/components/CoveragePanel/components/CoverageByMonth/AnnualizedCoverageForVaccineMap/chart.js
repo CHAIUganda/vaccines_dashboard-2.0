@@ -4,7 +4,7 @@ import Highcharts from "highcharts";
 // Chart Options
 import {
   commonChartOptions,
-  commonChartPlotOptions
+  mapLegend
 } from "../../../../../../../common/chartOptions/chartOptions";
 
 //  Map utilities
@@ -55,13 +55,46 @@ export const vaccineAnnualizedCoverage = (
     mapData.push([districtName, coverageRate]);
   }
 
+  // Calculate legend values
+  const values = mapData.map(v => v[1]);
+  const below_50 = values.filter(a => a < 50 && a !== null).length;
+  const between_50_to_89 = values.filter(a => a > 50 && a <= 89 && a !== null)
+    .length;
+  const above_90 = values.filter(a => a >= 90 && a !== null).length;
+
   return {
-    ...commonChartOptions,
+    credits: {
+      ...commonChartOptions.credits
+    },
     chart: {
       map: ugandaMap2,
       height: 74 + "%"
     },
+    exporting: {
+      scale: 2,
+      width: 1200,
+      chartOptions: {
+        plotOptions: {
+          series: {
+            dataLabels: {
+              enabled: true,
+              format: "{point.value:.0f} %"
+            }
+          }
+        },
+        title: {
+          text: `${tabTitle === "Annualized (CY)" ||
+            tabTitle === "Annualized (FY)"} Coverage of ${
+            vaccineName === "ALL" ? "PENTA3" : vaccineName
+          } for ${startYear}`
+        }
+      },
 
+      buttons: {
+        ...commonChartOptions.exporting.buttons
+      },
+      fallbackToExportServer: false
+    },
     title: {
       text: ""
     },
@@ -69,51 +102,34 @@ export const vaccineAnnualizedCoverage = (
       mapNavigation: { ...commonChartOptions.mapNavigation }
     },
     legend: {
-      title: {
-        text: "Legend"
-      },
-      align: "left",
-      verticalAlign: "top",
-      floating: true,
-      layout: "vertical",
-      valueDecimals: 0,
-      backgroundColor: "rgba(255,255,255,0.9)",
-      symbolRadius: 0,
-      symbolHeight: 14,
-      // x: 90,
-      y: 45,
-      labelFormatter: function() {
-        return this.name + "  ";
-      }
+      ...mapLegend
     },
     colorAxis: {
       dataClasses: [
         {
           to: 50,
-          color: "red"
+          color: "red",
+          count: below_50,
+          legendName: "<50%"
         },
         {
           from: 50.1,
           to: 89.9,
-          color: "yellow"
+          color: "yellow",
+          count: between_50_to_89,
+          legendName: "50% - 89%"
         },
         {
           from: 90,
-          color: "green"
+          color: "green",
+          count: above_90,
+          legendName: ">=90%"
         }
       ]
     },
 
     tooltip: {
-      formatter: function() {
-        return (
-          "<b><u>" +
-          this.point.properties.DName2018 +
-          "</u></b><br/><br/>" +
-          +Highcharts.numberFormat(this.point.value, 1) +
-          " %"
-        );
-      }
+      ...commonChartOptions.mapTooltip
     },
 
     series: [

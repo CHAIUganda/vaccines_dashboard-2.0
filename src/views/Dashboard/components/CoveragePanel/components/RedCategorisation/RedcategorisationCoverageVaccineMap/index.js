@@ -10,10 +10,6 @@ import { Chart } from "../../../../../../../components";
 // Chart Template
 import { redcategorisationCoverageMap } from "./chart";
 
-// Utils
-
-import { generateMapTitle } from "../../../../../../../common/utils/mapUtils";
-
 // High Maps components
 require("highcharts/modules/map")(Highcharts);
 
@@ -27,31 +23,21 @@ const DropoutRateCoverageForVaccineMap = ({
   reportYear,
   startYear
 }) => {
-  const [
-    _redcategorisationCoverageMap,
-    setRedcategorisationCoverageMap
-  ] = useState();
+  const [map, setMap] = useState();
 
-  const [mapTitle, setMapTitle] = useState(
-    "Annualized Coverage of PENTA3 for June 2019"
-  );
+  const mapTitle = `${
+    tabTitle === "Annualized (CY)" || tabTitle === "Annualized (FY)"
+      ? "Annualized"
+      : "Monthly"
+  } Red Categorization of ${
+    vaccineName === "ALL" ? "PENTA3" : vaccineName
+  } for ${endYear}`;
 
   useMemo(() => {
     if (data && data) {
-      setRedcategorisationCoverageMap(
+      setMap(
         redcategorisationCoverageMap(data, endYear, tabTitle, dose, vaccineName)
       );
-
-      // setMapTitle(
-      //   generateMapTitle(
-      //     tabTitle && tabTitle,
-      //     vaccineName && vaccineName,
-      //     dose && dose,
-      //     "Coverage",
-      //     reportYear && reportYear,
-      //     startYear
-      //   )
-      // );
     }
   }, [data, endYear, tabTitle, dose, vaccineName]);
 
@@ -61,9 +47,7 @@ const DropoutRateCoverageForVaccineMap = ({
       chart={
         <HighchartsReact
           highcharts={Highcharts}
-          options={
-            _redcategorisationCoverageMap && _redcategorisationCoverageMap
-          }
+          options={map && map}
           constructorType={"mapChart"}
         />
       }

@@ -2,7 +2,10 @@
 import Highcharts from "highcharts";
 
 // Chart Options
-import { commonChartOptions } from "../../../../../../../common/chartOptions/chartOptions";
+import {
+  commonChartOptions,
+  commonChartPlotOptions
+} from "../../../../../../../common/chartOptions/chartOptions";
 
 // Utility functions
 import { getChartData } from "../../../../../../../common/utils/utils";
@@ -70,29 +73,44 @@ export const dropoutRateCoverageCY = (
   }
 
   return {
-    ...commonChartOptions,
+    credits: { ...commonChartOptions.credits },
+
     chart: {
       ...(district === "National" ? { height: 50 + "%" } : { height: 28 + "%" })
+    },
+    exporting: {
+      ...commonChartOptions.exporting,
+      chartOptions: {
+        ...commonChartOptions.exporting.chartOptions,
+        title: {
+          text: `Trend of Annualized Dropout Rate of antigens for ${endYear} Calendar Year`
+        }
+      }
     },
     title: {
       text: ""
     },
     xAxis: {
-      categories: monthsInYear
+      categories: monthsInYear,
+      labels: {
+        ...commonChartOptions.labels
+      }
     },
     yAxis: {
       title: {
         text: "Percentage (%)"
+      },
+      labels: {
+        ...commonChartOptions.labels
       }
-      // min: 0
     },
     plotOptions: {
       line: {
-        lineWidth: 1,
-        marker: {
-          enabled: false
-        }
+        ...commonChartPlotOptions.plotOptions.line
       }
+    },
+    tooltip: {
+      ...commonChartOptions.lineTooltip
     },
     series: [...chartData]
   };
@@ -163,30 +181,41 @@ export const dropoutRateCoverageFY = (
   }
 
   return {
-    ...commonChartOptions,
+    credits: {
+      ...commonChartOptions.credits
+    },
     chart: {
       ...(district === "National" ? { height: 50 + "%" } : { height: 28 + "%" })
+    },
+
+    exporting: {
+      ...commonChartOptions.exporting,
+      chartOptions: {
+        ...commonChartOptions.exporting.chartOptions,
+        title: {
+          text: `Trend of Annualized Dropout Rate of antigens for ${endYear} Financial Year`
+        }
+      }
     },
     title: {
       text: ""
     },
     xAxis: {
-      categories: monthsFinancialYear
+      categories: monthsFinancialYear,
+      labels: {
+        ...commonChartOptions.labels
+      }
     },
 
     tooltip: {
-      formatter: function() {
-        return (
-          "<br/>" +
-          this.point.series.name +
-          ": " +
-          Highcharts.numberFormat(this.point.y, 1)
-        );
-      }
+      ...commonChartOptions.lineTooltip
     },
     yAxis: {
       title: {
         text: "Percentage (%)"
+      },
+      labels: {
+        ...commonChartOptions.labels
       }
     },
     plotOptions: {
