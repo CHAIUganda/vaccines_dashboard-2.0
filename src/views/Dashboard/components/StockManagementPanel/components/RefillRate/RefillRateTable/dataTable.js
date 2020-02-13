@@ -117,11 +117,11 @@ const useStyles = makeStyles({
 });
 
 export const DataTable = props => {
-  const { data, isLoading, endMonth, startMonth, district, vaccine } = props;
+  const { data } = props;
 
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(12);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -130,6 +130,14 @@ export const DataTable = props => {
   const handleChangeRowsPerPage = event => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const paginationTableConstructor = data => {
+    return (data =
+      rowsPerPage > 0
+        ? data &&
+          data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+        : data && data);
   };
 
   return (
@@ -150,8 +158,8 @@ export const DataTable = props => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data &&
-              data.map(row => (
+            {paginationTableConstructor(data && data) &&
+              paginationTableConstructor(data && data).map(row => (
                 <TableRow
                   hover
                   key={row.district_name.replace(/ District/g, "")}
@@ -181,6 +189,25 @@ export const DataTable = props => {
                 </TableRow>
               ))}
           </TableBody>
+
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[12, { label: "All", value: -1 }]}
+                colSpan={3}
+                count={data && data.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                SelectProps={{
+                  inputProps: { "aria-label": "rows per page" },
+                  native: true
+                }}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+                ActionsComponent={TablePaginationActions}
+              />
+            </TableRow>
+          </TableFooter>
         </Table>
       </TableContainer>
     </Paper>

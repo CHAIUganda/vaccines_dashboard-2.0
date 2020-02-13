@@ -52,12 +52,29 @@ export const uptakeRateChartTemplate = (
         ...commonChartOptions.labels
       }
     },
-    yAxis: {
-      labels: {
-        ...commonChartOptions.labels
+    yAxis: [
+      {
+        title: {
+          text: "Available Stock (Stock balance + Issues)"
+        },
+
+        labels: {
+          ...commonChartOptions.labels
+        },
+        min: 0
       },
-      min: 0
-    },
+      {
+        title: {
+          text: "Number of children immunized"
+        },
+
+        labels: {
+          ...commonChartOptions.labels
+        },
+        min: 0,
+        opposite: true
+      }
+    ],
     plotOptions: {
       column: {
         ...commonChartPlotOptions.plotOptions.column,
@@ -75,7 +92,7 @@ export const uptakeRateChartTemplate = (
       layout: "vertical",
       align: "right",
       verticalAlign: "top",
-      x: -40,
+      x: -20,
       y: 80,
       floating: true,
       borderWidth: 1,
