@@ -265,14 +265,18 @@ export const getStockChartData = (
     graphdataUptake.push({
       name: "Available Stock (Stock balance + Issues)",
       type: "column",
+      maxPointWidth: 50,
       color: "green",
-      data: sortedStockData
+      data: sortedStockData,
+      yAxis: 0
     });
     graphdataUptake.push({
       name: "Children Immunised",
       type: "column",
+      maxPointWidth: 50,
       color: "DodgerBlue",
-      data: sortedImmunisationData
+      data: sortedImmunisationData,
+      yAxis: 1
     });
     graphdataUptake.push({
       name: "Monthly Targets",
@@ -324,17 +328,20 @@ export const getStockChartData = (
     graphData.push({
       name: "Stock Balance",
       color: "green",
-      data: sortedStockData
+      data: sortedStockData,
+      maxPointWidth: 50
     });
     graphData.push({
       name: "Orders",
       color: "DodgerBlue",
-      data: sortedOrderedData
+      data: sortedOrderedData,
+      maxPointWidth: 50
     });
     graphData.push({
       name: "Supply By NMS",
       color: "Orange",
-      data: sortedSupplyData
+      data: sortedSupplyData,
+      maxPointWidth: 50
     });
     return graphData;
   }

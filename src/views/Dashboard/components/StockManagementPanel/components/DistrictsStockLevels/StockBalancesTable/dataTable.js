@@ -19,9 +19,6 @@ import LastPageIcon from "@material-ui/icons/LastPage";
 // Table Data Utility functions
 import { getStockChartData } from "../../../../../../../common/utils/stockmanagement/utils";
 
-// Shared componenrs
-import { Chart } from "../../../../../../../components";
-
 // Table headers
 const columns = [
   { id: "district", label: "District", minWidth: 170 },
@@ -159,8 +156,13 @@ export const DataTable = props => {
 
   const tableDataAboveMAX = tableData && tableData.map(i => i.tabledata_am)[0];
 
-  //   const emptyRows =
-  //     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  const paginationTableConstructor = data => {
+    return (data =
+      rowsPerPage > 0
+        ? data &&
+          data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+        : data && data);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -188,15 +190,17 @@ export const DataTable = props => {
               ))}
             </TableRow>
           </TableHead>
-          <TableBody>
-            {tab === "Stocked Out" ? (
-              <>
-                {tableDataStockedOut &&
-                  tableDataStockedOut.map(row => (
-                    <TableRow
-                      hover
-                      key={row.district_name.replace(/ District/g, "")}
-                    >
+
+          {tab === "Stocked Out" ? (
+            <>
+              <TableBody>
+                {paginationTableConstructor(
+                  tableDataStockedOut && tableDataStockedOut
+                ) &&
+                  paginationTableConstructor(
+                    tableDataStockedOut && tableDataStockedOut
+                  ).map(row => (
+                    <TableRow key={row.district_name}>
                       <TableCell>
                         {row.district_name.replace(/ District/g, "")}
                       </TableCell>
@@ -205,15 +209,36 @@ export const DataTable = props => {
                       <TableCell>{row.stock_requirement__maximum}</TableCell>
                     </TableRow>
                   ))}
-              </>
-            ) : tab === "Below MIN" ? (
-              <>
-                {tableDataBelowMIN &&
-                  tableDataBelowMIN.map(row => (
-                    <TableRow
-                      hover
-                      key={row.district_name.replace(/ District/g, "")}
-                    >
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[10, { label: "All", value: -1 }]}
+                    colSpan={3}
+                    count={tableDataStockedOut && tableDataStockedOut.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: { "aria-label": "rows per page" },
+                      native: true
+                    }}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                  />
+                </TableRow>
+              </TableFooter>
+            </>
+          ) : tab === "Below MIN" ? (
+            <>
+              <TableBody>
+                {paginationTableConstructor(
+                  tableDataBelowMIN && tableDataBelowMIN
+                ) &&
+                  paginationTableConstructor(
+                    tableDataBelowMIN && tableDataBelowMIN
+                  ).map(row => (
+                    <TableRow key={row.district_name}>
                       <TableCell>
                         {row.district_name.replace(/ District/g, "")}
                       </TableCell>
@@ -222,33 +247,36 @@ export const DataTable = props => {
                       <TableCell>{row.stock_requirement__maximum}</TableCell>
                     </TableRow>
                   ))}
-              </>
-            ) : tab === "Within RANGE" ? (
-              <>
-                {" "}
-                {tableDataWithinRANGE &&
-                  tableDataWithinRANGE.map(row => (
-                    <TableRow
-                      hover
-                      key={row.district_name.replace(/ District/g, "")}
-                    >
-                      <TableCell>
-                        {row.district_name.replace(/ District/g, "")}
-                      </TableCell>
-                      <TableCell>{row.at_hand}</TableCell>
-                      <TableCell>{row.stock_requirement__minimum}</TableCell>
-                      <TableCell>{row.stock_requirement__maximum}</TableCell>
-                    </TableRow>
-                  ))}{" "}
-              </>
-            ) : (
-              <>
-                {tableDataAboveMAX &&
-                  tableDataAboveMAX.map(row => (
-                    <TableRow
-                      hover
-                      key={row.district_name.replace(/ District/g, "")}
-                    >
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[10, { label: "All", value: -1 }]}
+                    colSpan={3}
+                    count={tableDataBelowMIN && tableDataBelowMIN.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: { "aria-label": "rows per page" },
+                      native: true
+                    }}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                  />
+                </TableRow>
+              </TableFooter>
+            </>
+          ) : tab === "Within RANGE" ? (
+            <>
+              <TableBody>
+                {paginationTableConstructor(
+                  tableDataWithinRANGE && tableDataWithinRANGE
+                ) &&
+                  paginationTableConstructor(
+                    tableDataWithinRANGE && tableDataWithinRANGE
+                  ).map(row => (
+                    <TableRow key={row.district_name}>
                       <TableCell>
                         {row.district_name.replace(/ District/g, "")}
                       </TableCell>
@@ -257,28 +285,65 @@ export const DataTable = props => {
                       <TableCell>{row.stock_requirement__maximum}</TableCell>
                     </TableRow>
                   ))}
-              </>
-            )}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                // rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                // rowsPerPageOptions={[10, 50]}
-                colSpan={3}
-                // count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                SelectProps={{
-                  inputProps: { "aria-label": "rows per page" },
-                  native: true
-                }}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-                ActionsComponent={TablePaginationActions}
-              />
-            </TableRow>
-          </TableFooter>
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[10, { label: "All", value: -1 }]}
+                    colSpan={3}
+                    count={tableDataWithinRANGE && tableDataWithinRANGE.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: { "aria-label": "rows per page" },
+                      native: true
+                    }}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                  />
+                </TableRow>
+              </TableFooter>
+            </>
+          ) : (
+            <>
+              <TableBody>
+                {paginationTableConstructor(
+                  tableDataAboveMAX && tableDataAboveMAX
+                ) &&
+                  paginationTableConstructor(
+                    tableDataAboveMAX && tableDataAboveMAX
+                  ).map(row => (
+                    <TableRow key={row.district_name}>
+                      <TableCell>
+                        {row.district_name.replace(/ District/g, "")}
+                      </TableCell>
+                      <TableCell>{row.at_hand}</TableCell>
+                      <TableCell>{row.stock_requirement__minimum}</TableCell>
+                      <TableCell>{row.stock_requirement__maximum}</TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[10, { label: "All", value: -1 }]}
+                    colSpan={3}
+                    count={tableDataAboveMAX && tableDataAboveMAX.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: { "aria-label": "rows per page" },
+                      native: true
+                    }}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                  />
+                </TableRow>
+              </TableFooter>
+            </>
+          )}
         </Table>
       </TableContainer>
     </Paper>
