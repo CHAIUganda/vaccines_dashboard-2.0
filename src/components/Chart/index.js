@@ -28,7 +28,9 @@ const CustomeChartPaper = props => {
   useMemo(() => {
     if (chartData && chartData)
       setDataState(
-        chartData.series === undefined || chartData.series.length === 0
+        chartData.series === undefined ||
+          chartData.series.length === 0 ||
+          chartData.series[0].length === 0
       );
   }, [chartData]);
 
@@ -61,7 +63,7 @@ const CustomeChartPaper = props => {
             <Typography variant="overline" display="block" gutterBottom>
               {props.description} {props.totals}
             </Typography>
-            <Typography component="div" style={{ height: 100 }}>
+            <Typography component="div">
               {dataState ? (
                 <p
                   style={{
@@ -71,10 +73,12 @@ const CustomeChartPaper = props => {
                     color: "red"
                   }}
                 >
-                  No Data Available for the selected filter
+                  No Data Available
                 </p>
               ) : (
-                <> {props.chart}</>
+                <>
+                  <div style={{ marginTop: 40 }}>{props.chart}</div>
+                </>
               )}
             </Typography>
           </>

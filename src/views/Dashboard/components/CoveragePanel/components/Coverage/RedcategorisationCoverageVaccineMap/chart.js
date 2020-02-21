@@ -1,6 +1,3 @@
-// Highcharts for time series test
-import Highcharts from "highcharts";
-
 // Chart Options
 import {
   commonChartOptions,
@@ -16,7 +13,6 @@ import {
 } from "../../../../../../../common/utils/mapUtils";
 
 //  Map
-const ugandaMap = require("../../../../../../../common/maps/map.json");
 const ugandaMap2 = require("../../../../../../../common/maps/map2.json");
 
 export const redcategorisationCoverageMap = (

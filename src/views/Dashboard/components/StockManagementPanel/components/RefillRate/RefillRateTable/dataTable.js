@@ -1,215 +1,111 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, forwardRef } from "react";
 
-import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
-import TableFooter from "@material-ui/core/TableFooter";
-import IconButton from "@material-ui/core/IconButton";
-import FirstPageIcon from "@material-ui/icons/FirstPage";
-import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
-import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
-import LastPageIcon from "@material-ui/icons/LastPage";
+import MaterialTable from "material-table";
 
-// Table headers
-const columns = [
-  { id: "district", label: "District", minWidth: 170 },
-  { id: "issued", label: "Issued", minWidth: 100 },
-  {
-    id: "orders",
-    label: "Orders",
-    minWidth: 100
-  },
-  {
-    id: "max",
-    label: "Max",
-    minWidth: 100
-  },
-  {
-    id: "min",
-    label: "Min",
-    minWidth: 100
-  }
-];
+// Import common styles
+import { useStyles } from "../../../../styles";
 
-const useStyles1 = makeStyles(theme => ({
-  root: {
-    flexShrink: 0,
-    marginLeft: theme.spacing(2.5)
-  }
-}));
+import AddBox from "@material-ui/icons/AddBox";
+import ArrowDownward from "@material-ui/icons/ArrowDownward";
+import Check from "@material-ui/icons/Check";
+import ChevronLeft from "@material-ui/icons/ChevronLeft";
+import ChevronRight from "@material-ui/icons/ChevronRight";
+import Clear from "@material-ui/icons/Clear";
+import DeleteOutline from "@material-ui/icons/DeleteOutline";
+import Edit from "@material-ui/icons/Edit";
+import FilterList from "@material-ui/icons/FilterList";
+import FirstPage from "@material-ui/icons/FirstPage";
+import LastPage from "@material-ui/icons/LastPage";
+import Remove from "@material-ui/icons/Remove";
+import SaveAlt from "@material-ui/icons/SaveAlt";
+import Search from "@material-ui/icons/Search";
+import ViewColumn from "@material-ui/icons/ViewColumn";
 
-function TablePaginationActions(props) {
-  const classes = useStyles1();
-  const theme = useTheme();
-  const { count, page, rowsPerPage, onChangePage } = props;
+const tableIcons = {
+  Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+  Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+  Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+  DetailPanel: forwardRef((props, ref) => (
+    <ChevronRight {...props} ref={ref} />
+  )),
+  Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+  Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+  Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+  FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+  LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+  NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+  PreviousPage: forwardRef((props, ref) => (
+    <ChevronLeft {...props} ref={ref} />
+  )),
+  ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+  SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
+  ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+};
 
-  const handleFirstPageButtonClick = event => {
-    onChangePage(event, 0);
-  };
-
-  const handleBackButtonClick = event => {
-    onChangePage(event, page - 1);
-  };
-
-  const handleNextButtonClick = event => {
-    onChangePage(event, page + 1);
-  };
-
-  const handleLastPageButtonClick = event => {
-    onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-  };
-
-  return (
-    <div className={classes.root}>
-      <IconButton
-        onClick={handleFirstPageButtonClick}
-        disabled={page === 0}
-        aria-label="first page"
-      >
-        {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
-      </IconButton>
-      <IconButton
-        onClick={handleBackButtonClick}
-        disabled={page === 0}
-        aria-label="previous page"
-      >
-        {theme.direction === "rtl" ? (
-          <KeyboardArrowRight />
-        ) : (
-          <KeyboardArrowLeft />
-        )}
-      </IconButton>
-      <IconButton
-        onClick={handleNextButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="next page"
-      >
-        {theme.direction === "rtl" ? (
-          <KeyboardArrowLeft />
-        ) : (
-          <KeyboardArrowRight />
-        )}
-      </IconButton>
-      <IconButton
-        onClick={handleLastPageButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="last page"
-      >
-        {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
-      </IconButton>
-    </div>
-  );
-}
-
-const useStyles = makeStyles({
-  root: {
-    width: "100%"
-  },
-  container: {
-    maxHeight: 525
-  }
-});
-
-export const DataTable = props => {
-  const { data } = props;
-
+export const DataTable = ({ data }) => {
   const classes = useStyles();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(12);
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = event => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const paginationTableConstructor = data => {
-    return (data =
-      rowsPerPage > 0
-        ? data &&
-          data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-        : data && data);
-  };
-
+  const columns = [
+    {
+      field: "district_name",
+      title: "District",
+      cellStyle: rowData => ({ fontSize: 13 }),
+      headerStyle: { fontSize: 15, fontWeight: 700 },
+      render: rowData => rowData.district_name.replace(/ District/g, "")
+    },
+    {
+      field: "received",
+      title: "Issued",
+      cellStyle: rowData => ({ fontSize: 13 }),
+      headerStyle: { fontSize: 15, fontWeight: 700 },
+      render: rowData => new Intl.NumberFormat("lg-UG").format(rowData.received)
+    },
+    {
+      field: "ordered",
+      title: "Orders",
+      cellStyle: rowData => ({ fontSize: 13 }),
+      headerStyle: { fontSize: 15, fontWeight: 700 },
+      render: rowData => new Intl.NumberFormat("lg-UG").format(rowData.ordered)
+    },
+    {
+      field: "stock_requirement__maximum",
+      title: "Max",
+      cellStyle: rowData => ({ fontSize: 13 }),
+      headerStyle: { fontSize: 15, fontWeight: 700 },
+      render: rowData =>
+        new Intl.NumberFormat("lg-UG").format(
+          rowData.stock_requirement__maximum
+        )
+    },
+    {
+      field: "stock_requirement__minimum",
+      title: "Min",
+      cellStyle: rowData => ({ fontSize: 13 }),
+      headerStyle: { fontSize: 15, fontWeight: 700 },
+      render: rowData =>
+        new Intl.NumberFormat("lg-UG").format(
+          rowData.stock_requirement__minimum
+        )
+    }
+  ];
   return (
-    <Paper className={classes.root}>
-      <TableContainer className={classes.container}>
-        <Table stickyHeader aria-label="stocked-out-table" size="small">
-          <TableHead>
-            <TableRow>
-              {columns.map(column => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {paginationTableConstructor(data && data) &&
-              paginationTableConstructor(data && data).map(row => (
-                <TableRow
-                  hover
-                  key={row.district_name.replace(/ District/g, "")}
-                >
-                  <TableCell>
-                    {row.district_name.replace(/ District/g, "")}
-                  </TableCell>
-                  <TableCell>
-                    {" "}
-                    {new Intl.NumberFormat("lg-UG").format(row.received)}
-                  </TableCell>
-                  <TableCell>
-                    {" "}
-                    {new Intl.NumberFormat("lg-UG").format(row.ordered)}
-                  </TableCell>
-                  <TableCell>
-                    {" "}
-                    {new Intl.NumberFormat("lg-UG").format(
-                      row.stock_requirement__maximum
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {new Intl.NumberFormat("lg-UG").format(
-                      row.stock_requirement__minimum
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[12, { label: "All", value: -1 }]}
-                colSpan={3}
-                count={data && data.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                SelectProps={{
-                  inputProps: { "aria-label": "rows per page" },
-                  native: true
-                }}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-                ActionsComponent={TablePaginationActions}
-              />
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </TableContainer>
+    <Paper className={classes.tableRoot}>
+      <MaterialTable
+        title={" "}
+        data={data && data}
+        columns={columns}
+        icons={tableIcons}
+        options={
+          ({
+            sorting: true
+          },
+          { exportButton: true })
+        }
+      />
     </Paper>
   );
 };

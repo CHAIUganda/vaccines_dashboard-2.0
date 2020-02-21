@@ -2,8 +2,11 @@ import React from "react";
 
 // Material components
 import { CssBaseline } from "@material-ui/core";
+import { Container } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 
-import { Dashboard } from "../Dashboard/index";
+// import Sidebar from "./Sidebar";
+import Header from "./Header";
 
 //Component styles
 const styles = () => ({
@@ -18,7 +21,21 @@ export default function BaseLayout(props) {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Dashboard />
+      <Header onChange={props.onChange} value={props.value} />
+      <Box component="span" m={1}>
+        <Container
+          maxWidth="false"
+          disableGutters
+          fixed
+          style={{
+            paddingLeft: 100,
+            paddingRight: 100,
+            backgroundColor: "#F5F5F5"
+          }}
+        >
+          {props.children}
+        </Container>
+      </Box>
     </div>
   );
 }

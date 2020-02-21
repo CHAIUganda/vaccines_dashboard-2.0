@@ -36,7 +36,7 @@ const RefillRateLineChart = ({
 
   return (
     <Chart
-      title={`Distribution of ${vaccine} for ${district}`}
+      title={`Distribution of ${vaccine} for ${district} `}
       chart={
         <HighchartsReact highcharts={Highcharts} options={chart && chart} />
       }

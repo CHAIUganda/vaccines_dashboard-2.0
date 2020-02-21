@@ -2,23 +2,14 @@ import React from "react";
 
 // Material components
 import { Grid } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
 
 // Custom components
 import UptakeRateChart from "./UptakeRateChart/index";
 import DistrictStockTrendsChart from "./DistrictStockTrendsChart/index";
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1
-  },
-  chartDiv: {
-    flexGrow: 1,
-    backgroundColor: "#F9F9FC",
-    fontFamily: "Open Sans",
-    height: 630
-  }
-}));
+// Import common styles
+import { useStyles } from "../../../styles";
 
 export default function UptakeRateAndDistrictStockTrends(props) {
   const classes = useStyles();
@@ -33,18 +24,11 @@ export default function UptakeRateAndDistrictStockTrends(props) {
   } = props;
 
   return (
-    <div className={classes.chartDiv}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Grid container spacing={3}>
-            <Grid
-              item
-              lg={12}
-              md={12}
-              xl={12}
-              xs={12}
-              style={{ height: 650, padding: "0.9rem" }}
-            >
+    <Grid container spacing={3}>
+      <Grid item xs={12}>
+        <Paper className={classes.paper} elevation={0}>
+          <Grid item lg={12} md={12} xl={12} xs={12}>
+            <div className={classes.chartDiv}>
               {tab === "uptake-rate" ? (
                 <>
                   <UptakeRateChart
@@ -68,10 +52,10 @@ export default function UptakeRateAndDistrictStockTrends(props) {
                   />
                 </>
               )}
-            </Grid>
+            </div>
           </Grid>
-        </Grid>
+        </Paper>
       </Grid>
-    </div>
+    </Grid>
   );
 }

@@ -75,7 +75,9 @@ export const antigensAnnualizedCoverageCY = (
       ...commonChartOptions.credits
     },
     chart: {
-      ...(district === "National" ? { height: 50 + "%" } : { height: 28 + "%" })
+      ...(district[0] === "National"
+        ? { height: 50 + "%" }
+        : { height: 28 + "%" })
     },
     exporting: {
       ...commonChartOptions.exporting,
@@ -155,7 +157,9 @@ export const antigensAnnualizedCoverageFY = (
   return {
     ...commonChartOptions,
     chart: {
-      ...(district === "National" ? { height: 50 + "%" } : { height: 28 + "%" })
+      ...(district[0] === "National"
+        ? { height: 50 + "%" }
+        : { height: 28 + "%" })
     },
     exporting: {
       ...commonChartOptions.exporting,
@@ -191,10 +195,7 @@ export const antigensAnnualizedCoverageFY = (
     },
     plotOptions: {
       line: {
-        lineWidth: 1,
-        marker: {
-          enabled: false
-        }
+        ...commonChartPlotOptions.plotOptions.line
       }
     },
     series: [...chartData]

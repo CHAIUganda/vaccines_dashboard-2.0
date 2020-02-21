@@ -13,7 +13,7 @@ import { redcategorisationCoverageMap } from "./chart";
 // High Maps components
 require("highcharts/modules/map")(Highcharts);
 
-const DropoutRateCoverageForVaccineMap = ({
+const RedCategorisationCoverageForVaccineMap = ({
   data,
   endYear,
   tabTitle,
@@ -56,4 +56,4 @@ const DropoutRateCoverageForVaccineMap = ({
   );
 };
 
-export default DropoutRateCoverageForVaccineMap;
+export default RedCategorisationCoverageForVaccineMap;
