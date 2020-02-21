@@ -1,6 +1,3 @@
-// Highcharts for time series test
-import Highcharts from "highcharts";
-
 // Chart Options
 import {
   commonChartOptions,
@@ -11,18 +8,20 @@ import {
 
 import {
   createDistrictDataMap,
-  calculateDropoutRate,
+  calculateCoverageRate,
   getPeriodList
 } from "../../../../../../../common/utils/mapUtils";
 
 //  Map
-const ugandaMap = require("../../../../../../../common/maps/map.json");
+
 const ugandaMap2 = require("../../../../../../../common/maps/map2.json");
 
-export const dropoutRateCoverageMap = (
+export const vaccineAnnualizedCoverage = (
   data,
   startYear,
+  endYear,
   tabTitle,
+  dose,
   vaccineName
 ) => {
   let activeVaccine = vaccineName;
@@ -41,7 +40,9 @@ export const dropoutRateCoverageMap = (
 
     const periodList = getPeriodList(_data, startYear, tabTitle);
 
-    const coverageRate = calculateDropoutRate(_data, periodList);
+    // Get Dose number from dose
+    const doseNumber = parseInt(dose[dose.length - 1]);
+    const coverageRate = calculateCoverageRate(_data, periodList, doseNumber);
 
     // Data District name is in format `District District`.
     // We only want the mane minus the word district at the end for our map
@@ -52,18 +53,10 @@ export const dropoutRateCoverageMap = (
 
   // Calculate legend values
   const values = mapData.map(v => v[1]);
-
-  const between_negative_10_to_0 = values.filter(
-    a => a >= -10 && a <= 0 && a !== undefined
-  ).length;
-
-  const between_0_and_10 = values.filter(
-    a => a >= 0 && a <= 10 && a !== undefined
-  ).length;
-
-  const between_negative_10_to_20 = values.filter(
-    a => a >= -10 && a <= 20 && a !== undefined
-  ).length;
+  const below_50 = values.filter(a => a < 50 && a !== null).length;
+  const between_50_to_89 = values.filter(a => a > 50 && a <= 89 && a !== null)
+    .length;
+  const above_90 = values.filter(a => a >= 90 && a !== null).length;
 
   return {
     credits: {
@@ -87,11 +80,12 @@ export const dropoutRateCoverageMap = (
         },
         title: {
           text: `${tabTitle === "Annualized (CY)" ||
-            tabTitle === "Annualized (FY)"} Dropout Rate  of ${
+            tabTitle === "Annualized (FY)"} Coverage of ${
             vaccineName === "ALL" ? "PENTA3" : vaccineName
           } for ${startYear}`
         }
       },
+
       buttons: {
         ...commonChartOptions.exporting.buttons
       },
@@ -103,33 +97,29 @@ export const dropoutRateCoverageMap = (
     mapNavigation: {
       mapNavigation: { ...commonChartOptions.mapNavigation }
     },
-
     legend: {
       ...mapLegend
     },
-
     colorAxis: {
       dataClasses: [
         {
-          from: -10,
-          to: 20,
-          color: "yellow",
-          count: between_negative_10_to_20,
-          legendName: "<- 10 & < 20"
-        },
-        {
-          from: -10 - 0,
-          to: -10,
+          to: 50,
           color: "red",
-          count: between_negative_10_to_0,
-          legendName: "(-10-0) & (10-20)"
+          count: below_50,
+          legendName: "<50%"
         },
         {
-          from: 0,
-          to: 10,
+          from: 50.1,
+          to: 89.9,
+          color: "yellow",
+          count: between_50_to_89,
+          legendName: "50% - 89%"
+        },
+        {
+          from: 90,
           color: "green",
-          count: between_0_and_10,
-          legendName: "0-10"
+          count: above_90,
+          legendName: ">=90%"
         }
       ]
     },

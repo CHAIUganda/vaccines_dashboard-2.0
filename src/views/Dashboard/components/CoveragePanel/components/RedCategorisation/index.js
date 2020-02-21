@@ -12,8 +12,8 @@ import Box from "@material-ui/core/Box";
 
 // Custom components
 
-import RedCategorisationForAntigensChart from "./RedcategorisationCoverageForAntigenChart/index";
-import RedCategprCoverageForVaccineMap from "./RedcategorisationCoverageVaccineMap/index";
+import RedCategorisationForAntigensChart from "../Coverage/RedcategorisationCoverageForAntigenChart/index";
+import RedCategprCoverageForVaccineMap from "../Coverage/RedcategorisationCoverageVaccineMap/index";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

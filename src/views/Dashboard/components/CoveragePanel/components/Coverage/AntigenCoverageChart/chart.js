@@ -21,7 +21,7 @@ export const coverageRateChartTemplate = (
     credits: { ...commonChartOptions.credits },
     chart: {
       type: "column",
-      height: { ...commonChartOptions.chart }
+      ...commonChartOptions.chart
     },
     exporting: {
       ...commonChartOptions.exporting,

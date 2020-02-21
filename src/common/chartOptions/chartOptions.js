@@ -31,7 +31,7 @@ const commonChartOptions = {
   // Axis labels
   labels: {
     style: {
-      fontSize: "18px"
+      fontSize: "12px"
     }
   },
 

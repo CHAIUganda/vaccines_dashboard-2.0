@@ -2,23 +2,14 @@ import React from "react";
 
 // Material components
 import { Grid } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
 
 // Custom components
 import RefillRateLineChart from "./RefillRateLineChart/index";
 import RefillRateTable from "./RefillRateTable/index";
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1
-  },
-  tabsDiv: {
-    flexGrow: 1,
-    backgroundColor: "#F9F9FC",
-    fontFamily: "Open Sans",
-    height: 630
-  }
-}));
+// Import common styles
+import { useStyles } from "../../../styles";
 
 export default function RefillRate(props) {
   const classes = useStyles();
@@ -34,48 +25,33 @@ export default function RefillRate(props) {
   } = props;
 
   return (
-    <div className={classes.tabsDiv}>
-      <Grid container spacing={3}>
-        <Grid item xs={6}>
-          <Grid container spacing={3}>
-            <Grid
-              item
-              lg={12}
-              md={12}
-              xl={12}
-              xs={12}
-              style={{ height: 650, padding: "0.9rem" }}
-            >
-              <RefillRateLineChart
-                data={stockByDistrictVaccineRefillData}
-                isLoading={isLoading}
-                endMonth={endMonth}
-                startMonth={startMonth}
-                district={district}
-                vaccine={vaccine}
-              />
+    <Grid container spacing={3}>
+      <Grid item xs={12} style={{ paddingTop: 10 }}>
+        <Paper className={classes.paper} elevation={0}>
+          <Grid item lg={12} md={12} xl={12} xs={12}>
+            <Grid container spacing={3} className={classes.DST_section}>
+              <Grid item lg={6} md={6} xl={6} xs={12}>
+                <RefillRateLineChart
+                  data={stockByDistrictVaccineRefillData}
+                  isLoading={isLoading}
+                  endMonth={endMonth}
+                  startMonth={startMonth}
+                  district={district}
+                  vaccine={vaccine}
+                />
+              </Grid>
+              <Grid item lg={6} md={6} xl={6} xs={12}>
+                <RefillRateTable
+                  data={atHandStockByDistrictRefillData}
+                  endMonth={endMonth}
+                  vaccine={vaccine}
+                  isLoading={isLoading}
+                />
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
-
-        <Grid item xs={6}>
-          <Grid container spacing={3}>
-            <Grid
-              item
-              lg={12}
-              md={12}
-              xl={12}
-              xs={12}
-              style={{ height: 650, padding: "0.9rem" }}
-            >
-              <RefillRateTable
-                data={atHandStockByDistrictRefillData}
-                isLoading={isLoading && isLoading}
-              />
-            </Grid>
-          </Grid>
-        </Grid>
+        </Paper>
       </Grid>
-    </div>
+    </Grid>
   );
 }

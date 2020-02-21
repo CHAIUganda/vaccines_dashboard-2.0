@@ -10,7 +10,12 @@ export const useVaccineDosesForCoverageByMonth = (
   vaccine,
   district
 ) => {
-  const vaccineDosesByPeriodURL = `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`;
+  const quotedAndCommaSeparatedDistricts = "'" + district.join("','") + "'";
+
+  const vaccineDosesByPeriodURL =
+    district.length === 1
+      ? `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`
+      : `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?districts=[${quotedAndCommaSeparatedDistricts}]&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`;
   const vaccineDosesForMapURL = `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?dataType=map&endYear=${startYear}`;
 
   const [isLoadingCoverageByMonth, setIsLoadingCoverageByMonth] = useState(
@@ -68,7 +73,14 @@ export const useVaccineDosesForCoverageByYear = (
   vaccine,
   district
 ) => {
-  const vaccineDosesByPeriodURL = `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`;
+  const quotedAndCommaSeparatedDistricts = "'" + district.join("','") + "'";
+
+  const vaccineDosesByPeriodURL =
+    district.length === 1
+      ? `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`
+      : `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?districts=[${quotedAndCommaSeparatedDistricts}]&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`;
+
+  // const vaccineDosesByPeriodURL = `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`;
 
   const [isLoadingCoverageByYear, setIsLoadingCoverageByYear] = useState(false);
   const [
@@ -109,7 +121,13 @@ export const useVaccineDosesForDropoutRate = (
   vaccine,
   district
 ) => {
-  const vaccineDosesByPeriodURL = `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`;
+  const quotedAndCommaSeparatedDistricts = "'" + district.join("','") + "'";
+
+  const vaccineDosesByPeriodURL =
+    district.length === 1
+      ? `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`
+      : `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?districts=[${quotedAndCommaSeparatedDistricts}]&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`;
+  // const vaccineDosesByPeriodURL = `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`;
 
   const vaccineDosesForMapURL = `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?dataType=map&endYear=${startYear}`;
 
@@ -342,7 +360,14 @@ export const useGetRefillRateData = (
   startMonth,
   vaccine
 ) => {
-  const stockByDistrictVaccineURL = `http://${apiEndpoint}${port}/api/stock/stockbydistrictvaccine?district=${district}&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}`;
+  const quotedAndCommaSeparatedDistricts = "'" + district.join("','") + "'";
+
+  const stockByDistrictVaccineURL =
+    district.length === 1
+      ? `http://${apiEndpoint}${port}/api/stock/stockbydistrictvaccine?district=${district}&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}`
+      : `http://${apiEndpoint}${port}/api/stock/stockbydistrictvaccine?districts=[${quotedAndCommaSeparatedDistricts}]&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}`;
+
+  // const stockByDistrictVaccineURL = `http://${apiEndpoint}${port}/api/stock/stockbydistrictvaccine?districts=[${quotedAndCommaSeparatedDistricts}]&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}`;
   const atHandStockByDistrictURL = `http://${apiEndpoint}${port}/api/stock/athandbydistrict?district=&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}`;
 
   const [isLoadingRefillRateData, setIsLoadingRefillRateData] = useState(false);
@@ -458,7 +483,12 @@ export const useGetDistrictStockTrendData = (
   startMonth,
   vaccine
 ) => {
-  const stockByDistrictVaccineURL = `http://${apiEndpoint}${port}/api/stock/stockbydistrictvaccine?district=${district}&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}`;
+  const quotedAndCommaSeparatedDistricts = "'" + district.join("','") + "'";
+
+  const stockByDistrictVaccineURL =
+    district.length === 1
+      ? `http://${apiEndpoint}${port}/api/stock/stockbydistrictvaccine?district=${district}&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}`
+      : `http://${apiEndpoint}${port}/api/stock/stockbydistrictvaccine?districts=[${quotedAndCommaSeparatedDistricts}]&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}`;
   const atHandStockByDistrictURL = `http://${apiEndpoint}${port}/api/stock/athandbydistrict?district=&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}`;
 
   const [isLoadingStockTrendData, setIsLoadingStockTrendData] = useState(false);

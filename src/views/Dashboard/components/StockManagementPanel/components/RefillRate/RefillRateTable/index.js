@@ -7,9 +7,12 @@ import { Grid } from "@material-ui/core";
 import { Chart } from "../../../../../../../components";
 import { DataTable } from "./dataTable";
 
-const RefillRateTable = ({ data, isLoading }) => {
+const RefillRateTable = ({ data, vaccine, endMonth, isLoading }) => {
+  const title = `Stock Balances of ${vaccine} at the Beginning of ${endMonth}`;
+
   return (
     <Chart
+      title={title}
       chart={
         <>
           <Grid container spacing={3}>

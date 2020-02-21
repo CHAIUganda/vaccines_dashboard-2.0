@@ -123,7 +123,6 @@ export const getStockChartData = (
           {
             name: "Stocked Out",
             y: (nothing / data.length) * 100,
-            sliced: true,
             selected: true
           },
           {
@@ -152,27 +151,25 @@ export const getStockChartData = (
     let max_seriesDistribution = [];
     let refreshrate = 0;
 
-    for (var i = 0; i < data.length; i++) {
+    Object.values(data).map(period => {
       seriesDistribution.push([
-        convertToTimeSeries(data[i].period),
-        parseInt(data[i].received)
+        convertToTimeSeries(period.period),
+        parseInt(period.received)
       ]);
-      seriesOrders.push([convertToTimeSeries(data[i].period), data[i].ordered]);
+      seriesOrders.push([convertToTimeSeries(period.period), period.ordered]);
       min_seriesDistribution.push([
-        convertToTimeSeries(data[i].period),
-        data[i].stock_requirement__minimum
+        convertToTimeSeries(period.period),
+        period.stock_requirement__minimum
       ]);
       max_seriesDistribution.push([
-        convertToTimeSeries(data[i].period),
-        data[i].stock_requirement__maximum
+        convertToTimeSeries(period.period),
+        period.stock_requirement__maximum
       ]);
-      if (data[i].month === getMonthNumber(endMonth.split(" ")[0])) {
+      if (period.month === getMonthNumber(endMonth.split(" ")[0])) {
         refreshrate =
-          data[i].ordered === 0
-            ? 0
-            : (data[i].received / data[i].ordered) * 100;
+          period.ordered === 0 ? 0 : (period.received / period.ordered) * 100;
       }
-    }
+    });
 
     const sortedMin_seriesDistribution = dataSorter(min_seriesDistribution);
 
@@ -203,7 +200,6 @@ export const getStockChartData = (
       data: sortedMax_seriesDistribution,
       color: "#FF7F0E"
     });
-
     return graphdataDistribution;
   } else if (type === "column_uptake_rate") {
     let graphdataUptake = [];

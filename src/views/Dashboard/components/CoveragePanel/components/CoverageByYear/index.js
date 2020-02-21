@@ -5,7 +5,7 @@ import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 // Custom components
-import AntigenCoverageChart from "./AntigenCoverageChart/index";
+import AntigenCoverageChart from "../AntigenCoverageChart/index";
 
 const useStyles = makeStyles(theme => ({
   root: {

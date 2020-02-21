@@ -12,8 +12,8 @@ import Box from "@material-ui/core/Box";
 
 // Custom components
 
-import DropoutRateForAntigensChart from "./DropoutRateCoverageForAntigenChart/index";
-import DropoutRateCoverageForVaccineMap from "./DropoutRateCoverageVaccineMap/index";
+import DropoutRateForAntigensChart from "../Coverage/DropoutRateCoverageForAntigenChart/index";
+import DropoutRateCoverageForVaccineMap from "../Coverage/DropoutRateCoverageVaccineMap/index";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
