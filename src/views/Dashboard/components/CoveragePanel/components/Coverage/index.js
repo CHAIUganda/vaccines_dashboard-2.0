@@ -138,7 +138,7 @@ export default function Coverage(props) {
               <Grid item lg={12} md={12} xl={12} xs={12}>
                 <TabPanel value={value} index={0}>
                   <Grid container spacing={3} className={classes.C_section}>
-                    {data && data.district[0] === "National" ? (
+                    {data && data.district.length === 1 ? (
                       <>
                         <Grid item lg={5} md={5} xl={5} xs={12}>
                           {parentTab === "monthlyCoverage" ? (
@@ -246,7 +246,7 @@ export default function Coverage(props) {
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                   <Grid container spacing={3} className={classes.C_section}>
-                    {data && data.district[0] === "National" ? (
+                    {data && data.district.length === 1 ? (
                       <>
                         <Grid item lg={5} md={5} xl={5} xs={12}>
                           {parentTab === "monthlyCoverage" ? (
@@ -356,7 +356,7 @@ export default function Coverage(props) {
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                   <Grid container spacing={3} className={classes.C_section}>
-                    {data && data.district[0] === "National" ? (
+                    {data && data.district.length === 1 ? (
                       <>
                         <Grid item lg={5} md={5} xl={5} xs={12}>
                           {parentTab === "monthlyCoverage" ? (
@@ -467,7 +467,7 @@ export default function Coverage(props) {
 
                 <TabPanel value={value} index={3}>
                   <Grid container spacing={3} className={classes.C_section}>
-                    {data && data.district[0] === "National" ? (
+                    {data && data.district.length === 1 ? (
                       <>
                         <Grid item lg={5} md={5} xl={5} xs={12}>
                           {parentTab === "monthlyCoverage" ? (
@@ -511,9 +511,8 @@ export default function Coverage(props) {
                                 district={data && data.district}
                               />
                             </>
-                          ) : parentTab === "dropoutRate" ? (
+                          ) : (
                             <>
-                              {" "}
                               <DropoutRateForAntigensChart
                                 data={data && data.vaccineDosesForChart}
                                 tabTitle={"Monthly (FY)"}
@@ -524,10 +523,8 @@ export default function Coverage(props) {
                                 endYear={data && data.endYear}
                                 reportYear={"FY"}
                                 district={data && data.district}
-                              />{" "}
+                              />
                             </>
-                          ) : (
-                            <> </>
                           )}
                         </Grid>
                       </>

@@ -24,7 +24,7 @@ export default function BaseLayout(props) {
       <Header onChange={props.onChange} value={props.value} />
       <Box component="span" m={1}>
         <Container
-          maxWidth="false"
+          maxWidth={false}
           disableGutters
           fixed
           style={{

@@ -73,9 +73,7 @@ export const dropoutRateCoverageCY = (
     credits: { ...commonChartOptions.credits },
 
     chart: {
-      ...(district[0] === "National"
-        ? { height: 50 + "%" }
-        : { height: 28 + "%" })
+      ...(district.length === 1 ? { height: 50 + "%" } : { height: 28 + "%" })
     },
     exporting: {
       ...commonChartOptions.exporting,
@@ -184,9 +182,7 @@ export const dropoutRateCoverageFY = (
       ...commonChartOptions.credits
     },
     chart: {
-      ...(district[0] === "National"
-        ? { height: 50 + "%" }
-        : { height: 28 + "%" })
+      ...(district.length === 1 ? { height: 50 + "%" } : { height: 28 + "%" })
     },
 
     exporting: {

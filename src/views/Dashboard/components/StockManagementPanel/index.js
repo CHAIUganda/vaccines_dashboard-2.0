@@ -514,24 +514,6 @@ export function StockManagementPanel() {
     }
   };
 
-  const handleChangeMultiple = (event, tab) => {
-    const { options } = event.target;
-    const value = [];
-    for (let i = 0, l = options.length; i < l; i += 1) {
-      if (options[i].selected) {
-        value.push(options[i].value);
-      }
-    }
-
-    if (tab === "District Stock Trends") {
-      setDistrictStockTrendDistrict2(value);
-      setDistrictStockTrendChipData(value);
-    } else {
-      setRefillRateDistrict2(value);
-      setRefillrateChipData(value);
-    }
-  };
-
   // Chip stuff
 
   const handleDeleteChip = (chipToDelete, tab) => () => {
@@ -552,14 +534,6 @@ export function StockManagementPanel() {
     }
   };
 
-  function getStyles(name, district, theme) {
-    return {
-      fontWeight:
-        district.indexOf(district.name) === -1
-          ? theme.typography.fontWeightRegular
-          : theme.typography.fontWeightMedium
-    };
-  }
   return (
     <div>
       <Grid container spacing={3}>
@@ -859,7 +833,7 @@ export function StockManagementPanel() {
       </Grid>
 
       <Grid container spacing={3}>
-        <Grid xs={12}>
+        <Grid item xs={12}>
           <TabPanel value={value} index={0}>
             <DistrictsStockLevels
               atHandStockLevelsData={atHandStockByDistrictStockLevels}
@@ -875,7 +849,7 @@ export function StockManagementPanel() {
             <Grid item xs={12}>
               <Paper className={classes.paper} elevation={0}>
                 <Grid container spacing={3}>
-                  <Grid xs={12}>
+                  <Grid item xs={12}>
                     {refillrateChipData.map(function(district) {
                       return (
                         <Chip
@@ -920,7 +894,7 @@ export function StockManagementPanel() {
             <Grid item xs={12}>
               <Paper className={classes.paper} elevation={0}>
                 <Grid container spacing={3}>
-                  <Grid xs={12}>
+                  <Grid item xs={12}>
                     {districtStockTrendChipData.map(function(district) {
                       return (
                         <Chip

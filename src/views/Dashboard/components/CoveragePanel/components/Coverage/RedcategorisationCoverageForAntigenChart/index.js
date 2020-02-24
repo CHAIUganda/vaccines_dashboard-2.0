@@ -50,7 +50,7 @@ const RedCategorisationForAntigensChart = props => {
         )
       );
     }
-  }, [data, vaccineName, tabTitle, dose, startYear, endYear]);
+  }, [data, vaccineName, tabTitle, dose, startYear, endYear, reportYear]);
 
   return (
     <Chart

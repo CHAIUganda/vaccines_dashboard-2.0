@@ -12,7 +12,6 @@ import Box from "@material-ui/core/Box";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
 import Paper from "@material-ui/core/Paper";
 import Tooltip from "@material-ui/core/Tooltip";
 import Chip from "@material-ui/core/Chip";
@@ -894,12 +893,12 @@ export function CoveragePanel() {
         </Grid>
       </Grid>
       <Grid container spacing={3}>
-        <Grid xs={12}>
+        <Grid item xs={12}>
           <TabPanel value={value} index={0}>
             <Grid item xs={12}>
               <Paper className={classes.paper} elevation={0}>
                 <Grid container spacing={3}>
-                  <Grid xs={12}>
+                  <Grid item xs={12}>
                     {coverageByMonthDistrictChipData
                       .filter(a => a !== "National")
                       .map(function(district) {
@@ -928,7 +927,7 @@ export function CoveragePanel() {
             <Grid item xs={12}>
               <Paper className={classes.paper} elevation={0}>
                 <Grid container spacing={3}>
-                  <Grid xs={12}>
+                  <Grid item xs={12}>
                     {coverageByYearDistrictChipData
                       .filter(a => a !== "National")
                       .map(function(district) {
@@ -957,7 +956,7 @@ export function CoveragePanel() {
             <Grid item xs={12}>
               <Paper className={classes.paper} elevation={0}>
                 <Grid container spacing={3}>
-                  <Grid xs={12}>
+                  <Grid item xs={12}>
                     {coverageDropoutrateDistrictChipData
                       .filter(a => a !== "National")
                       .map(function(district) {

@@ -66,6 +66,7 @@ const useStyles = makeStyles(theme => ({
     color: "#28354A",
     fontSize: 20
   },
+
   paper: {
     padding: theme.spacing(2),
     textAlign: "center",
