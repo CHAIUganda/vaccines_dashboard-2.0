@@ -77,7 +77,18 @@ const TabStyle = withStyles(theme => ({
 export default function Coverage(props) {
   const classes = useStyles();
   const [value, setValue] = useState(0);
-  const { data, parentTab } = props;
+  const {
+    data,
+    parentTab,
+    vacineDataForMap,
+    vaccineDosesForChart,
+    vaccineName,
+    dose,
+    isLoading,
+    startYear,
+    endYear,
+    district
+  } = props;
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -144,13 +155,13 @@ export default function Coverage(props) {
                           {parentTab === "monthlyCoverage" ? (
                             <>
                               <AnnualizedCoverageForVaccineMap
-                                data={data && data.vacineDataForMap}
+                                data={vacineDataForMap}
                                 tabTitle={"Annualized (CY)"}
-                                dose={data && data.dose}
-                                startYear={data && data.startYear}
-                                endYear={data && data.endYear}
-                                vaccineName={data && data.vaccineName}
-                                isLoading={data && data.isLoading}
+                                dose={dose}
+                                startYear={startYear}
+                                endYear={endYear}
+                                vaccineName={vaccineName}
+                                isLoading={isLoading}
                                 reportYear={"CY"}
                               />
                             </>
@@ -172,15 +183,15 @@ export default function Coverage(props) {
                           {parentTab === "monthlyCoverage" ? (
                             <>
                               <CoverageForAntigensChart
-                                data={data && data.vaccineDosesForChart}
+                                data={vaccineDosesForChart}
                                 tabTitle={"Annualized (CY)"}
-                                vaccineName={data && data.vaccineName}
-                                dose={data && data.dose}
-                                isLoading={data && data.isLoading}
-                                startYear={data && data.startYear}
-                                endYear={data && data.endYear}
+                                vaccineName={vaccineName}
+                                dose={dose}
+                                isLoading={isLoading}
+                                startYear={startYear}
+                                endYear={endYear}
                                 reportYear={"CY"}
-                                district={data && data.district}
+                                district={district}
                               />
                             </>
                           ) : (
@@ -225,7 +236,7 @@ export default function Coverage(props) {
                           />
                         </Grid>{" "}
                       </>
-                    ) : (
+                    ) : parentTab === "monthlyCoverage" ? (
                       <>
                         <Grid item lg={12} md={12} xl={12} xs={12}>
                           <CoverageForAntigensChart
@@ -240,6 +251,21 @@ export default function Coverage(props) {
                             district={data && data.district}
                           />
                         </Grid>
+                      </>
+                    ) : (
+                      <>
+                        {" "}
+                        <DropoutRateForAntigensChart
+                          data={data && data.vaccineDosesForChart}
+                          tabTitle={"Annualized (CY)"}
+                          vaccineName={data && data.vaccineName}
+                          dose={data && data.dose}
+                          isLoading={data && data.isLoading}
+                          startYear={data && data.startYear}
+                          endYear={data && data.endYear}
+                          reportYear={"CY"}
+                          district={data && data.district}
+                        />
                       </>
                     )}
                   </Grid>
@@ -292,7 +318,6 @@ export default function Coverage(props) {
                             </>
                           ) : parentTab === "dropoutRate" ? (
                             <>
-                              {" "}
                               <DropoutRateForAntigensChart
                                 data={data && data.vaccineDosesForChart}
                                 tabTitle={"Monthly (CY)"}
@@ -303,7 +328,7 @@ export default function Coverage(props) {
                                 endYear={data && data.endYear}
                                 reportYear={"CY"}
                                 district={data && data.district}
-                              />{" "}
+                              />
                             </>
                           ) : (
                             <> </>
@@ -335,7 +360,7 @@ export default function Coverage(props) {
                           />
                         </Grid>{" "}
                       </>
-                    ) : (
+                    ) : parentTab === "monthlyCoverage" ? (
                       <>
                         <Grid item lg={12} md={12} xl={12} xs={12}>
                           <CoverageForAntigensChart
@@ -350,6 +375,20 @@ export default function Coverage(props) {
                             district={data && data.district}
                           />
                         </Grid>
+                      </>
+                    ) : (
+                      <>
+                        <DropoutRateForAntigensChart
+                          data={data && data.vaccineDosesForChart}
+                          tabTitle={"Monthly (CY)"}
+                          vaccineName={data && data.vaccineName}
+                          dose={data && data.dose}
+                          isLoading={data && data.isLoading}
+                          startYear={data && data.startYear}
+                          endYear={data && data.endYear}
+                          reportYear={"CY"}
+                          district={data && data.district}
+                        />
                       </>
                     )}
                   </Grid>
@@ -400,9 +439,8 @@ export default function Coverage(props) {
                                 district={data && data.district}
                               />
                             </>
-                          ) : parentTab === "dropoutRate" ? (
+                          ) : (
                             <>
-                              {" "}
                               <DropoutRateForAntigensChart
                                 data={data && data.vaccineDosesForChart}
                                 tabTitle={"Annualized (FY)"}
@@ -413,10 +451,8 @@ export default function Coverage(props) {
                                 endYear={data && data.endYear}
                                 reportYear={"FY"}
                                 district={data && data.district}
-                              />{" "}
+                              />
                             </>
-                          ) : (
-                            <> </>
                           )}
                         </Grid>
                       </>
@@ -445,7 +481,7 @@ export default function Coverage(props) {
                           />
                         </Grid>{" "}
                       </>
-                    ) : (
+                    ) : parentTab === "monthlyCoverage" ? (
                       <>
                         <Grid item lg={12} md={12} xl={12} xs={12}>
                           <CoverageForAntigensChart
@@ -460,6 +496,20 @@ export default function Coverage(props) {
                             district={data && data.district}
                           />
                         </Grid>
+                      </>
+                    ) : (
+                      <>
+                        <DropoutRateForAntigensChart
+                          data={data && data.vaccineDosesForChart}
+                          tabTitle={"Annualized (FY)"}
+                          vaccineName={data && data.vaccineName}
+                          dose={data && data.dose}
+                          isLoading={data && data.isLoading}
+                          startYear={data && data.startYear}
+                          endYear={data && data.endYear}
+                          reportYear={"FY"}
+                          district={data && data.district}
+                        />
                       </>
                     )}
                   </Grid>
@@ -553,7 +603,7 @@ export default function Coverage(props) {
                           />
                         </Grid>{" "}
                       </>
-                    ) : (
+                    ) : parentTab === "monthlyCoverage" ? (
                       <>
                         <Grid item lg={12} md={12} xl={12} xs={12}>
                           <CoverageForAntigensChart
@@ -568,6 +618,21 @@ export default function Coverage(props) {
                             district={data && data.district}
                           />
                         </Grid>
+                      </>
+                    ) : (
+                      <>
+                        {" "}
+                        <DropoutRateForAntigensChart
+                          data={data && data.vaccineDosesForChart}
+                          tabTitle={"Monthly (FY)"}
+                          vaccineName={data && data.vaccineName}
+                          dose={data && data.dose}
+                          isLoading={data && data.isLoading}
+                          startYear={data && data.startYear}
+                          endYear={data && data.endYear}
+                          reportYear={"FY"}
+                          district={data && data.district}
+                        />{" "}
                       </>
                     )}
                   </Grid>

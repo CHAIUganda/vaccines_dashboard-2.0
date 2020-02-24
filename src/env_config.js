@@ -3,6 +3,8 @@ const serverUrl = require("./config.json");
 function env_config() {
   if (window.location.hostname === serverUrl.STAGING_URL) {
     return serverUrl.STAGING_URL;
+  } else if (window.location.hostname === serverUrl.PRODUCTION_URL) {
+    return serverUrl.PRODUCTION_URL;
   } else {
     return serverUrl.LOCAL_URL;
   }
