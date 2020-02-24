@@ -44,7 +44,7 @@ const RedCategorisationForAntigensChart = props => {
           tabTitle && tabTitle,
           vaccineName && vaccineName,
           dose && dose,
-          "Dropout Rate",
+          "Red Categorization",
           reportYear && reportYear,
           startYear && startYear
         )

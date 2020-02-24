@@ -55,17 +55,18 @@ const useStyles = makeStyles(theme => ({
   title: {
     color: "#28354A",
     marginRight: 10,
-    fontSize: 25
+    fontSize: "xx-large"
   },
   subTitle: {
     color: "red",
     flexGrow: 1,
-    fontSize: 13
+    fontSize: "larger",
+    marginLeft: 20
   },
   courtOfArms: {
     width: 45,
     height: 45,
-    marginRight: 15
+    paddingRight: 15
   },
   flagStrip: {
     width: "auto",
@@ -110,7 +111,7 @@ const useStyles = makeStyles(theme => ({
   verticalBar: {
     backgroundColor: "#28354A",
     marginLeft: 0,
-    height: "100vh"
+    minHeight: "100vh"
   },
 
   verticalLabelContainer: {

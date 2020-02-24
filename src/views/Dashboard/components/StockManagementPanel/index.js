@@ -122,11 +122,12 @@ const BootstrapInput = withStyles(theme => ({
     }
   },
   input: {
+    fontSize: "medium",
     borderRadius: 4,
     position: "relative",
     backgroundColor: theme.palette.background.paper,
     border: "1px solid #ced4da",
-    fontSize: 16,
+    // fontSize: 16,
     padding: "10px 26px 10px 12px",
     transition: theme.transitions.create(["border-color", "box-shadow"]),
     // Use the system font instead of the default Roboto font.
@@ -319,9 +320,9 @@ export function StockManagementPanel() {
   // District Stock levels Filters
   // -----------------------------------------------------------------------
   const districtStockLevelsVaccinesFilter = VACCINES.map(vaccine => (
-    <option value={vaccine} key={vaccine}>
+    <MenuItem value={vaccine} key={vaccine}>
       {vaccine}
-    </option>
+    </MenuItem>
   ));
 
   const districtStockLevelsEndMonthFilter =
@@ -377,21 +378,21 @@ export function StockManagementPanel() {
       ));
 
   const refillRateDataVaccinesFilter = VACCINES.map(vaccine => (
-    <option value={vaccine} key={vaccine}>
+    <MenuItem value={vaccine} key={vaccine}>
       {vaccine}
-    </option>
+    </MenuItem>
   ));
 
   const refillRateDataDistrictsFilter =
     districts &&
     districts.map(district => (
-      <option
+      <MenuItem
         value={district.name}
         key={district.name}
         style={{ fontSize: "large" }}
       >
         {district.name}
-      </option>
+      </MenuItem>
     ));
 
   // -----------------------------------------------------------------------
@@ -408,7 +409,7 @@ export function StockManagementPanel() {
           <optgroup label={year}></optgroup>
           {Object.values(groupedMonths[year]).map(y => (
             <>
-              <option value={y.name}>{y.name}</option>
+              <MenuItem value={y.name}>{y.name}</MenuItem>
             </>
           ))}
         </>
@@ -424,7 +425,7 @@ export function StockManagementPanel() {
           <optgroup label={year}></optgroup>
           {Object.values(groupedMonths[year]).map(y => (
             <>
-              <option value={y.name}>{y.name}</option>
+              <MenuItem value={y.name}>{y.name}</MenuItem>
             </>
           ))}
         </>
@@ -481,21 +482,21 @@ export function StockManagementPanel() {
       ));
 
   const districtStockTrendVaccinesFilter = VACCINES.map(vaccine => (
-    <option value={vaccine} key={vaccine}>
+    <MenuItem value={vaccine} key={vaccine}>
       {vaccine}
-    </option>
+    </MenuItem>
   ));
 
   const districtStockTrendDistrictsFilter =
     districts &&
     districts.map(district => (
-      <option
+      <MenuItem
         value={district.name}
         key={district.name}
         style={{ fontSize: "large" }}
       >
         {district.name}
-      </option>
+      </MenuItem>
     ));
 
   // ==================================================================================
@@ -629,15 +630,21 @@ export function StockManagementPanel() {
               <Grid item lg={6} md={6} xl={6} xs={12}>
                 <TabPanel value={value} index={0}>
                   <div className={classes.filters2}>
-                    <FormControl className={classes.selectMargin}>
+                    <FormControl
+                      className={classes.districtSelectMargin}
+                      variant="outlined"
+                      margin="dense"
+                    >
                       <InputLabel
                         htmlFor="endMonth"
                         className={classes.selectorLables2}
                       >
                         End Month
                       </InputLabel>
-                      <NativeSelect
-                        id="demo-customized-select-native"
+                      <Select
+                        native
+                        className={classes.selector_background}
+                        id="DSL_endMonth_selector"
                         value={districtStockLevelsEndMonth}
                         onChange={event =>
                           setDistrictStockLevelsEndMonth(event.target.value)
@@ -645,39 +652,52 @@ export function StockManagementPanel() {
                         input={<BootstrapInput />}
                       >
                         {districtStockLevelsEndMonthFilter}
-                      </NativeSelect>
+                      </Select>
                     </FormControl>
-                    <FormControl className={classes.selectMargin}>
+                    <FormControl
+                      className={classes.formControl}
+                      variant="outlined"
+                      margin="dense"
+                    >
                       <InputLabel
                         htmlFor="vaccine"
-                        className={classes.selectorLables2}
+                        className={classes.selectorLables}
                       >
                         Vaccine
                       </InputLabel>
-                      <NativeSelect
-                        id="demo-customized-select-native"
+                      <Select
+                        className={classes.selector_background}
                         value={districtStockLevelsVaccine}
                         onChange={event =>
                           setDistrictStockLevelsVaccine(event.target.value)
                         }
-                        input={<BootstrapInput />}
+                        inputProps={{
+                          name: "DSL_vaccine_selector",
+                          id: "DSL_vaccine_selector"
+                        }}
                       >
                         {districtStockLevelsVaccinesFilter}
-                      </NativeSelect>
+                      </Select>
                     </FormControl>
                   </div>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                   <div className={classes.filters2}>
-                    <FormControl className={classes.selectMargin}>
+                    <FormControl
+                      className={classes.districtSelectMargin}
+                      variant="outlined"
+                      margin="dense"
+                    >
                       <InputLabel
                         htmlFor="startMonth"
                         className={classes.selectorLables2}
                       >
                         Start Month
                       </InputLabel>
-                      <NativeSelect
-                        id="demo-customized-select-native"
+                      <Select
+                        native
+                        className={classes.selector_background}
+                        id="RR_startMonth_selector"
                         value={refillRateStartMonth}
                         onChange={event =>
                           setRefillRateStartMonth(event.target.value)
@@ -685,17 +705,23 @@ export function StockManagementPanel() {
                         input={<BootstrapInput />}
                       >
                         {refillRateDataStartMonthFilter}
-                      </NativeSelect>
+                      </Select>
                     </FormControl>
-                    <FormControl className={classes.selectMargin}>
+                    <FormControl
+                      className={classes.districtSelectMargin}
+                      variant="outlined"
+                      margin="dense"
+                    >
                       <InputLabel
                         htmlFor="endMonth"
                         className={classes.selectorLables2}
                       >
                         End Month
                       </InputLabel>
-                      <NativeSelect
-                        id="demo-customized-select-native"
+                      <Select
+                        native
+                        className={classes.selector_background}
+                        id="RR_endMonth_selector"
                         value={refillRateEndMonth}
                         onChange={event =>
                           setRefillRateEndMonth(event.target.value)
@@ -703,27 +729,38 @@ export function StockManagementPanel() {
                         input={<BootstrapInput />}
                       >
                         {refillRateEndMonthFilter}
-                      </NativeSelect>
+                      </Select>
                     </FormControl>
-                    <FormControl className={classes.selectMargin}>
+                    <FormControl
+                      className={classes.formControl}
+                      variant="outlined"
+                      margin="dense"
+                    >
                       <InputLabel
                         htmlFor="vaccine"
-                        className={classes.selectorLables2}
+                        className={classes.selectorLables}
                       >
                         Vaccine
                       </InputLabel>
-                      <NativeSelect
-                        id="demo-customized-select-native"
+                      <Select
+                        className={classes.selector_background}
                         value={refillRateVaccine}
                         onChange={event =>
                           setRefillRateVaccine(event.target.value)
                         }
-                        input={<BootstrapInput />}
+                        inputProps={{
+                          name: "RR_vaccine_selector",
+                          id: "RR_vaccine_selector"
+                        }}
                       >
                         {refillRateDataVaccinesFilter}
-                      </NativeSelect>
+                      </Select>
                     </FormControl>
-                    <FormControl className={classes.selectMargin}>
+                    <FormControl
+                      className={classes.districtSelectMargin}
+                      variant="outlined"
+                      margin="dense"
+                    >
                       <InputLabel
                         htmlFor="district"
                         className={classes.selectorLables2}
@@ -731,6 +768,7 @@ export function StockManagementPanel() {
                         District
                       </InputLabel>
                       <Select
+                        className={classes.selector_background}
                         displayEmpty
                         id="RR_district_name_selector"
                         input={<BootstrapInput />}
@@ -749,15 +787,21 @@ export function StockManagementPanel() {
                 {/* Change ID to 3 when we reactivate Uptake Rate */}
                 <TabPanel value={value} index={2}>
                   <div className={classes.filters2}>
-                    <FormControl className={classes.selectMargin}>
+                    <FormControl
+                      className={classes.districtSelectMargin}
+                      variant="outlined"
+                      margin="dense"
+                    >
                       <InputLabel
                         htmlFor="startMonth"
                         className={classes.selectorLables2}
                       >
                         Start Month
                       </InputLabel>
-                      <NativeSelect
-                        id="demo-customized-select-native"
+                      <Select
+                        native
+                        className={classes.selector_background}
+                        id="DST_startMonth_selector"
                         value={districtStockTrendStartMonth}
                         input={<BootstrapInput />}
                         onChange={event =>
@@ -765,16 +809,22 @@ export function StockManagementPanel() {
                         }
                       >
                         {districtStockTrendStartMonthFilter}
-                      </NativeSelect>
+                      </Select>
                     </FormControl>
-                    <FormControl className={classes.selectMargin}>
+                    <FormControl
+                      className={classes.districtSelectMargin}
+                      variant="outlined"
+                      margin="dense"
+                    >
                       <InputLabel
                         htmlFor="startMonth"
                         className={classes.selectorLables2}
                       >
                         End Month
                       </InputLabel>
-                      <NativeSelect
+                      <Select
+                        native
+                        className={classes.selector_background}
                         value={districtStockTrendEndMonth}
                         id="DST_end_month_selector"
                         input={<BootstrapInput />}
@@ -783,27 +833,38 @@ export function StockManagementPanel() {
                         }
                       >
                         {districtStockTrendEndMonthFilter}
-                      </NativeSelect>
+                      </Select>
                     </FormControl>
-                    <FormControl className={classes.selectMargin}>
+                    <FormControl
+                      className={classes.formControl}
+                      variant="outlined"
+                      margin="dense"
+                    >
                       <InputLabel
                         htmlFor="Vaccine"
-                        className={classes.selectorLables2}
+                        className={classes.selectorLables}
                       >
                         Vaccine
                       </InputLabel>
-                      <NativeSelect
+                      <Select
+                        className={classes.selector_background}
                         value={districtStockTrendVaccine}
-                        id="DSL_vaccine_name_selector"
-                        input={<BootstrapInput />}
                         onChange={event =>
                           setDistrictStockTrendVaccine(event.target.value)
                         }
+                        inputProps={{
+                          name: "DSL_vaccine_name_selector",
+                          id: "DSL_vaccine_name_selector"
+                        }}
                       >
                         {districtStockTrendVaccinesFilter}
-                      </NativeSelect>
+                      </Select>
                     </FormControl>
-                    <FormControl className={classes.selectMargin}>
+                    <FormControl
+                      className={classes.districtSelectMargin}
+                      variant="outlined"
+                      margin="dense"
+                    >
                       <InputLabel
                         htmlFor="district"
                         className={classes.selectorLables2}
@@ -811,6 +872,7 @@ export function StockManagementPanel() {
                         District
                       </InputLabel>
                       <Select
+                        className={classes.selector_background}
                         displayEmpty
                         id={"DSL_district_name_selector"}
                         input={<BootstrapInput />}
@@ -847,9 +909,13 @@ export function StockManagementPanel() {
 
           <TabPanel value={value} index={1}>
             <Grid item xs={12}>
-              <Paper className={classes.paper} elevation={0}>
+              <Paper
+                className={classes.paper}
+                elevation={0}
+                style={{ padding: 0 }}
+              >
                 <Grid container spacing={3}>
-                  <Grid item xs={12}>
+                  <Grid item xs={12} className={classes.chipPadding}>
                     {refillrateChipData.map(function(district) {
                       return (
                         <Chip
@@ -892,9 +958,13 @@ export function StockManagementPanel() {
 
           <TabPanel value={value} index={2}>
             <Grid item xs={12}>
-              <Paper className={classes.paper} elevation={0}>
+              <Paper
+                className={classes.paper}
+                elevation={0}
+                style={{ padding: 0 }}
+              >
                 <Grid container spacing={3}>
-                  <Grid item xs={12}>
+                  <Grid item xs={12} className={classes.chipPadding}>
                     {districtStockTrendChipData.map(function(district) {
                       return (
                         <Chip

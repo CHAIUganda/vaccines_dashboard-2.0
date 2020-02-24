@@ -25,7 +25,10 @@ const AntigenCoverageChart = ({
     const range =
       startYear === endYear ? startYear : `${startYear} - ${endYear}`;
     const _vaccine = vaccineName === "ALL" ? `Antigens` : vaccineName;
-    const _district = district === "National" ? `National Level` : district;
+    const _district =
+      district.length === 1
+        ? "National Level"
+        : district.filter(name => name !== "National");
 
     return `${_vaccine} Coverage for ${range} for ${_district}`;
   };

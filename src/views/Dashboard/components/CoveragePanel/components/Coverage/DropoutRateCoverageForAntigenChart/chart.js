@@ -217,10 +217,7 @@ export const dropoutRateCoverageFY = (
     },
     plotOptions: {
       line: {
-        lineWidth: 1,
-        marker: {
-          enabled: false
-        }
+        ...commonChartPlotOptions.plotOptions.line
       }
     },
     series: [...chartData]

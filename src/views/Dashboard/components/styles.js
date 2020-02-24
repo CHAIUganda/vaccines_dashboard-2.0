@@ -17,7 +17,8 @@ const useStyles = makeStyles(theme => ({
   formControl: {
     minWidth: 120,
     marginRight: theme.spacing(5),
-    maxWidth: 300
+    maxWidth: 300,
+    marginTop: 35
   },
   filters: {
     display: "flex",
@@ -58,13 +59,16 @@ const useStyles = makeStyles(theme => ({
   },
   selectorLables: {
     color: "#28354A",
-    fontSize: 20,
+    fontSize: "x-large",
     marginTop: "-15px",
-    marginLeft: "-15px"
+    marginLeft: "-15px",
+    backgroundColor: "white"
   },
   selectorLables2: {
     color: "#28354A",
-    fontSize: 20
+    fontSize: "x-large",
+    marginLeft: "-15px",
+    marginTop: "10px"
   },
 
   paper: {
@@ -96,6 +100,9 @@ const useStyles = makeStyles(theme => ({
   chip: {
     margin: 3,
     fontSize: "inherit"
+  },
+  chipPadding: {
+    padding: "0 !important"
   },
   noLabel: {
     marginTop: theme.spacing(3)
@@ -151,8 +158,11 @@ const useStyles = makeStyles(theme => ({
     }
   },
 
-  selectMargin: {
-    margin: theme.spacing(1)
+  districtSelectMargin: {
+    marginTop: 10,
+    minWidth: 120,
+    marginRight: theme.spacing(5),
+    maxWidth: 300
   }
 }));
 
