@@ -77,7 +77,18 @@ const TabStyle = withStyles(theme => ({
 export default function Coverage(props) {
   const classes = useStyles();
   const [value, setValue] = useState(0);
-  const { data, parentTab } = props;
+  const {
+    data,
+    parentTab,
+    vacineDataForMap,
+    vaccineDosesForChart,
+    vaccineName,
+    dose,
+    isLoading,
+    startYear,
+    endYear,
+    district
+  } = props;
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
