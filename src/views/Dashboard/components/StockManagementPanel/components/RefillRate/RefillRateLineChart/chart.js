@@ -1,6 +1,3 @@
-//  Highcharts
-import Highcharts from "highcharts";
-
 // Chart Options
 import {
   commonChartOptions,

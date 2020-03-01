@@ -26,6 +26,10 @@ export const districtStockTrendsChartTemplate = (
     "column_district_stock_trends"
   );
 
+  // Used to determine the width of the bars we render.
+  const dataLength = chartData[0].data.length;
+  console.log(dataLength);
+
   return {
     credits: {
       ...commonChartOptions.credits
@@ -60,9 +64,13 @@ export const districtStockTrendsChartTemplate = (
     },
     plotOptions: {
       column: {
-        ...commonChartPlotOptions.plotOptions.column,
+        ...(dataLength > 6
+          ? { ...commonChartPlotOptions.plotOptions.columnCondensed }
+          : { ...commonChartPlotOptions.plotOptions.column }),
         dataLabels: {
           enabled: true,
+          rotation: -90,
+          align: "right",
           format: "{y:,.0f}",
           ...commonChartOptions.labels
         }

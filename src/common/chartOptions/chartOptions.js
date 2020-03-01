@@ -132,6 +132,13 @@ const commonChartPlotOptions = {
       pointWidth: 35,
       borderWidth: 0,
       shadow: false
+    },
+
+    columnCondensed: {
+      pointPadding: 0.2,
+      pointWidth: 3,
+      borderWidth: 0,
+      shadow: false
     }
     // bar: {
     //   dataLabels: {

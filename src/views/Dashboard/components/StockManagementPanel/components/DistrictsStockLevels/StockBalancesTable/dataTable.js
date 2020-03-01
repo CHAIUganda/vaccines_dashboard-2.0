@@ -50,15 +50,7 @@ const tableIcons = {
 };
 
 export const DataTable = props => {
-  const {
-    data,
-    isLoading,
-    endMonth,
-    startMonth,
-    district,
-    vaccine,
-    tab
-  } = props;
+  const { data, endMonth, startMonth, district, vaccine, tab } = props;
   const classes = useStyles();
 
   const columns = [
@@ -113,7 +105,7 @@ export const DataTable = props => {
         )
       );
     }
-  }, [data, isLoading, endMonth, startMonth, district, vaccine]);
+  }, [data, endMonth, startMonth, district, vaccine]);
 
   const tableTitle = `Stock Balances of ${vaccine} at the Beginning of ${endMonth}`;
 

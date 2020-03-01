@@ -8,6 +8,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Box from "@material-ui/core/Box";
 import Tab from "@material-ui/core/Tab";
 import Button from "@material-ui/core/Button";
+import Drawer from "@material-ui/core/Drawer";
 
 import FlagStripImage from "../../common/image/flag-ug.png";
 
@@ -54,17 +55,18 @@ const useStyles = makeStyles(theme => ({
   title: {
     color: "#28354A",
     marginRight: 10,
-    fontSize: 25
+    fontSize: "xx-large"
   },
   subTitle: {
     color: "red",
     flexGrow: 1,
-    fontSize: 13
+    fontSize: "larger",
+    marginLeft: 20
   },
   courtOfArms: {
     width: 45,
     height: 45,
-    marginRight: 15
+    paddingRight: 15
   },
   flagStrip: {
     width: "auto",
@@ -92,6 +94,33 @@ const useStyles = makeStyles(theme => ({
   },
   iconSpacing: {
     marginRight: 5
+  },
+  drawer: {
+    width: 80,
+    flexShrink: 0,
+    position: "fixed"
+  },
+  drawerPaper: {
+    width: 80,
+    position: "initial"
+  },
+
+  verticalIconLabelWrapper: {
+    color: "white"
+  },
+  verticalBar: {
+    backgroundColor: "#28354A",
+    marginLeft: 0,
+    minHeight: "100vh"
+  },
+
+  verticalLabelContainer: {
+    height: 100
+  },
+
+  verticalIconSpacing: {
+    marginTop: 50,
+    minWidth: 0
   }
 }));
 
@@ -144,8 +173,7 @@ export default function Header(props) {
           >
             <LinkTab
               classes={{
-                wrapper: classes.iconLabelWrapper,
-                labelContainer: classes.labelContainer
+                wrapper: classes.iconLabelWrapper
               }}
               icon={<HomeIcon className={classes.iconSpacing} />}
               label="Overview"
@@ -155,8 +183,7 @@ export default function Header(props) {
             />
             <LinkTab
               classes={{
-                wrapper: classes.iconLabelWrapper,
-                labelContainer: classes.labelContainer
+                wrapper: classes.iconLabelWrapper
               }}
               icon={<PieChartIcon className={classes.iconSpacing} />}
               label="Coverage"
@@ -165,8 +192,7 @@ export default function Header(props) {
             />
             <LinkTab
               classes={{
-                wrapper: classes.iconLabelWrapper,
-                labelContainer: classes.labelContainer
+                wrapper: classes.iconLabelWrapper
               }}
               icon={<LocalShippingIcon className={classes.iconSpacing} />}
               label="Stock Management"
@@ -176,8 +202,7 @@ export default function Header(props) {
             />
             <LinkTab
               classes={{
-                wrapper: classes.iconLabelWrapper,
-                labelContainer: classes.labelContainer
+                wrapper: classes.iconLabelWrapper
               }}
               icon={<BusinessIcon className={classes.iconSpacing} />}
               label="Cold Chain"
@@ -187,8 +212,7 @@ export default function Header(props) {
             />
             <LinkTab
               classes={{
-                wrapper: classes.iconLabelWrapper,
-                labelContainer: classes.labelContainer
+                wrapper: classes.iconLabelWrapper
               }}
               icon={<TimelineIcon className={classes.iconSpacing} />}
               label="Performance Management"
@@ -196,17 +220,6 @@ export default function Header(props) {
               {...a11yProps(4)}
               disabled={true}
             />
-            {/* <LinkTab
-              classes={{
-                wrapper: classes.iconLabelWrapper,
-                labelContainer: classes.labelContainer
-              }}
-              icon={<TimelineIcon className={classes.iconSpacing} />}
-              label="Login"
-              href="/login"
-              {...a11yProps(4)}
-              disabled={false}
-            /> */}
           </Tabs>
           <Button color="inherit" href="/login">
             Login
@@ -214,6 +227,68 @@ export default function Header(props) {
           <Avatar alt="Map of Uganda" src="/uganda-flag.png" variant="square" />
         </Toolbar>
       </AppBar>
+      <Drawer
+        className={classes.drawer}
+        variant="permanent"
+        classes={{
+          paper: classes.drawerPaper
+        }}
+      >
+        <div className={classes.toolbar} />
+
+        <Tabs
+          className={classes.verticalBar}
+          indicatorColor="primary"
+          value={value}
+          orientation="vertical"
+          onChange={handleChange}
+          aria-label="Dashboard navigation tabs"
+          TabIndicatorProps={{
+            style: {
+              height: "4px"
+            }
+          }}
+        >
+          <LinkTab
+            classes={{
+              verticalIconLabelWrapper: classes.verticalIconLabelWrapper,
+              verticalLabelContainer: classes.verticalLabelContainer
+            }}
+            icon={<HomeIcon className={classes.verticalIcon} />}
+            href="/overview"
+            {...a11yProps(0)}
+            disabled={true}
+          />
+          <LinkTab
+            classes={{
+              verticalIconLabelWrapper: classes.verticalIconLabelWrapper,
+              verticalLabelContainer: classes.verticalLabelContainer
+            }}
+            icon={<PieChartIcon className={classes.verticalIcon} />}
+            href="/coverage"
+            {...a11yProps(1)}
+          />
+          <LinkTab
+            classes={{
+              verticalIconLabelWrapper: classes.verticalIconLabelWrapper,
+              verticalLabelContainer: classes.verticalLabelContainer
+            }}
+            icon={<LocalShippingIcon className={classes.verticalIcon} />}
+            href="/stock-management"
+            {...a11yProps(2)}
+          />
+          <LinkTab
+            classes={{
+              verticalIconLabelWrapper: classes.verticalIconLabelWrapper,
+              verticalLabelContainer: classes.verticalLabelContainer
+            }}
+            icon={<BusinessIcon className={classes.verticalIcon} />}
+            href="/cold-chain"
+            {...a11yProps(3)}
+            disabled={true}
+          />
+        </Tabs>
+      </Drawer>
     </div>
   );
 }

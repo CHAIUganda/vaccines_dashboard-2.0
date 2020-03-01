@@ -22,20 +22,19 @@ export default function BaseLayout(props) {
     <div className={classes.root}>
       <CssBaseline />
       <Header onChange={props.onChange} value={props.value} />
-      <Box component="span" m={1}>
-        <Container
-          maxWidth="false"
-          disableGutters
-          fixed
-          style={{
-            paddingLeft: 100,
-            paddingRight: 100,
-            backgroundColor: "#F5F5F5"
-          }}
-        >
-          {props.children}
-        </Container>
-      </Box>
+
+      <Container
+        maxWidth={false}
+        disableGutters
+        fixed
+        style={{
+          paddingLeft: 100,
+          paddingRight: 100,
+          backgroundColor: "#F5F5F5"
+        }}
+      >
+        {props.children}
+      </Container>
     </div>
   );
 }

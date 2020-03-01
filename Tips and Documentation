@@ -6,3 +6,40 @@ https://stackoverflow.com/questions/37324691/how-change-active-tab-color-in-reac
 
 CORS issue backend
 https://stackoverflow.com/questions/35760943/how-can-i-enable-cors-on-django-rest-framework - answer 3
+
+
+Server Ngnix configuration
+server {
+  listen 80;
+  server_name unepidata.health.go.ug;
+  location / {
+    proxy_set_header X-Real-IP  $remote_addr;
+    proxy_set_header X-Forwarded-For $remote_addr;
+    proxy_set_header Host $host;
+    proxy_pass http://127.0.0.1:5002;
+  }
+  location /static {
+    alias   /home/moh/src/vc_dashboard/asset_files;
+  }
+}
+
+
+server {
+  listen 80;
+  server_name unepidata.health.go.ug;
+  root /home/moh/src/vaccines_dashboard-2.0/build;
+  index index.html index.htm;
+  location / {
+    try_files $uri $uri/ /index.html;
+#    proxy_set_header X-Real-IP  $remote_addr;
+ #   proxy_set_header X-Forwarded-For $remote_addr;
+  #  proxy_set_header Host $host;
+   # proxy_pass http://127.0.0.1:5003;
+  }
+  location ~* \.(?:css|js)$ {
+            try_files $uri =404;
+            expires 1y;
+            access_log off;
+            add_header Cache-Control "public";
+        }
+}

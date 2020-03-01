@@ -44,13 +44,13 @@ const RedCategorisationForAntigensChart = props => {
           tabTitle && tabTitle,
           vaccineName && vaccineName,
           dose && dose,
-          "Dropout Rate",
+          "Red Categorization",
           reportYear && reportYear,
           startYear && startYear
         )
       );
     }
-  }, [data, vaccineName, tabTitle, dose, startYear, endYear]);
+  }, [data, vaccineName, tabTitle, dose, startYear, endYear, reportYear]);
 
   return (
     <Chart
