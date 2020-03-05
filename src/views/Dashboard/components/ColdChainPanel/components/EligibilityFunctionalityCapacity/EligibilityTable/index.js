@@ -7,12 +7,12 @@ import { Grid } from "@material-ui/core";
 import { Chart } from "../../../../../../../components";
 import { DataTable } from "./dataTable.js";
 
-const FunctionalityTable = ({
+const EligibilityTable = ({
   data,
   district,
   careLevel,
-  startYearHalf,
-  endYearHalf,
+  startQuarter,
+  endQuarter,
   isLoading
 }) => {
   return (
@@ -24,8 +24,8 @@ const FunctionalityTable = ({
               <DataTable
                 data={data}
                 isLoading={isLoading}
-                startYearHalf={startYearHalf}
-                endYearHalf={endYearHalf}
+                startQuarter={startQuarter}
+                endQuarter={endQuarter}
               />
             </Grid>
           </Grid>
@@ -36,4 +36,4 @@ const FunctionalityTable = ({
   );
 };
 
-export default FunctionalityTable;
+export default EligibilityTable;

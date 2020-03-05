@@ -14,7 +14,6 @@ import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import Paper from "@material-ui/core/Paper";
 import Tooltip from "@material-ui/core/Tooltip";
-import Chip from "@material-ui/core/Chip";
 import InputBase from "@material-ui/core/InputBase";
 import MenuItem from "@material-ui/core/MenuItem";
 
@@ -22,7 +21,9 @@ import MenuItem from "@material-ui/core/MenuItem";
 import {
   useGetDistricts,
   useGetFunctionalityData,
-  useGetCapacityData
+  useGetCapacityData,
+  useGetEligibilityData,
+  useGetQuarters
 } from "../../../../helpers/apiDataFetcher";
 
 // Import common component for ColdChain components
@@ -36,8 +37,8 @@ const date = new Date(),
   years = [],
   year = date.getFullYear();
 
-// Get last 5 years from now
-for (let i = year; i > year - 5; i--) {
+// Get last 2 years from now
+for (let i = year; i > year - 2; i--) {
   years.push(i);
 }
 
@@ -151,7 +152,7 @@ const BootstrapInput = withStyles(theme => ({
 
 export function ColdChainPanel() {
   const classes = useStyles();
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState(0);
   const [district, setDistrict] = useState("National");
 
   const handleChange = (event, newValue) => {
@@ -166,18 +167,20 @@ export function ColdChainPanel() {
 
   // Tab state variables.
   // Eligible Facilities
-  const [
-    eligibleFacilitiesStartYear,
-    setEligibleFacilitiesStartYear
-  ] = useState(years[1]);
 
-  const [eligibleFacilitiesEndYear, setEligibleFacilitiesEndYear] = useState(
-    years[1]
+  const [eligibilityDistrict, setEligibilityDistrict] = useState("national");
+
+  const [eligibilityCareLevel, setEligiblityCareLevel] = useState(
+    CARE_LEVELS[0]
   );
 
-  const [eligibleFacilitiesDistrict, setEligibleFacilitiesDistrict] = useState([
-    "National"
-  ]);
+  const [eligibilityStartQuarter, setEligibilityStartQuarter] = useState(
+    `${year - 1}_1`
+  );
+
+  const [eligibilityEndQuarter, setEligibilityEndQuarter] = useState(
+    `${year - 1}_4`
+  );
 
   // Functionality
 
@@ -208,6 +211,8 @@ export function ColdChainPanel() {
     `${year - 1}_${HALF_YEARS[1]}`
   );
 
+  // Eligibility
+
   // -----------------------------------------------------------------------
   // Fetch Data
   // -----------------------------------------------------------------------
@@ -226,11 +231,7 @@ export function ColdChainPanel() {
   );
 
   const [
-    {
-      capacityDataTableData,
-      // capacityMetricsChartData,
-      isLoadingCapacityData
-    }
+    { capacityDataTableData, capacityMetricsChartData, isLoadingCapacityData }
   ] = useGetCapacityData(
     capacityCareLevel,
     capacityDistrict,
@@ -238,23 +239,56 @@ export function ColdChainPanel() {
     capacityEndYear
   );
 
-  // -----------------------------------------------------------------------
-  // Eligible Facilities Filters
-  // -----------------------------------------------------------------------
+  const [
+    {
+      eligibilityDataTableData,
+      eligibilityMetricsChartData,
+      isLoadingEligibilityData
+    }
+  ] = useGetEligibilityData(
+    capacityCareLevel,
+    capacityDistrict,
+    capacityStartYear,
+    capacityEndYear
+  );
 
-  const eligibleFacilitiesStartYearFilter = years.map(year => (
-    <MenuItem value={year} key={year}>
-      {year}
+  const [{ quarters }] = useGetQuarters();
+
+  // -----------------------------------------------------------------------
+  // Eligibility  Filters
+  // -----------------------------------------------------------------------
+  const eligibilityCareLevelFilter = CARE_LEVELS.map(careLevel => (
+    <MenuItem value={careLevel} key={careLevel}>
+      {careLevel}
     </MenuItem>
   ));
 
-  const eligibleFacilitiesEndYearFilter = years.map(year => (
-    <MenuItem value={year} key={year}>
-      {year}
-    </MenuItem>
+  const eligibilityStartQuarterFilter = years.map(year => (
+    <>
+      <optgroup label={year}></optgroup>
+      {quarters &&
+        quarters
+          .filter(quarter => quarter.value.substring(0, 4) === year.toString())
+          .map(quarter => (
+            <option value={quarter.value}>{quarter.name}</option>
+          ))}
+    </>
   ));
 
-  const eligibleFacilitiesDistrictFilter =
+  const eligibilityEndQuarterFilter = years.map(year => (
+    <>
+      <optgroup label={year}></optgroup>
+      {quarters &&
+        quarters
+          .filter(quarter => quarter.value.substring(0, 4) === year.toString())
+          .map(quarter => (
+            <option value={quarter.value}>{quarter.name}</option>
+          ))}
+      ))
+    </>
+  ));
+
+  const eligibilityDistrictFilter =
     districts &&
     districts.map(district => (
       <MenuItem
@@ -275,31 +309,30 @@ export function ColdChainPanel() {
     </MenuItem>
   ));
 
-  const functionalityStartYearFilter = years
-    .filter(year => year !== 2020)
-    .map(year => (
-      <>
-        <optgroup label={year}></optgroup>
-        {HALF_YEARS.map(halfYear => (
-          <option value={`${year}_${halfYear}`}>
-            {`${year} - Half ${halfYear}`}
-          </option>
-        ))}
-      </>
-    ));
+  const functionalityStartYearFilter = years.map(year => (
+    <>
+      <optgroup label={year}></optgroup>
+      {quarters &&
+        quarters
+          .filter(quarter => quarter.value.substring(0, 4) === year.toString())
+          .map(quarter => (
+            <option value={quarter.value}>{quarter.name}</option>
+          ))}
+    </>
+  ));
 
-  const functionalityEndYearFilter = years
-    .filter(year => year !== 2020)
-    .map(year => (
-      <>
-        <optgroup label={year}></optgroup>
-        {HALF_YEARS.map(halfYear => (
-          <option value={`${year}_${halfYear}`}>
-            {`${year} - Half ${halfYear}`}
-          </option>
-        ))}
-      </>
-    ));
+  const functionalityEndYearFilter = years.map(year => (
+    <>
+      <optgroup label={year}></optgroup>
+      {quarters &&
+        quarters
+          .filter(quarter => quarter.value.substring(0, 4) === year.toString())
+          .map(quarter => (
+            <option value={quarter.value}>{quarter.name}</option>
+          ))}
+      ))
+    </>
+  ));
 
   const functionalityDistrictFilter =
     districts &&
@@ -361,7 +394,17 @@ export function ColdChainPanel() {
     ));
 
   const data = {
-    eligibility: {},
+    eligibility: {
+      eligibilityDataTableData:
+        eligibilityDataTableData && eligibilityDataTableData,
+      eligibilityMetricsChartData:
+        eligibilityMetricsChartData && eligibilityMetricsChartData,
+      isLoading: isLoadingEligibilityData,
+      district: eligibilityDistrict,
+      careLevel: eligibilityCareLevel,
+      startQuarter: eligibilityStartQuarter,
+      endQuarter: eligibilityEndQuarter
+    },
     functionality: {
       functionalityDataTableData:
         functionalityDataTableData && functionalityDataTableData,
@@ -375,6 +418,8 @@ export function ColdChainPanel() {
     },
     capacity: {
       capacityDataTableData: capacityDataTableData && capacityDataTableData,
+      capacityMetricsChartData:
+        capacityMetricsChartData && capacityMetricsChartData,
       isLoading: isLoadingCapacityData,
       district: capacityDistrict,
       careLevel: capacityCareLevel,
@@ -526,16 +571,16 @@ export function ColdChainPanel() {
                       </InputLabel>
                       <Select
                         className={classes.selector_background}
-                        value={eligibleFacilitiesStartYear}
+                        value={eligibilityStartQuarter}
                         onChange={event =>
-                          setEligibleFacilitiesStartYear(event.target.value)
+                          setEligibilityStartQuarter(event.target.value)
                         }
                         inputProps={{
                           name: "EF_StartYear_selector",
                           id: "EF_StartYear_selector"
                         }}
                       >
-                        {eligibleFacilitiesStartYearFilter}
+                        {eligibilityStartQuarterFilter}
                       </Select>
                     </FormControl>
                     <FormControl
@@ -551,16 +596,16 @@ export function ColdChainPanel() {
                       </InputLabel>
                       <Select
                         className={classes.selector_background}
-                        value={eligibleFacilitiesEndYear}
+                        value={eligibilityEndQuarter}
                         onChange={event =>
-                          setEligibleFacilitiesEndYear(event.target.value)
+                          setEligibilityEndQuarter(event.target.value)
                         }
                         inputProps={{
                           name: "EF_StartYear_selector",
                           id: "EF_StartYear_selector"
                         }}
                       >
-                        {eligibleFacilitiesEndYearFilter}
+                        {eligibilityEndQuarterFilter}
                       </Select>
                     </FormControl>
                     <FormControl
@@ -576,17 +621,16 @@ export function ColdChainPanel() {
                       </InputLabel>
                       <Select
                         className={classes.selector_background}
-                        displayEmpty
-                        id={"EF_district_selector"}
-                        value={eligibleFacilitiesDistrict}
-                        // onChange={event =>
-                        //   handleChangeDistrict(event, "Coverage (By Month)")
-                        // }
-                        multiple
-                        input={<BootstrapInput />}
-                        renderValue={selected => "National"}
+                        value={eligibilityDistrict}
+                        onChange={event =>
+                          setEligibilityDistrict(event.target.value)
+                        }
+                        inputProps={{
+                          name: "EF_district_selector",
+                          id: "EF_district_selector"
+                        }}
                       >
-                        {eligibleFacilitiesDistrictFilter}
+                        {eligibilityDistrictFilter}
                       </Select>
                     </FormControl>
                   </div>

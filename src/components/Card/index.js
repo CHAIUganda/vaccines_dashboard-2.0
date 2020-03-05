@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   },
   metric: {
     color: "#28354A",
-    fontSize: 60,
+    fontSize: 40,
     fontWeight: "bolder",
     float: "left",
     marginTop: "-30px",

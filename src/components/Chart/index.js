@@ -74,7 +74,7 @@ const CustomeChartPaper = props => {
                 </p>
               ) : (
                 <>
-                  <div style={{ marginTop: 40 }}>{props.chart}</div>
+                  <div>{props.chart}</div>
                 </>
               )}
             </Typography>

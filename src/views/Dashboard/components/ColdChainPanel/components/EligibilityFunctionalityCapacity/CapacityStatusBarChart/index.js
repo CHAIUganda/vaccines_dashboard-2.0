@@ -7,9 +7,9 @@ import HighchartsReact from "highcharts-react-official";
 import { Chart } from "../../../../../../../components";
 
 // Chart Template
-import { FunctionalityStatusBarChartTemplate } from "./chart";
+import { CapacityStatusBarChartTemplate } from "./chart";
 
-const FunctionalityStatusBarChart = ({
+const CapacityStatusBarChart = ({
   data,
   isLoading,
   district,
@@ -18,10 +18,11 @@ const FunctionalityStatusBarChart = ({
   endYearHalf
 }) => {
   const [chart, setChart] = useState();
+
   useMemo(() => {
     if (data && data) {
       setChart(
-        FunctionalityStatusBarChartTemplate(
+        CapacityStatusBarChartTemplate(
           data,
           district,
           careLevel,
@@ -34,7 +35,7 @@ const FunctionalityStatusBarChart = ({
 
   return (
     <Chart
-      title={`Working status of fridges ${
+      title={`Storage capacity in litres ${
         district === "national" ? "at National Level" : "in " + district
       }`}
       chart={
@@ -46,4 +47,4 @@ const FunctionalityStatusBarChart = ({
   );
 };
 
-export default FunctionalityStatusBarChart;
+export default CapacityStatusBarChart;

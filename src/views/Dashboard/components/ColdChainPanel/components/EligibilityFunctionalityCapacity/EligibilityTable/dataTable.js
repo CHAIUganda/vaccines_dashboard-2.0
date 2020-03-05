@@ -46,54 +46,57 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-export const DataTable = ({ data, startYearHalf, endYearHalf, district }) => {
+export const DataTable = ({ data, district, startQuarter, endQuarter }) => {
   const classes = useStyles();
-  const tilte = `Capacity Status of CCE in ${
-    district === "national" ? "National" : district
-  } for period ${startYearHalf} - ${endYearHalf}`;
+
+  const title = `Eligibility Status of CCE's at National Level for period ${startQuarter} - ${endQuarter}`;
 
   const columns = [
     {
-      field: "district",
+      field: "district__name",
       title: "District",
       cellStyle: rowData => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData => rowData.district.replace(/ District/g, "")
+      render: rowData => rowData.district__name.replace(/ District/g, "")
     },
     {
-      field: "required_net_storage_volume",
-      title: "Required Capacity",
+      field: "total_eligible_facility",
+      title: "Eligible Facilities",
       cellStyle: rowData => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
       render: rowData =>
-        new Intl.NumberFormat("lg-UG").format(
-          rowData.required_net_storage_volume
-        )
+        new Intl.NumberFormat("lg-UG").format(rowData.total_eligible_facility)
     },
     {
-      field: "available_net_storage_volume",
-      title: "Available Capacity",
+      field: "cce_coverage_rate",
+      title: "Coverage Rate",
       cellStyle: rowData => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
       render: rowData =>
-        new Intl.NumberFormat("lg-UG").format(
-          rowData.available_net_storage_volume
-        )
-    },
-    {
-      field: "gap",
-      title: "Gap",
-      cellStyle: rowData => ({ fontSize: 13 }),
-      headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData => new Intl.NumberFormat("lg-UG").format(rowData.gap)
+        new Intl.NumberFormat("lg-UG").format(rowData.cce_coverage_rate) + "%"
     }
+    // {
+    //   field: "not_working",
+    //   title: "Not Working",
+    //   cellStyle: rowData => ({ fontSize: 13 }),
+    //   headerStyle: { fontSize: 15, fontWeight: 700 },
+    //   render: rowData =>
+    //     new Intl.NumberFormat("lg-UG").format(rowData.not_working)
+    // },
+    // {
+    //   field: "needs_repair",
+    //   title: "Needs Maintenance",
+    //   cellStyle: rowData => ({ fontSize: 13 }),
+    //   headerStyle: { fontSize: 15, fontWeight: 700 },
+    //   render: rowData =>
+    //     new Intl.NumberFormat("lg-UG").format(rowData.needs_repair)
+    // }
   ];
   return (
     <Paper className={classes.tableRoot}>
       <MaterialTable
-        title={tilte}
-        // Filter out statisticts key
-        data={data && Object.values(data).filter(v => !v.statistics)}
+        title={title}
+        data={data && data}
         columns={columns}
         icons={tableIcons}
         options={

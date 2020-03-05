@@ -620,22 +620,17 @@ export const useGetCapacityData = (
   startPeriod,
   endPeriod
 ) => {
-  // const capacityMetricsChartDataURL = `http://${apiEndpoint}${port}/coldchain/api/functionalitymetricsgraph?carelevel=${careLevel}&district=${district}&start_period=${startPeriod}&end_period=${endPeriod}`;
+  const capacityMetricsChartDataURL = `http://${apiEndpoint}${port}/coldchain/api/capacitymetricsstats?carelevel=${careLevel}&district=${district}&start_period=${startPeriod}&end_period=${endPeriod}`;
 
   const capacityDataTableURL = `http://${apiEndpoint}${port}/coldchain/api/capacitymetrics?carelevel=${careLevel}&start_period=${startPeriod}&end_period=${endPeriod}`;
-
-  // district.length === 1
-  //     ? `http://${apiEndpoint}${port}/coldchain/api/functionalitymetrics?carelevel=${careLevel}&district=${district}&${yearHalf}`
-  //     : `http://${apiEndpoint}${port}/coldchain/api/functionalitymetrics?carelevel=${careLevel}&districts=[${quotedAndCommaSeparatedDistricts}]&${yearHalf}`;
 
   const [isLoadingCapacityData, setIsLoadingCapacityData] = useState(false);
 
   const [capacityDataTableData, setCapacityDataTableData] = useState(null);
 
-  // const [
-  //   functionalityMetricsChartData,
-  //   setFunctionalityMetricsChartData
-  // ] = useState(null);
+  const [capacityMetricsChartData, setCapacityMetricsChartData] = useState(
+    null
+  );
 
   useEffect(() => {
     setIsLoadingCapacityData(true);
@@ -645,34 +640,119 @@ export const useGetCapacityData = (
       return await response.json();
     };
 
-    // const functionalityMetricsChartDataReq = async () => {
-    //   const response = await fetch(functionalityMetricsChartDataURL);
-    //   return await response.json();
-    // };
+    const capacityMetricsChartDataReq = async () => {
+      const response = await fetch(capacityMetricsChartDataURL);
+      return await response.json();
+    };
 
     const getAllData = () => {
       return Promise.all([
-        capacityDataTableReq()
-        // functionalityMetricsChartDataReq()
+        capacityDataTableReq(),
+        capacityMetricsChartDataReq()
+      ]);
+    };
+
+    getAllData().then(([capacityDataTableData, capacityMetricsChartData]) => {
+      setCapacityDataTableData(capacityDataTableData);
+      setCapacityMetricsChartData(capacityMetricsChartData);
+      setIsLoadingCapacityData(false);
+    });
+  }, [careLevel, district, startPeriod, endPeriod]);
+
+  return [
+    {
+      capacityDataTableData,
+      capacityMetricsChartData,
+      isLoadingCapacityData
+    }
+  ];
+};
+
+export const useGetEligibilityData = (
+  careLevel,
+  district,
+  startPeriod,
+  endPeriod
+) => {
+  // http://localhost:9000/coldchain/api/eligiblefacilitiesstats
+  const eligibilityMetricsChartDataURL = `http://${apiEndpoint}${port}/coldchain/api/eligiblefacilitiesstats?carelevel=${careLevel}&district=${district}&start_period=${startPeriod}&end_period=${endPeriod}`;
+
+  const eligibilityDataTableURL = `http://${apiEndpoint}${port}/coldchain/api/eligiblefacilitiesmetrics?carelevel=${careLevel}&start_period=${startPeriod}&end_period=${endPeriod}`;
+
+  const [isLoadingEligibilityData, setIsLoadingEligibilityData] = useState(
+    false
+  );
+
+  const [eligibilityDataTableData, setEligibilityDataTableData] = useState(
+    null
+  );
+
+  const [
+    eligibilityMetricsChartData,
+    setEligibilityMetricsChartData
+  ] = useState(null);
+
+  useEffect(() => {
+    setIsLoadingEligibilityData(true);
+
+    const eligibilityDataTableReq = async () => {
+      const response = await fetch(eligibilityDataTableURL);
+      return await response.json();
+    };
+
+    const eligibilityMetricsChartDataReq = async () => {
+      const response = await fetch(eligibilityMetricsChartDataURL);
+      return await response.json();
+    };
+
+    const getAllData = () => {
+      return Promise.all([
+        eligibilityDataTableReq(),
+        eligibilityMetricsChartDataReq()
       ]);
     };
 
     getAllData().then(
-      ([capacityDataTableData, functionalityMetricsChartData]) => {
-        setCapacityDataTableData(capacityDataTableData);
-        // setFunctionalityMetricsChartData(functionalityMetricsChartData);
-        setIsLoadingCapacityData(false);
+      ([eligibilityDataTableData, eligibilityMetricsChartData]) => {
+        setEligibilityDataTableData(eligibilityDataTableData);
+        setEligibilityMetricsChartData(eligibilityMetricsChartData);
+        setIsLoadingEligibilityData(false);
       }
     );
   }, [careLevel, district, startPeriod, endPeriod]);
 
   return [
     {
-      capacityDataTableData,
-      // functionalityMetricsChartData,
-      isLoadingCapacityData
+      eligibilityDataTableData,
+      eligibilityMetricsChartData,
+      isLoadingEligibilityData
     }
   ];
+};
+
+export const useGetQuarters = () => {
+  const quartersURL = `http://${apiEndpoint}${port}/coldchain/api/quarters`;
+  const [quarters, setQuarters] = useState(null);
+  const [isLoadingQuarters, setIsLoadingQuarters] = useState(false);
+
+  useEffect(() => {
+    setIsLoadingQuarters(true);
+    const quartersReq = async () => {
+      const response = await fetch(quartersURL);
+      return await response.json();
+    };
+
+    const getAllData = () => {
+      return Promise.all([quartersReq()]);
+    };
+
+    getAllData().then(([quarters]) => {
+      setQuarters(quarters);
+      setIsLoadingQuarters(false);
+    });
+  }, [quartersURL]);
+
+  return [{ quarters, isLoadingQuarters }];
 };
 
 // export const useApiDataFetch = (

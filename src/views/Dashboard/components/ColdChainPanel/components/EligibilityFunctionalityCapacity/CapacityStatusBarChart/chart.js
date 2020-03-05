@@ -5,13 +5,15 @@ import {
 } from "../../../../../../../common/chartOptions/chartOptions";
 
 import {
-  getFunctionalityChartData,
+  getCapacityChartData,
   getQuarters
 } from "../../../../../../../common/utils/coldchain/utils";
 
-export const FunctionalityStatusBarChartTemplate = data => {
-  const quarters = getQuarters(data);
-  const chartData = getFunctionalityChartData(data);
+export const CapacityStatusBarChartTemplate = (data, district) => {
+  const quarters = getQuarters(data.required_available_comparison_metrics);
+  const chartData = getCapacityChartData(
+    data.required_available_comparison_metrics
+  );
 
   const chart = {
     chart: {
@@ -24,7 +26,7 @@ export const FunctionalityStatusBarChartTemplate = data => {
       chartOptions: {
         ...commonChartOptions.exporting.chartOptions,
         title: {
-          //   text: `Stock Balances of ${vaccine} at the beginning of ${startMonth}`
+          text: `Stock Balances of ${district} at the beginning of ${district}`
         }
       },
       title: ""
@@ -35,8 +37,6 @@ export const FunctionalityStatusBarChartTemplate = data => {
     xAxis: {
       categories: quarters
     },
-    legend: { show: false },
-
     yAxis: { visible: false },
     plotOptions: {
       column: {

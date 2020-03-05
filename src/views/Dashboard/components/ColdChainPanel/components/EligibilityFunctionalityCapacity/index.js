@@ -8,9 +8,11 @@ import Paper from "@material-ui/core/Paper";
 import { Card } from "../../../../../../components/";
 
 // Custom components
+import EligibilityTable from "./EligibilityTable/index";
+import EligibilityStatusPieChart from "./EligibilityStatusPieChart/index";
 import FunctionalityStatusBarChart from "./FunctionalityStatusBarChart/index";
 import FunctionalityTable from "./FunctionalityTable/index";
-import CapacityStatusBarChart from "./FunctionalityStatusBarChart/index";
+import CapacityStatusBarChart from "./CapacityStatusBarChart/index";
 import CapacityTable from "./CapacityTable/index";
 
 // Import common styles
@@ -21,25 +23,38 @@ export default function EligibilityFunctionalityCapacity(props) {
   const { data, parentTab } = props;
 
   const [functionality, setFunctionality] = useState();
+  const [capacityData, setCapacityData] = useState();
+  const [eligibilityData, setEligibilityData] = useState();
 
   useMemo(() => {
-    if (data && data) {
+    if (data && data && parentTab === "functionality") {
       setFunctionality(data && data.functionalityMetricsChartData);
+    } else if (data && data && parentTab === "capacity") {
+      setCapacityData(data && data.capacityMetricsChartData);
+    } else if (data && data && parentTab === "eligibility") {
+      setEligibilityData(data && data.eligibilityMetricsChartData);
     }
   }, [data]);
 
-  const functionality_percentage =
-    //   statistics &&
-    //   statistics
-    //     .filter(d => d.statistics)
-    //     .map(d => d.statistics)[0]
-    //     .filter(d => d.functionality_percentage)
-    //     .map(d => d.functionality_percentage);
+  const eligibibleFacilities =
+    eligibilityData && eligibilityData.total_eligible_facilities;
 
+  const functionality_percentage = Math.round(
     functionality &&
-    functionality
-      .filter(a => a.functionality_percentage)
-      .map(d => d.functionality_percentage);
+      functionality
+        .filter(a => a.functionality_percentage)
+        .map(d => d.functionality_percentage)
+  );
+
+  const capacity_shortage_negative =
+    capacityData && capacityData.gap_metrics.negative_gap_percentage;
+
+  const capacity_shortage_positive =
+    capacityData && capacityData.gap_metrics.positive_gap_percentage;
+
+  const totalAvailableLiters = new Intl.NumberFormat("lg-UG").format(
+    capacityData && capacityData.overall_total_available
+  );
 
   return (
     <Grid container spacing={3}>
@@ -70,7 +85,7 @@ export default function EligibilityFunctionalityCapacity(props) {
                             <Card
                               title={"Eligible Facilities"}
                               showPercentage={false}
-                              metric={"480"}
+                              metric={eligibibleFacilities}
                               isLoading={data.isLoading && data.isLoading}
                             />
                           </>
@@ -90,14 +105,29 @@ export default function EligibilityFunctionalityCapacity(props) {
                         xs={12}
                         style={{ marginTop: 120, height: 385, width: 650 }}
                       >
-                        <FunctionalityStatusBarChart
-                          data={data.functionalityMetricsChartData}
-                          isLoading={data.isLoading}
-                          district={data.district}
-                          careLevel={data.careLevel}
-                          startYearHalf={data.startYearHalf}
-                          endYearHalf={data.endYearHalf}
-                        />
+                        {parentTab === "eligibility" ? (
+                          <>
+                            <EligibilityStatusPieChart
+                              data={data.eligibilityMetricsChartData}
+                              isLoading={data.isLoading}
+                              district={data.district}
+                              careLevel={data.careLevel}
+                              startQuarter={data.endQuarter}
+                              endQuarter={data.endQuarter}
+                            />
+                          </>
+                        ) : (
+                          <>
+                            <FunctionalityStatusBarChart
+                              data={data.functionalityMetricsChartData}
+                              isLoading={data.isLoading}
+                              district={data.district}
+                              careLevel={data.careLevel}
+                              startYearHalf={data.startYearHalf}
+                              endYearHalf={data.endYearHalf}
+                            />{" "}
+                          </>
+                        )}
                       </Grid>
                     </Grid>
                   </Grid>
@@ -122,20 +152,32 @@ export default function EligibilityFunctionalityCapacity(props) {
                         />
                       </>
                     ) : (
-                      <></>
+                      <>
+                        <EligibilityTable
+                          data={data.eligibilityDataTableData}
+                          isLoading={data.isLoading}
+                          district={data.district}
+                          careLevel={data.careLevel}
+                          startQuarter={data.startQuarter}
+                          endQuarter={data.endQuarter}
+                        />
+                      </>
                     )}
                   </Grid>
                 </Grid>
               </>
             ) : (
               <>
-                {" "}
                 <Grid container spacing={3}>
                   <Grid item lg={4} md={4} xl={4} xs={12}>
                     <Card
-                      title={`Total number of liters in ${data.district}`}
+                      title={`Total number of liters ${
+                        data.district === "national"
+                          ? "at National Level"
+                          : "in " + data.district
+                      }`}
                       showPercentage={false}
-                      metric={"480"}
+                      metric={totalAvailableLiters}
                       isLoading={data.isLoading && data.isLoading}
                     />
                   </Grid>
@@ -143,7 +185,7 @@ export default function EligibilityFunctionalityCapacity(props) {
                     <Card
                       title={"Shortage (-ve Gap)"}
                       showPercentage={true}
-                      metric={"480"}
+                      metric={capacity_shortage_negative}
                       isLoading={data.isLoading && data.isLoading}
                     />
                   </Grid>
@@ -151,18 +193,25 @@ export default function EligibilityFunctionalityCapacity(props) {
                     <Card
                       title={"Shortage (+ve Gap)"}
                       showPercentage={true}
-                      metric={"480"}
+                      metric={capacity_shortage_positive}
                       isLoading={data.isLoading && data.isLoading}
                     />
                   </Grid>
                 </Grid>
                 <Grid container spacing={3}>
                   <Grid item lg={4} md={4} xl={4} xs={12}>
-                    hi
+                    <CapacityStatusBarChart
+                      data={data.capacityMetricsChartData}
+                      isLoading={data.isLoading}
+                      district={data.district}
+                      careLevel={data.careLevel}
+                      startYearHalf={data.startYearHalf}
+                      endYearHalf={data.endYearHalf}
+                    />
                   </Grid>
                   <Grid item lg={8} md={8} xl={8} xs={12}>
                     <CapacityTable
-                      data={data.functionalityDataTableData}
+                      data={data.capacityDataTableData}
                       isLoading={data.isLoading}
                       district={data.district}
                       careLevel={data.careLevel}

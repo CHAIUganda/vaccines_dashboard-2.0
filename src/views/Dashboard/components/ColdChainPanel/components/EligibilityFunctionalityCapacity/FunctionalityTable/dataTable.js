@@ -46,8 +46,10 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-export const DataTable = ({ data }) => {
+export const DataTable = ({ data, district, startYearHalf, endYearHalf }) => {
   const classes = useStyles();
+
+  const title = `Functionality Status of CCE's at National Level for period ${startYearHalf} - ${endYearHalf}`;
 
   const columns = [
     {
@@ -92,7 +94,7 @@ export const DataTable = ({ data }) => {
   return (
     <Paper className={classes.tableRoot}>
       <MaterialTable
-        title={" "}
+        title={title}
         // Filter out statisticts key
         data={data && Object.values(data).filter(v => !v.statistics)}
         columns={columns}
@@ -101,7 +103,9 @@ export const DataTable = ({ data }) => {
           ({
             sorting: true
           },
-          { exportButton: true })
+          { exportButton: true },
+          { pageSize: 7 },
+          { pageSizeOptions: [5, 7] })
         }
       />
     </Paper>
