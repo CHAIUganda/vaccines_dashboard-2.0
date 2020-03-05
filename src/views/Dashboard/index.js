@@ -52,7 +52,7 @@ const useStyles = makeStyles(theme => ({
 
 export function Dashboard() {
   const classes = useStyles();
-  const [value, setValue] = React.useState(1);
+  const [value, setValue] = React.useState(3);
 
   function handleChange(event, newValue) {
     setValue(newValue);

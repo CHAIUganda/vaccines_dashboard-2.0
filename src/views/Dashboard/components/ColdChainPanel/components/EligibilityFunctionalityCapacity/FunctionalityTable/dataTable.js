@@ -51,52 +51,49 @@ export const DataTable = ({ data }) => {
 
   const columns = [
     {
-      field: "district_name",
+      field: "district",
       title: "District",
       cellStyle: rowData => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData => rowData.district_name.replace(/ District/g, "")
+      render: rowData => rowData.district.replace(/ District/g, "")
     },
+    // {
+    //     field: "existing_equipment",
+    //     title: "Existing Equipment",
+    //     cellStyle: rowData => ({ fontSize: 13 }),
+    //     headerStyle: { fontSize: 15, fontWeight: 700 },
+    //     render: rowData => new Intl.NumberFormat("lg-UG").format(rowData.existing_equipment)
+    //   },
     {
-      field: "received",
-      title: "Issued",
+      field: "working",
+      title: "Working Equipment",
       cellStyle: rowData => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData => new Intl.NumberFormat("lg-UG").format(rowData.received)
+      render: rowData => new Intl.NumberFormat("lg-UG").format(rowData.working)
     },
     {
-      field: "ordered",
-      title: "Orders",
-      cellStyle: rowData => ({ fontSize: 13 }),
-      headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData => new Intl.NumberFormat("lg-UG").format(rowData.ordered)
-    },
-    {
-      field: "stock_requirement__maximum",
-      title: "Max",
-      cellStyle: rowData => ({ fontSize: 13 }),
-      headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData =>
-        new Intl.NumberFormat("lg-UG").format(
-          rowData.stock_requirement__maximum
-        )
-    },
-    {
-      field: "stock_requirement__minimum",
-      title: "Min",
+      field: "not_working",
+      title: "Not Working",
       cellStyle: rowData => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
       render: rowData =>
-        new Intl.NumberFormat("lg-UG").format(
-          rowData.stock_requirement__minimum
-        )
+        new Intl.NumberFormat("lg-UG").format(rowData.not_working)
+    },
+    {
+      field: "needs_repair",
+      title: "Needs Maintenance",
+      cellStyle: rowData => ({ fontSize: 13 }),
+      headerStyle: { fontSize: 15, fontWeight: 700 },
+      render: rowData =>
+        new Intl.NumberFormat("lg-UG").format(rowData.needs_repair)
     }
   ];
   return (
     <Paper className={classes.tableRoot}>
       <MaterialTable
         title={" "}
-        data={data && data}
+        // Filter out statisticts key
+        data={data && Object.values(data).filter(v => !v.statistics)}
         columns={columns}
         icons={tableIcons}
         options={

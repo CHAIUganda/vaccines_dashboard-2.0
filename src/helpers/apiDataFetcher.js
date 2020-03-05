@@ -550,6 +550,71 @@ export const useGetDistrictStockTrendData = (
   ];
 };
 
+export const useGetFunctionalityData = (
+  careLevel,
+  district,
+  startPeriod,
+  endPeriod
+) => {
+  const functionalityMetricsChartDataURL = `http://${apiEndpoint}${port}/coldchain/api/functionalitymetricsgraph?carelevel=${careLevel}&district=${district}&start_period=${startPeriod}&end_period=${endPeriod}`;
+
+  const functionalityDataTableURL = `http://${apiEndpoint}${port}/coldchain/api/functionalitymetrics?carelevel=${careLevel}&start_period=${startPeriod}&end_period=${endPeriod}`;
+
+  // district.length === 1
+  //     ? `http://${apiEndpoint}${port}/coldchain/api/functionalitymetrics?carelevel=${careLevel}&district=${district}&${yearHalf}`
+  //     : `http://${apiEndpoint}${port}/coldchain/api/functionalitymetrics?carelevel=${careLevel}&districts=[${quotedAndCommaSeparatedDistricts}]&${yearHalf}`;
+
+  const [isLoadingFunctionalityData, setIsLoadingFunctionalityData] = useState(
+    false
+  );
+
+  const [functionalityDataTableData, setFunctionalityDataTableData] = useState(
+    null
+  );
+
+  const [
+    functionalityMetricsChartData,
+    setFunctionalityMetricsChartData
+  ] = useState(null);
+
+  useEffect(() => {
+    setIsLoadingFunctionalityData(true);
+
+    const functionalityDataTableReq = async () => {
+      const response = await fetch(functionalityDataTableURL);
+      return await response.json();
+    };
+
+    const functionalityMetricsChartDataReq = async () => {
+      const response = await fetch(functionalityMetricsChartDataURL);
+      return await response.json();
+    };
+
+    const getAllData = () => {
+      return Promise.all([
+        functionalityDataTableReq(),
+        functionalityMetricsChartDataReq()
+      ]);
+    };
+
+    getAllData().then(
+      ([functionalityDataTableData, functionalityMetricsChartData]) => {
+        setFunctionalityDataTableData(functionalityDataTableData);
+        setFunctionalityMetricsChartData(functionalityMetricsChartData);
+        setIsLoadingFunctionalityData(false);
+      }
+    );
+  }, [careLevel, district, startPeriod, endPeriod]);
+
+  return [
+    {
+      functionalityDataTableData,
+      functionalityMetricsChartData,
+      isLoadingFunctionalityData
+    }
+  ];
+};
+
 // export const useApiDataFetch = (
 //   endYear,
 //   startYear,

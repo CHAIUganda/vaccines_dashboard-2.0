@@ -60,9 +60,6 @@ const CustomeChartPaper = props => {
                 <> {props.title} </>
               )}
             </Typography>
-            <Typography variant="overline" display="block" gutterBottom>
-              {props.description} {props.totals}
-            </Typography>
             <Typography component="div">
               {dataState ? (
                 <p
