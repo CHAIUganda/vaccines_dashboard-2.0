@@ -12,8 +12,8 @@ import LocalConvenienceStoreIcon from "@material-ui/icons/LocalConvenienceStore"
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
-    padding: theme.spacing(2, 2)
-    // height: "50%"
+    padding: theme.spacing(2, 2),
+    height: "50%"
   },
   text: {
     color: "#28354A",

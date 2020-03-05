@@ -57,14 +57,13 @@ export const DataTable = ({ data }) => {
       headerStyle: { fontSize: 15, fontWeight: 700 },
       render: rowData => rowData.district.replace(/ District/g, "")
     },
-    {
-      field: "total_cce",
-      title: "Existing Equipment",
-      cellStyle: rowData => ({ fontSize: 13 }),
-      headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData =>
-        new Intl.NumberFormat("lg-UG").format(rowData.total_cce)
-    },
+    // {
+    //     field: "existing_equipment",
+    //     title: "Existing Equipment",
+    //     cellStyle: rowData => ({ fontSize: 13 }),
+    //     headerStyle: { fontSize: 15, fontWeight: 700 },
+    //     render: rowData => new Intl.NumberFormat("lg-UG").format(rowData.existing_equipment)
+    //   },
     {
       field: "working",
       title: "Working Equipment",
