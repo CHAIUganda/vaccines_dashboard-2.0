@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 const apiEndpoint = require("../env_config").default;
 
 // Because the backend on the production runs on port 80 (default port)
-const port = apiEndpoint === "localhost" || "35.226.24.173" ? ":9000" : "";
+const port =
+  apiEndpoint === "localhost" || apiEndpoint === "35.226.24.173" ? ":9000" : "";
 
 export const useVaccineDosesForCoverageByMonth = (
   endYear,
