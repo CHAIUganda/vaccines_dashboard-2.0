@@ -31,8 +31,6 @@ const DropoutRateForAntigensChart = props => {
 
   const [chartTitle, setChartTitle] = useState();
 
-  console.log(vaccineName);
-
   useMemo(() => {
     if (data && data) {
       if (tabTitle === "Annualized (CY)" || tabTitle === "Monthly (CY)") {

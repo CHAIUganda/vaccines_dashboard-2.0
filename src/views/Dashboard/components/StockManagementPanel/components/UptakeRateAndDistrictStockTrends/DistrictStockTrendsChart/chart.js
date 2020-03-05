@@ -28,8 +28,6 @@ export const districtStockTrendsChartTemplate = (
 
   // Used to determine the width of the bars we render.
   const dataLength = chartData[0].data.length;
-  console.log(dataLength);
-
   return {
     credits: {
       ...commonChartOptions.credits
