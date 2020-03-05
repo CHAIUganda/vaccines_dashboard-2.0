@@ -208,7 +208,6 @@ export default function Header(props) {
               label="Cold Chain"
               href="/cold-chain"
               {...a11yProps(3)}
-              disabled={true}
             />
             <LinkTab
               classes={{
@@ -285,7 +284,6 @@ export default function Header(props) {
             icon={<BusinessIcon className={classes.verticalIcon} />}
             href="/cold-chain"
             {...a11yProps(3)}
-            disabled={true}
           />
         </Tabs>
       </Drawer>
