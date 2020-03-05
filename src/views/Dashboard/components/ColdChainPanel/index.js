@@ -21,7 +21,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 // Data Fetcher
 import {
   useGetDistricts,
-  useGetFunctionalityData
+  useGetFunctionalityData,
+  useGetCapacityData
 } from "../../../../helpers/apiDataFetcher";
 
 // Import common component for ColdChain components
@@ -195,6 +196,18 @@ export function ColdChainPanel() {
     `${year - 1}_${HALF_YEARS[1]}`
   );
 
+  // Capacity
+  const [capacityDistrict, setCapacityDistrict] = useState("national");
+  const [capacityCareLevel, setCapacityCareLevel] = useState(CARE_LEVELS[0]);
+
+  const [capacityStartYear, setCapacityStartYear] = useState(
+    `${year - 1}_${HALF_YEARS[0]}`
+  );
+
+  const [capacityEndYear, setCapacityEndYear] = useState(
+    `${year - 1}_${HALF_YEARS[1]}`
+  );
+
   // -----------------------------------------------------------------------
   // Fetch Data
   // -----------------------------------------------------------------------
@@ -210,6 +223,19 @@ export function ColdChainPanel() {
     functionalityDistrict,
     functionalityStartYear,
     functionalityEndYear
+  );
+
+  const [
+    {
+      capacityDataTableData,
+      // capacityMetricsChartData,
+      isLoadingCapacityData
+    }
+  ] = useGetCapacityData(
+    capacityCareLevel,
+    capacityDistrict,
+    capacityStartYear,
+    capacityEndYear
   );
 
   // -----------------------------------------------------------------------
@@ -287,6 +313,53 @@ export function ColdChainPanel() {
       </MenuItem>
     ));
 
+  // -----------------------------------------------------------------------
+  // Capacity  Filters
+  // -----------------------------------------------------------------------
+  const capacityCareLevelFilter = CARE_LEVELS.map(careLevel => (
+    <MenuItem value={careLevel} key={careLevel}>
+      {careLevel}
+    </MenuItem>
+  ));
+
+  const capacityStartYearFilter = years
+    .filter(year => year !== 2020)
+    .map(year => (
+      <>
+        <optgroup label={year}></optgroup>
+        {HALF_YEARS.map(halfYear => (
+          <option value={`${year}_${halfYear}`}>
+            {`${year} - Half ${halfYear}`}
+          </option>
+        ))}
+      </>
+    ));
+
+  const capacityEndYearFilter = years
+    .filter(year => year !== 2020)
+    .map(year => (
+      <>
+        <optgroup label={year}></optgroup>
+        {HALF_YEARS.map(halfYear => (
+          <option value={`${year}_${halfYear}`}>
+            {`${year} - Half ${halfYear}`}
+          </option>
+        ))}
+      </>
+    ));
+
+  const capacityDistrictFilter =
+    districts &&
+    districts.map(district => (
+      <MenuItem
+        value={district.name}
+        key={district.name}
+        style={{ fontSize: "large" }}
+      >
+        {district.name}
+      </MenuItem>
+    ));
+
   const data = {
     eligibility: {},
     functionality: {
@@ -300,7 +373,14 @@ export function ColdChainPanel() {
       startYearHalf: functionalityStartYear,
       endYearHalf: functionalityEndYear
     },
-    capacity: {},
+    capacity: {
+      capacityDataTableData: capacityDataTableData && capacityDataTableData,
+      isLoading: isLoadingCapacityData,
+      district: capacityDistrict,
+      careLevel: capacityCareLevel,
+      startYearHalf: capacityStartYear,
+      endYearHalf: capacityEndYear
+    },
     optimality: {},
     temperatureMonitoring: {}
   };
@@ -614,7 +694,106 @@ export function ColdChainPanel() {
                   </div>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                  Two
+                  <div className={classes.filters2}>
+                    <FormControl
+                      className={classes.districtSelectMargin}
+                      variant="outlined"
+                      margin="dense"
+                    >
+                      <InputLabel
+                        htmlFor="startYear"
+                        className={classes.selectorLables2}
+                      >
+                        Start Year
+                      </InputLabel>
+                      <Select
+                        native
+                        className={classes.selector_background}
+                        id="Cap_startYear_selector"
+                        value={capacityStartYear}
+                        onChange={event =>
+                          setCapacityStartYear(event.target.value)
+                        }
+                        input={<BootstrapInput />}
+                      >
+                        {capacityStartYearFilter}
+                      </Select>
+                    </FormControl>
+                    <FormControl
+                      className={classes.districtSelectMargin}
+                      variant="outlined"
+                      margin="dense"
+                    >
+                      <InputLabel
+                        htmlFor="endYear"
+                        className={classes.selectorLables2}
+                      >
+                        End Year
+                      </InputLabel>
+                      <Select
+                        native
+                        className={classes.selector_background}
+                        id="Cap_endYear_selector"
+                        value={capacityEndYear}
+                        onChange={event =>
+                          setCapacityEndYear(event.target.value)
+                        }
+                        input={<BootstrapInput />}
+                      >
+                        {capacityEndYearFilter}
+                      </Select>
+                    </FormControl>
+                    <FormControl
+                      className={classes.formControl}
+                      variant="outlined"
+                      margin="dense"
+                    >
+                      <InputLabel
+                        htmlFor="District"
+                        className={classes.selectorLables}
+                      >
+                        District
+                      </InputLabel>
+                      <Select
+                        className={classes.selector_background}
+                        value={capacityDistrict}
+                        onChange={event =>
+                          setCapacityDistrict(event.target.value)
+                        }
+                        inputProps={{
+                          name: "Cap_district_selector",
+                          id: "Cap_district_selector"
+                        }}
+                      >
+                        {capacityDistrictFilter}
+                      </Select>
+                    </FormControl>
+                    <FormControl
+                      className={classes.formControl}
+                      variant="outlined"
+                      margin="dense"
+                    >
+                      <InputLabel
+                        htmlFor="vaccine"
+                        className={classes.selectorLables}
+                      >
+                        Level of Care
+                      </InputLabel>
+                      <Select
+                        className={classes.selector_background}
+                        value={capacityCareLevel}
+                        onChange={event =>
+                          setCapacityCareLevel(event.target.value)
+                        }
+                        inputProps={{
+                          name: "Cap_careLevel_selector",
+                          id: "Cap_careLevel_selector"
+                        }}
+                      >
+                        {capacityCareLevelFilter}
+                      </Select>
+                    </FormControl>
+                  </div>
                 </TabPanel>
                 <TabPanel value={value} index={3}>
                   Three
