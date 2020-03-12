@@ -186,7 +186,7 @@ export function StockManagementPanel() {
   const [
     districtStockLevelsEndMonth,
     setDistrictStockLevelsEndMonth
-  ] = useState("Jun 2019");
+  ] = useState("Dec 2019");
 
   const [
     districtStockLevelsStartMonth,
@@ -202,7 +202,7 @@ export function StockManagementPanel() {
   // -------------------------------------------------------------------------
 
   const [refillRateStartMonth, setRefillRateStartMonth] = useState("Jan 2019");
-  const [refillRateEndMonth, setRefillRateEndMonth] = useState("Jun 2019");
+  const [refillRateEndMonth, setRefillRateEndMonth] = useState("Dec 2019");
   const [refillRateVaccine, setRefillRateVaccine] = useState("PENTA");
   const [refillRateDistrict, setRefillRateDistrict] = useState("Abim District");
   const [refillRateDistrict2, setRefillRateDistrict2] = useState([
@@ -217,7 +217,7 @@ export function StockManagementPanel() {
   // -------------------------------------------------------------------------
 
   const [uptakeRateStartMonth, setUptakeRateStartMonth] = useState("Jan 2019");
-  const [uptakeRateEndMonth, setUptakeRateEndMonth] = useState("Jun 2019");
+  const [uptakeRateEndMonth, setUptakeRateEndMonth] = useState("Dec 2019");
   const [uptakeRateVaccine, setUptakeRateVaccine] = useState("PENTA");
   const [uptakeRateDistrict, setUptakeRateDistrict] = useState("National");
 
@@ -230,7 +230,7 @@ export function StockManagementPanel() {
     setDistrictStockTrendStartMonth
   ] = useState("Jan 2019");
   const [districtStockTrendEndMonth, setDistrictStockTrendEndMonth] = useState(
-    "Jun 2019"
+    "Dec 2019"
   );
   const [districtStockTrendVaccine, setDistrictStockTrendVaccine] = useState(
     "PENTA"
