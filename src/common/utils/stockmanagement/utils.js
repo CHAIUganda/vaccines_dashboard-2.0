@@ -38,7 +38,7 @@ const convertToTimeSeries = period => {
   const year = str_period.substring(0, 4);
 
   // Extract Month
-  const month = str_period.substring(5, 6);
+  const month = str_period.substring(4, 6);
 
   // We subtract - 1 because JS reads months from 0
   // with Jan = 0, Feb = 1 etc.
