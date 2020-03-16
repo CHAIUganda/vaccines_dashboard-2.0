@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from "react";
-
 // Highcharts for time series test
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
@@ -8,34 +7,30 @@ import HighchartsReact from "highcharts-react-official";
 import { Chart } from "../../../../../../../components";
 
 // Chart Template
-import { StockBalancesPieChartTemplate } from "./chart";
+import { TemperatureMonitoringBarChartTemplate } from "./chart";
 
-const StockBalancesPieChart = ({
+const TemperatureMonitoringBarChart = ({
   data,
   isLoading,
-  endMonth,
-  startMonth,
   district,
-  vaccine,
+  year,
+  month
 }) => {
   const [chart, setChart] = useState();
 
   useMemo(() => {
     if (data && data) {
       setChart(
-        StockBalancesPieChartTemplate(
-          data,
-          endMonth,
-          startMonth,
-          district,
-          vaccine
-        )
+        TemperatureMonitoringBarChartTemplate(data, district, year, month)
       );
     }
-  }, [data, endMonth, startMonth, district, vaccine]);
+  }, [data, district, month, year]);
 
   return (
     <Chart
+      title={`Total number of freeze and heat alarms ${
+        district === "national" ? "at National Level" : "in " + district
+      }`}
       chart={
         <HighchartsReact highcharts={Highcharts} options={chart && chart} />
       }
@@ -45,4 +40,4 @@ const StockBalancesPieChart = ({
   );
 };
 
-export default StockBalancesPieChart;
+export default TemperatureMonitoringBarChart;

@@ -1,6 +1,5 @@
 import React, { useState, useMemo, forwardRef } from "react";
 
-import Paper from "@material-ui/core/Paper";
 import MaterialTable from "material-table";
 
 // Import common styles
@@ -46,48 +45,58 @@ const tableIcons = {
   Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
   SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-export const DataTable = props => {
-  const { data, endMonth, startMonth, district, vaccine, tab } = props;
+export const DataTable = (props) => {
+  const {
+    data = [],
+    endMonth,
+    startMonth,
+    district,
+    vaccine,
+    tab,
+    isLoading,
+  } = props;
+  const title = `Stock Balances of ${vaccine} at the Beginning of ${endMonth}`;
   const classes = useStyles();
 
   const columns = [
     {
       field: "district_name",
       title: "District",
-      cellStyle: rowData => ({ fontSize: 13 }),
+      cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData => rowData.district_name.replace(/ District/g, "")
+      render: (rowData) => rowData.district_name.replace(/ District/g, ""),
     },
     {
       field: "at_hand",
       title: "Balances",
-      cellStyle: rowData => ({ fontSize: 13 }),
+      cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData => new Intl.NumberFormat("lg-UG").format(rowData.at_hand)
+      render: (rowData) =>
+        new Intl.NumberFormat("lg-UG").format(rowData.at_hand),
     },
     {
       field: "stock_requirement__minimum",
       title: "Min",
-      cellStyle: rowData => ({ fontSize: 13 }),
+      cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData =>
+      render: (rowData) =>
         new Intl.NumberFormat("lg-UG").format(
           rowData.stock_requirement__minimum
-        )
+        ),
     },
     {
       field: "stock_requirement__maximum",
       title: "Max",
-      cellStyle: rowData => ({ fontSize: 13 }),
+      cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData =>
+      render: (rowData) =>
         new Intl.NumberFormat("lg-UG").format(
           rowData.stock_requirement__maximum
-        )
-    }
+        ),
+    },
   ];
 
   const [tableData, setTableData] = useState(null);
@@ -107,73 +116,78 @@ export const DataTable = props => {
     }
   }, [data, endMonth, startMonth, district, vaccine]);
 
-  const tableTitle = `Stock Balances of ${vaccine} at the Beginning of ${endMonth}`;
-
   const tableDataStockedOut =
-    tableData && tableData.map(i => i.tabledata_so)[0];
+    tableData && tableData.map((i) => i.tabledata_so)[0];
 
-  const tableDataBelowMIN = tableData && tableData.map(i => i.tabledata_bm)[0];
+  const tableDataBelowMIN =
+    tableData && tableData.map((i) => i.tabledata_bm)[0];
 
   const tableDataWithinRANGE =
-    tableData && tableData.map(i => i.tabledata_wr)[0];
+    tableData && tableData.map((i) => i.tabledata_wr)[0];
 
-  const tableDataAboveMAX = tableData && tableData.map(i => i.tabledata_am)[0];
+  const tableDataAboveMAX =
+    tableData && tableData.map((i) => i.tabledata_am)[0];
 
   return (
-    <Paper className={classes.tableRoot}>
+    <>
+      {" "}
       {tab === "Stocked Out" ? (
         <MaterialTable
-          title={tableTitle && tableTitle}
-          data={tableDataStockedOut && tableDataStockedOut}
+          title={<h3 className={classes.tableTitle}>{title}</h3>}
+          isLoading={isLoading}
+          data={(tableDataStockedOut && tableDataStockedOut) || []}
           columns={columns}
           icons={tableIcons}
           options={
             ({
-              sorting: true
+              sorting: true,
             },
             { exportButton: true })
           }
         />
       ) : tab === "Below MIN" ? (
         <MaterialTable
-          title={tableTitle && tableTitle}
-          data={tableDataBelowMIN && tableDataBelowMIN}
+          title={<h3 className={classes.tableTitle}>{title}</h3>}
+          isLoading={isLoading}
+          data={(tableDataBelowMIN && tableDataBelowMIN) || []}
           columns={columns}
           icons={tableIcons}
           options={
             ({
-              sorting: true
+              sorting: true,
             },
             { exportButton: true })
           }
         />
       ) : tab === "Within RANGE" ? (
         <MaterialTable
-          title={tableTitle && tableTitle}
-          data={tableDataWithinRANGE && tableDataWithinRANGE}
+          title={<h3 className={classes.tableTitle}>{title}</h3>}
+          isLoading={isLoading}
+          data={(tableDataWithinRANGE && tableDataWithinRANGE) || []}
           columns={columns}
           icons={tableIcons}
           options={
             ({
-              sorting: true
+              sorting: true,
             },
             { exportButton: true })
           }
         />
       ) : (
         <MaterialTable
-          title={tableTitle && tableTitle}
-          data={tableDataAboveMAX && tableDataAboveMAX}
+          title={<h3 className={classes.tableTitle}>{title}</h3>}
+          isLoading={isLoading}
+          data={(tableDataAboveMAX && tableDataAboveMAX) || []}
           columns={columns}
           icons={tableIcons}
           options={
             ({
-              sorting: true
+              sorting: true,
             },
             { exportButton: true })
           }
         />
       )}
-    </Paper>
+    </>
   );
 };

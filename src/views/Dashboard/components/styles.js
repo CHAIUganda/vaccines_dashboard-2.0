@@ -1,51 +1,51 @@
 import { makeStyles, fade } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.paper
+    backgroundColor: theme.palette.background.paper,
   },
   indicator: {
-    backgroundColor: "#F8E658"
+    backgroundColor: "#F8E658",
   },
   container: {
     display: "flex",
     flexWrap: "wrap",
     alignItems: "center",
-    float: "right"
+    float: "right",
   },
   formControl: {
     minWidth: 120,
     marginRight: theme.spacing(5),
     maxWidth: 300,
-    marginTop: 35
+    marginTop: 35,
   },
   filters: {
     display: "flex",
-    float: "right"
+    float: "right",
   },
 
   filters2: {
     float: "right",
-    marginTop: "-25px"
+    marginTop: "-25px",
   },
   appBar: {
     backgroundColor: "white",
     borderRadius: 10,
-    width: "fit-content"
+    width: "fit-content",
   },
   sub_appBar: {
     backgroundColor: "white",
     marginLeft: 500,
     borderRadius: 10,
-    width: "fit-content"
+    width: "fit-content",
   },
   tabsDiv: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
     fontFamily: "Open Sans",
     width: "6400",
-    paddingBottom: 1
+    paddingBottom: 1,
   },
   tabs: {
     padding: "0rem",
@@ -55,83 +55,95 @@ const useStyles = makeStyles(theme => ({
     fontSize: "10rem",
     border: "1px solid #00000033 !important",
     borderRadius: "5px",
-    height: 45
+    height: 45,
   },
   selectorLables: {
     color: "#28354A",
-    fontSize: "x-large",
+    fontSize: "large",
     marginTop: "-15px",
-    marginLeft: "-15px"
+    marginLeft: "-15px",
     // backgroundColor: "white"
   },
   selectorLables2: {
     color: "#28354A",
-    fontSize: "x-large",
+    fontSize: "large",
     marginLeft: "-15px",
-    marginTop: "10px"
+    marginTop: "10px",
+    width: "max-content",
+    transform: "translate(14px, -6px) scale(0.75) !important",
   },
 
+  liItems: {
+    fontSize: "small",
+  },
+  tableTitle: {
+    color: "#28354A",
+    opacity: "100%",
+    fontSize: "medium",
+    fontWeight: 400,
+  },
   paper: {
     padding: theme.spacing(2),
     textAlign: "center",
     color: theme.palette.text.secondary,
-    backgroundColor: "#F5F5F5"
+    backgroundColor: "#F5F5F5",
   },
   selector_background: {
-    backgroundColor: "white"
+    backgroundColor: "white",
+    fontSize: "small",
   },
   C_section: {
     paddingTop: 25,
-    height: 582
+    height: 582,
   },
   DST_section: {
-    height: 640
+    height: 640,
   },
   chartDiv: {
     flexGrow: 1,
     backgroundColor: "#F5F5F5",
     fontFamily: "Open Sans",
-    height: 630
+    height: 630,
   },
   chips: {
     display: "flex",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
   },
   chip: {
     margin: 3,
-    fontSize: "inherit"
+    fontSize: "inherit",
   },
   chipPadding: {
-    padding: "0 !important"
+    padding: "0 !important",
   },
   noLabel: {
-    marginTop: theme.spacing(3)
+    marginTop: theme.spacing(3),
   },
 
   // Table
   tableRoot: {
-    width: "100%"
+    width: "100%",
   },
   tableContainer: {
-    maxHeight: 550
+    maxHeight: 550,
   },
   tableHead: {
-    fontSize: "inherit"
+    fontSize: "inherit",
   },
   search: {
     position: "relative",
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
     "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25)
+      backgroundColor: fade(theme.palette.common.white, 0.25),
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
     width: "50%",
     [theme.breakpoints.up("sm")]: {
       marginLeft: theme.spacing(3),
-      width: "auto"
-    }
+      width: "auto",
+    },
   },
   searchIcon: {
     width: theme.spacing(7),
@@ -140,12 +152,12 @@ const useStyles = makeStyles(theme => ({
     pointerEvents: "none",
     display: "flex",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   inputRoot: {
     color: "#28354A",
     border: "1px solid #FC6F6F !important",
-    borderRadius: "5px"
+    borderRadius: "5px",
   },
 
   inputInput: {
@@ -154,16 +166,16 @@ const useStyles = makeStyles(theme => ({
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("md")]: {
-      width: 120
-    }
+      width: 120,
+    },
   },
 
   districtSelectMargin: {
     marginTop: 10,
     minWidth: 120,
     marginRight: theme.spacing(5),
-    maxWidth: 300
-  }
+    maxWidth: 300,
+  },
 }));
 
 export { useStyles };

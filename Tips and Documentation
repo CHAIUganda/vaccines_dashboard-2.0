@@ -43,3 +43,8 @@ server {
             add_header Cache-Control "public";
         }
 }
+
+
+const [capacityStartYear, setCapacityStartYear] = useState(`${year - 1}01`);
+
+const [capacityEndYear, setCapacityEndYear] = useState(`${year}01`);

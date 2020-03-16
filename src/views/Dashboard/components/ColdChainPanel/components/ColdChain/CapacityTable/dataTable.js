@@ -2,9 +2,6 @@ import React, { forwardRef } from "react";
 
 import MaterialTable from "material-table";
 
-// Import common styles
-import { useStyles } from "../../../../styles";
-
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import Check from "@material-ui/icons/Check";
@@ -20,6 +17,8 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
+
+import { useStyles } from "../../../../styles";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -45,67 +44,69 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-export const DataTable = ({ data, vaccine, endMonth, isLoading }) => {
+export const DataTable = ({
+  data = [],
+  startQuarter,
+  endQuarter,
+  district,
+  isLoading,
+}) => {
   const classes = useStyles();
-  const title = `Stock Balances of ${vaccine} at the Beginning of ${endMonth}`;
+  const title = `Capacity Status of CCE in ${
+    district === "national" ? "National" : district
+  } for period ${startQuarter} - ${endQuarter}`;
 
   const columns = [
     {
-      field: "district_name",
+      field: "district",
       title: "District",
       cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: (rowData) => rowData.district_name.replace(/ District/g, ""),
+      render: (rowData) => rowData.name.replace(/ District/g, ""),
     },
     {
-      field: "received",
-      title: "Issued",
-      cellStyle: (rowData) => ({ fontSize: 13 }),
-      headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: (rowData) =>
-        new Intl.NumberFormat("lg-UG").format(rowData.received),
-    },
-    {
-      field: "ordered",
-      title: "Orders",
-      cellStyle: (rowData) => ({ fontSize: 13 }),
-      headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: (rowData) =>
-        new Intl.NumberFormat("lg-UG").format(rowData.ordered),
-    },
-    {
-      field: "stock_requirement__maximum",
-      title: "Max",
+      field: "required_net_storage_volume",
+      title: "Required Capacity",
       cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
       render: (rowData) =>
         new Intl.NumberFormat("lg-UG").format(
-          rowData.stock_requirement__maximum
+          rowData.required_net_storage_volume
         ),
     },
     {
-      field: "stock_requirement__minimum",
-      title: "Min",
+      field: "available_net_storage_volume",
+      title: "Available Capacity",
       cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
       render: (rowData) =>
         new Intl.NumberFormat("lg-UG").format(
-          rowData.stock_requirement__minimum
+          rowData.available_net_storage_volume
         ),
+    },
+    {
+      field: "gap",
+      title: "Gap",
+      cellStyle: (rowData) => ({ fontSize: 13 }),
+      headerStyle: { fontSize: 15, fontWeight: 700 },
+      render: (rowData) => new Intl.NumberFormat("lg-UG").format(rowData.gap),
     },
   ];
   return (
     <MaterialTable
       title={<h3 className={classes.tableTitle}>{title}</h3>}
+      // Filter out statisticts key
+      data={(data && Object.values(data).filter((v) => !v.statistics)) || []}
       isLoading={isLoading}
-      data={data && data}
       columns={columns}
+      style={{ height: "100%" }}
       icons={tableIcons}
       options={
         ({
           sorting: true,
         },
-        { exportButton: true })
+        { exportButton: true },
+        { pageSize: 7 })
       }
     />
   );

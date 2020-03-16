@@ -1,7 +1,7 @@
 // Chart Options
 import {
   commonChartOptions,
-  mapLegend
+  mapLegend,
 } from "../../../../../../../common/chartOptions/chartOptions";
 
 //  Map utilities
@@ -9,7 +9,7 @@ import {
 import {
   createDistrictDataMap,
   calculateDropoutRate,
-  getPeriodList
+  getPeriodList,
 } from "../../../../../../../common/utils/mapUtils";
 
 //  Map
@@ -47,22 +47,22 @@ export const dropoutRateCoverageMap = (
   }
 
   // Calculate legend values
-  const values = mapData.map(v => v[1]);
+  const values = mapData.map((v) => v[1]);
 
   const between_0_and_10 = values.filter(
-    a => a >= 0 && a <= 10 && a !== undefined
+    (a) => a >= 0 && a <= 10 && a !== undefined
   ).length;
 
-  const all_else = values.filter(a => !(a >= 0 && a <= 10 && a !== undefined))
+  const all_else = values.filter((a) => !(a >= 0 && a <= 10 && a !== undefined))
     .length;
 
   return {
     credits: {
-      ...commonChartOptions.credits
+      ...commonChartOptions.credits,
     },
     chart: {
       map: ugandaMap2,
-      height: 74 + "%"
+      height: 74 + "%",
     },
     exporting: {
       scale: 2,
@@ -72,54 +72,55 @@ export const dropoutRateCoverageMap = (
           series: {
             dataLabels: {
               enabled: true,
-              format: "{point.value:.0f} %"
-            }
-          }
+              format: "{point.value:.0f} %",
+            },
+          },
         },
         title: {
-          text: `${tabTitle === "Annualized (CY)" ||
-            tabTitle === "Annualized (FY)"} Dropout Rate  of ${
+          text: `${
+            tabTitle === "Annualized (CY)" || tabTitle === "Annualized (FY)"
+          } Dropout Rate  of ${
             vaccineName === "ALL" ? "PENTA3" : vaccineName
-          } for ${startYear}`
-        }
+          } for ${startYear}`,
+        },
       },
       buttons: {
-        ...commonChartOptions.exporting.buttons
+        ...commonChartOptions.exporting.buttons,
       },
-      fallbackToExportServer: false
+      fallbackToExportServer: false,
     },
     title: {
-      text: ""
+      text: "",
     },
     mapNavigation: {
-      mapNavigation: { ...commonChartOptions.mapNavigation }
+      mapNavigation: { ...commonChartOptions.mapNavigation },
     },
 
     legend: {
-      ...mapLegend
+      ...mapLegend,
     },
 
     colorAxis: {
       dataClasses: [
         {
-          from: -10,
-          to: 21,
+          from: -100,
+          to: 100,
           color: "red",
           count: all_else,
-          legendName: "(0-(-10)) & (10-20)"
+          legendName: "(0-(-10)) & (10-20)",
         },
         {
           from: 0,
           to: 10,
           color: "green",
           count: between_0_and_10,
-          legendName: "0-10"
-        }
-      ]
+          legendName: "0-10",
+        },
+      ],
     },
 
     tooltip: {
-      ...commonChartOptions.mapTooltip
+      ...commonChartOptions.mapTooltip,
     },
 
     series: [
@@ -131,10 +132,10 @@ export const dropoutRateCoverageMap = (
         borderWidth: 0.5,
         states: {
           hover: {
-            color: "#a4edba"
-          }
-        }
-      }
-    ]
+            color: "#a4edba",
+          },
+        },
+      },
+    ],
   };
 };

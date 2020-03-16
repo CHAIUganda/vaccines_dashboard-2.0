@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from "react";
-
 // Highcharts for time series test
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
@@ -8,34 +7,33 @@ import HighchartsReact from "highcharts-react-official";
 import { Chart } from "../../../../../../../components";
 
 // Chart Template
-import { StockBalancesPieChartTemplate } from "./chart";
+import { TemperatureMonitoringReportRateChartTemplate } from "./chart";
 
-const StockBalancesPieChart = ({
+const TemperatureMonitoringReportRateChart = ({
   data,
   isLoading,
-  endMonth,
-  startMonth,
   district,
-  vaccine,
+  year,
+  month
 }) => {
   const [chart, setChart] = useState();
 
   useMemo(() => {
     if (data && data) {
       setChart(
-        StockBalancesPieChartTemplate(
+        TemperatureMonitoringReportRateChartTemplate(
           data,
-          endMonth,
-          startMonth,
           district,
-          vaccine
+          year,
+          month
         )
       );
     }
-  }, [data, endMonth, startMonth, district, vaccine]);
+  }, [data, district, month, year]);
 
   return (
     <Chart
+      title={`Proportion of districts submitting temperature data for ${year}`}
       chart={
         <HighchartsReact highcharts={Highcharts} options={chart && chart} />
       }
@@ -45,4 +43,4 @@ const StockBalancesPieChart = ({
   );
 };
 
-export default StockBalancesPieChart;
+export default TemperatureMonitoringReportRateChart;

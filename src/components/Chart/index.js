@@ -6,20 +6,21 @@ import { Typography } from "@material-ui/core";
 import { Paper } from "@material-ui/core";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     padding: theme.spacing(2, 2),
-    height: "100%"
+    height: "100%",
   },
   text: {
     color: "#28354A",
     opacity: "100%",
-    fontWeight: theme.typography.fontWeightRegular
-  }
+    fontWeight: theme.typography.fontWeightRegular,
+    fontSize: "medium",
+  },
 }));
 
-const CustomeChartPaper = props => {
+const CustomeChartPaper = (props) => {
   const { children, isLoading, centerTitle, chartData, ...rest } = props;
 
   // Used to store state of the series chart data.
@@ -67,14 +68,14 @@ const CustomeChartPaper = props => {
                     margin: 200,
                     marginLeft: 300,
                     fontSize: 20,
-                    color: "red"
+                    color: "red",
                   }}
                 >
                   No Data Available
                 </p>
               ) : (
                 <>
-                  <div style={{ marginTop: 40 }}>{props.chart}</div>
+                  <div>{props.chart}</div>
                 </>
               )}
             </Typography>

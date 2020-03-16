@@ -1,7 +1,7 @@
 // Chart Options
 import {
   commonChartOptions,
-  mapLegend
+  mapLegend,
 } from "../../../../../../../common/chartOptions/chartOptions";
 
 //  Map utilities
@@ -9,7 +9,7 @@ import {
 import {
   createDistrictDataMap,
   calculateCoverageRate,
-  getPeriodList
+  getPeriodList,
 } from "../../../../../../../common/utils/mapUtils";
 
 //  Map
@@ -52,19 +52,23 @@ export const vaccineAnnualizedCoverage = (
   }
 
   // Calculate legend values
-  const values = mapData.map(v => v[1]);
-  const below_50 = values.filter(a => a < 50 && a !== null).length;
-  const between_50_to_89 = values.filter(a => a > 50 && a <= 89 && a !== null)
+  const values = mapData.map((v) => v[1]);
+  console.log(values);
+
+  // const _values = mapData.map((v) => (isNaN(v.value) ? 0 : v.value));
+
+  const below_50 = values.filter((a) => a < 50).length;
+  const between_50_to_89 = values.filter((a) => a > 50 && a <= 89 && a !== null)
     .length;
-  const above_90 = values.filter(a => a >= 90 && a !== null).length;
+  const above_90 = values.filter((a) => a >= 89.9 && a !== null).length;
 
   return {
     credits: {
-      ...commonChartOptions.credits
+      ...commonChartOptions.credits,
     },
     chart: {
       map: ugandaMap2,
-      height: 74 + "%"
+      height: 74 + "%",
     },
     exporting: {
       scale: 2,
@@ -74,58 +78,60 @@ export const vaccineAnnualizedCoverage = (
           series: {
             dataLabels: {
               enabled: true,
-              format: "{point.value:.0f} %"
-            }
-          }
+              format: "{point.value:.0f} %",
+            },
+          },
         },
         title: {
-          text: `${tabTitle === "Annualized (CY)" ||
-            tabTitle === "Annualized (FY)"} Coverage of ${
+          text: `${
+            tabTitle === "Annualized (CY)" || tabTitle === "Annualized (FY)"
+          } Coverage of ${
             vaccineName === "ALL" ? "PENTA3" : vaccineName
-          } for ${startYear}`
-        }
+          } for ${startYear}`,
+        },
       },
 
       buttons: {
-        ...commonChartOptions.exporting.buttons
+        ...commonChartOptions.exporting.buttons,
       },
-      fallbackToExportServer: false
+      fallbackToExportServer: false,
     },
     title: {
-      text: ""
+      text: "",
     },
     mapNavigation: {
-      mapNavigation: { ...commonChartOptions.mapNavigation }
+      mapNavigation: { ...commonChartOptions.mapNavigation },
     },
     legend: {
-      ...mapLegend
+      ...mapLegend,
     },
     colorAxis: {
       dataClasses: [
         {
+          from: -1,
           to: 50,
           color: "red",
           count: below_50,
-          legendName: "<50%"
+          legendName: "<50%",
         },
         {
           from: 50.1,
           to: 89.9,
           color: "yellow",
           count: between_50_to_89,
-          legendName: "50% - 89%"
+          legendName: "50% - 89%",
         },
         {
-          from: 90,
+          from: 89.9,
           color: "green",
           count: above_90,
-          legendName: ">=90%"
-        }
-      ]
+          legendName: ">=90%",
+        },
+      ],
     },
 
     tooltip: {
-      ...commonChartOptions.mapTooltip
+      ...commonChartOptions.mapTooltip,
     },
 
     series: [
@@ -137,10 +143,10 @@ export const vaccineAnnualizedCoverage = (
         borderWidth: 0.5,
         states: {
           hover: {
-            color: "#a4edba"
-          }
-        }
-      }
-    ]
+            color: "#a4edba",
+          },
+        },
+      },
+    ],
   };
 };
