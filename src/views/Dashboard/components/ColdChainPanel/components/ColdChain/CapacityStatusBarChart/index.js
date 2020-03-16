@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from "react";
-
 // Highcharts for time series test
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
@@ -8,34 +7,22 @@ import HighchartsReact from "highcharts-react-official";
 import { Chart } from "../../../../../../../components";
 
 // Chart Template
-import { StockBalancesPieChartTemplate } from "./chart";
+import { CapacityStatusBarChartTemplate } from "./chart";
 
-const StockBalancesPieChart = ({
-  data,
-  isLoading,
-  endMonth,
-  startMonth,
-  district,
-  vaccine,
-}) => {
+const CapacityStatusBarChart = ({ data, isLoading, district }) => {
   const [chart, setChart] = useState();
 
   useMemo(() => {
     if (data && data) {
-      setChart(
-        StockBalancesPieChartTemplate(
-          data,
-          endMonth,
-          startMonth,
-          district,
-          vaccine
-        )
-      );
+      setChart(CapacityStatusBarChartTemplate(data, district));
     }
-  }, [data, endMonth, startMonth, district, vaccine]);
+  }, [data, district]);
 
   return (
     <Chart
+      title={`Storage capacity in litres ${
+        district === "national" ? "at National Level" : "in " + district
+      }`}
       chart={
         <HighchartsReact highcharts={Highcharts} options={chart && chart} />
       }
@@ -45,4 +32,4 @@ const StockBalancesPieChart = ({
   );
 };
 
-export default StockBalancesPieChart;
+export default CapacityStatusBarChart;

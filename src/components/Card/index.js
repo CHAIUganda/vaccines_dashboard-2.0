@@ -12,22 +12,21 @@ import LocalConvenienceStoreIcon from "@material-ui/icons/LocalConvenienceStore"
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
-    padding: theme.spacing(2, 2)
-    // height: "50%"
+    padding: theme.spacing(2, 2),
+    height: "auto"
   },
   text: {
     color: "#28354A",
     opacity: "100%",
-    fontSize: "xx-large",
+    fontWeight: 400,
     float: "left"
   },
   metric: {
     color: "#28354A",
-    fontSize: 60,
-    fontWeight: "bolder",
+    fontSize: 40,
     float: "left",
-    marginTop: "-30px",
-    marginBottom: "-20px"
+    marginBottom: "-20px",
+    letterSpacing: "inherit"
   },
   icon: {
     color: "#6F85FC",
@@ -35,6 +34,12 @@ const useStyles = makeStyles(theme => ({
     float: "right",
     marginTop: 20,
     marginRight: 10
+  },
+  metricSubtitle: {
+    fontSize: "initial",
+    marginTop: "-40px",
+    marginLeft: "3px",
+    color: "blue"
   }
 }));
 
@@ -65,17 +70,62 @@ const CustomCardPaper = props => {
             </Typography>
             <Typography component="div">
               <Grid container spacing={3}>
-                <Grid item xs={7}>
+                <Grid item xs={9}>
                   <Typography
                     variant="overline"
                     display="block"
-                    className={classes.metric}
+                    className={
+                      props.metric2 === undefined ? classes.metric : ""
+                    }
                   >
-                    {props.metric}
-                    {showPercentage ? <>%</> : <> </>}
+                    <Grid container spacing={1}>
+                      {props.metric2 === undefined ? (
+                        <>
+                          <Grid item xs={12}>
+                            {props.metric}
+                            {showPercentage ? <>%</> : <> </>}
+                          </Grid>
+                        </>
+                      ) : (
+                        <>
+                          <Grid item xs={6} className={classes.metric}>
+                            <Grid
+                              container
+                              direction="column"
+                              justify="space-evenly"
+                              alignItems="flex-start"
+                            >
+                              <Grid item>
+                                {props.metric}
+                                {showPercentage ? <>%</> : <> </>}
+                              </Grid>
+                              <Grid item className={classes.metricSubtitle}>
+                                DVS
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                          <Grid item xs={6} className={classes.metric}>
+                            <Grid
+                              container
+                              direction="column"
+                              justify="space-evenly"
+                              alignItems="flex-start"
+                            >
+                              <Grid item>
+                                {props.metric2}
+                                {showPercentage ? <>%</> : <> </>}
+                              </Grid>
+                              <Grid item className={classes.metricSubtitle}>
+                                HF
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        </>
+                      )}
+                    </Grid>
                   </Typography>
                 </Grid>
-                <Grid item xs={5}>
+                <Grid item xs={3}>
                   <LocalConvenienceStoreIcon className={classes.icon} />
                 </Grid>
               </Grid>

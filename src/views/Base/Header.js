@@ -4,24 +4,16 @@ import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import MailIcon from "@material-ui/icons/Mail";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import { Grid } from "@material-ui/core";
 
 // Material icons
@@ -236,7 +228,7 @@ function Header(props) {
           icon={<BusinessIcon className={classes.verticalIcon} />}
           href="/cold-chain"
           {...a11yProps(3)}
-          disabled={true}
+          disabled={false}
         />
       </Tabs>
     </div>
@@ -330,7 +322,7 @@ function Header(props) {
                   label="Cold Chain"
                   href="/cold-chain"
                   {...a11yProps(3)}
-                  disabled={true}
+                  disabled={false}
                 />
                 <LinkTab
                   classes={{

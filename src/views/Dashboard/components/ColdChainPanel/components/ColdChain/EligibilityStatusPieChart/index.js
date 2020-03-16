@@ -7,35 +7,37 @@ import HighchartsReact from "highcharts-react-official";
 import { Chart } from "../../../../../../../components";
 
 // Chart Template
-import { FunctionalityStatusBarChartTemplate } from "./chart";
+import { EligibilityStatusPieChartTemplate } from "./chart";
 
-const FunctionalityStatusBarChart = ({
+const EligibilityStatusPieChart = ({
   data,
   isLoading,
   district,
   careLevel,
-  startYearHalf,
-  endYearHalf
+  startQuarter,
+  endQuarter
 }) => {
   const [chart, setChart] = useState();
 
   useMemo(() => {
     if (data && data) {
       setChart(
-        FunctionalityStatusBarChartTemplate(
+        EligibilityStatusPieChartTemplate(
           data,
           district,
           careLevel,
-          startYearHalf,
-          endYearHalf
+          startQuarter,
+          endQuarter
         )
       );
     }
-  }, [data, district, careLevel, startYearHalf, endYearHalf]);
+  }, [data, district, careLevel, startQuarter, endQuarter]);
 
   return (
     <Chart
-      title={`Working status of fridges in ${district}`}
+      title={`Eligible facilities ${
+        district === "national" ? "at National Level" : "in " + district
+      }`}
       chart={
         <HighchartsReact highcharts={Highcharts} options={chart && chart} />
       }
@@ -45,4 +47,4 @@ const FunctionalityStatusBarChart = ({
   );
 };
 
-export default FunctionalityStatusBarChart;
+export default EligibilityStatusPieChart;

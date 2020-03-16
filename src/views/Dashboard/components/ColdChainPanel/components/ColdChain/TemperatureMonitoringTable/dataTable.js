@@ -1,10 +1,6 @@
 import React, { forwardRef } from "react";
 
-import Paper from "@material-ui/core/Paper";
 import MaterialTable from "material-table";
-
-// Import common styles
-import { useStyles } from "../../../../styles";
 
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
@@ -21,6 +17,8 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
+
+import { useStyles } from "../../../../styles";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -43,67 +41,52 @@ const tableIcons = {
   Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
   SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-export const DataTable = ({ data }) => {
+export const DataTable = ({ data = [], year, isLoading }) => {
   const classes = useStyles();
+  const title = `Total number of freeze and heat alarms ${"at National Level"} for ${year}`;
 
   const columns = [
     {
-      field: "district",
+      field: "district__name",
       title: "District",
-      cellStyle: rowData => ({ fontSize: 13 }),
+      cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData => rowData.district.replace(/ District/g, "")
+      render: (rowData) => rowData.district__name.replace(/ District/g, ""),
     },
     {
-      field: "total_cce",
-      title: "Existing Equipment",
-      cellStyle: rowData => ({ fontSize: 13 }),
+      field: "heat_alarm_value",
+      title: "Heat Alarms",
+      cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData =>
-        new Intl.NumberFormat("lg-UG").format(rowData.total_cce)
+      render: (rowData) =>
+        new Intl.NumberFormat("lg-UG").format(rowData.heat_alarm_value),
     },
     {
-      field: "working",
-      title: "Working Equipment",
-      cellStyle: rowData => ({ fontSize: 13 }),
+      field: "freeze_alarm_value",
+      title: "Freeze Alarms",
+      cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData => new Intl.NumberFormat("lg-UG").format(rowData.working)
+      render: (rowData) =>
+        new Intl.NumberFormat("lg-UG").format(rowData.freeze_alarm_value),
     },
-    {
-      field: "not_working",
-      title: "Not Working",
-      cellStyle: rowData => ({ fontSize: 13 }),
-      headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData =>
-        new Intl.NumberFormat("lg-UG").format(rowData.not_working)
-    },
-    {
-      field: "needs_repair",
-      title: "Needs Maintenance",
-      cellStyle: rowData => ({ fontSize: 13 }),
-      headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData =>
-        new Intl.NumberFormat("lg-UG").format(rowData.needs_repair)
-    }
   ];
   return (
-    <Paper className={classes.tableRoot}>
-      <MaterialTable
-        title={" "}
-        // Filter out statisticts key
-        data={data && Object.values(data).filter(v => !v.statistics)}
-        columns={columns}
-        icons={tableIcons}
-        options={
-          ({
-            sorting: true
-          },
-          { exportButton: true })
-        }
-      />
-    </Paper>
+    <MaterialTable
+      title={<h3 className={classes.tableTitle}>{title}</h3>}
+      isLoading={isLoading}
+      data={data}
+      columns={columns}
+      icons={tableIcons}
+      options={
+        ({
+          sorting: true,
+        },
+        { exportButton: true },
+        { pageSize: 7 })
+      }
+    />
   );
 };

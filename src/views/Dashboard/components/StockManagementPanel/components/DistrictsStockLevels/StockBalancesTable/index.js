@@ -17,7 +17,7 @@ import { useStyles } from "../../../../styles";
 import { Chart } from "../../../../../../../components";
 import { DataTable } from "./dataTable";
 
-const TabStyle = withStyles(theme => ({
+const TabStyle = withStyles((theme) => ({
   root: {
     padding: "1rem 0",
     textTransform: "none",
@@ -26,17 +26,17 @@ const TabStyle = withStyles(theme => ({
     "&:hover": {
       backgroundColor: "#FC6F6F",
       color: "black",
-      opacity: 1
+      opacity: 1,
     },
     "&$selected": {
       backgroundColor: "#FC6F6F",
       color: "#28354A",
       fontWeight: theme.typography.fontWeightMedium,
-      fontSize: 12
-    }
+      fontSize: 12,
+    },
   },
-  selected: {}
-}))(props => <Tab {...props} />);
+  selected: {},
+}))((props) => <Tab {...props} />);
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -58,7 +58,7 @@ function TabPanel(props) {
 function a11yProps(index) {
   return {
     id: `districts-stock-levels-tab-${index}`,
-    "aria-controls": `districts-stock-levels-tabpanel-${index}`
+    "aria-controls": `districts-stock-levels-tabpanel-${index}`,
   };
 }
 
@@ -172,7 +172,6 @@ const StockBalancesTable = ({ data, vaccine, endMonth, isLoading }) => {
           </TabPanel>
         </>
       }
-      isLoading={isLoading && isLoading}
     />
   );
 };

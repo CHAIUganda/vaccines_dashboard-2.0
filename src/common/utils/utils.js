@@ -1,37 +1,37 @@
 // Various utility functions for graphs
 const _ = require("underscore");
 
-const getYearFromData = data => {
+const getYearFromData = (data) => {
   // Years returned as 201902 (year + period)
   // We map the period, cast it to string and remove the period and return unique years
-  const periods = data.map(period => String(period.period).slice(0, -2));
+  const periods = data.map((period) => String(period.period).slice(0, -2));
   const years = [...new Set(periods)];
   return years;
 };
 
-const getMonthFromPeriod = period => {
+const getMonthFromPeriod = (period) => {
   period = period.toString();
   return Number(period.substr(4, 2));
 };
 
-const getYearFromPeriod = period => {
+const getYearFromPeriod = (period) => {
   period = period.toString();
   return Number(period.substr(0, 4));
 };
 
-const getPeriodsFromData = data => {
-  const periods = [...new Set(data.map(p => p.period))];
+const getPeriodsFromData = (data) => {
+  const periods = [...new Set(data.map((p) => p.period))];
 
   return periods;
 };
 
-const getYearRangeFromData = periodRangesData => {
+const getYearRangeFromData = (periodRangesData) => {
   const years = periodRangesData.years;
 };
 
-const getMonthsFromPeriod = periods => {
+const getMonthsFromPeriod = (periods) => {
   const months = [];
-  periods.forEach(uniquePeriod => {
+  periods.forEach((uniquePeriod) => {
     uniquePeriod = uniquePeriod.toString();
     months.push(Number(uniquePeriod.substr(4, 2)));
   });
@@ -52,7 +52,7 @@ const getMonthsFromPeriodNumber = (months, yearType) => {
     "Sept",
     "Oct",
     "Nov",
-    "Dec"
+    "Dec",
   ];
   const monthsFinancialYear = [
     "",
@@ -67,11 +67,11 @@ const getMonthsFromPeriodNumber = (months, yearType) => {
     "Mar",
     "Apr",
     "May",
-    "Jun"
+    "Jun",
   ];
   const monthsToReturn = [];
 
-  months.forEach(month => {
+  months.forEach((month) => {
     yearType === "CY"
       ? monthsToReturn.push(monthsInYear[month])
       : monthsToReturn.push(monthsFinancialYear[month]);
@@ -82,9 +82,9 @@ const getMonthsFromPeriodNumber = (months, yearType) => {
 
 const aggregateData = (data, vaccine, fieldToAggregate) => {
   let aggregateData = [];
-  const periods = [...new Set(data.map(p => p.period))];
+  const periods = [...new Set(data.map((p) => p.period))];
 
-  periods.forEach(uniquePeriod => {
+  periods.forEach((uniquePeriod) => {
     let periodTotal = data
       .filter(({ period }) => period === uniquePeriod)
       .filter(({ vaccine__name }) => vaccine__name === vaccine)
@@ -128,21 +128,21 @@ const getMonthIndexFromPeriod = (period, yearType) => {
   }
 };
 
-const getActiveDoseNumber = activeDose => {
+const getActiveDoseNumber = (activeDose) => {
   if (activeDose !== undefined)
     return Number(activeDose.substr(activeDose.length - 1, 1));
   return 0;
 };
 
-const fillMissingValues = values => {
+const fillMissingValues = (values) => {
   var monthIndexes = _.range(1, 13);
-  var existingIndexes = values.map(item => {
+  var existingIndexes = values.map((item) => {
     return item.x;
   });
-  var newIndexes = monthIndexes.filter(v => {
+  var newIndexes = monthIndexes.filter((v) => {
     return existingIndexes.indexOf(v) < 0;
   });
-  newIndexes.forEach(monthIndex => {
+  newIndexes.forEach((monthIndex) => {
     values.push({ x: monthIndex, y: 0 });
   });
   return values.sort((a, b) => {
@@ -188,7 +188,7 @@ const aggregateYearAntigenData = (data, vaccineName) => {
         totalThirdDose: 0,
         totalLastDose: 0,
         totalPlanned: 0,
-        totalSecondDose: 0
+        totalSecondDose: 0,
       };
 
     acc[vaccine][year].totalActual += item.total_actual;
@@ -226,27 +226,27 @@ const aggregateYearAntigenData = (data, vaccineName) => {
       chartData.push({
         name: "Dose 1",
         data: vaccineData.cR1,
-        maxPointWidth: 50
+        maxPointWidth: 50,
       });
 
       if (["PENTA", "PCV", "OPV", "HPV", "TT"].includes(vaccine))
         chartData.push({
           name: "Dose 2",
           data: vaccineData.cR2,
-          maxPointWidth: 50
+          maxPointWidth: 50,
         });
 
       if (["PENTA", "PCV", "OPV", "DPT"].includes(vaccineName))
         chartData.push({
           name: "Dose 3",
           data: vaccineData.cR3,
-          maxPointWidth: 50
+          maxPointWidth: 50,
         });
     } else {
       chartData.push({
         name: vaccine,
         data: vaccineData.cR,
-        maxPointWidth: 50
+        maxPointWidth: 50,
       });
     }
   }
@@ -255,7 +255,7 @@ const aggregateYearAntigenData = (data, vaccineName) => {
 };
 
 const getChartData = (
-  data,
+  data = [],
   startYear,
   endYear,
   reportYear,
@@ -309,7 +309,7 @@ const getChartData = (
         second_dose: 0,
         third_dose: 0,
         last_dose: 0,
-        planned: 0
+        planned: 0,
       };
       redCategoryTotals[yearLabel][vaccine] = {};
     }
@@ -321,18 +321,24 @@ const getChartData = (
       redCategoryTotals[yearLabel][vaccine][district] = {
         first_dose: 0,
         last_dose: 0,
-        planned: 0
+        planned: 0,
       };
     }
 
     if (cumulative) {
+      let combinedPlanned = 0;
+      let combinedFirstDose = 0;
+      let combinedSecondDose = 0;
+      let combinedThirdDose = 0;
+
+      let combinedLastDose = 0;
       if (path === "redcategory") {
-        var combinedFirstDose =
+        combinedFirstDose =
           redCategoryTotals[yearLabel][vaccine][district].first_dose +
           first_dose;
-        var combinedLastDose =
+        combinedLastDose =
           redCategoryTotals[yearLabel][vaccine][district].last_dose + last_dose;
-        var combinedPlanned =
+        combinedPlanned =
           redCategoryTotals[yearLabel][vaccine][district].planned + planned;
 
         redCategoryTotals[yearLabel][vaccine][
@@ -345,14 +351,12 @@ const getChartData = (
           district
         ].planned = combinedPlanned;
       } else {
-        var combinedFirstDose =
-          totals[yearLabel][vaccine].first_dose + first_dose;
-        var combinedLastDose = totals[yearLabel][vaccine].last_dose + last_dose;
-        var combinedSecondDose =
+        combinedFirstDose = totals[yearLabel][vaccine].first_dose + first_dose;
+        combinedLastDose = totals[yearLabel][vaccine].last_dose + last_dose;
+        combinedSecondDose =
           totals[yearLabel][vaccine].second_dose + second_dose;
-        var combinedThirdDose =
-          totals[yearLabel][vaccine].third_dose + third_dose;
-        var combinedPlanned = totals[yearLabel][vaccine].planned + planned;
+        combinedThirdDose = totals[yearLabel][vaccine].third_dose + third_dose;
+        combinedPlanned = totals[yearLabel][vaccine].planned + planned;
 
         totals[yearLabel][vaccine].first_dose = combinedFirstDose;
         totals[yearLabel][vaccine].last_dose = combinedLastDose;
@@ -366,7 +370,7 @@ const getChartData = (
           first: combinedFirstDose,
           second: combinedSecondDose,
           third: combinedThirdDose,
-          last: combinedLastDose
+          last: combinedLastDose,
         },
         combinedPlanned,
         path,
@@ -378,7 +382,7 @@ const getChartData = (
           first: first_dose,
           second: second_dose,
           third: third_dose,
-          last: last_dose
+          last: last_dose,
         },
         planned,
         path,
@@ -400,7 +404,7 @@ const getChartData = (
     } else {
       periodValues[yearLabel][vaccine].push({
         x: monthIndex,
-        y: rate
+        y: rate,
       });
     }
   }
@@ -408,14 +412,14 @@ const getChartData = (
   let chartData = [];
 
   if (path === "redcategory") {
-    let getRedCategoryValues = function(
+    let getRedCategoryValues = function (
       monthIndex,
       catDistricts,
       totalDistricts
     ) {
       return {
         x: Number(monthIndex),
-        y: (catDistricts / totalDistricts) * 100
+        y: (catDistricts / totalDistricts) * 100,
       };
     };
 
@@ -430,7 +434,7 @@ const getChartData = (
       1: [],
       2: [],
       3: [],
-      4: []
+      4: [],
     };
 
     for (let yearLabel in redCategoryValues) {
@@ -465,22 +469,22 @@ const getChartData = (
     chartData.push({
       name: "CAT1",
       color: "DarkGreen",
-      data: fillMissingValues(categoryValues[1])
+      data: fillMissingValues(categoryValues[1]),
     });
     chartData.push({
       name: "CAT2",
       color: "Yellow",
-      data: fillMissingValues(categoryValues[2])
+      data: fillMissingValues(categoryValues[2]),
     });
     chartData.push({
       name: "CAT3",
       color: "Orange",
-      data: fillMissingValues(categoryValues[3])
+      data: fillMissingValues(categoryValues[3]),
     });
     chartData.push({
       name: "CAT4",
       color: "Red",
-      data: fillMissingValues(categoryValues[4])
+      data: fillMissingValues(categoryValues[4]),
     });
   } else {
     // Check if we have data
@@ -544,5 +548,5 @@ export {
   generateChartTitle,
   getYearRangeFromData,
   aggregateYearAntigenData,
-  getChartData
+  getChartData,
 };

@@ -1,7 +1,7 @@
 // Chart Options
 import {
   commonChartOptions,
-  commonChartPlotOptions
+  commonChartPlotOptions,
 } from "../../../../../../../common/chartOptions/chartOptions";
 
 // Utility functions
@@ -28,7 +28,7 @@ export const antigensAnnualizedCoverageCY = (
     "Sept",
     "Oct",
     "Nov",
-    "Dec"
+    "Dec",
   ];
 
   let chartData;
@@ -72,50 +72,50 @@ export const antigensAnnualizedCoverageCY = (
 
   return {
     credits: {
-      ...commonChartOptions.credits
+      ...commonChartOptions.credits,
     },
 
     chart: {
-      ...(district.length === 1 ? { height: 50 + "%" } : { height: 28 + "%" })
+      ...(district.length === 1 ? { height: 50 + "%" } : { height: 28 + "%" }),
     },
     exporting: {
       ...commonChartOptions.exporting,
       chartOptions: {
         ...commonChartOptions.exporting.chartOptions,
         title: {
-          text: `Trend of Annualized Coverage of antigens for ${startYear} Calendar Year`
-        }
-      }
+          text: `Trend of Annualized Coverage of antigens for ${startYear} Calendar Year`,
+        },
+      },
     },
 
     title: {
-      text: ""
+      text: "",
     },
     xAxis: {
       categories: monthsInYear,
       labels: {
-        ...commonChartOptions.labels
-      }
+        ...commonChartOptions.labels,
+      },
     },
     tooltip: {
-      ...commonChartOptions.lineTooltip
+      ...commonChartOptions.lineTooltip,
     },
 
     yAxis: {
       title: {
-        text: "Percentage (%)"
+        text: "Percentage (%)",
       },
       labels: {
-        ...commonChartOptions.labels
+        ...commonChartOptions.labels,
       },
-      min: 0
+      min: 0,
     },
     plotOptions: {
       line: {
-        ...commonChartPlotOptions.plotOptions.line
-      }
+        ...commonChartPlotOptions.plotOptions.line,
+      },
     },
-    series: [...chartData]
+    series: [...chartData],
   };
 };
 
@@ -140,7 +140,7 @@ export const antigensAnnualizedCoverageFY = (
     "Mar",
     "Apr",
     "May",
-    "Jun"
+    "Jun",
   ];
 
   const chartData = getChartData(
@@ -156,45 +156,45 @@ export const antigensAnnualizedCoverageFY = (
   return {
     ...commonChartOptions,
     chart: {
-      ...(district.length === 1 ? { height: 50 + "%" } : { height: 28 + "%" })
+      ...(district.length === 1 ? { height: 50 + "%" } : { height: 28 + "%" }),
     },
     exporting: {
       ...commonChartOptions.exporting,
       chartOptions: {
         ...commonChartOptions.exporting.chartOptions,
         title: {
-          text: `Trend of Annualized Coverage of antigens for ${startYear} Financial Year`
-        }
-      }
+          text: `Trend of Annualized Coverage of antigens for ${startYear} Financial Year`,
+        },
+      },
     },
     title: {
-      text: ""
+      text: "",
     },
     xAxis: {
       categories: monthsFinancialYear,
       labels: {
-        ...commonChartOptions.labels
-      }
+        ...commonChartOptions.labels,
+      },
     },
 
     tooltip: {
-      ...commonChartOptions.tooltip
+      ...commonChartOptions.tooltip,
     },
 
     yAxis: {
       title: {
-        text: "Percentage (%)"
+        text: "Percentage (%)",
       },
       min: 0,
       labels: {
-        ...commonChartOptions.labels
-      }
+        ...commonChartOptions.labels,
+      },
     },
     plotOptions: {
       line: {
-        ...commonChartPlotOptions.plotOptions.line
-      }
+        ...commonChartPlotOptions.plotOptions.line,
+      },
     },
-    series: [...chartData]
+    series: [...chartData],
   };
 };

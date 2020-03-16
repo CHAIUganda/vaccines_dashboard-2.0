@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from "react";
-
 // Highcharts for time series test
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
@@ -8,34 +7,36 @@ import HighchartsReact from "highcharts-react-official";
 import { Chart } from "../../../../../../../components";
 
 // Chart Template
-import { StockBalancesPieChartTemplate } from "./chart";
+import { FunctionalityStatusBarChartTemplate } from "./chart";
 
-const StockBalancesPieChart = ({
+const FunctionalityStatusBarChart = ({
   data,
   isLoading,
-  endMonth,
-  startMonth,
   district,
-  vaccine,
+  careLevel,
+  startYearHalf,
+  endYearHalf
 }) => {
   const [chart, setChart] = useState();
-
   useMemo(() => {
     if (data && data) {
       setChart(
-        StockBalancesPieChartTemplate(
+        FunctionalityStatusBarChartTemplate(
           data,
-          endMonth,
-          startMonth,
           district,
-          vaccine
+          careLevel,
+          startYearHalf,
+          endYearHalf
         )
       );
     }
-  }, [data, endMonth, startMonth, district, vaccine]);
+  }, [data, district, careLevel, startYearHalf, endYearHalf]);
 
   return (
     <Chart
+      title={`Working status of fridges ${
+        district === "national" ? "at National Level" : "in " + district
+      }`}
       chart={
         <HighchartsReact highcharts={Highcharts} options={chart && chart} />
       }
@@ -45,4 +46,4 @@ const StockBalancesPieChart = ({
   );
 };
 
-export default StockBalancesPieChart;
+export default FunctionalityStatusBarChart;

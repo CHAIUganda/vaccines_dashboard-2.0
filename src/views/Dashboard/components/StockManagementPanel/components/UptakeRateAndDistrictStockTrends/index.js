@@ -20,7 +20,7 @@ export default function UptakeRateAndDistrictStockTrends(props) {
     isLoading,
     vaccine,
     district,
-    tab
+    tab,
   } = props;
 
   return (
@@ -28,31 +28,29 @@ export default function UptakeRateAndDistrictStockTrends(props) {
       <Grid item xs={12}>
         <Paper className={classes.paper} elevation={0}>
           <Grid item lg={12} md={12} xl={12} xs={12}>
-            <div className={classes.chartDiv}>
-              {tab === "uptake-rate" ? (
-                <>
-                  <UptakeRateChart
-                    data={data && data}
-                    startMonth={startMonth && startMonth}
-                    endMonth={endMonth && endMonth}
-                    isLoading={isLoading && isLoading}
-                    vaccine={vaccine && vaccine}
-                    district={district && district}
-                  />
-                </>
-              ) : (
-                <>
-                  <DistrictStockTrendsChart
-                    data={data && data}
-                    startMonth={startMonth && startMonth}
-                    endMonth={endMonth && endMonth}
-                    isLoading={isLoading && isLoading}
-                    vaccine={vaccine && vaccine}
-                    district={district && district}
-                  />
-                </>
-              )}
-            </div>
+            {tab === "uptake-rate" ? (
+              <>
+                <UptakeRateChart
+                  data={data && data}
+                  startMonth={startMonth && startMonth}
+                  endMonth={endMonth && endMonth}
+                  isLoading={isLoading && isLoading}
+                  vaccine={vaccine && vaccine}
+                  district={district && district}
+                />
+              </>
+            ) : (
+              <>
+                <DistrictStockTrendsChart
+                  data={data && data}
+                  startMonth={startMonth && startMonth}
+                  endMonth={endMonth && endMonth}
+                  isLoading={isLoading && isLoading}
+                  vaccine={vaccine && vaccine}
+                  district={district && district}
+                />
+              </>
+            )}
           </Grid>
         </Paper>
       </Grid>
