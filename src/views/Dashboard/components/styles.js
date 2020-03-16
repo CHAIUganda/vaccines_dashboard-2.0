@@ -61,8 +61,7 @@ const useStyles = makeStyles(theme => ({
     color: "#28354A",
     fontSize: "x-large",
     marginTop: "-15px",
-    marginLeft: "-15px",
-    backgroundColor: "white"
+    marginLeft: "-15px"
   },
   selectorLables2: {
     color: "#28354A",

@@ -2,8 +2,6 @@ import React from "react";
 
 // Material components
 import { CssBaseline } from "@material-ui/core";
-import { Container } from "@material-ui/core";
-import { Box } from "@material-ui/core";
 
 // import Sidebar from "./Sidebar";
 import Header from "./Header";
@@ -21,20 +19,11 @@ export default function BaseLayout(props) {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Header onChange={props.onChange} value={props.value} />
-
-      <Container
-        maxWidth={false}
-        disableGutters
-        fixed
-        style={{
-          paddingLeft: 100,
-          paddingRight: 100,
-          backgroundColor: "#F5F5F5"
-        }}
-      >
-        {props.children}
-      </Container>
+      <Header
+        onChange={props.onChange}
+        value={props.value}
+        content={props.children}
+      />
     </div>
   );
 }
