@@ -148,15 +148,19 @@ const BootstrapInput = withStyles(theme => ({
 export function CoveragePanel() {
   const classes = useStyles();
   const [value, setValue] = useState(0);
-  const [endYear, setEndYear] = useState(years.slice(-4)[0]);
+  const [endYear, setEndYear] = useState(years[0]);
   const [district, setDistrict] = useState("National");
+
+  console.log(years[0]);
 
   // -----------------------------------------------------------------------
   // Coverage By Month state data
   // -----------------------------------------------------------------------
   const [coverageByMonthStartYear, setCoverageByMonthStartYear] = useState(
-    years[1]
+    years[0]
   );
+
+  console.log(coverageByMonthStartYear);
 
   const [coverageByMonthVaccine, setCoverageByMonthVaccine] = useState(
     VACCINES[0]
@@ -178,7 +182,7 @@ export function CoveragePanel() {
   // -----------------------------------------------------------------------
 
   const [coverageByYearStartYear, setCoverageByYearStartYear] = useState(
-    years[1]
+    years[0]
   );
 
   const [coverageByYearEndYear, setCoverageByYearEndYear] = useState(years[1]);
@@ -203,7 +207,7 @@ export function CoveragePanel() {
   // -----------------------------------------------------------------------
 
   const [coverageDropoutRateYear, setCoverageDropoutrateYear] = useState(
-    years[1]
+    years[0]
   );
   const [coverageDropoutRateVaccine, setCoverageDropoutrateVaccine] = useState(
     VACCINES[0]
@@ -227,7 +231,7 @@ export function CoveragePanel() {
   // Redcategory state data
   // -----------------------------------------------------------------------
   const [coverageRedCategoryYear, setCoverageRedCategoryYear] = useState(
-    years[1]
+    years[0]
   );
 
   const [coverageRedCategoryVaccine, setCoverageRedCategoryVaccine] = useState(
