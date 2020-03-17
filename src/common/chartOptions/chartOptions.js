@@ -28,6 +28,28 @@ const commonChartOptions = {
     fallbackToExportServer: false
   },
 
+  exportingMap: {
+    scale: 2,
+    width: 1200,
+    chartOptions: {
+      plotOptions: {
+        series: {
+          dataLabels: {
+            enabled: true,
+            color: "#FFFFFF",
+            style: {
+              fontSize: "3px"
+            },
+            format: null,
+            formatter: function() {
+              return this.point.properties["DName2018"];
+            }
+          }
+        }
+      }
+    }
+  },
+
   // Axis labels
   labels: {
     style: {

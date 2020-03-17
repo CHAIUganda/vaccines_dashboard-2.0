@@ -67,25 +67,16 @@ export const vaccineAnnualizedCoverage = (
       height: 74 + "%"
     },
     exporting: {
-      scale: 2,
-      width: 1200,
-      chartOptions: {
-        plotOptions: {
-          series: {
-            dataLabels: {
-              enabled: true,
-              format: "{point.value:.0f} %"
-            }
-          }
-        },
-        title: {
-          text: `${tabTitle === "Annualized (CY)" ||
-            tabTitle === "Annualized (FY)"} Coverage of ${
-            vaccineName === "ALL" ? "PENTA3" : vaccineName
-          } for ${startYear}`
-        }
+      ...commonChartOptions.exportingMap,
+      title: {
+        text: `${
+          tabTitle === "Annualized (CY)" || tabTitle === "Annualized (FY)"
+            ? "Annualized"
+            : "Monthly"
+        } Coverage of ${
+          vaccineName === "ALL" ? "PENTA3" : vaccineName
+        } for ${startYear}`
       },
-
       buttons: {
         ...commonChartOptions.exporting.buttons
       },
@@ -134,7 +125,7 @@ export const vaccineAnnualizedCoverage = (
         keys: ["DName2018", "value"],
         joinBy: "DName2018",
         borderColor: "grey",
-        borderWidth: 0.5,
+        borderWidth: 1,
         states: {
           hover: {
             color: "#a4edba"
