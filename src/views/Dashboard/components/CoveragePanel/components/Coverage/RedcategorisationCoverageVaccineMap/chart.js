@@ -63,23 +63,15 @@ export const redcategorisationCoverageMap = (
       height: 74 + "%"
     },
     exporting: {
-      scale: 2,
-      width: 1200,
-      chartOptions: {
-        plotOptions: {
-          series: {
-            dataLabels: {
-              enabled: true,
-              format: "{point.value:.0f}"
-            }
-          }
-        },
-        title: {
-          text: `${tabTitle === "Annualized (CY)" ||
-            tabTitle === "Annualized (FY)"} Red Categorization of ${
-            vaccineName === "ALL" ? "PENTA3" : vaccineName
-          } for ${endYear}`
-        }
+      ...commonChartOptions.exportingMap,
+      title: {
+        text: `${
+          tabTitle === "Annualized (CY)" || tabTitle === "Annualized (FY)"
+            ? "Annualized"
+            : "Monthly"
+        } Red Categorization of ${
+          vaccineName === "ALL" ? "PENTA3" : vaccineName
+        } for ${endYear}`
       },
       buttons: {
         ...commonChartOptions.exporting.buttons
@@ -137,7 +129,7 @@ export const redcategorisationCoverageMap = (
         keys: ["DName2018", "value"],
         joinBy: "DName2018",
         borderColor: "grey",
-        borderWidth: 0.5,
+        borderWidth: 1,
         states: {
           hover: {
             color: "#a4edba"
