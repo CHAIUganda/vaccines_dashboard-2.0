@@ -90,55 +90,57 @@ const getLastValue = (d, defaultValue) => {
 const getPeriodList = (data, endYear, tabTitle) => {
   const periodList = [];
 
-  if (tabTitle === "Monthly (CY)") {
-    periodList.push([endYear.toString(), getLastValue(data[endYear], 12)]);
-  } else if (tabTitle === "Monthly (FY)") {
-    const nextYear = endYear + 1;
-    let lastValue;
+  if (data && data) {
+    if (tabTitle === "Monthly (CY)") {
+      periodList.push([endYear.toString(), getLastValue(data[endYear], 12)]);
+    } else if (tabTitle === "Monthly (FY)") {
+      const nextYear = endYear + 1;
+      let lastValue;
 
-    if (nextYear in data) {
-      lastValue = getLastValue(data[nextYear], 6);
-      periodList.push([nextYear.toString(), lastValue]);
-    } else {
-      lastValue = getLastValue(data[endYear], 12);
-      periodList.push([endYear.toString(), lastValue]);
-    }
-  } else if (tabTitle === "Annualized (CY)") {
-    periodList.push.apply(
-      periodList,
-      getValuesInRange(
-        data,
-        endYear,
-        1,
-        endYear,
-        getLastValue(data[endYear], 12)
-      )
-    );
-  } else if (tabTitle === "Annualized (FY)") {
-    const nextYear = endYear + 1;
-
-    if (nextYear in data) {
+      if (nextYear in data) {
+        lastValue = getLastValue(data[nextYear], 6);
+        periodList.push([nextYear.toString(), lastValue]);
+      } else {
+        lastValue = getLastValue(data[endYear], 12);
+        periodList.push([endYear.toString(), lastValue]);
+      }
+    } else if (tabTitle === "Annualized (CY)") {
       periodList.push.apply(
         periodList,
         getValuesInRange(
           data,
           endYear,
-          7,
-          nextYear,
-          getLastValue(data[nextYear], 6)
-        )
-      );
-    } else {
-      periodList.push.apply(
-        periodList,
-        getValuesInRange(
-          data,
-          endYear,
-          7,
+          1,
           endYear,
           getLastValue(data[endYear], 12)
         )
       );
+    } else if (tabTitle === "Annualized (FY)") {
+      const nextYear = endYear + 1;
+
+      if (nextYear in data) {
+        periodList.push.apply(
+          periodList,
+          getValuesInRange(
+            data,
+            endYear,
+            7,
+            nextYear,
+            getLastValue(data[nextYear], 6)
+          )
+        );
+      } else {
+        periodList.push.apply(
+          periodList,
+          getValuesInRange(
+            data,
+            endYear,
+            7,
+            endYear,
+            getLastValue(data[endYear], 12)
+          )
+        );
+      }
     }
   }
 

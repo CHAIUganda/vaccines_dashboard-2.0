@@ -150,9 +150,6 @@ export function CoveragePanel() {
   const [value, setValue] = useState(0);
   const [endYear, setEndYear] = useState(years[0]);
   const [district, setDistrict] = useState("National");
-
-  console.log(years[0]);
-
   // -----------------------------------------------------------------------
   // Coverage By Month state data
   // -----------------------------------------------------------------------
