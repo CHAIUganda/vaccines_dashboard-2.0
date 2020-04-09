@@ -14,7 +14,7 @@ import { dropoutRateCoverageCY, dropoutRateCoverageFY } from "./chart";
 
 import { generateChartTitle } from "../../../../../../../common/utils/utils";
 
-const DropoutRateForAntigensChart = props => {
+const DropoutRateForAntigensChart = (props) => {
   const {
     data,
     tabTitle,
@@ -24,14 +24,12 @@ const DropoutRateForAntigensChart = props => {
     startYear,
     endYear,
     reportYear,
-    district
+    district,
   } = props;
 
   const [chart, setChart] = useState();
 
   const [chartTitle, setChartTitle] = useState();
-
-  console.log(vaccineName);
 
   useMemo(() => {
     if (data && data) {

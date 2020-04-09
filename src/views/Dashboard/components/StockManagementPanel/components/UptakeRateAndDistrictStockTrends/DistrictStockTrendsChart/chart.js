@@ -4,7 +4,7 @@ import Highcharts from "highcharts";
 // Chart Options
 import {
   commonChartOptions,
-  commonChartPlotOptions
+  commonChartPlotOptions,
 } from "../../../../../../../common/chartOptions/chartOptions";
 
 // Utility functions
@@ -32,35 +32,35 @@ export const districtStockTrendsChartTemplate = (
 
   return {
     credits: {
-      ...commonChartOptions.credits
+      ...commonChartOptions.credits,
     },
     chart: {
       type: "column",
-      ...commonChartOptions.chart
+      ...commonChartOptions.chart,
     },
     exporting: {
       ...commonChartOptions.exporting,
       chartOptions: {
         ...commonChartOptions.exporting.chartOptions,
         title: {
-          text: `${district} stock level monthly trends for ${vaccine}`
-        }
-      }
+          text: `${district} stock level monthly trends for ${vaccine}`,
+        },
+      },
     },
     title: {
-      text: ""
+      text: "",
     },
     xAxis: {
       type: "datetime",
       labels: {
-        ...commonChartOptions.labels
-      }
+        ...commonChartOptions.labels,
+      },
     },
     yAxis: {
       labels: {
-        ...commonChartOptions.labels
+        ...commonChartOptions.labels,
       },
-      min: 0
+      min: 0,
     },
     plotOptions: {
       column: {
@@ -72,12 +72,12 @@ export const districtStockTrendsChartTemplate = (
           rotation: -90,
           align: "right",
           format: "{y:,.0f}",
-          ...commonChartOptions.labels
-        }
-      }
+          ...commonChartOptions.labels,
+        },
+      },
     },
     tooltip: {
-      ...commonChartOptions.lineTooltip
+      ...commonChartOptions.lineTooltip,
     },
     legend: {
       layout: "vertical",
@@ -89,8 +89,8 @@ export const districtStockTrendsChartTemplate = (
       borderWidth: 1,
       backgroundColor:
         Highcharts.defaultOptions.legend.backgroundColor || "#FFFFFF",
-      shadow: true
+      shadow: true,
     },
-    series: [...chartData]
+    series: [...chartData],
   };
 };

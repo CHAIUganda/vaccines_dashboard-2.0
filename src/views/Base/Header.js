@@ -3,25 +3,16 @@ import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import MailIcon from "@material-ui/icons/Mail";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import { Grid } from "@material-ui/core";
 
 // Material icons
@@ -41,7 +32,7 @@ function LinkTab(props) {
   return (
     <Tab
       component="a"
-      onClick={event => {
+      onClick={(event) => {
         event.preventDefault();
       }}
       {...props}
@@ -53,57 +44,57 @@ function LinkTab(props) {
 function a11yProps(index) {
   return {
     id: `nav-tab-${index}`,
-    "aria-controls": `nav-tabpanel-${index}`
+    "aria-controls": `nav-tabpanel-${index}`,
   };
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex"
+    display: "flex",
   },
   drawer: {
     [theme.breakpoints.up("sm")]: {
       width: drawerWidth,
-      flexShrink: 0
-    }
+      flexShrink: 0,
+    },
   },
 
   appBar: {
     [theme.breakpoints.up("sm")]: {
       width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth
+      marginLeft: drawerWidth,
     },
-    height: 75
+    height: 75,
   },
   menuButton: {
     marginRight: theme.spacing(2),
     [theme.breakpoints.up("sm")]: {
-      display: "none"
-    }
+      display: "none",
+    },
   },
   //   toolbar: theme.mixins.toolbar,
   toolbar: {
-    minHeight: 75
+    minHeight: 75,
   },
   drawerPaper: {
     width: drawerWidth,
-    backgroundColor: "#28354A"
+    backgroundColor: "#28354A",
   },
   content: {
     flexGrow: 1,
     minHeight: "100vh",
     padding: theme.spacing(3),
-    backgroundColor: "#F5F5F5"
+    backgroundColor: "#F5F5F5",
   },
   flagStrip: {
     width: "auto",
     minHeight: "15px",
-    backgroundImage: `url(${FlagStripImage})`
+    backgroundImage: `url(${FlagStripImage})`,
   },
   courtOfArms: {
     width: 45,
     height: 45,
-    marginRight: 10
+    marginRight: 10,
   },
   //   ugandaMapLogo: {
   //     marginLeft: `calc(100% + ${drawerWidth}px)`
@@ -112,50 +103,50 @@ const useStyles = makeStyles(theme => ({
     color: "#28354A",
     flexDirection: "row",
     fontWeight: "fontWeightBold",
-    fontSize: 12
+    fontSize: 12,
   },
   iconSpacing: {
-    marginRight: 5
+    marginRight: 5,
   },
   grow: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   sectionDesktop: {
     display: "none",
     [theme.breakpoints.up("md")]: {
-      display: "flex"
-    }
+      display: "flex",
+    },
   },
   verticalIcon: {
     marginTop: 50,
     color: "white",
     fontSize: 40,
-    minWidth: 0
+    minWidth: 0,
   },
 
   dashboardIcon: {
     color: "white",
     fontSize: 40,
-    minWidth: 0
+    minWidth: 0,
   },
 
   verticalIconLabelWrapper: {
-    color: "white"
+    color: "white",
   },
   verticalBar: {
     backgroundColor: "#28354A",
     marginLeft: 0,
-    minHeight: "100%"
+    minHeight: "100%",
   },
 
   verticalLabelContainer: {
-    height: 100
+    height: 100,
   },
 
   verticalIconSpacing: {
     marginTop: 50,
-    minWidth: 0
-  }
+    minWidth: 0,
+  },
 }));
 
 function Header(props) {
@@ -181,7 +172,7 @@ function Header(props) {
           justifyContent: "center",
           alignItems: "center",
           display: "inline-flex",
-          minWidth: "100%"
+          minWidth: "100%",
         }}
       >
         <DashboardIcon className={classes.dashboardIcon} />
@@ -196,14 +187,14 @@ function Header(props) {
         aria-label="Dashboard navigation tabs"
         TabIndicatorProps={{
           style: {
-            height: "4px"
-          }
+            height: "4px",
+          },
         }}
       >
         <LinkTab
           classes={{
             verticalIconLabelWrapper: classes.verticalIconLabelWrapper,
-            verticalLabelContainer: classes.verticalLabelContainer
+            verticalLabelContainer: classes.verticalLabelContainer,
           }}
           icon={<HomeIcon className={classes.verticalIcon} />}
           href="/overview"
@@ -213,7 +204,7 @@ function Header(props) {
         <LinkTab
           classes={{
             verticalIconLabelWrapper: classes.verticalIconLabelWrapper,
-            verticalLabelContainer: classes.verticalLabelContainer
+            verticalLabelContainer: classes.verticalLabelContainer,
           }}
           icon={<PieChartIcon className={classes.verticalIcon} />}
           href="/coverage"
@@ -222,7 +213,7 @@ function Header(props) {
         <LinkTab
           classes={{
             verticalIconLabelWrapper: classes.verticalIconLabelWrapper,
-            verticalLabelContainer: classes.verticalLabelContainer
+            verticalLabelContainer: classes.verticalLabelContainer,
           }}
           icon={<LocalShippingIcon className={classes.verticalIcon} />}
           href="/stock-management"
@@ -231,12 +222,12 @@ function Header(props) {
         <LinkTab
           classes={{
             verticalIconLabelWrapper: classes.verticalIconLabelWrapper,
-            verticalLabelContainer: classes.verticalLabelContainer
+            verticalLabelContainer: classes.verticalLabelContainer,
           }}
           icon={<BusinessIcon className={classes.verticalIcon} />}
           href="/cold-chain"
           {...a11yProps(3)}
-          disabled={true}
+          disabled={false}
         />
       </Tabs>
     </div>
@@ -289,13 +280,13 @@ function Header(props) {
                 aria-label="Vaccine dashboard navigation tabs"
                 TabIndicatorProps={{
                   style: {
-                    height: "1px"
-                  }
+                    height: "1px",
+                  },
                 }}
               >
                 <LinkTab
                   classes={{
-                    wrapper: classes.iconLabelWrapper
+                    wrapper: classes.iconLabelWrapper,
                   }}
                   icon={<HomeIcon className={classes.iconSpacing} />}
                   label="Overview"
@@ -305,7 +296,7 @@ function Header(props) {
                 />
                 <LinkTab
                   classes={{
-                    wrapper: classes.iconLabelWrapper
+                    wrapper: classes.iconLabelWrapper,
                   }}
                   icon={<PieChartIcon className={classes.iconSpacing} />}
                   label="Coverage"
@@ -314,7 +305,7 @@ function Header(props) {
                 />
                 <LinkTab
                   classes={{
-                    wrapper: classes.iconLabelWrapper
+                    wrapper: classes.iconLabelWrapper,
                   }}
                   icon={<LocalShippingIcon className={classes.iconSpacing} />}
                   label="Stock Management"
@@ -324,17 +315,17 @@ function Header(props) {
                 />
                 <LinkTab
                   classes={{
-                    wrapper: classes.iconLabelWrapper
+                    wrapper: classes.iconLabelWrapper,
                   }}
                   icon={<BusinessIcon className={classes.iconSpacing} />}
                   label="Cold Chain"
                   href="/cold-chain"
                   {...a11yProps(3)}
-                  disabled={true}
+                  disabled={false}
                 />
                 <LinkTab
                   classes={{
-                    wrapper: classes.iconLabelWrapper
+                    wrapper: classes.iconLabelWrapper,
                   }}
                   icon={<TimelineIcon className={classes.iconSpacing} />}
                   label="Performance Management"
@@ -371,10 +362,10 @@ function Header(props) {
             open={mobileOpen}
             onClose={handleDrawerToggle}
             classes={{
-              paper: classes.drawerPaper
+              paper: classes.drawerPaper,
             }}
             ModalProps={{
-              keepMounted: true // Better open performance on mobile.
+              keepMounted: true, // Better open performance on mobile.
             }}
           >
             {drawer}
@@ -383,7 +374,7 @@ function Header(props) {
         <Hidden xsDown implementation="css">
           <Drawer
             classes={{
-              paper: classes.drawerPaper
+              paper: classes.drawerPaper,
             }}
             variant="permanent"
             open
@@ -410,7 +401,7 @@ Header.propTypes = {
    * Injected by the documentation to work in an iframe.
    * You won't need it on your project.
    */
-  container: PropTypes.any
+  container: PropTypes.any,
 };
 
 export default Header;

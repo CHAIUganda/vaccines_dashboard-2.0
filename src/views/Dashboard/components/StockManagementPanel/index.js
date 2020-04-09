@@ -16,7 +16,6 @@ import Paper from "@material-ui/core/Paper";
 import Tooltip from "@material-ui/core/Tooltip";
 import Chip from "@material-ui/core/Chip";
 import InputBase from "@material-ui/core/InputBase";
-import NativeSelect from "@material-ui/core/NativeSelect";
 
 // Data Fetcher
 import {
@@ -25,7 +24,7 @@ import {
   useGetDistrictStockLevels,
   useGetRefillRateData,
   useGetUptakeRateData,
-  useGetDistrictStockTrendData
+  useGetDistrictStockTrendData,
 } from "../../../../helpers/apiDataFetcher";
 
 // Import Stockmanaggement components
@@ -58,7 +57,8 @@ const VACCINES = [
   "OPV",
   "BCG",
   "MEASLES",
-  "TT"
+  "TT",
+  "ROTA",
 ];
 
 function TabPanel(props) {
@@ -81,11 +81,11 @@ function TabPanel(props) {
 function a11yProps(index) {
   return {
     id: `stock-management-keymetrics-tab-${index}`,
-    "aria-controls": `stock-management-keymetrics-tabpanel-${index}`
+    "aria-controls": `stock-management-keymetrics-tabpanel-${index}`,
   };
 }
 
-const TabStyle = withStyles(theme => ({
+const TabStyle = withStyles((theme) => ({
   root: {
     textTransform: "none",
     fontWeight: theme.typography.fontWeightBold,
@@ -93,36 +93,36 @@ const TabStyle = withStyles(theme => ({
     "&:hover": {
       backgroundColor: "#FC6F6F",
       color: "#28354A",
-      opacity: 1
+      opacity: 1,
     },
     "&$selected": {
       backgroundColor: "#FC6F6F",
       color: "#28354A",
       fontWeight: theme.typography.fontWeightMedium,
-      fontSize: 12
-    }
+      fontSize: 12,
+    },
   },
-  selected: {}
-}))(props => <Tab {...props} />);
+  selected: {},
+}))((props) => <Tab {...props} />);
 
-const HtmlTooltip = withStyles(theme => ({
+const HtmlTooltip = withStyles((theme) => ({
   tooltip: {
     backgroundColor: "#f5f5f9",
     color: "rgba(0, 0, 0, 0.87)",
     maxWidth: 220,
     fontSize: theme.typography.pxToRem(12),
-    border: "1px solid #dadde9"
-  }
+    border: "1px solid #dadde9",
+  },
 }))(Tooltip);
 
-const BootstrapInput = withStyles(theme => ({
+const BootstrapInput = withStyles((theme) => ({
   root: {
     "label + &": {
-      marginTop: theme.spacing(3)
-    }
+      marginTop: theme.spacing(3),
+    },
   },
   input: {
-    fontSize: "medium",
+    fontSize: "small",
     borderRadius: 4,
     position: "relative",
     backgroundColor: theme.palette.background.paper,
@@ -141,14 +141,14 @@ const BootstrapInput = withStyles(theme => ({
       "sans-serif",
       '"Apple Color Emoji"',
       '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"'
+      '"Segoe UI Symbol"',
     ].join(","),
     "&:focus": {
       borderRadius: 4,
       borderColor: "#80bdff",
-      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)"
-    }
-  }
+      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
+    },
+  },
 }))(InputBase);
 
 export function StockManagementPanel() {
@@ -185,12 +185,12 @@ export function StockManagementPanel() {
 
   const [
     districtStockLevelsEndMonth,
-    setDistrictStockLevelsEndMonth
+    setDistrictStockLevelsEndMonth,
   ] = useState("Dec 2019");
 
   const [
     districtStockLevelsStartMonth,
-    setDistrictStockLevelsStartMonth
+    setDistrictStockLevelsStartMonth,
   ] = useState("Jan 2019");
 
   const [districtStockLevelsVaccine, setDistrictStockLevelsVaccine] = useState(
@@ -206,18 +206,18 @@ export function StockManagementPanel() {
   const [refillRateVaccine, setRefillRateVaccine] = useState("PENTA");
   const [refillRateDistrict, setRefillRateDistrict] = useState("Abim District");
   const [refillRateDistrict2, setRefillRateDistrict2] = useState([
-    "Abim District"
+    "Abim District",
   ]);
   const [refillrateChipData, setRefillrateChipData] = useState([
-    refillRateDistrict2
+    refillRateDistrict2,
   ]);
 
   // -----------------------------------------------------------------------
   // Uptake Rate  state data
   // -------------------------------------------------------------------------
 
-  const [uptakeRateStartMonth, setUptakeRateStartMonth] = useState("Jan 2019");
-  const [uptakeRateEndMonth, setUptakeRateEndMonth] = useState("Dec 2019");
+  const [uptakeRateStartMonth, setUptakeRateStartMonth] = useState("Jan 2020");
+  const [uptakeRateEndMonth, setUptakeRateEndMonth] = useState("Dec 2020");
   const [uptakeRateVaccine, setUptakeRateVaccine] = useState("PENTA");
   const [uptakeRateDistrict, setUptakeRateDistrict] = useState("National");
 
@@ -227,7 +227,7 @@ export function StockManagementPanel() {
 
   const [
     districtStockTrendStartMonth,
-    setDistrictStockTrendStartMonth
+    setDistrictStockTrendStartMonth,
   ] = useState("Jan 2019");
   const [districtStockTrendEndMonth, setDistrictStockTrendEndMonth] = useState(
     "Dec 2019"
@@ -241,11 +241,11 @@ export function StockManagementPanel() {
 
   const [
     districtStockTrendDistrict2,
-    setDistrictStockTrendDistrict2
+    setDistrictStockTrendDistrict2,
   ] = useState(["National"]);
 
   const [districtStockTrendChipData, setDistrictStockTrendChipData] = useState([
-    districtStockTrendDistrict2
+    districtStockTrendDistrict2,
   ]);
 
   // -----------------------------------------------------------------------
@@ -257,7 +257,7 @@ export function StockManagementPanel() {
   // Fetch Districts Stock Levels Data
   // -----------------------------------------------------------------------
   const [
-    { atHandStockByDistrictStockLevels, isLoadingDistrictStockLevels }
+    { atHandStockByDistrictStockLevels, isLoadingDistrictStockLevels },
   ] = useGetDistrictStockLevels(
     "",
     districtStockLevelsEndMonth,
@@ -273,8 +273,8 @@ export function StockManagementPanel() {
     {
       stockByDistrictVaccineRefillData,
       atHandStockByDistrictRefillData,
-      isLoadingRefillRateData
-    }
+      isLoadingRefillRateData,
+    },
   ] = useGetRefillRateData(
     refillRateDistrict2,
     refillRateEndMonth,
@@ -290,8 +290,8 @@ export function StockManagementPanel() {
     {
       stockByDistrictVaccineUptakeData,
       atHandStockByDistrictUptakeData,
-      isLoadingUptakeRateData
-    }
+      isLoadingUptakeRateData,
+    },
   ] = useGetUptakeRateData(
     uptakeRateDistrict,
     uptakeRateEndMonth,
@@ -307,8 +307,8 @@ export function StockManagementPanel() {
     {
       stockByDistrictVaccineStockTrendData,
       atHandStockByDistrictStockTrendData,
-      isLoadingStockTrendData
-    }
+      isLoadingStockTrendData,
+    },
   ] = useGetDistrictStockTrendData(
     districtStockTrendDistrict2,
     districtStockTrendEndMonth,
@@ -319,27 +319,26 @@ export function StockManagementPanel() {
   // -----------------------------------------------------------------------
   // District Stock levels Filters
   // -----------------------------------------------------------------------
-  const districtStockLevelsVaccinesFilter = VACCINES.map(vaccine => (
-    <MenuItem value={vaccine} key={vaccine}>
+  const districtStockLevelsVaccinesFilter = VACCINES.map((vaccine) => (
+    <MenuItem value={vaccine} key={vaccine} className={classes.liItems}>
       {vaccine}
     </MenuItem>
   ));
 
   const districtStockLevelsEndMonthFilter =
     groupedMonths &&
-    Object.keys(groupedMonths)
-      .filter(year => year !== "2020")
-      .map(year => (
-        <>
-          {" "}
-          <optgroup label={year}></optgroup>
-          {Object.values(groupedMonths[year]).map(y => (
-            <>
-              <option value={y.name}>{y.name}</option>
-            </>
-          ))}
-        </>
-      ));
+    Object.keys(groupedMonths).map((year) => (
+      <>
+        <optgroup label={year} className={classes.liItems}></optgroup>
+        {Object.values(groupedMonths[year]).map((y) => (
+          <>
+            <option value={y.name} className={classes.liItems}>
+              {y.name}
+            </option>
+          </>
+        ))}
+      </>
+    ));
 
   // -----------------------------------------------------------------------
   // Refill Rate data filters
@@ -347,49 +346,49 @@ export function StockManagementPanel() {
 
   const refillRateDataStartMonthFilter =
     groupedMonths &&
-    Object.keys(groupedMonths)
-      .filter(year => year !== "2020")
-      .map(year => (
-        <>
-          {" "}
-          <optgroup label={year}></optgroup>
-          {Object.values(groupedMonths[year]).map(y => (
-            <>
-              <option value={y.name}>{y.name}</option>
-            </>
-          ))}
-        </>
-      ));
+    Object.keys(groupedMonths).map((year) => (
+      <>
+        <optgroup label={year} className={classes.liItems}></optgroup>
+        {Object.values(groupedMonths[year]).map((y) => (
+          <>
+            <option value={y.name} className={classes.liItems}>
+              {y.name}
+            </option>
+          </>
+        ))}
+      </>
+    ));
 
   const refillRateEndMonthFilter =
     groupedMonths &&
     Object.keys(groupedMonths)
-      .filter(year => year === lastYear.toString())
-      .map(year => (
+      .filter((year) => year === lastYear.toString())
+      .map((year) => (
         <>
-          {" "}
-          <optgroup label={year}></optgroup>
-          {Object.values(groupedMonths[year]).map(y => (
+          <optgroup label={year} className={classes.liItems}></optgroup>
+          {Object.values(groupedMonths[year]).map((y) => (
             <>
-              <option value={y.name}>{y.name}</option>
+              <option value={y.name} className={classes.liItems}>
+                {y.name}
+              </option>
             </>
           ))}
         </>
       ));
 
-  const refillRateDataVaccinesFilter = VACCINES.map(vaccine => (
-    <MenuItem value={vaccine} key={vaccine}>
+  const refillRateDataVaccinesFilter = VACCINES.map((vaccine) => (
+    <MenuItem value={vaccine} key={vaccine} className={classes.liItems}>
       {vaccine}
     </MenuItem>
   ));
 
   const refillRateDataDistrictsFilter =
     districts &&
-    districts.map(district => (
+    districts.map((district) => (
       <MenuItem
         value={district.name}
         key={district.name}
-        style={{ fontSize: "large" }}
+        className={classes.liItems}
       >
         {district.name}
       </MenuItem>
@@ -401,46 +400,48 @@ export function StockManagementPanel() {
 
   const uptakeRateDataStartMonthFilter =
     groupedMonths &&
-    Object.keys(groupedMonths)
-      .filter(year => year !== "2020")
-      .map(year => (
-        <>
-          {" "}
-          <optgroup label={year}></optgroup>
-          {Object.values(groupedMonths[year]).map(y => (
-            <>
-              <MenuItem value={y.name}>{y.name}</MenuItem>
-            </>
-          ))}
-        </>
-      ));
+    Object.keys(groupedMonths).map((year) => (
+      <>
+        <optgroup label={year} className={classes.liItems}></optgroup>
+        {Object.values(groupedMonths[year]).map((y) => (
+          <>
+            <MenuItem value={y.name} className={classes.liItems}>
+              {y.name}
+            </MenuItem>
+          </>
+        ))}
+      </>
+    ));
 
   const uptakeRateEndMonthFilter =
     groupedMonths &&
-    Object.keys(groupedMonths)
-      .filter(year => year !== "2020")
-      .map(year => (
-        <>
-          {" "}
-          <optgroup label={year}></optgroup>
-          {Object.values(groupedMonths[year]).map(y => (
-            <>
-              <MenuItem value={y.name}>{y.name}</MenuItem>
-            </>
-          ))}
-        </>
-      ));
+    Object.keys(groupedMonths).map((year) => (
+      <>
+        <optgroup label={year} className={classes.liItems}></optgroup>
+        {Object.values(groupedMonths[year]).map((y) => (
+          <>
+            <MenuItem value={y.name} className={classes.liItems}>
+              {y.name}
+            </MenuItem>
+          </>
+        ))}
+      </>
+    ));
 
-  const uptakeRateDataVaccinesFilter = VACCINES.map(vaccine => (
-    <MenuItem value={vaccine} key={vaccine}>
+  const uptakeRateDataVaccinesFilter = VACCINES.map((vaccine) => (
+    <MenuItem value={vaccine} key={vaccine} className={classes.liItems}>
       {vaccine}
     </MenuItem>
   ));
 
   const uptakeRateDataDistrictsFilter =
     districts &&
-    districts.map(district => (
-      <MenuItem value={district.name} key={district.name}>
+    districts.map((district) => (
+      <MenuItem
+        value={district.name}
+        key={district.name}
+        className={classes.liItems}
+      >
         {district.name}
       </MenuItem>
     ));
@@ -451,49 +452,48 @@ export function StockManagementPanel() {
 
   const districtStockTrendStartMonthFilter =
     groupedMonths &&
-    Object.keys(groupedMonths)
-      .filter(year => year !== "2020")
-      .map(year => (
-        <>
-          {" "}
-          <optgroup label={year}></optgroup>
-          {Object.values(groupedMonths[year]).map(y => (
-            <>
-              <option value={y.name}>{y.name}</option>
-            </>
-          ))}
-        </>
-      ));
+    Object.keys(groupedMonths).map((year) => (
+      <>
+        {" "}
+        <optgroup label={year} className={classes.liItems}></optgroup>
+        {Object.values(groupedMonths[year]).map((y) => (
+          <>
+            <option value={y.name} className={classes.liItems}>
+              {y.name}
+            </option>
+          </>
+        ))}
+      </>
+    ));
 
   const districtStockTrendEndMonthFilter =
     groupedMonths &&
-    Object.keys(groupedMonths)
-      .filter(year => year !== "2020")
-      .map(year => (
-        <>
-          {" "}
-          <optgroup label={year}></optgroup>
-          {Object.values(groupedMonths[year]).map(y => (
-            <>
-              <option value={y.name}>{y.name}</option>
-            </>
-          ))}
-        </>
-      ));
+    Object.keys(groupedMonths).map((year) => (
+      <>
+        <optgroup label={year} className={classes.liItems}></optgroup>
+        {Object.values(groupedMonths[year]).map((y) => (
+          <>
+            <option value={y.name} className={classes.liItems}>
+              {y.name}
+            </option>
+          </>
+        ))}
+      </>
+    ));
 
-  const districtStockTrendVaccinesFilter = VACCINES.map(vaccine => (
-    <MenuItem value={vaccine} key={vaccine}>
+  const districtStockTrendVaccinesFilter = VACCINES.map((vaccine) => (
+    <MenuItem value={vaccine} key={vaccine} className={classes.liItems}>
       {vaccine}
     </MenuItem>
   ));
 
   const districtStockTrendDistrictsFilter =
     districts &&
-    districts.map(district => (
+    districts.map((district) => (
       <MenuItem
         value={district.name}
         key={district.name}
-        style={{ fontSize: "large" }}
+        className={classes.liItems}
       >
         {district.name}
       </MenuItem>
@@ -520,17 +520,17 @@ export function StockManagementPanel() {
   const handleDeleteChip = (chipToDelete, tab) => () => {
     if (tab === "Refill Rate") {
       setRefillRateDistrict2(
-        refillRateDistrict2.filter(chip => chip !== chipToDelete)
+        refillRateDistrict2.filter((chip) => chip !== chipToDelete)
       );
       setRefillrateChipData(
-        refillrateChipData.filter(chip => chip !== chipToDelete)
+        refillrateChipData.filter((chip) => chip !== chipToDelete)
       );
     } else if (tab === "District Stock Trends") {
       setDistrictStockTrendDistrict2(
-        districtStockTrendDistrict2.filter(chip => chip !== chipToDelete)
+        districtStockTrendDistrict2.filter((chip) => chip !== chipToDelete)
       );
       setDistrictStockTrendChipData(
-        districtStockTrendChipData.filter(chip => chip !== chipToDelete)
+        districtStockTrendChipData.filter((chip) => chip !== chipToDelete)
       );
     }
   };
@@ -543,355 +543,354 @@ export function StockManagementPanel() {
             Key Metrics
           </Typography>
         </Grid>
-
-        <Grid item xs={12}>
-          <Paper className={classes.paper} elevation={0}>
-            <Grid container spacing={3}>
-              <Grid item lg={6} md={6} xl={6} xs={12}>
-                <AppBar
-                  position="static"
-                  className={classes.appBar}
-                  elevation={0}
+      </Grid>
+      <Grid item xs={12}>
+        <Paper className={classes.paper} elevation={0}>
+          <Grid container spacing={3}>
+            <Grid item lg={6} md={6} xl={6} xs={12}>
+              <AppBar
+                position="static"
+                className={classes.appBar}
+                elevation={0}
+              >
+                <Tabs
+                  value={value}
+                  onChange={handleChange}
+                  aria-label="Stock Management Key metrics"
+                  className={classes.tabs}
+                  TabIndicatorProps={{
+                    style: { backgroundColor: "#FC6F6F" },
+                  }}
                 >
-                  <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    aria-label="Stock Management Key metrics"
-                    className={classes.tabs}
-                    TabIndicatorProps={{
-                      style: { backgroundColor: "#FC6F6F" }
-                    }}
-                  >
-                    <TabStyle
-                      {...a11yProps(0)}
-                      label={
-                        <HtmlTooltip
-                          title={
-                            <React.Fragment>
-                              <Typography color="inherit">
-                                <b>
-                                  {
-                                    "Percentage of Districts reporting zero balance"
-                                  }
-                                </b>
-                              </Typography>
-                            </React.Fragment>
-                          }
-                          enterDelay={500}
-                          leaveDelay={200}
-                        >
-                          <span>District Stock Levels</span>
-                        </HtmlTooltip>
-                      }
-                    />
-                    <TabStyle
-                      {...a11yProps(1)}
-                      label={
-                        <HtmlTooltip
-                          title={
-                            <React.Fragment>
-                              <Typography color="inherit">
-                                <b> {"Doses distributed by NMS / Doses"} </b>{" "}
-                                ordered expressed as a percentage
-                              </Typography>
-                            </React.Fragment>
-                          }
-                          enterDelay={500}
-                          leaveDelay={200}
-                        >
-                          <span>Refill Rate</span>
-                        </HtmlTooltip>
-                      }
-                    />
-                    {/* Disable for now till they fix their issues */}
-                    {/* <TabStyle {...a11yProps(2)} label="Uptake Rate" /> */}
-                    <TabStyle
-                      {...a11yProps(2)}
-                      label={
-                        <HtmlTooltip
-                          title={
-                            <React.Fragment>
-                              <Typography color="inherit">
-                                <b> {"Doses consumed / Available doses"} </b>
-                                expressed as a percentage
-                              </Typography>
-                            </React.Fragment>
-                          }
-                          enterDelay={500}
-                          leaveDelay={200}
-                        >
-                          <span>District Stock Trends</span>
-                        </HtmlTooltip>
-                      }
-                    />
-                  </Tabs>
-                </AppBar>
-              </Grid>
-              <Grid item lg={6} md={6} xl={6} xs={12}>
-                <TabPanel value={value} index={0}>
-                  <div className={classes.filters2}>
-                    <FormControl
-                      className={classes.districtSelectMargin}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="endMonth"
-                        className={classes.selectorLables2}
-                      >
-                        End Month
-                      </InputLabel>
-                      <Select
-                        native
-                        className={classes.selector_background}
-                        id="DSL_endMonth_selector"
-                        value={districtStockLevelsEndMonth}
-                        onChange={event =>
-                          setDistrictStockLevelsEndMonth(event.target.value)
+                  <TabStyle
+                    {...a11yProps(0)}
+                    label={
+                      <HtmlTooltip
+                        title={
+                          <React.Fragment>
+                            <Typography color="inherit">
+                              <b>
+                                {
+                                  "Percentage of Districts reporting zero balance"
+                                }
+                              </b>
+                            </Typography>
+                          </React.Fragment>
                         }
-                        input={<BootstrapInput />}
+                        enterDelay={500}
+                        leaveDelay={200}
                       >
-                        {districtStockLevelsEndMonthFilter}
-                      </Select>
-                    </FormControl>
-                    <FormControl
-                      className={classes.formControl}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="vaccine"
-                        className={classes.selectorLables}
-                      >
-                        Vaccine
-                      </InputLabel>
-                      <Select
-                        className={classes.selector_background}
-                        value={districtStockLevelsVaccine}
-                        onChange={event =>
-                          setDistrictStockLevelsVaccine(event.target.value)
+                        <span>District Stock Levels</span>
+                      </HtmlTooltip>
+                    }
+                  />
+                  <TabStyle
+                    {...a11yProps(1)}
+                    label={
+                      <HtmlTooltip
+                        title={
+                          <React.Fragment>
+                            <Typography color="inherit">
+                              <b> {"Doses distributed by NMS / Doses"} </b>{" "}
+                              ordered expressed as a percentage
+                            </Typography>
+                          </React.Fragment>
                         }
-                        inputProps={{
-                          name: "DSL_vaccine_selector",
-                          id: "DSL_vaccine_selector"
-                        }}
+                        enterDelay={500}
+                        leaveDelay={200}
                       >
-                        {districtStockLevelsVaccinesFilter}
-                      </Select>
-                    </FormControl>
-                  </div>
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                  <div className={classes.filters2}>
-                    <FormControl
-                      className={classes.districtSelectMargin}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="startMonth"
-                        className={classes.selectorLables2}
-                      >
-                        Start Month
-                      </InputLabel>
-                      <Select
-                        native
-                        className={classes.selector_background}
-                        id="RR_startMonth_selector"
-                        value={refillRateStartMonth}
-                        onChange={event =>
-                          setRefillRateStartMonth(event.target.value)
+                        <span>Refill Rate</span>
+                      </HtmlTooltip>
+                    }
+                  />
+                  {/* Disable for now till they fix their issues */}
+                  {/* <TabStyle {...a11yProps(2)} label="Uptake Rate" /> */}
+                  <TabStyle
+                    {...a11yProps(2)}
+                    label={
+                      <HtmlTooltip
+                        title={
+                          <React.Fragment>
+                            <Typography color="inherit">
+                              <b> {"Doses consumed / Available doses"} </b>
+                              expressed as a percentage
+                            </Typography>
+                          </React.Fragment>
                         }
-                        input={<BootstrapInput />}
+                        enterDelay={500}
+                        leaveDelay={200}
                       >
-                        {refillRateDataStartMonthFilter}
-                      </Select>
-                    </FormControl>
-                    <FormControl
-                      className={classes.districtSelectMargin}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="endMonth"
-                        className={classes.selectorLables2}
-                      >
-                        End Month
-                      </InputLabel>
-                      <Select
-                        native
-                        className={classes.selector_background}
-                        id="RR_endMonth_selector"
-                        value={refillRateEndMonth}
-                        onChange={event =>
-                          setRefillRateEndMonth(event.target.value)
-                        }
-                        input={<BootstrapInput />}
-                      >
-                        {refillRateEndMonthFilter}
-                      </Select>
-                    </FormControl>
-                    <FormControl
-                      className={classes.formControl}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="vaccine"
-                        className={classes.selectorLables}
-                      >
-                        Vaccine
-                      </InputLabel>
-                      <Select
-                        className={classes.selector_background}
-                        value={refillRateVaccine}
-                        onChange={event =>
-                          setRefillRateVaccine(event.target.value)
-                        }
-                        inputProps={{
-                          name: "RR_vaccine_selector",
-                          id: "RR_vaccine_selector"
-                        }}
-                      >
-                        {refillRateDataVaccinesFilter}
-                      </Select>
-                    </FormControl>
-                    <FormControl
-                      className={classes.districtSelectMargin}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="district"
-                        className={classes.selectorLables2}
-                      >
-                        District
-                      </InputLabel>
-                      <Select
-                        className={classes.selector_background}
-                        displayEmpty
-                        id="RR_district_name_selector"
-                        input={<BootstrapInput />}
-                        value={refillRateDistrict2}
-                        onChange={event =>
-                          handleChangeDistrict(event, "Refill Rate")
-                        }
-                        multiple
-                        renderValue={selected => "National"}
-                      >
-                        {refillRateDataDistrictsFilter}
-                      </Select>
-                    </FormControl>
-                  </div>
-                </TabPanel>
-                {/* Change ID to 3 when we reactivate Uptake Rate */}
-                <TabPanel value={value} index={2}>
-                  <div className={classes.filters2}>
-                    <FormControl
-                      className={classes.districtSelectMargin}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="startMonth"
-                        className={classes.selectorLables2}
-                      >
-                        Start Month
-                      </InputLabel>
-                      <Select
-                        native
-                        className={classes.selector_background}
-                        id="DST_startMonth_selector"
-                        value={districtStockTrendStartMonth}
-                        input={<BootstrapInput />}
-                        onChange={event =>
-                          setDistrictStockTrendStartMonth(event.target.value)
-                        }
-                      >
-                        {districtStockTrendStartMonthFilter}
-                      </Select>
-                    </FormControl>
-                    <FormControl
-                      className={classes.districtSelectMargin}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="startMonth"
-                        className={classes.selectorLables2}
-                      >
-                        End Month
-                      </InputLabel>
-                      <Select
-                        native
-                        className={classes.selector_background}
-                        value={districtStockTrendEndMonth}
-                        id="DST_end_month_selector"
-                        input={<BootstrapInput />}
-                        onChange={event =>
-                          setDistrictStockTrendEndMonth(event.target.value)
-                        }
-                      >
-                        {districtStockTrendEndMonthFilter}
-                      </Select>
-                    </FormControl>
-                    <FormControl
-                      className={classes.formControl}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="Vaccine"
-                        className={classes.selectorLables}
-                      >
-                        Vaccine
-                      </InputLabel>
-                      <Select
-                        className={classes.selector_background}
-                        value={districtStockTrendVaccine}
-                        onChange={event =>
-                          setDistrictStockTrendVaccine(event.target.value)
-                        }
-                        inputProps={{
-                          name: "DSL_vaccine_name_selector",
-                          id: "DSL_vaccine_name_selector"
-                        }}
-                      >
-                        {districtStockTrendVaccinesFilter}
-                      </Select>
-                    </FormControl>
-                    <FormControl
-                      className={classes.districtSelectMargin}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="district"
-                        className={classes.selectorLables2}
-                      >
-                        District
-                      </InputLabel>
-                      <Select
-                        className={classes.selector_background}
-                        displayEmpty
-                        id={"DSL_district_name_selector"}
-                        input={<BootstrapInput />}
-                        value={districtStockTrendDistrict2}
-                        onChange={event =>
-                          handleChangeDistrict(event, "District Stock Trends")
-                        }
-                        multiple
-                        renderValue={selected => "National"}
-                      >
-                        {districtStockTrendDistrictsFilter}
-                      </Select>
-                    </FormControl>
-                  </div>
-                </TabPanel>
-              </Grid>
+                        <span>District Stock Trends</span>
+                      </HtmlTooltip>
+                    }
+                  />
+                </Tabs>
+              </AppBar>
             </Grid>
-          </Paper>
-        </Grid>
+            <Grid item lg={6} md={6} xl={6} xs={12}>
+              <TabPanel value={value} index={0}>
+                <div className={classes.filters2}>
+                  <FormControl
+                    className={classes.districtSelectMargin}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="endMonth"
+                      className={classes.selectorLables2}
+                    >
+                      End Month
+                    </InputLabel>
+                    <Select
+                      native
+                      className={classes.selector_background}
+                      id="DSL_endMonth_selector"
+                      value={districtStockLevelsEndMonth}
+                      onChange={(event) =>
+                        setDistrictStockLevelsEndMonth(event.target.value)
+                      }
+                      input={<BootstrapInput />}
+                    >
+                      {districtStockLevelsEndMonthFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    className={classes.formControl}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="vaccine"
+                      className={classes.selectorLables}
+                    >
+                      Vaccine
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      value={districtStockLevelsVaccine}
+                      onChange={(event) =>
+                        setDistrictStockLevelsVaccine(event.target.value)
+                      }
+                      inputProps={{
+                        name: "DSL_vaccine_selector",
+                        id: "DSL_vaccine_selector",
+                      }}
+                    >
+                      {districtStockLevelsVaccinesFilter}
+                    </Select>
+                  </FormControl>
+                </div>
+              </TabPanel>
+              <TabPanel value={value} index={1}>
+                <div className={classes.filters2}>
+                  <FormControl
+                    className={classes.districtSelectMargin}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="startMonth"
+                      className={classes.selectorLables2}
+                    >
+                      Start Month
+                    </InputLabel>
+                    <Select
+                      native
+                      className={classes.selector_background}
+                      id="RR_startMonth_selector"
+                      value={refillRateStartMonth}
+                      onChange={(event) =>
+                        setRefillRateStartMonth(event.target.value)
+                      }
+                      input={<BootstrapInput />}
+                    >
+                      {refillRateDataStartMonthFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    className={classes.districtSelectMargin}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="endMonth"
+                      className={classes.selectorLables2}
+                    >
+                      End Month
+                    </InputLabel>
+                    <Select
+                      native
+                      className={classes.selector_background}
+                      id="RR_endMonth_selector"
+                      value={refillRateEndMonth}
+                      onChange={(event) =>
+                        setRefillRateEndMonth(event.target.value)
+                      }
+                      input={<BootstrapInput />}
+                    >
+                      {refillRateEndMonthFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    className={classes.formControl}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="vaccine"
+                      className={classes.selectorLables}
+                    >
+                      Vaccine
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      value={refillRateVaccine}
+                      onChange={(event) =>
+                        setRefillRateVaccine(event.target.value)
+                      }
+                      inputProps={{
+                        name: "RR_vaccine_selector",
+                        id: "RR_vaccine_selector",
+                      }}
+                    >
+                      {refillRateDataVaccinesFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    className={classes.districtSelectMargin}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="district"
+                      className={classes.selectorLables2}
+                    >
+                      District
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      displayEmpty
+                      id="RR_district_name_selector"
+                      input={<BootstrapInput />}
+                      value={refillRateDistrict2}
+                      onChange={(event) =>
+                        handleChangeDistrict(event, "Refill Rate")
+                      }
+                      multiple
+                      renderValue={(selected) => "National"}
+                    >
+                      {refillRateDataDistrictsFilter}
+                    </Select>
+                  </FormControl>
+                </div>
+              </TabPanel>
+              {/* Change ID to 3 when we reactivate Uptake Rate */}
+              <TabPanel value={value} index={2}>
+                <div className={classes.filters2}>
+                  <FormControl
+                    className={classes.districtSelectMargin}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="startMonth"
+                      className={classes.selectorLables2}
+                    >
+                      Start Month
+                    </InputLabel>
+                    <Select
+                      native
+                      className={classes.selector_background}
+                      id="DST_startMonth_selector"
+                      value={districtStockTrendStartMonth}
+                      input={<BootstrapInput />}
+                      onChange={(event) =>
+                        setDistrictStockTrendStartMonth(event.target.value)
+                      }
+                    >
+                      {districtStockTrendStartMonthFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    className={classes.districtSelectMargin}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="startMonth"
+                      className={classes.selectorLables2}
+                    >
+                      End Month
+                    </InputLabel>
+                    <Select
+                      native
+                      className={classes.selector_background}
+                      value={districtStockTrendEndMonth}
+                      id="DST_end_month_selector"
+                      input={<BootstrapInput />}
+                      onChange={(event) =>
+                        setDistrictStockTrendEndMonth(event.target.value)
+                      }
+                    >
+                      {districtStockTrendEndMonthFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    className={classes.formControl}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="Vaccine"
+                      className={classes.selectorLables}
+                    >
+                      Vaccine
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      value={districtStockTrendVaccine}
+                      onChange={(event) =>
+                        setDistrictStockTrendVaccine(event.target.value)
+                      }
+                      inputProps={{
+                        name: "DSL_vaccine_name_selector",
+                        id: "DSL_vaccine_name_selector",
+                      }}
+                    >
+                      {districtStockTrendVaccinesFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    className={classes.districtSelectMargin}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="district"
+                      className={classes.selectorLables2}
+                    >
+                      District
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      displayEmpty
+                      id={"DSL_district_name_selector"}
+                      input={<BootstrapInput />}
+                      value={districtStockTrendDistrict2}
+                      onChange={(event) =>
+                        handleChangeDistrict(event, "District Stock Trends")
+                      }
+                      multiple
+                      renderValue={(selected) => "National"}
+                    >
+                      {districtStockTrendDistrictsFilter}
+                    </Select>
+                  </FormControl>
+                </div>
+              </TabPanel>
+            </Grid>
+          </Grid>
+        </Paper>
       </Grid>
 
       <Grid container spacing={3}>
@@ -902,7 +901,6 @@ export function StockManagementPanel() {
               isLoading={isLoadingDistrictStockLevels}
               endMonth={districtStockLevelsEndMonth}
               startMonth={districtStockLevelsStartMonth}
-              // district={districtStockLe}
               vaccine={districtStockLevelsVaccine}
             />
           </TabPanel>
@@ -916,7 +914,7 @@ export function StockManagementPanel() {
               >
                 <Grid container spacing={3}>
                   <Grid item xs={12} className={classes.chipPadding}>
-                    {refillrateChipData.map(function(district) {
+                    {refillrateChipData.map(function (district) {
                       return (
                         <Chip
                           key={district}
@@ -965,7 +963,7 @@ export function StockManagementPanel() {
               >
                 <Grid container spacing={3}>
                   <Grid item xs={12} className={classes.chipPadding}>
-                    {districtStockTrendChipData.map(function(district) {
+                    {districtStockTrendChipData.map(function (district) {
                       return (
                         <Chip
                           key={district}

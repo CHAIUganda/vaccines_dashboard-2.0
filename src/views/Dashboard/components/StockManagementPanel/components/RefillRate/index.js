@@ -21,7 +21,7 @@ export default function RefillRate(props) {
     endMonth,
     startMonth,
     district,
-    vaccine
+    vaccine,
   } = props;
 
   return (
@@ -30,7 +30,14 @@ export default function RefillRate(props) {
         <Paper className={classes.paper} elevation={0}>
           <Grid item lg={12} md={12} xl={12} xs={12}>
             <Grid container spacing={3} className={classes.DST_section}>
-              <Grid item lg={6} md={6} xl={6} xs={12}>
+              <Grid
+                item
+                lg={6}
+                md={6}
+                xl={6}
+                xs={12}
+                style={{ maxHeight: 630 }}
+              >
                 <RefillRateLineChart
                   data={stockByDistrictVaccineRefillData}
                   isLoading={isLoading}

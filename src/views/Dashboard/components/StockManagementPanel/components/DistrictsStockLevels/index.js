@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
 // Material components
@@ -41,7 +41,7 @@ export default function DistrictsStockLevels(props) {
     endMonth,
     startMonth,
     district,
-    vaccine
+    vaccine,
   } = props;
 
   return (
@@ -50,7 +50,14 @@ export default function DistrictsStockLevels(props) {
         <Paper className={classes.paper} elevation={0}>
           <Grid item lg={12} md={12} xl={12} xs={12}>
             <Grid container spacing={3} className={classes.DST_section}>
-              <Grid item lg={5} md={5} xl={5} xs={12}>
+              <Grid
+                item
+                lg={5}
+                md={5}
+                xl={5}
+                xs={12}
+                style={{ maxHeight: 630 }}
+              >
                 <StockBalancesPieChart
                   data={atHandStockLevelsData}
                   isLoading={isLoading}
@@ -81,5 +88,5 @@ export default function DistrictsStockLevels(props) {
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired
+  value: PropTypes.any.isRequired,
 };

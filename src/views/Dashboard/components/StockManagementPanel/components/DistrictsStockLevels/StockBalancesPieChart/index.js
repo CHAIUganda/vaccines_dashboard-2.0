@@ -16,7 +16,7 @@ const StockBalancesPieChart = ({
   endMonth,
   startMonth,
   district,
-  vaccine
+  vaccine,
 }) => {
   const [chart, setChart] = useState();
 
