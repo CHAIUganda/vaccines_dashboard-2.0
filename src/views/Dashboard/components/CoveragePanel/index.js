@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 // Material components
@@ -24,7 +24,7 @@ import {
   useVaccineDosesForCoverageByMonth,
   useVaccineDosesForCoverageByYear,
   useVaccineDosesForDropoutRate,
-  useGetDistricts
+  useGetDistricts,
 } from "../../../../helpers/apiDataFetcher";
 
 // Import coverage components
@@ -52,7 +52,8 @@ const VACCINES = [
   "OPV",
   "BCG",
   "MEASLES",
-  "TT"
+  "TT",
+  "ROTA",
 ];
 const DOSES = ["Dose 1", "Dose 2", "Dose 3"];
 function TabPanel(props) {
@@ -75,11 +76,11 @@ function TabPanel(props) {
 function a11yProps(index) {
   return {
     id: `coverage-panel-keymetrics-tab-${index}`,
-    "aria-controls": `coverage-panel-keymetrics-tabpanel-${index}`
+    "aria-controls": `coverage-panel-keymetrics-tabpanel-${index}`,
   };
 }
 
-const TabStyle = withStyles(theme => ({
+const TabStyle = withStyles((theme) => ({
   root: {
     textTransform: "none",
     fontWeight: theme.typography.fontWeightBold,
@@ -88,40 +89,40 @@ const TabStyle = withStyles(theme => ({
     "&:hover": {
       backgroundColor: "#F8E658",
       color: "#28354A",
-      opacity: 1
+      opacity: 1,
     },
     "&$selected": {
       backgroundColor: "#F8E658",
       color: "#28354A",
       fontWeight: theme.typography.fontWeightMedium,
-      fontSize: 12
-    }
+      fontSize: 12,
+    },
   },
-  selected: {}
-}))(props => <Tab {...props} />);
+  selected: {},
+}))((props) => <Tab {...props} />);
 
-const HtmlTooltip = withStyles(theme => ({
+const HtmlTooltip = withStyles((theme) => ({
   tooltip: {
     backgroundColor: "#f5f5f9",
     color: "rgba(0, 0, 0, 0.87)",
     maxWidth: 220,
     fontSize: theme.typography.pxToRem(12),
-    border: "1px solid #dadde9"
-  }
+    border: "1px solid #dadde9",
+  },
 }))(Tooltip);
 
-const BootstrapInput = withStyles(theme => ({
+const BootstrapInput = withStyles((theme) => ({
   root: {
     "label + &": {
-      marginTop: theme.spacing(3)
-    }
+      marginTop: theme.spacing(3),
+    },
   },
   input: {
     borderRadius: 4,
     position: "relative",
     backgroundColor: theme.palette.background.paper,
     border: "1px solid #ced4da",
-    fontSize: "medium",
+    fontSize: "small",
     padding: "10px 26px 10px 12px",
     transition: theme.transitions.create(["border-color", "box-shadow"]),
     // Use the system font instead of the default Roboto font.
@@ -135,14 +136,14 @@ const BootstrapInput = withStyles(theme => ({
       "sans-serif",
       '"Apple Color Emoji"',
       '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"'
+      '"Segoe UI Symbol"',
     ].join(","),
     "&:focus": {
       borderRadius: 4,
       borderColor: "#80bdff",
-      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)"
-    }
-  }
+      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
+    },
+  },
 }))(InputBase);
 
 export function CoveragePanel() {
@@ -150,14 +151,13 @@ export function CoveragePanel() {
   const [value, setValue] = useState(0);
   const [endYear, setEndYear] = useState(years[0]);
   const [district, setDistrict] = useState("National");
+
   // -----------------------------------------------------------------------
   // Coverage By Month state data
   // -----------------------------------------------------------------------
   const [coverageByMonthStartYear, setCoverageByMonthStartYear] = useState(
     years[0]
   );
-
-  console.log(coverageByMonthStartYear);
 
   const [coverageByMonthVaccine, setCoverageByMonthVaccine] = useState(
     VACCINES[0]
@@ -166,12 +166,12 @@ export function CoveragePanel() {
   const [coverageByMonthDose, setCoverageByMonthDose] = useState(DOSES[2]);
 
   const [coverageByMonthDistrict, setCoverageByMonthDistrict] = useState([
-    "National"
+    "National",
   ]);
 
   const [
     coverageByMonthDistrictChipData,
-    setcoverageByMonthDistrictChipData
+    setcoverageByMonthDistrictChipData,
   ] = useState(coverageByMonthDistrict);
 
   // -----------------------------------------------------------------------
@@ -182,21 +182,21 @@ export function CoveragePanel() {
     years[0]
   );
 
-  const [coverageByYearEndYear, setCoverageByYearEndYear] = useState(years[1]);
+  const [coverageByYearEndYear, setCoverageByYearEndYear] = useState(years[0]);
 
   const [coverageByYearVaccine, setCoverageByYearVaccine] = useState(
     VACCINES[0]
   );
 
   const [coverageByYearDistrict, setCoverageByYearDistrict] = useState([
-    "National"
+    "National",
   ]);
 
   const [coverageByYearDose, setCoverageByYearDose] = useState(DOSES[2]);
 
   const [
     coverageByYearDistrictChipData,
-    setCoverageByYearDistrictChipData
+    setCoverageByYearDistrictChipData,
   ] = useState(coverageByYearDistrict);
 
   // -----------------------------------------------------------------------
@@ -212,7 +212,7 @@ export function CoveragePanel() {
 
   const [
     coverageDropoutRateDistrict,
-    setCoverageDropoutrateDistrict
+    setCoverageDropoutrateDistrict,
   ] = useState(["National"]);
 
   const [coverageDropoutRateDose, setCoverageDropoutRateDose] = useState(
@@ -221,7 +221,7 @@ export function CoveragePanel() {
 
   const [
     coverageDropoutrateDistrictChipData,
-    setCoverageDropoutrateDistrictChipData
+    setCoverageDropoutrateDistrictChipData,
   ] = useState(coverageDropoutRateDistrict);
 
   // -----------------------------------------------------------------------
@@ -241,7 +241,7 @@ export function CoveragePanel() {
 
   const [
     coverageRedCategoryDistrict,
-    setCoverageRedCategoryDistrict
+    setCoverageRedCategoryDistrict,
   ] = useState(["National"]);
 
   // Fetch data
@@ -249,8 +249,8 @@ export function CoveragePanel() {
     {
       vaccineDosesForCoverageRedCategory,
       vaccineDosesForCoverageRedCategoryMap,
-      isLoadingRedCategory
-    }
+      isLoadingRedCategory,
+    },
   ] = useVaccineDosesForRedCategory(
     endYear,
     coverageRedCategoryYear,
@@ -267,8 +267,8 @@ export function CoveragePanel() {
     {
       vaccineDosesForCoverageByMonth,
       vaccineDosesForCoverageByMonthMap,
-      isLoadingCoverageByMonth
-    }
+      isLoadingCoverageByMonth,
+    },
   ] = useVaccineDosesForCoverageByMonth(
     endYear,
     coverageByMonthStartYear,
@@ -282,7 +282,7 @@ export function CoveragePanel() {
   // -----------------------------------------------------------------------
 
   const [
-    { vaccineDosesForCoverageByYear, isLoadingCoverageByYear }
+    { vaccineDosesForCoverageByYear, isLoadingCoverageByYear },
   ] = useVaccineDosesForCoverageByYear(
     coverageByYearEndYear,
     coverageByYearStartYear,
@@ -299,8 +299,8 @@ export function CoveragePanel() {
     {
       vaccineDosesForCoverageDropoutRate,
       vaccineDosesForCoverageDropoutRateMap,
-      isLoadingDropoutRate
-    }
+      isLoadingDropoutRate,
+    },
   ] = useVaccineDosesForDropoutRate(
     endYear,
     coverageDropoutRateYear,
@@ -325,7 +325,7 @@ export function CoveragePanel() {
       isLoading: isLoadingCoverageByMonth && isLoadingCoverageByMonth,
       startYear: coverageByMonthStartYear,
       endYear: endYear,
-      district: coverageByMonthDistrict && coverageByMonthDistrict
+      district: coverageByMonthDistrict && coverageByMonthDistrict,
     },
     coverageByYear: {
       vacineData:
@@ -334,7 +334,7 @@ export function CoveragePanel() {
       endYear: coverageByYearEndYear,
       isLoading: isLoadingCoverageByYear && isLoadingCoverageByYear,
       vaccineName: coverageByYearVaccine,
-      district: coverageByYearDistrict && coverageByYearDistrict
+      district: coverageByYearDistrict && coverageByYearDistrict,
     },
     dropoutRate: {
       vacineDataForMap:
@@ -348,7 +348,7 @@ export function CoveragePanel() {
       isLoading: isLoadingDropoutRate && isLoadingDropoutRate,
       startYear: coverageDropoutRateYear,
       endYear: endYear,
-      district: coverageDropoutRateDistrict && coverageDropoutRateDistrict
+      district: coverageDropoutRateDistrict && coverageDropoutRateDistrict,
     },
     redCategorisation: {
       vacineDataForMap:
@@ -363,39 +363,39 @@ export function CoveragePanel() {
       startYear: coverageRedCategoryYear,
       endYear: endYear,
       // Set district to an empty array since we dont filter by district under red category
-      district: []
-    }
+      district: [],
+    },
   };
 
   // -----------------------------------------------------------------------
   // Coverage By Month Filters
   // -----------------------------------------------------------------------
 
-  const coverageByMonthYearFilter = years.map(year => (
-    <MenuItem value={year} key={year}>
+  const coverageByMonthYearFilter = years.map((year) => (
+    <MenuItem value={year} key={year} className={classes.liItems}>
       {year}
     </MenuItem>
   ));
 
-  const coverageByMonthVaccinesFilter = VACCINES.map(vaccine => (
-    <MenuItem value={vaccine} key={vaccine}>
+  const coverageByMonthVaccinesFilter = VACCINES.map((vaccine) => (
+    <MenuItem value={vaccine} key={vaccine} className={classes.liItems}>
       {vaccine}
     </MenuItem>
   ));
 
-  const coverageByMonthDoseFilter = DOSES.map(dose => (
-    <MenuItem value={dose} key={dose}>
+  const coverageByMonthDoseFilter = DOSES.map((dose) => (
+    <MenuItem value={dose} key={dose} className={classes.liItems}>
       {dose}
     </MenuItem>
   ));
 
   const coverageByMonthDistrictFilter =
     districts &&
-    districts.map(district => (
+    districts.map((district) => (
       <MenuItem
         value={district.name}
         key={district.name}
-        style={{ fontSize: "large" }}
+        className={classes.liItems}
       >
         {district.name}
       </MenuItem>
@@ -405,31 +405,31 @@ export function CoveragePanel() {
   // Coverage By Year Filters
   // -----------------------------------------------------------------------
 
-  const coverageByYearStartYearFilter = years.map(year => (
-    <MenuItem value={year} key={year}>
+  const coverageByYearStartYearFilter = years.map((year) => (
+    <MenuItem value={year} key={year} className={classes.liItems}>
       {year}
     </MenuItem>
   ));
 
-  const coverageByYearEndYearFilter = years.map(year => (
-    <MenuItem value={year} key={year}>
+  const coverageByYearEndYearFilter = years.map((year) => (
+    <MenuItem value={year} key={year} className={classes.liItems}>
       {year}
     </MenuItem>
   ));
 
-  const coverageByYearVaccinesFilter = VACCINES.map(vaccine => (
-    <MenuItem value={vaccine} key={vaccine}>
+  const coverageByYearVaccinesFilter = VACCINES.map((vaccine) => (
+    <MenuItem value={vaccine} key={vaccine} className={classes.liItems}>
       {vaccine}
     </MenuItem>
   ));
 
   const coverageByYearDistrictFilter =
     districts &&
-    districts.map(district => (
+    districts.map((district) => (
       <MenuItem
         value={district.name}
         key={district.name}
-        style={{ fontSize: "large" }}
+        className={classes.liItems}
       >
         {district.name}
       </MenuItem>
@@ -439,25 +439,25 @@ export function CoveragePanel() {
   // Dropout Rate filters
   // -----------------------------------------------------------------------
 
-  const coverageDropoutRateYearFilter = years.map(year => (
-    <MenuItem value={year} key={year}>
+  const coverageDropoutRateYearFilter = years.map((year) => (
+    <MenuItem value={year} key={year} className={classes.liItems}>
       {year}
     </MenuItem>
   ));
 
-  const coverageDropoutRateVaccinesFilter = VACCINES.map(vaccine => (
-    <MenuItem value={vaccine} key={vaccine}>
+  const coverageDropoutRateVaccinesFilter = VACCINES.map((vaccine) => (
+    <MenuItem value={vaccine} key={vaccine} className={classes.liItems}>
       {vaccine}
     </MenuItem>
   ));
 
   const coverageDropoutRateDistrictFilter =
     districts &&
-    districts.map(district => (
+    districts.map((district) => (
       <MenuItem
         value={district.name}
         key={district.name}
-        style={{ fontSize: "large" }}
+        className={classes.liItems}
       >
         {district.name}
       </MenuItem>
@@ -467,14 +467,14 @@ export function CoveragePanel() {
   // Redcategory filters
   // -----------------------------------------------------------------------
 
-  const redcategoryYearFilter = years.map(year => (
-    <MenuItem value={year} key={year}>
+  const redcategoryYearFilter = years.map((year) => (
+    <MenuItem value={year} key={year} className={classes.liItems}>
       {year}
     </MenuItem>
   ));
 
-  const redcategoryVaccinesFilter = VACCINES.map(vaccine => (
-    <MenuItem value={vaccine} key={vaccine}>
+  const redcategoryVaccinesFilter = VACCINES.map((vaccine) => (
+    <MenuItem value={vaccine} key={vaccine} className={classes.liItems}>
       {vaccine}
     </MenuItem>
   ));
@@ -502,24 +502,24 @@ export function CoveragePanel() {
   const handleDeleteChip = (chipToDelete, tab) => () => {
     if (tab === "Coverage (By Month)") {
       setCoverageByMonthDistrict(
-        coverageByMonthDistrict.filter(chip => chip !== chipToDelete)
+        coverageByMonthDistrict.filter((chip) => chip !== chipToDelete)
       );
       setcoverageByMonthDistrictChipData(
-        coverageByMonthDistrict.filter(chip => chip !== chipToDelete)
+        coverageByMonthDistrict.filter((chip) => chip !== chipToDelete)
       );
     } else if (tab === "Coverage (By Year)") {
       setCoverageByYearDistrict(
-        coverageByYearDistrict.filter(chip => chip !== chipToDelete)
+        coverageByYearDistrict.filter((chip) => chip !== chipToDelete)
       );
       setCoverageByYearDistrictChipData(
-        coverageByYearDistrict.filter(chip => chip !== chipToDelete)
+        coverageByYearDistrict.filter((chip) => chip !== chipToDelete)
       );
     } else {
       setCoverageDropoutrateDistrict(
-        coverageDropoutRateDistrict.filter(chip => chip !== chipToDelete)
+        coverageDropoutRateDistrict.filter((chip) => chip !== chipToDelete)
       );
       setCoverageDropoutrateDistrictChipData(
-        coverageDropoutRateDistrict.filter(chip => chip !== chipToDelete)
+        coverageDropoutRateDistrict.filter((chip) => chip !== chipToDelete)
       );
     }
   };
@@ -532,447 +532,447 @@ export function CoveragePanel() {
             Key Metrics
           </Typography>
         </Grid>
-
-        <Grid item xs={12}>
-          <Paper className={classes.paper} elevation={0}>
-            <Grid container spacing={3}>
-              <Grid item lg={6} md={6} xl={6} xs={12}>
-                <AppBar
-                  position="static"
-                  className={classes.appBar}
-                  elevation={0}
-                >
-                  <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    aria-label="Coverage Key metrics"
-                    className={classes.tabs}
-                    TabIndicatorProps={{
-                      style: { backgroundColor: "#F8E658" }
-                    }}
-                  >
-                    <TabStyle
-                      {...a11yProps(0)}
-                      label={
-                        <HtmlTooltip
-                          title={
-                            <React.Fragment>
-                              <Typography color="inherit">
-                                <b>
-                                  {
-                                    "Actual number of children immunized / projected number to be immunized expressed as a percentage"
-                                  }
-                                </b>
-                              </Typography>
-                            </React.Fragment>
-                          }
-                          enterDelay={500}
-                          leaveDelay={200}
-                        >
-                          <span>Coverage (By Month)</span>
-                        </HtmlTooltip>
-                      }
-                    />
-                    <TabStyle
-                      {...a11yProps(1)}
-                      label={
-                        <HtmlTooltip
-                          title={
-                            <React.Fragment>
-                              <Typography color="inherit">
-                                <b>
-                                  {
-                                    "Actual number of children immunized / projected number to be immunized expressed as a percentage"
-                                  }
-                                </b>
-                              </Typography>
-                            </React.Fragment>
-                          }
-                          enterDelay={500}
-                          leaveDelay={200}
-                        >
-                          <span>Coverage (By Year)</span>
-                        </HtmlTooltip>
-                      }
-                    />
-                    <TabStyle
-                      {...a11yProps(2)}
-                      label={
-                        <HtmlTooltip
-                          title={
-                            <React.Fragment>
-                              <Typography color="inherit">
-                                <b>
-                                  {
-                                    "Percentage of children that did not receive the last dose of scheduled vaccines (E.g total DPT3 = total DPT1 numbers)"
-                                  }
-                                </b>
-                              </Typography>
-                            </React.Fragment>
-                          }
-                          enterDelay={500}
-                          leaveDelay={200}
-                        >
-                          <span>Dropout Rate</span>
-                        </HtmlTooltip>
-                      }
-                    />
-                    <TabStyle {...a11yProps(3)} label="Red Categorisation" />
-                  </Tabs>
-                </AppBar>
-              </Grid>
-              <Grid item lg={6} md={6} xl={6} xs={12}>
-                <TabPanel value={value} index={0}>
-                  <div className={classes.filters2}>
-                    <FormControl
-                      className={classes.formControl}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="startYears"
-                        className={classes.selectorLables}
-                      >
-                        Year
-                      </InputLabel>
-                      <Select
-                        className={classes.selector_background}
-                        value={coverageByMonthStartYear}
-                        onChange={event =>
-                          setCoverageByMonthStartYear(event.target.value)
-                        }
-                        inputProps={{
-                          name: "CM_year_selector",
-                          id: "CM_year_selector"
-                        }}
-                      >
-                        {coverageByMonthYearFilter}
-                      </Select>
-                    </FormControl>
-                    <FormControl
-                      className={classes.formControl}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="Vaccine"
-                        className={classes.selectorLables}
-                      >
-                        Vaccine
-                      </InputLabel>
-                      <Select
-                        className={classes.selector_background}
-                        value={coverageByMonthVaccine}
-                        onChange={event =>
-                          setCoverageByMonthVaccine(event.target.value)
-                        }
-                        inputProps={{
-                          name: "CM_vaccine_selector",
-                          id: "CM_vaccine_selector"
-                        }}
-                      >
-                        {coverageByMonthVaccinesFilter}
-                      </Select>
-                    </FormControl>
-                    <FormControl
-                      className={classes.formControl}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="Dose"
-                        className={classes.selectorLables}
-                      >
-                        Dose
-                      </InputLabel>
-                      <Select
-                        className={classes.selector_background}
-                        value={coverageByMonthDose}
-                        onChange={event =>
-                          setCoverageByMonthDose(event.target.value)
-                        }
-                        inputProps={{
-                          name: "CM_dose_selector",
-                          id: "CM_dose_selector"
-                        }}
-                      >
-                        {coverageByMonthDoseFilter}
-                      </Select>
-                    </FormControl>
-                    <FormControl
-                      className={classes.districtSelectMargin}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="District"
-                        className={classes.selectorLables2}
-                      >
-                        District
-                      </InputLabel>
-                      <Select
-                        className={classes.selector_background}
-                        displayEmpty
-                        id={"CM_district_selector"}
-                        value={coverageByMonthDistrict}
-                        onChange={event =>
-                          handleChangeDistrict(event, "Coverage (By Month)")
-                        }
-                        multiple
-                        input={<BootstrapInput />}
-                        renderValue={selected => "National"}
-                      >
-                        {coverageByMonthDistrictFilter}
-                      </Select>
-                    </FormControl>
-                  </div>
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                  <div className={classes.filters2}>
-                    <FormControl
-                      className={classes.formControl}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="CY_startYear"
-                        className={classes.selectorLables}
-                      >
-                        Start Year
-                      </InputLabel>
-                      <Select
-                        className={classes.selector_background}
-                        value={coverageByYearStartYear}
-                        onChange={event =>
-                          setCoverageByYearStartYear(event.target.value)
-                        }
-                        inputProps={{
-                          id: "CY_start_year_selector",
-                          name: "CY_start_year_selector"
-                        }}
-                      >
-                        {coverageByYearStartYearFilter}
-                      </Select>
-                    </FormControl>
-                    <FormControl
-                      className={classes.formControl}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="CY_endYear"
-                        className={classes.selectorLables}
-                      >
-                        End Year
-                      </InputLabel>
-                      <Select
-                        className={classes.selector_background}
-                        value={coverageByYearEndYear}
-                        onChange={event =>
-                          setCoverageByYearEndYear(event.target.value)
-                        }
-                        inputProps={{
-                          id: "CY_end_year_selector",
-                          name: "CY_end_year_selector"
-                        }}
-                      >
-                        {coverageByYearEndYearFilter}
-                      </Select>
-                    </FormControl>
-                    <FormControl
-                      className={classes.formControl}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="CY_Vaccine"
-                        className={classes.selectorLables}
-                      >
-                        Vaccine
-                      </InputLabel>
-                      <Select
-                        className={classes.selector_background}
-                        value={coverageByYearVaccine}
-                        onChange={event =>
-                          setCoverageByYearVaccine(event.target.value)
-                        }
-                        inputProps={{
-                          id: "CY_vaccine_selector",
-                          name: "CY_vaccine_selector"
-                        }}
-                      >
-                        {coverageByYearVaccinesFilter}
-                      </Select>
-                    </FormControl>
-
-                    <FormControl
-                      className={classes.districtSelectMargin}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="District"
-                        className={classes.selectorLables2}
-                      >
-                        District
-                      </InputLabel>
-                      <Select
-                        className={classes.selector_background}
-                        displayEmpty
-                        id={"CY_district_selector"}
-                        input={<BootstrapInput />}
-                        value={coverageByYearDistrict}
-                        onChange={event =>
-                          handleChangeDistrict(event, "Coverage (By Year)")
-                        }
-                        multiple
-                        renderValue={selected => "National"}
-                      >
-                        {coverageByYearDistrictFilter}
-                      </Select>
-                    </FormControl>
-                  </div>
-                </TabPanel>
-                <TabPanel value={value} index={2}>
-                  <div className={classes.filters2}>
-                    <FormControl
-                      className={classes.formControl}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="startYears"
-                        className={classes.selectorLables}
-                      >
-                        Year
-                      </InputLabel>
-                      <Select
-                        className={classes.selector_background}
-                        value={coverageDropoutRateYear}
-                        onChange={event =>
-                          setCoverageDropoutrateYear(event.target.value)
-                        }
-                        inputProps={{
-                          id: "DR_start_year_selector",
-                          name: "DR_start_year_selector"
-                        }}
-                      >
-                        {coverageDropoutRateYearFilter}
-                      </Select>
-                    </FormControl>
-                    <FormControl
-                      className={classes.formControl}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="Vaccine"
-                        className={classes.selectorLables}
-                      >
-                        Vaccine
-                      </InputLabel>
-                      <Select
-                        className={classes.selector_background}
-                        id={"DR_vaccine_selector"}
-                        value={coverageDropoutRateVaccine}
-                        onChange={event =>
-                          setCoverageDropoutrateVaccine(event.target.value)
-                        }
-                        inputProps={{
-                          id: "DR_vaccine_selector",
-                          name: "DR_vaccine_selector"
-                        }}
-                      >
-                        {coverageDropoutRateVaccinesFilter}
-                      </Select>
-                    </FormControl>
-                    <FormControl
-                      className={classes.districtSelectMargin}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="District"
-                        className={classes.selectorLables2}
-                      >
-                        District
-                      </InputLabel>
-                      <Select
-                        className={classes.selector_background}
-                        displayEmpty
-                        id={"DR_district_selector"}
-                        input={<BootstrapInput />}
-                        value={coverageDropoutRateDistrict}
-                        onChange={event =>
-                          handleChangeDistrict(event, "Dropout Rate")
-                        }
-                        multiple
-                        renderValue={selected => "National"}
-                      >
-                        {coverageDropoutRateDistrictFilter}
-                      </Select>
-                    </FormControl>
-                  </div>
-                </TabPanel>
-                <TabPanel value={value} index={3}>
-                  <div className={classes.filters2}>
-                    <FormControl
-                      className={classes.formControl}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="startYears"
-                        className={classes.selectorLables}
-                      >
-                        Year
-                      </InputLabel>
-                      <Select
-                        className={classes.selector_background}
-                        value={coverageRedCategoryYear}
-                        onChange={event =>
-                          setCoverageRedCategoryYear(event.target.value)
-                        }
-                        inputProps={{
-                          id: "RC_start_year_selector",
-                          name: "RC_start_year_selector"
-                        }}
-                      >
-                        {redcategoryYearFilter}
-                      </Select>
-                    </FormControl>
-                    <FormControl
-                      className={classes.formControl}
-                      variant="outlined"
-                      margin="dense"
-                    >
-                      <InputLabel
-                        htmlFor="Vaccine"
-                        className={classes.selectorLables}
-                      >
-                        Vaccine
-                      </InputLabel>
-                      <Select
-                        className={classes.selector_background}
-                        value={coverageRedCategoryVaccine}
-                        onChange={event =>
-                          setCoverageRedCategoryVaccine(event.target.value)
-                        }
-                        inputProps={{
-                          id: "RC_vaccine_selector",
-                          name: "RC_vaccine_selector"
-                        }}
-                      >
-                        {redcategoryVaccinesFilter}
-                      </Select>
-                    </FormControl>
-                  </div>
-                </TabPanel>
-              </Grid>
-            </Grid>
-          </Paper>
-        </Grid>
       </Grid>
+      <Grid item xs={12}>
+        <Paper className={classes.paper} elevation={0}>
+          <Grid container spacing={3}>
+            <Grid item lg={6} md={6} xl={6} xs={12}>
+              <AppBar
+                position="static"
+                className={classes.appBar}
+                elevation={0}
+              >
+                <Tabs
+                  value={value}
+                  onChange={handleChange}
+                  aria-label="Coverage Key metrics"
+                  className={classes.tabs}
+                  TabIndicatorProps={{
+                    style: { backgroundColor: "#F8E658" },
+                  }}
+                >
+                  <TabStyle
+                    {...a11yProps(0)}
+                    label={
+                      <HtmlTooltip
+                        title={
+                          <React.Fragment>
+                            <Typography color="inherit">
+                              <b>
+                                {
+                                  "Actual number of children immunized / projected number to be immunized expressed as a percentage"
+                                }
+                              </b>
+                            </Typography>
+                          </React.Fragment>
+                        }
+                        enterDelay={500}
+                        leaveDelay={200}
+                      >
+                        <span>Coverage (By Month)</span>
+                      </HtmlTooltip>
+                    }
+                  />
+                  <TabStyle
+                    {...a11yProps(1)}
+                    label={
+                      <HtmlTooltip
+                        title={
+                          <React.Fragment>
+                            <Typography color="inherit">
+                              <b>
+                                {
+                                  "Actual number of children immunized / projected number to be immunized expressed as a percentage"
+                                }
+                              </b>
+                            </Typography>
+                          </React.Fragment>
+                        }
+                        enterDelay={500}
+                        leaveDelay={200}
+                      >
+                        <span>Coverage (By Year)</span>
+                      </HtmlTooltip>
+                    }
+                  />
+                  <TabStyle
+                    {...a11yProps(2)}
+                    label={
+                      <HtmlTooltip
+                        title={
+                          <React.Fragment>
+                            <Typography color="inherit">
+                              <b>
+                                {
+                                  "Percentage of children that did not receive the last dose of scheduled vaccines (E.g total DPT3 = total DPT1 numbers)"
+                                }
+                              </b>
+                            </Typography>
+                          </React.Fragment>
+                        }
+                        enterDelay={500}
+                        leaveDelay={200}
+                      >
+                        <span>Dropout Rate</span>
+                      </HtmlTooltip>
+                    }
+                  />
+                  <TabStyle {...a11yProps(3)} label="Red Categorisation" />
+                </Tabs>
+              </AppBar>
+            </Grid>
+            <Grid item lg={6} md={6} xl={6} xs={12}>
+              <TabPanel value={value} index={0}>
+                <div className={classes.filters2}>
+                  <FormControl
+                    className={classes.formControl}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="startYears"
+                      className={classes.selectorLables}
+                    >
+                      Year
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      value={coverageByMonthStartYear}
+                      onChange={(event) =>
+                        setCoverageByMonthStartYear(event.target.value)
+                      }
+                      inputProps={{
+                        name: "CM_year_selector",
+                        id: "CM_year_selector",
+                      }}
+                    >
+                      {coverageByMonthYearFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    className={classes.formControl}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="Vaccine"
+                      className={classes.selectorLables}
+                    >
+                      Vaccine
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      value={coverageByMonthVaccine}
+                      onChange={(event) =>
+                        setCoverageByMonthVaccine(event.target.value)
+                      }
+                      inputProps={{
+                        name: "CM_vaccine_selector",
+                        id: "CM_vaccine_selector",
+                      }}
+                    >
+                      {coverageByMonthVaccinesFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    className={classes.formControl}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="Dose"
+                      className={classes.selectorLables}
+                    >
+                      Dose
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      value={coverageByMonthDose}
+                      onChange={(event) =>
+                        setCoverageByMonthDose(event.target.value)
+                      }
+                      inputProps={{
+                        name: "CM_dose_selector",
+                        id: "CM_dose_selector",
+                      }}
+                    >
+                      {coverageByMonthDoseFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    className={classes.districtSelectMargin}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="District"
+                      className={classes.selectorLables2}
+                    >
+                      District
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      displayEmpty
+                      id={"CM_district_selector"}
+                      value={coverageByMonthDistrict}
+                      onChange={(event) =>
+                        handleChangeDistrict(event, "Coverage (By Month)")
+                      }
+                      multiple
+                      input={<BootstrapInput />}
+                      renderValue={(selected) => "National"}
+                    >
+                      {coverageByMonthDistrictFilter}
+                    </Select>
+                  </FormControl>
+                </div>
+              </TabPanel>
+              <TabPanel value={value} index={1}>
+                <div className={classes.filters2}>
+                  <FormControl
+                    className={classes.formControl}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="CY_startYear"
+                      className={classes.selectorLables}
+                    >
+                      Start Year
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      value={coverageByYearStartYear}
+                      onChange={(event) =>
+                        setCoverageByYearStartYear(event.target.value)
+                      }
+                      inputProps={{
+                        id: "CY_start_year_selector",
+                        name: "CY_start_year_selector",
+                      }}
+                    >
+                      {coverageByYearStartYearFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    className={classes.formControl}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="CY_endYear"
+                      className={classes.selectorLables}
+                    >
+                      End Year
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      value={coverageByYearEndYear}
+                      onChange={(event) =>
+                        setCoverageByYearEndYear(event.target.value)
+                      }
+                      inputProps={{
+                        id: "CY_end_year_selector",
+                        name: "CY_end_year_selector",
+                      }}
+                    >
+                      {coverageByYearEndYearFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    className={classes.formControl}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="CY_Vaccine"
+                      className={classes.selectorLables}
+                    >
+                      Vaccine
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      value={coverageByYearVaccine}
+                      onChange={(event) =>
+                        setCoverageByYearVaccine(event.target.value)
+                      }
+                      inputProps={{
+                        id: "CY_vaccine_selector",
+                        name: "CY_vaccine_selector",
+                      }}
+                    >
+                      {coverageByYearVaccinesFilter}
+                    </Select>
+                  </FormControl>
+
+                  <FormControl
+                    className={classes.districtSelectMargin}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="District"
+                      className={classes.selectorLables2}
+                    >
+                      District
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      displayEmpty
+                      id={"CY_district_selector"}
+                      input={<BootstrapInput />}
+                      value={coverageByYearDistrict}
+                      onChange={(event) =>
+                        handleChangeDistrict(event, "Coverage (By Year)")
+                      }
+                      multiple
+                      renderValue={(selected) => "National"}
+                    >
+                      {coverageByYearDistrictFilter}
+                    </Select>
+                  </FormControl>
+                </div>
+              </TabPanel>
+              <TabPanel value={value} index={2}>
+                <div className={classes.filters2}>
+                  <FormControl
+                    className={classes.formControl}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="startYears"
+                      className={classes.selectorLables}
+                    >
+                      Year
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      value={coverageDropoutRateYear}
+                      onChange={(event) =>
+                        setCoverageDropoutrateYear(event.target.value)
+                      }
+                      inputProps={{
+                        id: "DR_start_year_selector",
+                        name: "DR_start_year_selector",
+                      }}
+                    >
+                      {coverageDropoutRateYearFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    className={classes.formControl}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="Vaccine"
+                      className={classes.selectorLables}
+                    >
+                      Vaccine
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      id={"DR_vaccine_selector"}
+                      value={coverageDropoutRateVaccine}
+                      onChange={(event) =>
+                        setCoverageDropoutrateVaccine(event.target.value)
+                      }
+                      inputProps={{
+                        id: "DR_vaccine_selector",
+                        name: "DR_vaccine_selector",
+                      }}
+                    >
+                      {coverageDropoutRateVaccinesFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    className={classes.districtSelectMargin}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="District"
+                      className={classes.selectorLables2}
+                    >
+                      District
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      displayEmpty
+                      id={"DR_district_selector"}
+                      input={<BootstrapInput />}
+                      value={coverageDropoutRateDistrict}
+                      onChange={(event) =>
+                        handleChangeDistrict(event, "Dropout Rate")
+                      }
+                      multiple
+                      renderValue={(selected) => "National"}
+                    >
+                      {coverageDropoutRateDistrictFilter}
+                    </Select>
+                  </FormControl>
+                </div>
+              </TabPanel>
+              <TabPanel value={value} index={3}>
+                <div className={classes.filters2}>
+                  <FormControl
+                    className={classes.formControl}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="startYears"
+                      className={classes.selectorLables}
+                    >
+                      Year
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      value={coverageRedCategoryYear}
+                      onChange={(event) =>
+                        setCoverageRedCategoryYear(event.target.value)
+                      }
+                      inputProps={{
+                        id: "RC_start_year_selector",
+                        name: "RC_start_year_selector",
+                      }}
+                    >
+                      {redcategoryYearFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    className={classes.formControl}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="Vaccine"
+                      className={classes.selectorLables}
+                    >
+                      Vaccine
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      value={coverageRedCategoryVaccine}
+                      onChange={(event) =>
+                        setCoverageRedCategoryVaccine(event.target.value)
+                      }
+                      inputProps={{
+                        id: "RC_vaccine_selector",
+                        name: "RC_vaccine_selector",
+                      }}
+                    >
+                      {redcategoryVaccinesFilter}
+                    </Select>
+                  </FormControl>
+                </div>
+              </TabPanel>
+            </Grid>
+          </Grid>
+        </Paper>
+      </Grid>
+
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <TabPanel value={value} index={0}>
@@ -985,8 +985,8 @@ export function CoveragePanel() {
                 <Grid container spacing={3}>
                   <Grid item xs={12} className={classes.chipPadding}>
                     {coverageByMonthDistrictChipData
-                      .filter(a => a !== "National")
-                      .map(function(district) {
+                      .filter((a) => a !== "National")
+                      .map(function (district) {
                         return (
                           <Chip
                             key={district}
@@ -1018,8 +1018,8 @@ export function CoveragePanel() {
                 <Grid container spacing={3}>
                   <Grid item xs={12} className={classes.chipPadding}>
                     {coverageByYearDistrictChipData
-                      .filter(a => a !== "National")
-                      .map(function(district) {
+                      .filter((a) => a !== "National")
+                      .map(function (district) {
                         return (
                           <Chip
                             key={district}
@@ -1048,8 +1048,8 @@ export function CoveragePanel() {
                 <Grid container spacing={3}>
                   <Grid item xs={12} className={classes.chipPadding}>
                     {coverageDropoutrateDistrictChipData
-                      .filter(a => a !== "National")
-                      .map(function(district) {
+                      .filter((a) => a !== "National")
+                      .map(function (district) {
                         return (
                           <Chip
                             key={district}
@@ -1083,5 +1083,5 @@ export function CoveragePanel() {
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired
+  value: PropTypes.any.isRequired,
 };

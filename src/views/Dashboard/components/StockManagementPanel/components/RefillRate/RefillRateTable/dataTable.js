@@ -1,6 +1,5 @@
-import React, { useState, useMemo, forwardRef } from "react";
+import React, { forwardRef } from "react";
 
-import Paper from "@material-ui/core/Paper";
 import MaterialTable from "material-table";
 
 // Import common styles
@@ -43,69 +42,71 @@ const tableIcons = {
   Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
   SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-export const DataTable = ({ data }) => {
+export const DataTable = ({ data, vaccine, endMonth, isLoading }) => {
   const classes = useStyles();
+  const title = `Stock Balances of ${vaccine} at the Beginning of ${endMonth}`;
 
   const columns = [
     {
       field: "district_name",
       title: "District",
-      cellStyle: rowData => ({ fontSize: 13 }),
+      cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData => rowData.district_name.replace(/ District/g, "")
+      render: (rowData) => rowData.district_name.replace(/ District/g, ""),
     },
     {
       field: "received",
       title: "Issued",
-      cellStyle: rowData => ({ fontSize: 13 }),
+      cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData => new Intl.NumberFormat("lg-UG").format(rowData.received)
+      render: (rowData) =>
+        new Intl.NumberFormat("lg-UG").format(rowData.received),
     },
     {
       field: "ordered",
       title: "Orders",
-      cellStyle: rowData => ({ fontSize: 13 }),
+      cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData => new Intl.NumberFormat("lg-UG").format(rowData.ordered)
+      render: (rowData) =>
+        new Intl.NumberFormat("lg-UG").format(rowData.ordered),
     },
     {
       field: "stock_requirement__maximum",
       title: "Max",
-      cellStyle: rowData => ({ fontSize: 13 }),
+      cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData =>
+      render: (rowData) =>
         new Intl.NumberFormat("lg-UG").format(
           rowData.stock_requirement__maximum
-        )
+        ),
     },
     {
       field: "stock_requirement__minimum",
       title: "Min",
-      cellStyle: rowData => ({ fontSize: 13 }),
+      cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: rowData =>
+      render: (rowData) =>
         new Intl.NumberFormat("lg-UG").format(
           rowData.stock_requirement__minimum
-        )
-    }
+        ),
+    },
   ];
   return (
-    <Paper className={classes.tableRoot}>
-      <MaterialTable
-        title={" "}
-        data={data && data}
-        columns={columns}
-        icons={tableIcons}
-        options={
-          ({
-            sorting: true
-          },
-          { exportButton: true })
-        }
-      />
-    </Paper>
+    <MaterialTable
+      title={<h3 className={classes.tableTitle}>{title}</h3>}
+      isLoading={isLoading}
+      data={data && data}
+      columns={columns}
+      icons={tableIcons}
+      options={
+        ({
+          sorting: true,
+        },
+        { exportButton: true })
+      }
+    />
   );
 };

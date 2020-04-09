@@ -49,11 +49,11 @@ function TabPanel(props) {
 function a11yProps(index) {
   return {
     id: `coverage-by-months-tab-${index}`,
-    "aria-controls": `coverage-by-months-tabpanel-${index}`
+    "aria-controls": `coverage-by-months-tabpanel-${index}`,
   };
 }
 
-const TabStyle = withStyles(theme => ({
+const TabStyle = withStyles((theme) => ({
   root: {
     padding: "1rem 0",
     textTransform: "none",
@@ -62,33 +62,22 @@ const TabStyle = withStyles(theme => ({
     "&:hover": {
       backgroundColor: "#B2C0D6",
       color: "black",
-      opacity: 1
+      opacity: 1,
     },
     "&$selected": {
       backgroundColor: "#B2C0D6",
       color: "black",
       fontWeight: theme.typography.fontWeightMedium,
-      fontSize: 12
-    }
+      fontSize: 12,
+    },
   },
-  selected: {}
-}))(props => <Tab {...props} />);
+  selected: {},
+}))((props) => <Tab {...props} />);
 
 export default function Coverage(props) {
   const classes = useStyles();
   const [value, setValue] = useState(0);
-  const {
-    data,
-    parentTab,
-    vacineDataForMap,
-    vaccineDosesForChart,
-    vaccineName,
-    dose,
-    isLoading,
-    startYear,
-    endYear,
-    district
-  } = props;
+  const { data, parentTab } = props;
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -136,7 +125,7 @@ export default function Coverage(props) {
                     onChange={handleChange}
                     aria-label="Coverage by month tabs"
                     TabIndicatorProps={{
-                      style: { backgroundColor: "#B2C0D6" }
+                      style: { backgroundColor: "#B2C0D6" },
                     }}
                   >
                     <TabStyle {...a11yProps(0)} label="Annualized (CY)" />
@@ -649,5 +638,5 @@ export default function Coverage(props) {
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired
+  value: PropTypes.any.isRequired,
 };

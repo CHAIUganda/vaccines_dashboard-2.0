@@ -4,7 +4,7 @@ const apiEndpoint = require("../env_config").default;
 
 // Because the backend on the production runs on port 80 (default port)
 const port =
-  apiEndpoint === "localhost" || apiEndpoint === "35.226.24.173" ? ":9000" : "";
+  apiEndpoint === "localhost" || apiEndpoint === "34.69.101.182" ? ":9000" : "";
 
 export const useVaccineDosesForCoverageByMonth = (
   endYear,
@@ -26,11 +26,11 @@ export const useVaccineDosesForCoverageByMonth = (
   );
   const [
     vaccineDosesForCoverageByMonth,
-    setVaccineDosesForCoverageByMonth
+    setVaccineDosesForCoverageByMonth,
   ] = useState(null);
   const [
     vaccineDosesForCoverageByMonthMap,
-    setVaccineDosesForCoverageByMonthMap
+    setVaccineDosesForCoverageByMonthMap,
   ] = useState(null);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export const useVaccineDosesForCoverageByMonth = (
     const getAllData = () => {
       return Promise.all([
         vaccineDosesForCoverageByMonthReq(),
-        vaccineDosesForCoverageByMonthMapReq()
+        vaccineDosesForCoverageByMonthMapReq(),
       ]);
     };
     getAllData().then(
@@ -64,8 +64,8 @@ export const useVaccineDosesForCoverageByMonth = (
     {
       vaccineDosesForCoverageByMonth,
       vaccineDosesForCoverageByMonthMap,
-      isLoadingCoverageByMonth
-    }
+      isLoadingCoverageByMonth,
+    },
   ];
 };
 
@@ -88,7 +88,7 @@ export const useVaccineDosesForCoverageByYear = (
   const [isLoadingCoverageByYear, setIsLoadingCoverageByYear] = useState(false);
   const [
     vaccineDosesForCoverageByYear,
-    setVaccineDosesForCoverageByYear
+    setVaccineDosesForCoverageByYear,
   ] = useState(null);
 
   useEffect(() => {
@@ -112,8 +112,8 @@ export const useVaccineDosesForCoverageByYear = (
   return [
     {
       vaccineDosesForCoverageByYear,
-      isLoadingCoverageByYear
-    }
+      isLoadingCoverageByYear,
+    },
   ];
 };
 
@@ -137,12 +137,12 @@ export const useVaccineDosesForDropoutRate = (
   const [isLoadingDropoutRate, setIsLoadingDropoutRate] = useState(false);
   const [
     vaccineDosesForCoverageDropoutRate,
-    setVaccineDosesForCoverageDropoutRate
+    setVaccineDosesForCoverageDropoutRate,
   ] = useState(null);
 
   const [
     vaccineDosesForCoverageDropoutRateMap,
-    setVaccineDosesForCoverageDropoutRateMap
+    setVaccineDosesForCoverageDropoutRateMap,
   ] = useState(null);
 
   useEffect(() => {
@@ -161,13 +161,13 @@ export const useVaccineDosesForDropoutRate = (
     const getAllData = () => {
       return Promise.all([
         vaccineDosesForDropoutRateReq(),
-        vaccineDosesForDropoutRateMapReq()
+        vaccineDosesForDropoutRateMapReq(),
       ]);
     };
     getAllData().then(
       ([
         vaccineDosesForCoverageDropoutRate,
-        vaccineDosesForCoverageDropoutRateMap
+        vaccineDosesForCoverageDropoutRateMap,
       ]) => {
         setVaccineDosesForCoverageDropoutRate(
           vaccineDosesForCoverageDropoutRate
@@ -183,8 +183,8 @@ export const useVaccineDosesForDropoutRate = (
     {
       vaccineDosesForCoverageDropoutRate,
       vaccineDosesForCoverageDropoutRateMap,
-      isLoadingDropoutRate
-    }
+      isLoadingDropoutRate,
+    },
   ];
 };
 
@@ -202,12 +202,12 @@ export const useVaccineDosesForRedCategory = (
   const [isLoadingRedCategory, setIsLoadingRedCategory] = useState(false);
   const [
     vaccineDosesForCoverageRedCategory,
-    setVaccineDosesForCoverageRedCategory
+    setVaccineDosesForCoverageRedCategory,
   ] = useState(null);
 
   const [
     vaccineDosesForCoverageRedCategoryMap,
-    setVaccineDosesForCoverageRedCategoryMap
+    setVaccineDosesForCoverageRedCategoryMap,
   ] = useState(null);
 
   useEffect(() => {
@@ -226,13 +226,13 @@ export const useVaccineDosesForRedCategory = (
     const getAllData = () => {
       return Promise.all([
         vaccineDosesForRedCategoryReq(),
-        vaccineDosesForRedCategoryMapReq()
+        vaccineDosesForRedCategoryMapReq(),
       ]);
     };
     getAllData().then(
       ([
         vaccineDosesForCoverageRedCategory,
-        vaccineDosesForCoverageRedCategoryMap
+        vaccineDosesForCoverageRedCategoryMap,
       ]) => {
         setVaccineDosesForCoverageRedCategory(
           vaccineDosesForCoverageRedCategory
@@ -250,12 +250,12 @@ export const useVaccineDosesForRedCategory = (
     {
       vaccineDosesForCoverageRedCategory,
       vaccineDosesForCoverageRedCategoryMap,
-      isLoadingRedCategory
-    }
+      isLoadingRedCategory,
+    },
   ];
 };
 
-export const useGetDistricts = district => {
+export const useGetDistricts = (district) => {
   const districtsURL = `http://${apiEndpoint}${port}/api/districts`;
   const [isLoadingDistricts, setIsLoadingDistricts] = useState(false);
   const [districts, setDistricts] = useState(null);
@@ -279,8 +279,8 @@ export const useGetDistricts = district => {
   return [
     {
       districts,
-      isLoadingDistricts
-    }
+      isLoadingDistricts,
+    },
   ];
 };
 
@@ -309,8 +309,8 @@ export const useGetMonths = () => {
   return [
     {
       monthsData,
-      isLoadingMonthsData
-    }
+      isLoadingMonthsData,
+    },
   ];
 };
 
@@ -324,12 +324,12 @@ export const useGetDistrictStockLevels = (
 
   const [
     isLoadingDistrictStockLevels,
-    setIsLoadingDistrictStockLevels
+    setIsLoadingDistrictStockLevels,
   ] = useState(false);
 
   const [
     atHandStockByDistrictStockLevels,
-    setAtHandStockByDistrictStockLevels
+    setAtHandStockByDistrictStockLevels,
   ] = useState(null);
 
   useEffect(() => {
@@ -352,8 +352,8 @@ export const useGetDistrictStockLevels = (
   return [
     {
       atHandStockByDistrictStockLevels,
-      isLoadingDistrictStockLevels
-    }
+      isLoadingDistrictStockLevels,
+    },
   ];
 };
 
@@ -377,12 +377,12 @@ export const useGetRefillRateData = (
 
   const [
     stockByDistrictVaccineRefillData,
-    setStockByDistrictVaccineRefillData
+    setStockByDistrictVaccineRefillData,
   ] = useState(null);
 
   const [
     atHandStockByDistrictRefillData,
-    setAtHandStockByDistrictRefillData
+    setAtHandStockByDistrictRefillData,
   ] = useState(null);
 
   useEffect(() => {
@@ -401,7 +401,7 @@ export const useGetRefillRateData = (
     const getAllData = () => {
       return Promise.all([
         stockByDistrictVaccineRefillDataReq(),
-        atHandStockByDistrictRefillDataReq()
+        atHandStockByDistrictRefillDataReq(),
       ]);
     };
     getAllData().then(
@@ -417,8 +417,8 @@ export const useGetRefillRateData = (
     {
       stockByDistrictVaccineRefillData,
       atHandStockByDistrictRefillData,
-      isLoadingRefillRateData
-    }
+      isLoadingRefillRateData,
+    },
   ];
 };
 
@@ -435,12 +435,12 @@ export const useGetUptakeRateData = (
 
   const [
     stockByDistrictVaccineUptakeData,
-    setStockByDistrictVaccineUptakeData
+    setStockByDistrictVaccineUptakeData,
   ] = useState(null);
 
   const [
     atHandStockByDistrictUptakeData,
-    setAtHandStockByDistrictUptakeData
+    setAtHandStockByDistrictUptakeData,
   ] = useState(null);
 
   useEffect(() => {
@@ -459,7 +459,7 @@ export const useGetUptakeRateData = (
     const getAllData = () => {
       return Promise.all([
         stockByDistrictVaccineUptakeDataReq(),
-        atHandStockByDistrictUptakeDataReq()
+        atHandStockByDistrictUptakeDataReq(),
       ]);
     };
     getAllData().then(
@@ -475,8 +475,8 @@ export const useGetUptakeRateData = (
     {
       stockByDistrictVaccineUptakeData,
       atHandStockByDistrictUptakeData,
-      isLoadingUptakeRateData
-    }
+      isLoadingUptakeRateData,
+    },
   ];
 };
 
@@ -498,12 +498,12 @@ export const useGetDistrictStockTrendData = (
 
   const [
     stockByDistrictVaccineStockTrendData,
-    setStockByDistrictVaccineStockTrendData
+    setStockByDistrictVaccineStockTrendData,
   ] = useState(null);
 
   const [
     atHandStockByDistrictStockTrendData,
-    setAtHandStockByDistrictStockTrendData
+    setAtHandStockByDistrictStockTrendData,
   ] = useState(null);
 
   useEffect(() => {
@@ -522,13 +522,13 @@ export const useGetDistrictStockTrendData = (
     const getAllData = () => {
       return Promise.all([
         stockByDistrictVaccineStockTrendDataReq(),
-        atHandStockByDistrictStockTrendDataReq()
+        atHandStockByDistrictStockTrendDataReq(),
       ]);
     };
     getAllData().then(
       ([
         stockByDistrictVaccineStockTrendData,
-        atHandStockByDistrictStockTrendData
+        atHandStockByDistrictStockTrendData,
       ]) => {
         setStockByDistrictVaccineStockTrendData(
           stockByDistrictVaccineStockTrendData
@@ -545,9 +545,345 @@ export const useGetDistrictStockTrendData = (
     {
       stockByDistrictVaccineStockTrendData,
       atHandStockByDistrictStockTrendData,
-      isLoadingStockTrendData
-    }
+      isLoadingStockTrendData,
+    },
   ];
+};
+
+export const useGetFunctionalityData = (
+  careLevel,
+  district,
+  startPeriod,
+  endPeriod
+) => {
+  const functionalityMetricsChartDataURL = `http://${apiEndpoint}${port}/coldchain/api/functionalitymetricsgraph?carelevel=${careLevel}&district=${district}&start_period=${startPeriod}&end_period=${endPeriod}`;
+
+  const functionalityDataTableURL = `http://${apiEndpoint}${port}/coldchain/api/functionalitymetrics?carelevel=${careLevel}&start_period=${startPeriod}&end_period=${endPeriod}`;
+
+  // district.length === 1
+  //     ? `http://${apiEndpoint}${port}/coldchain/api/functionalitymetrics?carelevel=${careLevel}&district=${district}&${yearHalf}`
+  //     : `http://${apiEndpoint}${port}/coldchain/api/functionalitymetrics?carelevel=${careLevel}&districts=[${quotedAndCommaSeparatedDistricts}]&${yearHalf}`;
+
+  const [isLoadingFunctionalityData, setIsLoadingFunctionalityData] = useState(
+    false
+  );
+
+  const [functionalityDataTableData, setFunctionalityDataTableData] = useState(
+    null
+  );
+
+  const [
+    functionalityMetricsChartData,
+    setFunctionalityMetricsChartData,
+  ] = useState(null);
+
+  useEffect(() => {
+    setIsLoadingFunctionalityData(true);
+
+    const functionalityDataTableReq = async () => {
+      const response = await fetch(functionalityDataTableURL);
+      return await response.json();
+    };
+
+    const functionalityMetricsChartDataReq = async () => {
+      const response = await fetch(functionalityMetricsChartDataURL);
+      return await response.json();
+    };
+
+    const getAllData = () => {
+      return Promise.all([
+        functionalityDataTableReq(),
+        functionalityMetricsChartDataReq(),
+      ]);
+    };
+
+    getAllData().then(
+      ([functionalityDataTableData, functionalityMetricsChartData]) => {
+        setFunctionalityDataTableData(functionalityDataTableData);
+        setFunctionalityMetricsChartData(functionalityMetricsChartData);
+        setIsLoadingFunctionalityData(false);
+      }
+    );
+  }, [careLevel, district, startPeriod, endPeriod]);
+
+  return [
+    {
+      functionalityDataTableData,
+      functionalityMetricsChartData,
+      isLoadingFunctionalityData,
+    },
+  ];
+};
+
+export const useGetCapacityData = (
+  careLevel,
+  district,
+  startPeriod,
+  endPeriod
+) => {
+  const capacityMetricsChartDataURL = `http://${apiEndpoint}${port}/coldchain/api/capacitymetricsstats?carelevel=${careLevel}&district=${district}&start_period=${startPeriod}&end_period=${endPeriod}`;
+
+  const capacityDataTableURL = `http://${apiEndpoint}${port}/coldchain/api/capacitymetrics?carelevel=${careLevel}&start_period=${startPeriod}&end_period=${endPeriod}`;
+
+  const [isLoadingCapacityData, setIsLoadingCapacityData] = useState(false);
+
+  const [capacityDataTableData, setCapacityDataTableData] = useState(null);
+
+  const [capacityMetricsChartData, setCapacityMetricsChartData] = useState(
+    null
+  );
+
+  useEffect(() => {
+    setIsLoadingCapacityData(true);
+
+    const capacityDataTableReq = async () => {
+      const response = await fetch(capacityDataTableURL);
+      return await response.json();
+    };
+
+    const capacityMetricsChartDataReq = async () => {
+      const response = await fetch(capacityMetricsChartDataURL);
+      return await response.json();
+    };
+
+    const getAllData = () => {
+      return Promise.all([
+        capacityDataTableReq(),
+        capacityMetricsChartDataReq(),
+      ]);
+    };
+
+    getAllData().then(([capacityDataTableData, capacityMetricsChartData]) => {
+      setCapacityDataTableData(capacityDataTableData);
+      setCapacityMetricsChartData(capacityMetricsChartData);
+      setIsLoadingCapacityData(false);
+    });
+  }, [careLevel, district, startPeriod, endPeriod]);
+
+  return [
+    {
+      capacityDataTableData,
+      capacityMetricsChartData,
+      isLoadingCapacityData,
+    },
+  ];
+};
+
+export const useGetEligibilityData = (district, startPeriod, endPeriod) => {
+  // http://localhost:9000/coldchain/api/eligiblefacilitiesstats
+  const eligibilityMetricsChartDataURL = `http://${apiEndpoint}${port}/coldchain/api/eligiblefacilitiesstats?district=${district}&start_period=${startPeriod}&end_period=${endPeriod}`;
+
+  const eligibilityDataTableURL = `http://${apiEndpoint}${port}/coldchain/api/eligiblefacilitiesmetrics?start_period=${startPeriod}&end_period=${endPeriod}`;
+
+  const [isLoadingEligibilityData, setIsLoadingEligibilityData] = useState(
+    false
+  );
+
+  const [eligibilityDataTableData, setEligibilityDataTableData] = useState(
+    null
+  );
+
+  const [
+    eligibilityMetricsChartData,
+    setEligibilityMetricsChartData,
+  ] = useState(null);
+
+  useEffect(() => {
+    setIsLoadingEligibilityData(true);
+
+    const eligibilityDataTableReq = async () => {
+      const response = await fetch(eligibilityDataTableURL);
+      return await response.json();
+    };
+
+    const eligibilityMetricsChartDataReq = async () => {
+      const response = await fetch(eligibilityMetricsChartDataURL);
+      return await response.json();
+    };
+
+    const getAllData = () => {
+      return Promise.all([
+        eligibilityDataTableReq(),
+        eligibilityMetricsChartDataReq(),
+      ]);
+    };
+
+    getAllData().then(
+      ([eligibilityDataTableData, eligibilityMetricsChartData]) => {
+        setEligibilityDataTableData(eligibilityDataTableData);
+        setEligibilityMetricsChartData(eligibilityMetricsChartData);
+        setIsLoadingEligibilityData(false);
+      }
+    );
+  }, [district, startPeriod, endPeriod]);
+
+  return [
+    {
+      eligibilityDataTableData,
+      eligibilityMetricsChartData,
+      isLoadingEligibilityData,
+    },
+  ];
+};
+
+export const useGetOptimalityData = (careLevel, district, year) => {
+  // http://localhost:9000/coldchain/api/eligiblefacilitiesstats
+  const optimalityMetricsChartDataURL = `http://${apiEndpoint}${port}/coldchain/api/optimalitystats?carelevel=${careLevel}&district=${district}&year=${year}`;
+
+  const optimalityDataTableURL = `http://${apiEndpoint}${port}/coldchain/api/optimalitymetrics?carelevel=${careLevel}&year=${year}`;
+
+  const [isLoadingOptimalityData, setIsLoadingOptimalityData] = useState(false);
+
+  const [optimalityDataTableData, setOptimalityDataTableData] = useState(null);
+
+  const [optimalityMetricsChartData, setOptimalityMetricsChartData] = useState(
+    null
+  );
+
+  useEffect(() => {
+    setIsLoadingOptimalityData(true);
+
+    const optimalityDataTableReq = async () => {
+      const response = await fetch(optimalityDataTableURL);
+      return await response.json();
+    };
+
+    const optimalityMetricsChartDataReq = async () => {
+      const response = await fetch(optimalityMetricsChartDataURL);
+      return await response.json();
+    };
+
+    const getAllData = () => {
+      return Promise.all([
+        optimalityDataTableReq(),
+        optimalityMetricsChartDataReq(),
+      ]);
+    };
+
+    getAllData().then(
+      ([optimalityDataTableData, optimalityMetricsChartData]) => {
+        setOptimalityDataTableData(optimalityDataTableData);
+        setOptimalityMetricsChartData(optimalityMetricsChartData);
+        setIsLoadingOptimalityData(false);
+      }
+    );
+  }, [careLevel, district, year]);
+
+  return [
+    {
+      optimalityDataTableData,
+      optimalityMetricsChartData,
+      isLoadingOptimalityData,
+    },
+  ];
+};
+
+export const useGetTemperatureData = (year, district) => {
+  const temperatureMonitoringMetricsChartDataURL = `http://${apiEndpoint}${port}/coldchain/api/tempheatfreezestats?district=${district}&year=${year}`;
+
+  const temperatureMonitoringDataTableURL = `http://${apiEndpoint}${port}/coldchain/api/tempreportmetrics?year=${year}`;
+
+  const temperatureMonitoringReportingRatesDataURL = `http://${apiEndpoint}${port}/coldchain/api/tempreportingratestats?year=${year}`;
+
+  const [
+    isLoadingTemperatureMonitoringData,
+    setIsLoadingTemperatureMonitoringData,
+  ] = useState(false);
+
+  const [
+    temperatureMonitoringDataTableData,
+    setTemperatureMonitoringDataTableData,
+  ] = useState(null);
+
+  const [
+    temperatureMonitoringMetricsChartData,
+    setTemperatureMonitoringMetricsChartData,
+  ] = useState(null);
+
+  const [
+    temperatureMonitoringReportingRatesData,
+    setTemperatureMonitoringReportingRatesData,
+  ] = useState(null);
+
+  useEffect(() => {
+    setIsLoadingTemperatureMonitoringData(true);
+
+    const temperatureMonitoringDataTableReq = async () => {
+      const response = await fetch(temperatureMonitoringDataTableURL);
+      return await response.json();
+    };
+
+    const temperatureMonitoringMetricsChartDataReq = async () => {
+      const response = await fetch(temperatureMonitoringMetricsChartDataURL);
+      return await response.json();
+    };
+
+    const temperatureMonitoringReportingRatesDataReq = async () => {
+      const response = await fetch(temperatureMonitoringReportingRatesDataURL);
+      return await response.json();
+    };
+
+    const getAllData = () => {
+      return Promise.all([
+        temperatureMonitoringDataTableReq(),
+        temperatureMonitoringMetricsChartDataReq(),
+        temperatureMonitoringReportingRatesDataReq(),
+      ]);
+    };
+
+    getAllData().then(
+      ([
+        temperatureMonitoringDataTableData,
+        temperatureMonitoringMetricsChartData,
+        temperatureMonitoringReportingRatesData,
+      ]) => {
+        setTemperatureMonitoringDataTableData(
+          temperatureMonitoringDataTableData
+        );
+        setTemperatureMonitoringMetricsChartData(
+          temperatureMonitoringMetricsChartData
+        );
+        setTemperatureMonitoringReportingRatesData(
+          temperatureMonitoringReportingRatesData
+        );
+        setIsLoadingTemperatureMonitoringData(false);
+      }
+    );
+  }, [district, year]);
+
+  return [
+    {
+      temperatureMonitoringDataTableData,
+      temperatureMonitoringMetricsChartData,
+      temperatureMonitoringReportingRatesData,
+      isLoadingTemperatureMonitoringData,
+    },
+  ];
+};
+
+export const useGetQuarters = () => {
+  const quartersURL = `http://${apiEndpoint}${port}/coldchain/api/quarters`;
+  const [quarters, setQuarters] = useState(null);
+  const [isLoadingQuarters, setIsLoadingQuarters] = useState(false);
+
+  useEffect(() => {
+    setIsLoadingQuarters(true);
+    const quartersReq = async () => {
+      const response = await fetch(quartersURL);
+      return await response.json();
+    };
+
+    const getAllData = () => {
+      return Promise.all([quartersReq()]);
+    };
+
+    getAllData().then(([quarters]) => {
+      setQuarters(quarters);
+      setIsLoadingQuarters(false);
+    });
+  }, [quartersURL]);
+
+  return [{ quarters, isLoadingQuarters }];
 };
 
 // export const useApiDataFetch = (

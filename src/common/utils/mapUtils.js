@@ -1,6 +1,6 @@
 // Various utility functions for maps
 
-const createDistrictDataMap = data => {
+const createDistrictDataMap = (data = []) => {
   let dataDistrictMap = {};
 
   for (let i in data) {
@@ -51,9 +51,9 @@ const createDistrictDataMap = data => {
   return dataDistrictMap;
 };
 
-const getAggregates = (data, periodList) => {
+const getAggregates = (data = [], periodList) => {
   const result = periodList.reduce(
-    function(acc, period) {
+    function (acc, period) {
       if (
         data === undefined ||
         data[period[0]] === undefined ||
@@ -73,7 +73,7 @@ const getAggregates = (data, periodList) => {
       totalFirstDose: 0,
       totalSecondDose: 0,
       totalThirdDose: 0,
-      totalLastDose: 0
+      totalLastDose: 0,
     }
   );
 
@@ -90,7 +90,7 @@ const getLastValue = (d, defaultValue) => {
 const getPeriodList = (data, endYear, tabTitle) => {
   const periodList = [];
 
-  if (data && data) {
+  if (data) {
     if (tabTitle === "Monthly (CY)") {
       periodList.push([endYear.toString(), getLastValue(data[endYear], 12)]);
     } else if (tabTitle === "Monthly (FY)") {
@@ -147,7 +147,13 @@ const getPeriodList = (data, endYear, tabTitle) => {
   return periodList;
 };
 
-const getValuesInRange = (data, startYear, startMonth, endYear, endMonth) => {
+const getValuesInRange = (
+  data = [],
+  startYear,
+  startMonth,
+  endYear,
+  endMonth
+) => {
   let values = [];
   for (let yearIndex in data) {
     if (yearIndex < startYear || yearIndex > endYear) continue;
@@ -161,24 +167,24 @@ const getValuesInRange = (data, startYear, startMonth, endYear, endMonth) => {
   return values;
 };
 
-const calculateCoverageRate = (data, periodList, doseNumber) => {
+const calculateCoverageRate = (data = [], periodList, doseNumber) => {
   const result = getAggregates(data, periodList);
   let doseValue = result.totalLastDose;
   if (doseNumber === 1) doseValue = result.totalFirstDose;
   else if (doseNumber === 2) doseValue = result.totalSecondDose;
   else if (doseNumber === 3) doseValue = result.totalThirdDose;
-  return (doseValue / result.totalPlanned) * 100;
+  return (doseValue / result.totalPlanned) * 100 || 0;
 };
 
-const calculateDropoutRate = (data, periodList) => {
+const calculateDropoutRate = (data = [], periodList) => {
   const result = getAggregates(data, periodList);
   return (
     ((result.totalFirstDose - result.totalLastDose) / result.totalFirstDose) *
-    100
+      100 || 0
   );
 };
 
-const calculateRedCategoryValue = (data, periodList) => {
+const calculateRedCategoryValue = (data = [], periodList) => {
   const r = getAggregates(data, periodList);
   const access = (r.totalFirstDose / r.totalPlanned) * 100;
   const dropoutRate =
@@ -198,7 +204,7 @@ const getLastMapPeriod = (data, endYear, tabTitle) => {
   // return periodList[periodList.length - 1];
 };
 
-const generateFullLabelFromPeriod = period => {
+const generateFullLabelFromPeriod = (period) => {
   period = period.toString();
   var year = period.substr(0, 4);
   var month = Number(period.substr(4, 2));
@@ -216,7 +222,7 @@ const generateFullLabelFromPeriod = period => {
     "September",
     "October",
     "November",
-    "December"
+    "December",
   ];
   return months[month] + " " + year;
 };
@@ -247,5 +253,5 @@ export {
   getPeriodList,
   generateMapTitle,
   calculateDropoutRate,
-  calculateRedCategoryValue
+  calculateRedCategoryValue,
 };
