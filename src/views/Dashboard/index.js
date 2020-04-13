@@ -14,6 +14,7 @@ import { OverviewPanel } from "../Dashboard/components/OverviewPanel/index";
 import { ColdChainPanel } from "../Dashboard/components/ColdChainPanel/index";
 import { CoveragePanel } from "./components/CoveragePanel/index";
 import { StockManagementPanel } from "./components/StockManagementPanel/index";
+import { PerformanceManagementPanel } from "./components/PerformanceManagementPanel/index";
 
 // Importing this at the top to provide pdf export functionality
 import Highcharts from "highcharts";
@@ -52,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function Dashboard() {
   const classes = useStyles();
-  const [value, setValue] = React.useState(1);
+  const [value, setValue] = React.useState(4);
 
   function handleChange(event, newValue) {
     setValue(newValue);
@@ -72,6 +73,9 @@ export function Dashboard() {
         </TabPanel>
         <TabPanel value={value} index={3}>
           <ColdChainPanel />
+        </TabPanel>
+        <TabPanel value={value} index={4}>
+          <PerformanceManagementPanel />
         </TabPanel>
       </div>
     </BaseLayout>

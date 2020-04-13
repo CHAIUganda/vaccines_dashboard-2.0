@@ -12,7 +12,7 @@ export const EligibilityStatusPieChartTemplate = (data, district) => {
       plotBackgroundColor: null,
       plotBorderWidth: null,
       plotShadow: false,
-      height: 80 + "%",
+      // height: 80 + "%",
     },
     credits: { ...commonChartOptions.credits },
     exporting: {

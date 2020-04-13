@@ -120,6 +120,31 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
 
+  switch: {
+    marginTop: 8,
+    borderStyle: "solid",
+    borderRadius: 4,
+    borderWidth: "thin",
+    borderColor: "#CCCCCC",
+    backgroundColor: "white",
+    padding: 5,
+    paddingRight: 20,
+  },
+  switchLable: {
+    fontSize: "small",
+    color: "#28354A",
+  },
+
+  lable: {
+    fontSize: "small !important",
+    color: "#28354A",
+  },
+
+  swithFormControl: {
+    marginTop: 15,
+    marginRight: 40,
+  },
+
   // Table
   tableRoot: {
     width: "100%",

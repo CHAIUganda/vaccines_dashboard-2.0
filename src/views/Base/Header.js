@@ -227,7 +227,15 @@ function Header(props) {
           icon={<BusinessIcon className={classes.verticalIcon} />}
           href="/cold-chain"
           {...a11yProps(3)}
-          disabled={false}
+        />
+        <LinkTab
+          classes={{
+            verticalIconLabelWrapper: classes.verticalIconLabelWrapper,
+            verticalLabelContainer: classes.verticalLabelContainer,
+          }}
+          icon={<TimelineIcon className={classes.verticalIcon} />}
+          href="/performance-management"
+          {...a11yProps(4)}
         />
       </Tabs>
     </div>
@@ -311,7 +319,6 @@ function Header(props) {
                   label="Stock Management"
                   href="/stock-management"
                   {...a11yProps(2)}
-                  disabled={false}
                 />
                 <LinkTab
                   classes={{
@@ -321,7 +328,6 @@ function Header(props) {
                   label="Cold Chain"
                   href="/cold-chain"
                   {...a11yProps(3)}
-                  disabled={false}
                 />
                 <LinkTab
                   classes={{
@@ -331,19 +337,10 @@ function Header(props) {
                   label="Performance Management"
                   href="/performance-management"
                   {...a11yProps(4)}
-                  disabled={true}
                 />
                 <Button color="inherit" href="/login" icon={<SettingsIcon />}>
                   Login
                 </Button>
-                {/* <Avatar
-                  alt="Map of Uganda"
-                  src="/uganda-flag.png"
-                  variant="square"
-                  classes={{
-                    wrapper: classes.iconLabelWrapper
-                  }}
-                /> */}
               </Tabs>
             </div>
           </Hidden>

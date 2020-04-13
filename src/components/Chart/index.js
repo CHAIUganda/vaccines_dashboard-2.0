@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   text: {
     color: "#28354A",
     opacity: "100%",
-    fontWeight: theme.typography.fontWeightRegular,
+    fontWeight: "500",
     fontSize: "medium",
   },
 }));
@@ -65,8 +65,8 @@ const CustomeChartPaper = (props) => {
               {dataState ? (
                 <p
                   style={{
-                    margin: 200,
-                    marginLeft: 300,
+                    float: "inherit",
+                    textAlign: "center",
                     fontSize: 20,
                     color: "red",
                   }}
