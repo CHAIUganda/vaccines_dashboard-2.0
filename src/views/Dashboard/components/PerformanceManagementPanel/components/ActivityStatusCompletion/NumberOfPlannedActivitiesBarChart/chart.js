@@ -1,10 +1,22 @@
-import Highcharts from "highcharts";
+import { useContext } from "react";
+
+// Bring in our performance management context
+import { PerformanceManagementContext } from "../../../../../../../context/PerformanceManagement/PerformanceManagementState";
+
 // Chart Options
 import { commonChartOptions } from "../../../../../../../common/chartOptions/chartOptions";
 
-// import { getEligibilityChartData } from "../../../../../../../common/utils/coldchain/utils";
+import { getPlannedActivitiesChartData } from "../../../../../../../common/utils/performancemanagement/utils";
 
-export const NumberOfPlannedActivitiesBarChartTemplate = (data, district) => {
+export const NumberOfPlannedActivitiesBarChartTemplate = () => {
+  const { activityCompletionStatus, quarterCategories } = useContext(
+    PerformanceManagementContext
+  );
+
+  const { plannedActivities } = activityCompletionStatus;
+
+  const chartData = getPlannedActivitiesChartData(plannedActivities);
+
   const chart = {
     credits: {
       ...commonChartOptions.credits,
@@ -20,38 +32,14 @@ export const NumberOfPlannedActivitiesBarChartTemplate = (data, district) => {
       text: "",
     },
     xAxis: {
-      categories: ["2020 Q1", "2020 Q2", "2020 Q3", "2020 Q4", "2021 Q1"],
+      categories: quarterCategories,
     },
-    series: [
-      {
-        type: "column",
-        name: "Jane",
-        data: [3, 2, 1, 3, 4],
-        color: {
-          linearGradient: {
-            x1: 0,
-            x2: 0,
-            y1: 0,
-            y2: 1,
-          },
-          stops: [
-            [0, "#4E596A"],
-            [1, "#9CA2AB"],
-          ],
-        },
+    yAxis: {
+      title: {
+        text: "Number of activities",
       },
-
-      {
-        type: "line",
-        name: "Average",
-        data: [3, 2.67, 3, 6.33, 3.33],
-        marker: {
-          lineWidth: 2,
-          lineColor: Highcharts.getOptions().colors[3],
-          fillColor: "white",
-        },
-      },
-    ],
+    },
+    series: chartData,
   };
 
   return chart;

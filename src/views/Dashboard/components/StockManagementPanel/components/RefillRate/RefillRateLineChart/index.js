@@ -1,4 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
+
+// Bring in our stock management context
+import { StockManagementContext } from "../../../../../../../context/StockManagement/StockManagementState";
 
 // Highcharts for time series test
 import Highcharts from "highcharts";
@@ -10,29 +13,15 @@ import { Chart } from "../../../../../../../components";
 // Chart Template
 import { RefillRateLineChartTemplate } from "./chart";
 
-const RefillRateLineChart = ({
-  data,
-  isLoading,
-  endMonth,
-  startMonth,
-  district,
-  vaccine
-}) => {
+const RefillRateLineChart = () => {
   const [chart, setChart] = useState();
+  const { refillRate } = useContext(StockManagementContext);
+  const { startMonth, endMonth, isLoading, vaccine, district } = refillRate;
 
   useMemo(() => {
-    if (data && data) {
-      setChart(
-        RefillRateLineChartTemplate(
-          data,
-          endMonth,
-          startMonth,
-          district,
-          vaccine
-        )
-      );
-    }
-  }, [data, endMonth, startMonth, district, vaccine]);
+    setChart(RefillRateLineChartTemplate());
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [endMonth, startMonth, vaccine, district]);
 
   return (
     <Chart

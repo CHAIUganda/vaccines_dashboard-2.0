@@ -1,4 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
+
+// Bring in our cold chain context
+import { CoverageContext } from "../../../../../../../context/Coverage/CoverageState";
 
 // Highcharts for time series test
 import Highcharts from "highcharts";
@@ -8,21 +11,16 @@ import HighchartsReact from "highcharts-react-official";
 import { Chart } from "../../../../../../../components";
 
 // Chart Template
-import { redcategorisationCoverageMap } from "./chart";
+import { RedcategorisationCoverageMap } from "./chart";
 
 // High Maps components
 require("highcharts/modules/map")(Highcharts);
 
-const RedCategorisationCoverageForVaccineMap = ({
-  data,
-  endYear,
-  tabTitle,
-  dose,
-  vaccineName,
-  isLoading,
-  reportYear,
-  startYear
-}) => {
+const RedCategorisationCoverageForVaccineMap = ({ tabTitle }) => {
+  const { redCategorisation } = useContext(CoverageContext);
+
+  const { vaccine, endYear, startYear, isLoading } = redCategorisation;
+
   const [map, setMap] = useState();
 
   const mapTitle = `${
@@ -30,16 +28,13 @@ const RedCategorisationCoverageForVaccineMap = ({
       ? "Annualized"
       : "Monthly"
   } Red Categorization of ${
-    vaccineName === "ALL" ? "PENTA3" : vaccineName
+    vaccine === "ALL" ? "PENTA3" : vaccine
   } for ${endYear}`;
 
   useMemo(() => {
-    if (data && data) {
-      setMap(
-        redcategorisationCoverageMap(data, endYear, tabTitle, dose, vaccineName)
-      );
-    }
-  }, [data, endYear, tabTitle, dose, vaccineName]);
+    setMap(RedcategorisationCoverageMap(tabTitle));
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startYear, vaccine]);
 
   return (
     <Chart
@@ -51,7 +46,7 @@ const RedCategorisationCoverageForVaccineMap = ({
           constructorType={"mapChart"}
         />
       }
-      isLoading={isLoading && isLoading}
+      isLoading={isLoading}
     />
   );
 };

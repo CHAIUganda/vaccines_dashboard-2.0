@@ -1,4 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
+
+// Bring in our stock management context
+import { StockManagementContext } from "../../../../../../../context/StockManagement/StockManagementState";
 
 // Highcharts for time series test
 import Highcharts from "highcharts";
@@ -8,33 +11,27 @@ import HighchartsReact from "highcharts-react-official";
 import { Chart } from "../../../../../../../../src/components";
 
 // Chart Template
-import { districtStockTrendsChartTemplate } from "./chart";
+import { DistrictStockTrendsChartTemplate } from "./chart";
 
-const DistrictStockTrendsChart = ({
-  data,
-  isLoading,
-  endMonth,
-  startMonth,
-  district,
-  vaccine
-}) => {
+const DistrictStockTrendsChart = () => {
   const [chart, setChart] = useState();
+
+  const { districtStockTrends } = useContext(StockManagementContext);
+
+  const {
+    endMonth,
+    startMonth,
+    vaccine,
+    district,
+    isLoading,
+  } = districtStockTrends;
 
   const chartTitle = `${district} stock level monthly trends for ${vaccine}`;
 
   useMemo(() => {
-    if (data && data) {
-      setChart(
-        districtStockTrendsChartTemplate(
-          data,
-          endMonth,
-          startMonth,
-          district,
-          vaccine
-        )
-      );
-    }
-  }, [data, startMonth, endMonth, vaccine, district]);
+    setChart(DistrictStockTrendsChartTemplate());
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startMonth, endMonth, vaccine, district]);
 
   return (
     <Chart

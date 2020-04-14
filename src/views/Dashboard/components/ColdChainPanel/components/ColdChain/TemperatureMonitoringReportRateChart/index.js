@@ -1,4 +1,8 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
+
+// Bring in our cold chain context
+import { ColdChainContext } from "../../../../../../../context/ColdChain/ColdChainState";
+
 // Highcharts for time series test
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
@@ -9,27 +13,16 @@ import { Chart } from "../../../../../../../components";
 // Chart Template
 import { TemperatureMonitoringReportRateChartTemplate } from "./chart";
 
-const TemperatureMonitoringReportRateChart = ({
-  data,
-  isLoading,
-  district,
-  year,
-  month,
-}) => {
+const TemperatureMonitoringReportRateChart = () => {
   const [chart, setChart] = useState();
 
+  const { temperatureMonitoring } = useContext(ColdChainContext);
+  const { isLoading, district, year } = temperatureMonitoring;
+
   useMemo(() => {
-    if (data && data) {
-      setChart(
-        TemperatureMonitoringReportRateChartTemplate(
-          data,
-          district,
-          year,
-          month
-        )
-      );
-    }
-  }, [data, district, month, year]);
+    setChart(TemperatureMonitoringReportRateChartTemplate());
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [district, year]);
 
   return (
     <Chart

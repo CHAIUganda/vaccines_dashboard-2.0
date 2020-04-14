@@ -1,27 +1,38 @@
+import { useContext } from "react";
+
+// Bring in our coverage context
+import { CoverageContext } from "../../../../../../../context/Coverage/CoverageState";
+
 // Chart Options
 import { commonChartOptions } from "../../../../../../../common/chartOptions/chartOptions";
 
 // Utility functions
 import {
   getYearFromData,
-  aggregateYearAntigenData
+  aggregateYearAntigenData,
 } from "../../../../../../../common/utils/utils";
 
-export const coverageRateChartTemplate = (
-  data,
-  vaccineName,
-  startYear,
-  district
-) => {
-  const years = getYearFromData(data);
+export const CoverageRateChartTemplate = () => {
+  const { coverageByYear } = useContext(CoverageContext);
+  const {
+    vaccineDosesForCoverageByYear,
+    startYear,
+    vaccine,
+    district,
+  } = coverageByYear;
 
-  const antigenData = aggregateYearAntigenData(data, vaccineName);
+  const years = getYearFromData(vaccineDosesForCoverageByYear);
+
+  const antigenData = aggregateYearAntigenData(
+    vaccineDosesForCoverageByYear,
+    vaccine
+  );
 
   let chart = {
     credits: { ...commonChartOptions.credits },
     chart: {
       type: "column",
-      ...commonChartOptions.chart
+      ...commonChartOptions.chart,
     },
     exporting: {
       ...commonChartOptions.exporting,
@@ -30,43 +41,43 @@ export const coverageRateChartTemplate = (
         title: {
           text: `Antigen Coverage for ${startYear} for ${
             district === "National" ? "National Level" : district
-          }`
-        }
-      }
+          }`,
+        },
+      },
     },
     title: {
-      text: ""
+      text: "",
     },
     xAxis: {
       categories: years,
       labels: {
-        ...commonChartOptions.labels
-      }
+        ...commonChartOptions.labels,
+      },
     },
     yAxis: {
       min: 0,
       title: {
         text: "Coverage Rate (%)",
-        align: "middle"
+        align: "middle",
       },
       labels: {
         ...commonChartOptions.labels,
-        overflow: "justify"
-      }
+        overflow: "justify",
+      },
     },
     plotOptions: {
       column: {
         dataLabels: {
           enabled: true,
           format: "{y} %",
-          ...commonChartOptions.labels
-        }
-      }
+          ...commonChartOptions.labels,
+        },
+      },
     },
     tooltip: {
-      ...commonChartOptions.lineTooltip
+      ...commonChartOptions.lineTooltip,
     },
-    series: [...antigenData]
+    series: [...antigenData],
   };
 
   return chart;

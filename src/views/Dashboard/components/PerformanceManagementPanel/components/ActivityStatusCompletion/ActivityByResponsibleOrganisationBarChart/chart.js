@@ -1,53 +1,34 @@
+// Bring in our performance management context
+import { useContext } from "react";
+
+import { PerformanceManagementContext } from "../../../../../../../context/PerformanceManagement/PerformanceManagementState";
+
 // Chart Options
 import { commonChartOptions } from "../../../../../../../common/chartOptions/chartOptions";
 
-// import { getEligibilityChartData } from "../../../../../../../common/utils/coldchain/utils";
+import { getActivityByResponsibleOrganisationChartData } from "../../../../../../../common/utils/performancemanagement/utils";
 
-export const ActivityByResponsibleOrganisationChartTemplate = (
-  data,
-  district
-) => {
+export const ActivityByResponsibleOrganisationChartTemplate = (data) => {
+  const { organisations } = useContext(PerformanceManagementContext);
+
+  const chartData = getActivityByResponsibleOrganisationChartData(data);
+
   return {
     credits: {
       ...commonChartOptions.credits,
     },
 
     chart: {
-      type: "bar",
-      height: 600,
+      type: "column",
+      height: 250,
       backgroundColor: null,
     },
     title: {
       text: "",
     },
-    // subtitle: {
-    //   text:
-    //     'Source: <a href="https://en.wikipedia.org/wiki/World_population">Wikipedia.org</a>',
-    // },
+
     xAxis: {
-      categories: [
-        "AFENET",
-
-        "CDC",
-
-        "CHAI",
-
-        "GoU",
-
-        "JSI",
-
-        "HSS2/GAVI",
-
-        "PATH",
-
-        "UNICEF",
-
-        "PBF/Gavi",
-
-        "WHO",
-
-        "WHO(PEP 2019)",
-      ],
+      categories: organisations.filter((org) => org !== "All"),
       title: {
         text: null,
       },
@@ -55,15 +36,15 @@ export const ActivityByResponsibleOrganisationChartTemplate = (
     yAxis: {
       min: 0,
       title: {
-        text: "Population (millions)",
-        align: "high",
+        text: "Number of funded activities",
+        align: "low",
       },
       labels: {
         overflow: "justify",
       },
     },
     tooltip: {
-      valueSuffix: " millions",
+      valueSuffix: " activities",
     },
     plotOptions: {
       bar: {
@@ -72,32 +53,7 @@ export const ActivityByResponsibleOrganisationChartTemplate = (
         },
       },
     },
-    // legend: {
-    //   layout: "vertical",
-    //   align: "right",
-    //   verticalAlign: "top",
-    //   x: -40,
-    //   y: 80,
-    //   floating: true,
-    //   borderWidth: 1,
-    //   // backgroundColor:
-    //   //     Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
-    //   shadow: true,
-    // },
-    // credits: {
-    //     enabled: false
-    // },
-    series: [
-      {
-        name: "Year 2016",
-        data: [107, 31, 635, 203, 133, 156, 947, 408, 68, 99, 102],
-        color: "#FC6F6F",
-      },
-      {
-        name: "Year 2017",
-        data: [107, 31, 635, 203, 133, 156, 947, 408, 68, 99, 102].reverse(),
-        color: "#4E596A",
-      },
-    ],
+
+    series: [...chartData],
   };
 };

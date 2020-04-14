@@ -1,6 +1,11 @@
-import React, { forwardRef, useState, useMemo } from "react";
+import React, { forwardRef, useContext } from "react";
 
-import MaterialTable from "material-table";
+// Bring in our cold chain context
+import { ColdChainContext } from "../../../../../../../context/ColdChain/ColdChainState";
+
+import MaterialTable, { MTableToolbar } from "material-table";
+
+import Chip from "@material-ui/core/Chip";
 
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
@@ -44,18 +49,21 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-export const HeatTable = ({ data, year, isLoading }) => {
+export const HeatTable = () => {
   const classes = useStyles();
 
+  const { temperatureMonitoring } = useContext(ColdChainContext);
+
+  const {
+    temperatureMonitoringReportingRatesData,
+    isLoading,
+    year,
+  } = temperatureMonitoring;
+
+  const reportingRateData =
+    temperatureMonitoringReportingRatesData?.heat_graph_data;
+
   const title = `Proportion of districts submitting temperature data for ${year}`;
-
-  const [reportingRateData, setReportingRateData] = useState([]);
-
-  useMemo(() => {
-    if (data && data.heat_graph_data) {
-      setReportingRateData(data.heat_graph_data);
-    }
-  }, [data]);
 
   // Very ugly expensive hackish way of drawinng the required heat map.
   // Look into better ways eg Highcharts heat map? or optimize below
@@ -205,6 +213,31 @@ export const HeatTable = ({ data, year, isLoading }) => {
         { exportButton: true },
         { pageSize: 7 })
       }
+      components={{
+        Toolbar: (props) => (
+          <div>
+            <MTableToolbar {...props} />
+            <div style={{ padding: "0px 10px" }}>
+              <Chip
+                label="Submitted"
+                style={{
+                  marginRight: 10,
+                  backgroundColor: "limegreen",
+                  color: "white",
+                }}
+              />
+              <Chip
+                label="Not Submitted"
+                style={{
+                  marginRight: 5,
+                  backgroundColor: "orangered",
+                  color: "white",
+                }}
+              />
+            </div>
+          </div>
+        ),
+      }}
     />
   );
 };

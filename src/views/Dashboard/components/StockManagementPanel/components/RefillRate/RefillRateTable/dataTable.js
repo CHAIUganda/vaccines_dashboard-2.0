@@ -1,6 +1,9 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useContext } from "react";
 
 import MaterialTable from "material-table";
+
+// Bring in our stock management context
+import { StockManagementContext } from "../../../../../../../context/StockManagement/StockManagementState";
 
 // Import common styles
 import { useStyles } from "../../../../styles";
@@ -45,8 +48,18 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-export const DataTable = ({ data, vaccine, endMonth, isLoading }) => {
+export const DataTable = () => {
   const classes = useStyles();
+
+  const { refillRate } = useContext(StockManagementContext);
+
+  const {
+    atHandStockByDistrictData,
+    vaccine,
+    endMonth,
+    isLoading,
+  } = refillRate;
+
   const title = `Stock Balances of ${vaccine} at the Beginning of ${endMonth}`;
 
   const columns = [
@@ -98,7 +111,7 @@ export const DataTable = ({ data, vaccine, endMonth, isLoading }) => {
     <MaterialTable
       title={<h3 className={classes.tableTitle}>{title}</h3>}
       isLoading={isLoading}
-      data={data && data}
+      data={atHandStockByDistrictData}
       columns={columns}
       icons={tableIcons}
       options={

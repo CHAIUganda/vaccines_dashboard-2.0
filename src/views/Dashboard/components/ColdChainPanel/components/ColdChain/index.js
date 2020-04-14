@@ -1,4 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
+
+// Bring in our cold chain context
+import { ColdChainContext } from "../../../../../../context/ColdChain/ColdChainState";
 
 // Material components
 import { Grid } from "@material-ui/core";
@@ -75,58 +78,49 @@ const TabStyle = withStyles((theme) => ({
   selected: {},
 }))((props) => <Tab {...props} />);
 
-export default function ColdChain(props) {
+export default function ColdChain({ parentTab }) {
+  // Grab our context
+
+  const { eligibility, functionality, capacity, optimality } = useContext(
+    ColdChainContext
+  );
+
   const classes = useStyles();
   const [value, setValue] = useState(0);
-  const { data, parentTab } = props;
-
-  const [functionality, setFunctionality] = useState();
-  const [capacityData, setCapacityData] = useState();
-  const [eligibilityData, setEligibilityData] = useState();
-  const [optimalityData, setOptimalityData] = useState();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  useMemo(() => {
-    if (data && data && parentTab === "functionality") {
-      setFunctionality(data && data.functionalityMetricsChartData);
-    } else if (data && data && parentTab === "capacity") {
-      setCapacityData(data && data.capacityMetricsChartData);
-    } else if (data && data && parentTab === "eligibility") {
-      setEligibilityData(data && data.eligibilityMetricsChartData);
-    } else if (data && data && parentTab === "optimality") {
-      setOptimalityData(data && data.optimalityMetricsChartData);
-    }
-  }, [data, parentTab]);
-
-  const eligibibleFacilities =
-    eligibilityData && eligibilityData.total_eligible_facilities;
-
-  const functionality_percentage = Math.round(
-    functionality &&
-      functionality
-        .filter((a) => a.functionality_percentage)
-        .map((d) => d.functionality_percentage)
+  const eligibibleFacilities = new Intl.NumberFormat("lg-UG").format(
+    eligibility?.eligibilityMetricsChartData?.total_eligible_facilities
   );
+
+  const functionality_percentage =
+    Math.round(
+      functionality?.functionalityMetricsChartData
+        ?.filter((a) => a.functionality_percentage)
+        ?.map((d) => d.functionality_percentage)
+    ) || 0;
 
   const capacity_shortage_negative =
-    capacityData && capacityData.gap_metrics.negative_gap_percentage;
+    capacity?.capacityMetricsChartData?.gap_metrics.negative_gap_percentage;
 
   const capacity_shortage_positive =
-    capacityData && capacityData.gap_metrics.positive_gap_percentage;
+    capacity?.capacityMetricsChartData?.gap_metrics.positive_gap_percentage;
 
   const totalAvailableLiters = new Intl.NumberFormat("lg-UG").format(
-    capacityData && capacityData.overall_total_available
+    capacity?.capacityMetricsChartData?.overall_total_available
   );
 
-  const CCE_dvs_optimality_percentage = optimalityData && optimalityData.dvs;
-  const CCE_hf_optimality_percentage = optimalityData && optimalityData.hf;
+  const CCE_dvs_optimality_percentage =
+    optimality?.optimalityMetricsChartData?.dvs;
+  const CCE_hf_optimality_percentage =
+    optimality?.optimalityMetricsChartData?.hf;
   const SITE_dvs_optimality_percentage =
-    optimalityData && optimalityData.dvs_sites;
+    optimality?.optimalityMetricsChartData?.dvs_sites;
   const SITE_hf_optimality_percentage =
-    optimalityData && optimalityData.hf_sites;
+    optimality?.optimalityMetricsChartData?.hf_sites;
 
   return (
     <Grid container spacing={3}>
@@ -160,7 +154,7 @@ export default function ColdChain(props) {
                               title={"Eligible Facilities"}
                               showPercentage={false}
                               metric={eligibibleFacilities}
-                              isLoading={data.isLoading && data.isLoading}
+                              isLoading={eligibility.isLoading}
                             />
                           </>
                         ) : (
@@ -169,7 +163,7 @@ export default function ColdChain(props) {
                               title={"Functionality"}
                               showPercentage={true}
                               metric={functionality_percentage}
-                              isLoading={data.isLoading && data.isLoading}
+                              isLoading={functionality.isLoading}
                             />
                           </>
                         )}
@@ -181,25 +175,11 @@ export default function ColdChain(props) {
                       >
                         {parentTab === "eligibility" ? (
                           <>
-                            <EligibilityStatusPieChart
-                              data={data.eligibilityMetricsChartData}
-                              isLoading={data.isLoading}
-                              district={data.district}
-                              careLevel={data.careLevel}
-                              startQuarter={data.endQuarter}
-                              endQuarter={data.endQuarter}
-                            />
+                            <EligibilityStatusPieChart />
                           </>
                         ) : (
                           <>
-                            <FunctionalityStatusBarChart
-                              data={data.functionalityMetricsChartData}
-                              isLoading={data.isLoading}
-                              district={data.district}
-                              careLevel={data.careLevel}
-                              startYearHalf={data.startYearHalf}
-                              endYearHalf={data.endYearHalf}
-                            />
+                            <FunctionalityStatusBarChart />
                           </>
                         )}
                       </Grid>
@@ -209,25 +189,11 @@ export default function ColdChain(props) {
                   <Grid item lg={9} md={9} xl={9} xs={12}>
                     {parentTab === "functionality" ? (
                       <>
-                        <FunctionalityTable
-                          data={data.functionalityDataTableData}
-                          isLoading={data.isLoading}
-                          district={data.district}
-                          careLevel={data.careLevel}
-                          startQuarter={data.startQuarter}
-                          endQuarter={data.endQuarter}
-                        />
+                        <FunctionalityTable />
                       </>
                     ) : (
                       <>
-                        <EligibilityTable
-                          data={data.eligibilityDataTableData}
-                          isLoading={data.isLoading}
-                          district={data.district}
-                          careLevel={data.careLevel}
-                          startQuarter={data.startQuarter}
-                          endQuarter={data.endQuarter}
-                        />
+                        <EligibilityTable />
                       </>
                     )}
                   </Grid>
@@ -246,29 +212,31 @@ export default function ColdChain(props) {
                       <Grid item lg={4} md={4} xl={4} xs={12}>
                         <Card
                           title={`Total liters ${
-                            data.district === "national"
+                            capacity?.district === "national"
                               ? "at National Level"
-                              : "in " + data.district
+                              : "in " + capacity?.district
                           }`}
                           showPercentage={false}
                           metric={totalAvailableLiters}
-                          isLoading={data.isLoading && data.isLoading}
+                          isLoading={capacity.isLoading}
                         />
                       </Grid>
                       <Grid item lg={4} md={4} xl={4} xs={12}>
                         <Card
                           title={"Shortage (-ve Gap)"}
+                          metricType={"capacity_neg"}
                           showPercentage={true}
                           metric={capacity_shortage_negative}
-                          isLoading={data.isLoading && data.isLoading}
+                          isLoading={capacity.isLoading}
                         />
                       </Grid>
                       <Grid item lg={4} md={4} xl={4} xs={12}>
                         <Card
-                          title={"Shortage (+ve Gap)"}
+                          title={"Surplus (+ve Gap)"}
+                          metricType={"capacity_pos"}
                           showPercentage={true}
                           metric={capacity_shortage_positive}
-                          isLoading={data.isLoading && data.isLoading}
+                          isLoading={capacity.isLoading}
                         />
                       </Grid>
                     </Grid>
@@ -283,24 +251,10 @@ export default function ColdChain(props) {
                         xs={12}
                         style={{ height: "fit-content" }}
                       >
-                        <CapacityStatusBarChart
-                          data={data.capacityMetricsChartData}
-                          isLoading={data.isLoading}
-                          district={data.district}
-                          careLevel={data.careLevel}
-                          startQuarter={data.startQuarter}
-                          endQuarter={data.endQuarter}
-                        />
+                        <CapacityStatusBarChart />
                       </Grid>
                       <Grid item lg={8} md={8} xl={8} xs={12}>
-                        <CapacityTable
-                          data={data.capacityDataTableData}
-                          isLoading={data.isLoading}
-                          district={data.district}
-                          careLevel={data.careLevel}
-                          startQuarter={data.startQuarter}
-                          endQuarter={data.endQuarter}
-                        />
+                        <CapacityTable />
                       </Grid>
                     </Grid>
                   </Grid>
@@ -356,7 +310,7 @@ export default function ColdChain(props) {
                                     showPercentage={true}
                                     metric={CCE_dvs_optimality_percentage}
                                     metric2={CCE_hf_optimality_percentage}
-                                    isLoading={data.isLoading && data.isLoading}
+                                    isLoading={optimality.isLoading}
                                   />
                                 </Grid>
                                 <Grid
@@ -368,23 +322,12 @@ export default function ColdChain(props) {
                                     width: 650,
                                   }}
                                 >
-                                  <OptimalityStatusBarChart
-                                    data={data.optimalityMetricsChartData}
-                                    isLoading={data.isLoading}
-                                    district={data.district}
-                                    year={data.year}
-                                  />
+                                  <OptimalityStatusBarChart />
                                 </Grid>
                               </Grid>
                             </Grid>
                             <Grid item lg={9} md={9} xl={9} xs={12}>
-                              <OptimalityTable
-                                data={data.optimalityDataTableData}
-                                isLoading={data.isLoading}
-                                district={data.district}
-                                careLevel={data.careLevel}
-                                year={data.year}
-                              />
+                              <OptimalityTable />
                             </Grid>
                           </Grid>
                         </TabPanel>
@@ -412,7 +355,7 @@ export default function ColdChain(props) {
                                     showPercentage={true}
                                     metric={SITE_dvs_optimality_percentage}
                                     metric2={SITE_hf_optimality_percentage}
-                                    isLoading={data.isLoading && data.isLoading}
+                                    isLoading={optimality.isLoading}
                                   />
                                 </Grid>
                                 <Grid
@@ -424,23 +367,12 @@ export default function ColdChain(props) {
                                     width: 650,
                                   }}
                                 >
-                                  <OptimalityStatusBarChart
-                                    data={data.optimalityMetricsChartData}
-                                    isLoading={data.isLoading}
-                                    district={data.district}
-                                    year={data.year}
-                                  />
+                                  <OptimalityStatusBarChart />
                                 </Grid>
                               </Grid>
                             </Grid>
                             <Grid item lg={9} md={9} xl={9} xs={12}>
-                              <OptimalityTable
-                                data={data.optimalityDataTableData}
-                                isLoading={data.isLoading}
-                                district={data.district}
-                                careLevel={data.careLevel}
-                                year={data.year}
-                              />
+                              <OptimalityTable />
                             </Grid>
                           </Grid>
                         </TabPanel>
@@ -495,26 +427,10 @@ export default function ColdChain(props) {
                               xs={12}
                               style={{ maxHeight: 630 }}
                             >
-                              <TemperatureMonitoringReportRateChart
-                                data={
-                                  data.temperatureMonitoringReportingRatesData
-                                }
-                                isLoading={data.isLoading}
-                                district={data.district}
-                                month={data.month}
-                                year={data.year}
-                              />
+                              <TemperatureMonitoringReportRateChart />
                             </Grid>
                             <Grid item lg={7} md={7} xl={7} xs={12}>
-                              <TemperatureMonitoringReportRateHeatMap
-                                data={
-                                  data.temperatureMonitoringReportingRatesData
-                                }
-                                isLoading={data.isLoading}
-                                district={data.district}
-                                month={data.month}
-                                year={data.year}
-                              />
+                              <TemperatureMonitoringReportRateHeatMap />
                             </Grid>
                           </Grid>
                         </TabPanel>
@@ -532,24 +448,10 @@ export default function ColdChain(props) {
                               xs={12}
                               style={{ maxHeight: 630 }}
                             >
-                              <TemperatureMonitoringBarChart
-                                data={
-                                  data.temperatureMonitoringMetricsChartData
-                                }
-                                isLoading={data.isLoading}
-                                district={data.district}
-                                month={data.month}
-                                year={data.year}
-                              />
+                              <TemperatureMonitoringBarChart />
                             </Grid>
                             <Grid item lg={7} md={7} xl={7} xs={12}>
-                              <TemperatureMonitoringTable
-                                data={data.temperatureMonitoringDataTableData}
-                                isLoading={data.isLoading}
-                                district={data.district}
-                                month={data.month}
-                                year={data.year}
-                              />
+                              <TemperatureMonitoringTable />
                             </Grid>
                           </Grid>
                         </TabPanel>

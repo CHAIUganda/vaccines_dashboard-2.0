@@ -1,3 +1,8 @@
+import { useContext } from "react";
+
+// Bring in our coverage  context
+import { CoverageContext } from "../../../../../../../context/Coverage/CoverageState";
+
 // Chart Options
 import {
   commonChartOptions,
@@ -15,21 +20,20 @@ import {
 //  Map
 const ugandaMap2 = require("../../../../../../../common/maps/map2.json");
 
-export const dropoutRateCoverageMap = (
-  data,
-  startYear,
-  tabTitle,
-  vaccineName
-) => {
-  let activeVaccine = vaccineName;
+export const DropoutRateCoverageMap = (tabTitle) => {
+  const { dropoutRate } = useContext(CoverageContext);
 
-  if (vaccineName === "DPT" || vaccineName === "ALL") {
+  const { vacineDataForMap, vaccine, startYear } = dropoutRate;
+
+  let activeVaccine = vaccine;
+
+  if (vaccine === "DPT" || vaccine === "ALL") {
     activeVaccine = "PENTA";
   }
 
   let mapData = [];
 
-  const districtMapData = createDistrictDataMap(data);
+  const districtMapData = createDistrictDataMap(vacineDataForMap);
 
   for (let [key, value] of Object.entries(districtMapData)) {
     const district = key;
@@ -80,7 +84,7 @@ export const dropoutRateCoverageMap = (
           text: `${
             tabTitle === "Annualized (CY)" || tabTitle === "Annualized (FY)"
           } Dropout Rate  of ${
-            vaccineName === "ALL" ? "PENTA3" : vaccineName
+            vaccine === "ALL" ? "PENTA3" : vaccine
           } for ${startYear}`,
         },
       },

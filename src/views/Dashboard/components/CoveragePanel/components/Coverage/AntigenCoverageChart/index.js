@@ -1,4 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
+
+// Bring in our coverage contenxt
+import { CoverageContext } from "../../../../../../../context/Coverage/CoverageState";
 
 // Highcharts for time series test
 import Highcharts from "highcharts";
@@ -8,39 +11,32 @@ import HighchartsReact from "highcharts-react-official";
 import { Chart } from "../../../../../../../components";
 
 // Chart Template
-import { coverageRateChartTemplate } from "./chart";
+import { CoverageRateChartTemplate } from "./chart";
 
-const AntigenCoverageChart = ({
-  data,
-  startYear,
-  endYear,
-  isLoading,
-  vaccineName,
-  district
-}) => {
+const AntigenCoverageChart = () => {
+  const { coverageByYear } = useContext(CoverageContext);
+  const { startYear, endYear, vaccine, isLoading, district } = coverageByYear;
+
   const [chart, setChart] = useState();
   const [chartTitle, setChartTile] = useState();
 
   const _setChartTile = (startYear, endYear) => {
     const range =
       startYear === endYear ? startYear : `${startYear} - ${endYear}`;
-    const _vaccine = vaccineName === "ALL" ? `Antigens` : vaccineName;
+    const _vaccine = vaccine === "ALL" ? `Antigens` : vaccine;
     const _district =
-      district.length === 1
+      district?.length === 1
         ? "National Level"
-        : district.filter(name => name !== "National");
+        : district?.filter((name) => name !== "National");
 
     return `${_vaccine} Coverage for ${range} for ${_district}`;
   };
 
   useMemo(() => {
-    if (data && data) {
-      setChart(
-        coverageRateChartTemplate(data, vaccineName, startYear, district)
-      );
-      setChartTile(_setChartTile(startYear, endYear));
-    }
-  }, [data, startYear, endYear, vaccineName, district]);
+    setChart(CoverageRateChartTemplate());
+    setChartTile(_setChartTile(startYear, endYear));
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startYear, endYear, vaccine, district]);
 
   return (
     <Chart

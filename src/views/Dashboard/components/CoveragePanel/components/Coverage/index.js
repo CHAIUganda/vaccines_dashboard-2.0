@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
+
+// Bring in our cold chain context
+import { CoverageContext } from "../../../../../../context/Coverage/CoverageState";
 
 // Material components
 import { Grid } from "@material-ui/core";
@@ -74,10 +77,11 @@ const TabStyle = withStyles((theme) => ({
   selected: {},
 }))((props) => <Tab {...props} />);
 
-export default function Coverage(props) {
+export default function Coverage({ parentTab }) {
   const classes = useStyles();
   const [value, setValue] = useState(0);
-  const { data, parentTab } = props;
+
+  const { coverageByMonth, dropoutRate } = useContext(CoverageContext);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -97,14 +101,7 @@ export default function Coverage(props) {
                 xs={12}
                 className={classes.chartDiv}
               >
-                <AntigenCoverageChart
-                  data={data.vacineData}
-                  startYear={data.startYear}
-                  endYear={data.endYear}
-                  isLoading={data.isLoading}
-                  vaccineName={data.vaccineName}
-                  district={data.district}
-                />
+                <AntigenCoverageChart />
               </Grid>
             </Paper>
           </Grid>
@@ -138,155 +135,24 @@ export default function Coverage(props) {
               <Grid item lg={12} md={12} xl={12} xs={12}>
                 <TabPanel value={value} index={0}>
                   <Grid container spacing={3} className={classes.C_section}>
-                    {data.district.length === 1 ? (
+                    {coverageByMonth?.district?.length === 1 ||
+                    dropoutRate?.district?.length === 1 ||
+                    coverageByMonth?.district?.length === undefined ||
+                    dropoutRate?.district?.length === 1 ? (
                       <>
                         <Grid item lg={5} md={5} xl={5} xs={12}>
                           {parentTab === "monthlyCoverage" ? (
-                            <>
-                              <AnnualizedCoverageForVaccineMap
-                                data={data.vacineDataForMap}
-                                tabTitle={"Annualized (CY)"}
-                                dose={data.dose}
-                                startYear={data.startYear}
-                                endYear={data.endYear}
-                                vaccineName={data.vaccineName}
-                                isLoading={data.isLoading}
-                                reportYear={"CY"}
-                              />
-                            </>
-                          ) : (
-                            <>
-                              <DropoutRateCoverageForVaccineMap
-                                data={data.vacineDataForMap}
-                                tabTitle={"Annualized (CY)"}
-                                dose={data.dose}
-                                startYear={data.startYear}
-                                endYear={data.endYear}
-                                vaccineName={data.vaccineName}
-                                isLoading={data.isLoading}
-                              />
-                            </>
-                          )}
-                        </Grid>
-                        <Grid item lg={7} md={7} xl={7} xs={12}>
-                          {parentTab === "monthlyCoverage" ? (
-                            <>
-                              <CoverageForAntigensChart
-                                data={data.vaccineDosesForChart}
-                                tabTitle={"Annualized (CY)"}
-                                vaccineName={data.vaccineName}
-                                dose={data.dose}
-                                isLoading={data.isLoading}
-                                startYear={data.startYear}
-                                endYear={data.endYear}
-                                reportYear={"CY"}
-                                district={data.district}
-                              />
-                            </>
-                          ) : (
-                            <>
-                              <DropoutRateForAntigensChart
-                                data={data.vaccineDosesForChart}
-                                tabTitle={"Annualized (CY)"}
-                                vaccineName={data.vaccineName}
-                                dose={data.dose}
-                                isLoading={data.isLoading}
-                                startYear={data.startYear}
-                                endYear={data.endYear}
-                                reportYear={"CY"}
-                                district={data.district}
-                              />
-                            </>
-                          )}
-                        </Grid>
-                      </>
-                    ) : data.district[0] === undefined ? (
-                      <>
-                        <Grid item lg={5} md={5} xl={5} xs={12}>
-                          <RedCategorisationCoverageForVaccineMap
-                            data={data.vacineDataForMap}
-                            tabTitle={"Annualized (CY)"}
-                            dose={data.dose}
-                            endYear={data.endYear}
-                            vaccineName={data.vaccineName}
-                            isLoading={data.isLoading}
-                          />
-                        </Grid>
-                        <Grid item lg={7} md={7} xl={7} xs={12}>
-                          <RedCategorisationForAntigensChart
-                            data={data.vaccineDosesForChart}
-                            tabTitle={"Annualized (CY)"}
-                            vaccineName={data.vaccineName}
-                            dose={data.dose}
-                            isLoading={data.isLoading}
-                            startYear={data.startYear}
-                            endYear={data.endYear}
-                            reportYear={"CY"}
-                          />
-                        </Grid>{" "}
-                      </>
-                    ) : parentTab === "monthlyCoverage" ? (
-                      <>
-                        <Grid item lg={12} md={12} xl={12} xs={12}>
-                          <CoverageForAntigensChart
-                            data={data.vaccineDosesForChart}
-                            tabTitle={"Annualized (CY)"}
-                            vaccineName={data.vaccineName}
-                            dose={data.dose}
-                            isLoading={data.isLoading}
-                            startYear={data.startYear}
-                            endYear={data.endYear}
-                            reportYear={"CY"}
-                            district={data.district}
-                          />
-                        </Grid>
-                      </>
-                    ) : (
-                      <>
-                        {" "}
-                        <DropoutRateForAntigensChart
-                          data={data.vaccineDosesForChart}
-                          tabTitle={"Annualized (CY)"}
-                          vaccineName={data.vaccineName}
-                          dose={data.dose}
-                          isLoading={data.isLoading}
-                          startYear={data.startYear}
-                          endYear={data.endYear}
-                          reportYear={"CY"}
-                          district={data.district}
-                        />
-                      </>
-                    )}
-                  </Grid>
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                  <Grid container spacing={3} className={classes.C_section}>
-                    {data.district.length === 1 ? (
-                      <>
-                        <Grid item lg={5} md={5} xl={5} xs={12}>
-                          {parentTab === "monthlyCoverage" ? (
-                            <>
-                              <AnnualizedCoverageForVaccineMap
-                                data={data.vacineDataForMap}
-                                tabTitle={"Monthly (CY)"}
-                                dose={data.dose}
-                                endYear={data.endYear}
-                                vaccineName={data.vaccineName}
-                                isLoading={data.isLoading}
-                                reportYear={"CY"}
-                                startYear={data.startYear}
-                              />
-                            </>
-                          ) : (
+                            <AnnualizedCoverageForVaccineMap
+                              tabTitle={"Annualized (CY)"}
+                            />
+                          ) : parentTab === "dropoutRate" ? (
                             <DropoutRateCoverageForVaccineMap
-                              data={data.vacineDataForMap}
-                              tabTitle={"Monthly (CY)"}
-                              dose={data.dose}
-                              endYear={data.endYear}
-                              vaccineName={data.vaccineName}
-                              isLoading={data.isLoading}
-                              reportYear={"CY"}
-                              startYear={data.startYear}
+                              tabTitle={"Annualized (CY)"}
+                            />
+                          ) : (
+                            // RedCat
+                            <RedCategorisationCoverageForVaccineMap
+                              tabTitle={"Annualized (CY)"}
                             />
                           )}
                         </Grid>
@@ -294,335 +160,209 @@ export default function Coverage(props) {
                           {parentTab === "monthlyCoverage" ? (
                             <>
                               <CoverageForAntigensChart
-                                data={data.vaccineDosesForChart}
-                                tabTitle={"Monthly (CY)"}
-                                vaccineName={data.vaccineName}
-                                dose={data.dose}
-                                isLoading={data.isLoading}
-                                startYear={data.startYear}
-                                endYear={data.endYear}
+                                tabTitle={"Annualized (CY)"}
                                 reportYear={"CY"}
-                                district={data.district}
                               />
                             </>
                           ) : parentTab === "dropoutRate" ? (
                             <>
                               <DropoutRateForAntigensChart
-                                data={data.vaccineDosesForChart}
-                                tabTitle={"Monthly (CY)"}
-                                vaccineName={data.vaccineName}
-                                dose={data.dose}
-                                isLoading={data.isLoading}
-                                startYear={data.startYear}
-                                endYear={data.endYear}
+                                tabTitle={"Annualized (CY)"}
                                 reportYear={"CY"}
-                                district={data.district}
                               />
                             </>
                           ) : (
-                            <> </>
+                            // Red Cat
+                            <>
+                              <RedCategorisationForAntigensChart
+                                tabTitle={"Annualized (CY)"}
+                                reportYear={"CY"}
+                              />
+                            </>
                           )}
                         </Grid>
                       </>
-                    ) : data.district[0] === undefined ? (
-                      <>
-                        <Grid item lg={5} md={5} xl={5} xs={12}>
-                          <RedCategorisationCoverageForVaccineMap
-                            data={data.vacineDataForMap}
-                            tabTitle={"Monthly (CY)"}
-                            dose={data.dose}
-                            endYear={data.endYear}
-                            vaccineName={data.vaccineName}
-                            isLoading={data.isLoading}
-                          />
-                        </Grid>
-                        <Grid item lg={7} md={7} xl={7} xs={12}>
-                          <RedCategorisationForAntigensChart
-                            data={data.vaccineDosesForChart}
-                            tabTitle={"Monthly (CY)"}
-                            vaccineName={data.vaccineName}
-                            dose={data.dose}
-                            isLoading={data.isLoading}
-                            startYear={data.startYear}
-                            endYear={data.endYear}
-                            reportYear={"CY"}
-                          />
-                        </Grid>{" "}
-                      </>
                     ) : parentTab === "monthlyCoverage" ? (
-                      <>
-                        <Grid item lg={12} md={12} xl={12} xs={12}>
-                          <CoverageForAntigensChart
-                            data={data.vaccineDosesForChart}
-                            tabTitle={"Monthly (CY)"}
-                            vaccineName={data.vaccineName}
-                            dose={data.dose}
-                            isLoading={data.isLoading}
-                            startYear={data.startYear}
-                            endYear={data.endYear}
-                            reportYear={"CY"}
-                            district={data.district}
-                          />
-                        </Grid>
-                      </>
-                    ) : (
-                      <>
-                        <DropoutRateForAntigensChart
-                          data={data.vaccineDosesForChart}
-                          tabTitle={"Monthly (CY)"}
-                          vaccineName={data.vaccineName}
-                          dose={data.dose}
-                          isLoading={data.isLoading}
-                          startYear={data.startYear}
-                          endYear={data.endYear}
+                      <Grid item lg={12} md={12} xl={12} xs={12}>
+                        <CoverageForAntigensChart
+                          tabTitle={"Annualized (CY)"}
                           reportYear={"CY"}
-                          district={data.district}
                         />
-                      </>
+                      </Grid>
+                    ) : (
+                      <DropoutRateForAntigensChart
+                        tabTitle={"Annualized (CY)"}
+                        reportYear={"CY"}
+                      />
                     )}
                   </Grid>
                 </TabPanel>
-                <TabPanel value={value} index={2}>
+                <TabPanel value={value} index={1}>
                   <Grid container spacing={3} className={classes.C_section}>
-                    {data.district.length === 1 ? (
+                    {coverageByMonth?.district?.length === 1 ||
+                    dropoutRate?.district?.length === 1 ||
+                    coverageByMonth?.district?.length === undefined ||
+                    dropoutRate?.district?.length === 1 ? (
                       <>
                         <Grid item lg={5} md={5} xl={5} xs={12}>
                           {parentTab === "monthlyCoverage" ? (
-                            <>
-                              <AnnualizedCoverageForVaccineMap
-                                data={data.vacineDataForMap}
-                                tabTitle={"Annualized (FY)"}
-                                dose={data.dose}
-                                endYear={data.endYear}
-                                vaccineName={data.vaccineName}
-                                isLoading={data.isLoading}
-                                reportYear={"FY"}
-                                startYear={data.startYear}
-                              />
-                            </>
-                          ) : (
+                            <AnnualizedCoverageForVaccineMap
+                              tabTitle={"Monthly (CY)"}
+                            />
+                          ) : parentTab === "dropoutRate" ? (
                             <DropoutRateCoverageForVaccineMap
-                              data={data.vacineDataForMap}
-                              tabTitle={"Annualized (FY)"}
-                              dose={data.dose}
-                              endYear={data.endYear}
-                              vaccineName={data.vaccineName}
-                              isLoading={data.isLoading}
-                              reportYear={"FY"}
-                              startYear={data.startYear}
+                              tabTitle={"Monthly (CY)"}
+                            />
+                          ) : (
+                            <RedCategorisationCoverageForVaccineMap
+                              tabTitle={"Monthly (CY)"}
                             />
                           )}
                         </Grid>
                         <Grid item lg={7} md={7} xl={7} xs={12}>
                           {parentTab === "monthlyCoverage" ? (
-                            <>
-                              <CoverageForAntigensChart
-                                data={data.vaccineDosesForChart}
-                                tabTitle={"Annualized (FY)"}
-                                vaccineName={data.vaccineName}
-                                dose={data.dose}
-                                isLoading={data.isLoading}
-                                startYear={data.startYear}
-                                endYear={data.endYear}
-                                reportYear={"FY"}
-                                district={data.district}
-                              />
-                            </>
+                            <CoverageForAntigensChart
+                              tabTitle={"Monthly (CY)"}
+                              reportYear={"CY"}
+                            />
+                          ) : parentTab === "dropoutRate" ? (
+                            <DropoutRateForAntigensChart
+                              tabTitle={"Monthly (CY)"}
+                              reportYear={"CY"}
+                            />
                           ) : (
-                            <>
-                              <DropoutRateForAntigensChart
-                                data={data.vaccineDosesForChart}
-                                tabTitle={"Annualized (FY)"}
-                                vaccineName={data.vaccineName}
-                                dose={data.dose}
-                                isLoading={data.isLoading}
-                                startYear={data.startYear}
-                                endYear={data.endYear}
-                                reportYear={"FY"}
-                                district={data.district}
-                              />
-                            </>
+                            <RedCategorisationForAntigensChart
+                              tabTitle={"Monthly (CY)"}
+                              reportYear={"CY"}
+                            />
                           )}
                         </Grid>
                       </>
-                    ) : data.district[0] === undefined ? (
+                    ) : parentTab === "monthlyCoverage" ? (
+                      <Grid item lg={12} md={12} xl={12} xs={12}>
+                        <CoverageForAntigensChart
+                          tabTitle={"Monthly (CY)"}
+                          reportYear={"CY"}
+                        />
+                      </Grid>
+                    ) : (
+                      <DropoutRateForAntigensChart
+                        tabTitle={"Monthly (CY)"}
+                        reportYear={"CY"}
+                      />
+                    )}
+                  </Grid>
+                </TabPanel>
+                <TabPanel value={value} index={2}>
+                  <Grid container spacing={3} className={classes.C_section}>
+                    {coverageByMonth?.district?.length === 1 ||
+                    dropoutRate?.district?.length === 1 ||
+                    coverageByMonth?.district?.length === undefined ||
+                    dropoutRate?.district?.length === 1 ? (
                       <>
                         <Grid item lg={5} md={5} xl={5} xs={12}>
-                          <RedCategorisationCoverageForVaccineMap
-                            data={data.vacineDataForMap}
-                            tabTitle={"Annualized (FY)"}
-                            dose={data.dose}
-                            endYear={data.endYear}
-                            vaccineName={data.vaccineName}
-                            isLoading={data.isLoading}
-                          />
+                          {parentTab === "monthlyCoverage" ? (
+                            <AnnualizedCoverageForVaccineMap
+                              tabTitle={"Annualized (FY)"}
+                            />
+                          ) : parentTab === "dropoutRate" ? (
+                            <DropoutRateCoverageForVaccineMap
+                              tabTitle={"Annualized (FY)"}
+                            />
+                          ) : (
+                            <RedCategorisationCoverageForVaccineMap
+                              tabTitle={"Annualized (FY)"}
+                            />
+                          )}
                         </Grid>
                         <Grid item lg={7} md={7} xl={7} xs={12}>
-                          <RedCategorisationForAntigensChart
-                            data={data.vaccineDosesForChart}
-                            tabTitle={"Annualized (FY)"}
-                            vaccineName={data.vaccineName}
-                            dose={data.dose}
-                            isLoading={data.isLoading}
-                            startYear={data.startYear}
-                            endYear={data.endYear}
-                            reportYear={"FY"}
-                          />
-                        </Grid>{" "}
-                      </>
-                    ) : parentTab === "monthlyCoverage" ? (
-                      <>
-                        <Grid item lg={12} md={12} xl={12} xs={12}>
-                          <CoverageForAntigensChart
-                            data={data.vaccineDosesForChart}
-                            tabTitle={"Annualized (FY)"}
-                            vaccineName={data.vaccineName}
-                            dose={data.dose}
-                            isLoading={data.isLoading}
-                            startYear={data.startYear}
-                            endYear={data.endYear}
-                            reportYear={"FY"}
-                            district={data.district}
-                          />
+                          {parentTab === "monthlyCoverage" ? (
+                            <CoverageForAntigensChart
+                              tabTitle={"Annualized (FY)"}
+                              reportYear={"FY"}
+                            />
+                          ) : parentTab === "dropoutRate" ? (
+                            <DropoutRateForAntigensChart
+                              tabTitle={"Annualized (FY)"}
+                              reportYear={"FY"}
+                            />
+                          ) : (
+                            <RedCategorisationForAntigensChart
+                              tabTitle={"Annualized (FY)"}
+                              reportYear={"FY"}
+                            />
+                          )}
                         </Grid>
                       </>
-                    ) : (
-                      <>
-                        <DropoutRateForAntigensChart
-                          data={data.vaccineDosesForChart}
+                    ) : parentTab === "monthlyCoverage" ? (
+                      <Grid item lg={12} md={12} xl={12} xs={12}>
+                        <CoverageForAntigensChart
                           tabTitle={"Annualized (FY)"}
-                          vaccineName={data.vaccineName}
-                          dose={data.dose}
-                          isLoading={data.isLoading}
-                          startYear={data.startYear}
-                          endYear={data.endYear}
                           reportYear={"FY"}
-                          district={data.district}
                         />
-                      </>
+                      </Grid>
+                    ) : (
+                      <DropoutRateForAntigensChart
+                        tabTitle={"Annualized (FY)"}
+                        reportYear={"FY"}
+                      />
                     )}
                   </Grid>
                 </TabPanel>
 
                 <TabPanel value={value} index={3}>
                   <Grid container spacing={3} className={classes.C_section}>
-                    {data.district.length === 1 ? (
+                    {coverageByMonth?.district?.length === 1 ||
+                    dropoutRate?.district?.length === 1 ||
+                    coverageByMonth?.district?.length === undefined ||
+                    dropoutRate?.district?.length === 1 ? (
                       <>
                         <Grid item lg={5} md={5} xl={5} xs={12}>
                           {parentTab === "monthlyCoverage" ? (
-                            <>
-                              <AnnualizedCoverageForVaccineMap
-                                data={data.vacineDataForMap}
-                                tabTitle={"Monthly (FY)"}
-                                dose={data.dose}
-                                endYear={data.endYear}
-                                vaccineName={data.vaccineName}
-                                isLoading={data.isLoading}
-                                reportYear={"FY"}
-                                startYear={data.startYear}
-                              />
-                            </>
-                          ) : (
-                            <DropoutRateCoverageForVaccineMap
-                              data={data.vacineDataForMap}
+                            <AnnualizedCoverageForVaccineMap
                               tabTitle={"Monthly (FY)"}
-                              dose={data.dose}
-                              endYear={data.endYear}
-                              vaccineName={data.vaccineName}
-                              isLoading={data.isLoading}
-                              reportYear={"FY"}
-                              startYear={data.startYear}
+                            />
+                          ) : parentTab === "dropoutRate" ? (
+                            <DropoutRateCoverageForVaccineMap
+                              tabTitle={"Monthly (FY)"}
+                            />
+                          ) : (
+                            <RedCategorisationCoverageForVaccineMap
+                              tabTitle={"Monthly (FY)"}
                             />
                           )}
                         </Grid>
                         <Grid item lg={7} md={7} xl={7} xs={12}>
                           {parentTab === "monthlyCoverage" ? (
-                            <>
-                              <CoverageForAntigensChart
-                                data={data.vaccineDosesForChart}
-                                tabTitle={"Monthly (FY)"}
-                                vaccineName={data.vaccineName}
-                                dose={data.dose}
-                                isLoading={data.isLoading}
-                                startYear={data.startYear}
-                                endYear={data.endYear}
-                                reportYear={"FY"}
-                                district={data.district}
-                              />
-                            </>
+                            <CoverageForAntigensChart
+                              tabTitle={"Monthly (FY)"}
+                              reportYear={"FY"}
+                            />
+                          ) : parentTab === "dropoutRate" ? (
+                            <DropoutRateForAntigensChart
+                              tabTitle={"Monthly (FY)"}
+                              reportYear={"FY"}
+                            />
                           ) : (
-                            <>
-                              <DropoutRateForAntigensChart
-                                data={data.vaccineDosesForChart}
-                                tabTitle={"Monthly (FY)"}
-                                vaccineName={data.vaccineName}
-                                dose={data.dose}
-                                isLoading={data.isLoading}
-                                startYear={data.startYear}
-                                endYear={data.endYear}
-                                reportYear={"FY"}
-                                district={data.district}
-                              />
-                            </>
+                            <RedCategorisationForAntigensChart
+                              tabTitle={"Monthly (FY)"}
+                              reportYear={"FY"}
+                            />
                           )}
                         </Grid>
                       </>
-                    ) : data.district[0] === undefined ? (
-                      <>
-                        <Grid item lg={5} md={5} xl={5} xs={12}>
-                          <RedCategorisationCoverageForVaccineMap
-                            data={data.vacineDataForMap}
-                            tabTitle={"Monthly (FY)"}
-                            dose={data.dose}
-                            endYear={data.endYear}
-                            vaccineName={data.vaccineName}
-                            isLoading={data.isLoading}
-                          />
-                        </Grid>
-                        <Grid item lg={7} md={7} xl={7} xs={12}>
-                          <RedCategorisationForAntigensChart
-                            data={data.vaccineDosesForChart}
-                            tabTitle={"Monthly (FY)"}
-                            vaccineName={data.vaccineName}
-                            dose={data.dose}
-                            isLoading={data.isLoading}
-                            startYear={data.startYear}
-                            endYear={data.endYear}
-                            reportYear={"FY"}
-                          />
-                        </Grid>{" "}
-                      </>
                     ) : parentTab === "monthlyCoverage" ? (
-                      <>
-                        <Grid item lg={12} md={12} xl={12} xs={12}>
-                          <CoverageForAntigensChart
-                            data={data.vaccineDosesForChart}
-                            tabTitle={"Monthly (FY)"}
-                            vaccineName={data.vaccineName}
-                            dose={data.dose}
-                            isLoading={data.isLoading}
-                            startYear={data.startYear}
-                            endYear={data.endYear}
-                            reportYear={"FY"}
-                            district={data.district}
-                          />
-                        </Grid>
-                      </>
-                    ) : (
-                      <>
-                        {" "}
-                        <DropoutRateForAntigensChart
-                          data={data.vaccineDosesForChart}
+                      <Grid item lg={12} md={12} xl={12} xs={12}>
+                        <CoverageForAntigensChart
                           tabTitle={"Monthly (FY)"}
-                          vaccineName={data.vaccineName}
-                          dose={data.dose}
-                          isLoading={data.isLoading}
-                          startYear={data.startYear}
-                          endYear={data.endYear}
                           reportYear={"FY"}
-                          district={data.district}
-                        />{" "}
-                      </>
+                        />
+                      </Grid>
+                    ) : (
+                      <DropoutRateForAntigensChart
+                        tabTitle={"Monthly (FY)"}
+                        reportYear={"FY"}
+                      />
                     )}
                   </Grid>
                 </TabPanel>

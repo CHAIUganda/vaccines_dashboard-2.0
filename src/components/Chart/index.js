@@ -21,7 +21,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CustomeChartPaper = (props) => {
-  const { children, isLoading, centerTitle, chartData, ...rest } = props;
+  const {
+    children,
+    isLoading,
+    centerTitle,
+    chartData,
+    elevate,
+    ...rest
+  } = props;
 
   // Used to store state of the series chart data.
   // If empty, means no data and we render appropriate message
@@ -39,14 +46,15 @@ const CustomeChartPaper = (props) => {
 
   return (
     <React.Fragment>
-      <Paper {...rest} className={classes.root}>
+      <Paper {...rest} className={classes.root} elevation={elevate}>
         {isLoading ? (
-          <div style={{ marginTop: 200, marginLeft: 20 }}>
-            <LinearProgress />
+          // <div style={{ marginTop: 200, marginLeft: 20 }}>
+          <>
+            <LinearProgress style={{ margin: "auto" }} />
             <Typography variant="overline" display="block" gutterBottom>
               Loading data ....
             </Typography>
-          </div>
+          </>
         ) : (
           <>
             <Typography
@@ -74,9 +82,7 @@ const CustomeChartPaper = (props) => {
                   No Data Available
                 </p>
               ) : (
-                <>
-                  <div>{props.chart}</div>
-                </>
+                <>{props.chart}</>
               )}
             </Typography>
           </>

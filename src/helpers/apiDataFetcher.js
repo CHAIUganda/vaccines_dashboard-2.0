@@ -83,8 +83,6 @@ export const useVaccineDosesForCoverageByYear = (
       ? `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`
       : `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?districts=[${quotedAndCommaSeparatedDistricts}]&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`;
 
-  // const vaccineDosesByPeriodURL = `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`;
-
   const [isLoadingCoverageByYear, setIsLoadingCoverageByYear] = useState(false);
   const [
     vaccineDosesForCoverageByYear,

@@ -1,4 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+
+// Bring in the global context
+import { GlobalContext } from "../../../../context/GlobalState";
+
+// Bring in our stock management context
+import { StockManagementContext } from "../../../../context/StockManagement/StockManagementState";
 
 // Material components
 import { Grid } from "@material-ui/core";
@@ -17,16 +23,6 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Chip from "@material-ui/core/Chip";
 import InputBase from "@material-ui/core/InputBase";
 
-// Data Fetcher
-import {
-  useGetDistricts,
-  useGetMonths,
-  useGetDistrictStockLevels,
-  useGetRefillRateData,
-  useGetUptakeRateData,
-  useGetDistrictStockTrendData,
-} from "../../../../helpers/apiDataFetcher";
-
 // Import Stockmanaggement components
 import DistrictsStockLevels from "./components/DistrictsStockLevels/index";
 import RefillRate from "./components/RefillRate/index";
@@ -34,32 +30,6 @@ import UptakeRateAndDistrictStockTrends from "./components/UptakeRateAndDistrict
 
 // Import common styles
 import { useStyles } from "../styles";
-
-// Variables
-const date = new Date(),
-  years = [],
-  year = date.getFullYear();
-
-// Get last 5 years from now
-for (let i = year; i > year - 5; i--) {
-  years.push(i);
-}
-
-// Get last year
-const lastYear = new Date().getFullYear() - 1;
-
-const VACCINES = [
-  "HPV",
-  "DPT",
-  "PENTA",
-  "PCV",
-  "IPV",
-  "OPV",
-  "BCG",
-  "MEASLES",
-  "TT",
-  "ROTA",
-];
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -152,29 +122,47 @@ const BootstrapInput = withStyles((theme) => ({
 }))(InputBase);
 
 export function StockManagementPanel() {
+  // Extract required global state variables
+  const { districts, vaccines, getDistricts, getVaccines } = useContext(
+    GlobalContext
+  );
+
+  // Extract required Stock management state variables
+  const {
+    stockMonths,
+    defaultEndMonth,
+    defaultStartMonth,
+    defaultVaccine,
+    defaultDistrict,
+    getStockManagementMonths,
+    getDistrictStockLevelsData,
+    getRefillRateData,
+    getDistrictStockTrendsData,
+  } = useContext(StockManagementContext);
+
   // -----------------------------------------------------------------------
-  // Fetch Months
-  // -----------------------------------------------------------------------
+  // Fetch Vacinnes, Districts and Months to generate quarters
   // We need these first so we fetch them on component load
-  const [{ monthsData }] = useGetMonths();
+  // -----------------------------------------------------------------------
+  useEffect(() => {
+    getDistricts();
+    getVaccines();
+    getStockManagementMonths();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  let groupedMonths;
-
-  if (monthsData && monthsData) {
-    function groupBy(objectArray, property) {
-      return objectArray.reduce((acc, obj) => {
-        let key = obj[property];
-        if (!acc[key]) {
-          acc[key] = [];
-        }
-        acc[key].push(obj);
-        return acc;
-      }, {});
-    }
-
-    const groupedData = groupBy(monthsData, "year");
-    groupedMonths = groupedData;
+  function groupBy(objectArray, property) {
+    return objectArray.reduce((acc, obj) => {
+      let key = obj[property];
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(obj);
+      return acc;
+    }, {});
   }
+
+  const groupedMonths = groupBy(stockMonths, "year");
 
   const classes = useStyles();
   const [value, setValue] = useState(0);
@@ -186,40 +174,54 @@ export function StockManagementPanel() {
   const [
     districtStockLevelsEndMonth,
     setDistrictStockLevelsEndMonth,
-  ] = useState("Dec 2019");
-
-  const [
-    districtStockLevelsStartMonth,
-    setDistrictStockLevelsStartMonth,
-  ] = useState("Jan 2019");
+  ] = useState(defaultEndMonth);
 
   const [districtStockLevelsVaccine, setDistrictStockLevelsVaccine] = useState(
-    "PENTA"
+    defaultVaccine
   );
+
+  // Fetch District Stock Levels data
+
+  useEffect(() => {
+    getDistrictStockLevelsData(
+      districtStockLevelsVaccine,
+      defaultStartMonth,
+      districtStockLevelsEndMonth,
+      ""
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [districtStockLevelsEndMonth, districtStockLevelsVaccine]);
 
   // -----------------------------------------------------------------------
   // Refill Rate  state data
   // -------------------------------------------------------------------------
 
-  const [refillRateStartMonth, setRefillRateStartMonth] = useState("Jan 2019");
-  const [refillRateEndMonth, setRefillRateEndMonth] = useState("Dec 2019");
-  const [refillRateVaccine, setRefillRateVaccine] = useState("PENTA");
-  const [refillRateDistrict, setRefillRateDistrict] = useState("Abim District");
-  const [refillRateDistrict2, setRefillRateDistrict2] = useState([
-    "Abim District",
-  ]);
+  const [refillRateStartMonth, setRefillRateStartMonth] = useState(
+    defaultStartMonth
+  );
+  const [refillRateEndMonth, setRefillRateEndMonth] = useState(defaultEndMonth);
+  const [refillRateVaccine, setRefillRateVaccine] = useState(defaultVaccine);
+  const [refillRateDistrict, setRefillRateDistrict] = useState(defaultDistrict);
   const [refillrateChipData, setRefillrateChipData] = useState([
-    refillRateDistrict2,
+    refillRateDistrict,
   ]);
 
-  // -----------------------------------------------------------------------
-  // Uptake Rate  state data
-  // -------------------------------------------------------------------------
+  // Fetch Refill Rate data
 
-  const [uptakeRateStartMonth, setUptakeRateStartMonth] = useState("Jan 2020");
-  const [uptakeRateEndMonth, setUptakeRateEndMonth] = useState("Dec 2020");
-  const [uptakeRateVaccine, setUptakeRateVaccine] = useState("PENTA");
-  const [uptakeRateDistrict, setUptakeRateDistrict] = useState("National");
+  useEffect(() => {
+    getRefillRateData(
+      refillRateDistrict,
+      refillRateEndMonth,
+      refillRateStartMonth,
+      refillRateVaccine
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    refillRateDistrict,
+    refillRateEndMonth,
+    refillRateStartMonth,
+    refillRateVaccine,
+  ]);
 
   // -----------------------------------------------------------------------
   // District Stock Trends state data
@@ -228,98 +230,44 @@ export function StockManagementPanel() {
   const [
     districtStockTrendStartMonth,
     setDistrictStockTrendStartMonth,
-  ] = useState("Jan 2019");
+  ] = useState(defaultStartMonth);
   const [districtStockTrendEndMonth, setDistrictStockTrendEndMonth] = useState(
-    "Dec 2019"
+    defaultEndMonth
   );
   const [districtStockTrendVaccine, setDistrictStockTrendVaccine] = useState(
-    "PENTA"
-  );
-  const [districtStockTrendDistrict, setDistrictStockTrendDistrict] = useState(
-    "National"
+    defaultVaccine
   );
 
-  const [
-    districtStockTrendDistrict2,
-    setDistrictStockTrendDistrict2,
-  ] = useState(["National"]);
+  const [districtStockTrendDistrict, setDistrictStockTrendDistrict] = useState([
+    "National",
+  ]);
 
   const [districtStockTrendChipData, setDistrictStockTrendChipData] = useState([
-    districtStockTrendDistrict2,
+    districtStockTrendDistrict,
   ]);
 
   // -----------------------------------------------------------------------
-  // Fetch Districts
+  // Fetch District Stock Trends data
   // -----------------------------------------------------------------------
-  const [{ districts, isLoadingDistricts }] = useGetDistricts("ALL");
-
-  // -----------------------------------------------------------------------
-  // Fetch Districts Stock Levels Data
-  // -----------------------------------------------------------------------
-  const [
-    { atHandStockByDistrictStockLevels, isLoadingDistrictStockLevels },
-  ] = useGetDistrictStockLevels(
-    "",
-    districtStockLevelsEndMonth,
-    districtStockLevelsStartMonth,
-    districtStockLevelsVaccine
-  );
-
-  // -----------------------------------------------------------------------
-  // Fetch Refill Rate Data
-  // -----------------------------------------------------------------------
-
-  const [
-    {
-      stockByDistrictVaccineRefillData,
-      atHandStockByDistrictRefillData,
-      isLoadingRefillRateData,
-    },
-  ] = useGetRefillRateData(
-    refillRateDistrict2,
-    refillRateEndMonth,
-    refillRateStartMonth,
-    refillRateVaccine
-  );
-
-  // -----------------------------------------------------------------------
-  // Fetch Uptake Rate Data
-  // -----------------------------------------------------------------------
-
-  const [
-    {
-      stockByDistrictVaccineUptakeData,
-      atHandStockByDistrictUptakeData,
-      isLoadingUptakeRateData,
-    },
-  ] = useGetUptakeRateData(
-    uptakeRateDistrict,
-    uptakeRateEndMonth,
-    uptakeRateStartMonth,
-    uptakeRateVaccine
-  );
-
-  // -----------------------------------------------------------------------
-  // Fetch District Stock Trends Data
-  // -----------------------------------------------------------------------
-
-  const [
-    {
-      stockByDistrictVaccineStockTrendData,
-      atHandStockByDistrictStockTrendData,
-      isLoadingStockTrendData,
-    },
-  ] = useGetDistrictStockTrendData(
-    districtStockTrendDistrict2,
+  useEffect(() => {
+    getDistrictStockTrendsData(
+      districtStockTrendDistrict,
+      districtStockTrendEndMonth,
+      districtStockTrendStartMonth,
+      districtStockTrendVaccine
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    districtStockTrendDistrict,
     districtStockTrendEndMonth,
     districtStockTrendStartMonth,
-    districtStockTrendVaccine
-  );
+    districtStockTrendVaccine,
+  ]);
 
   // -----------------------------------------------------------------------
   // District Stock levels Filters
   // -----------------------------------------------------------------------
-  const districtStockLevelsVaccinesFilter = VACCINES.map((vaccine) => (
+  const districtStockLevelsVaccinesFilter = vaccines.map((vaccine) => (
     <MenuItem value={vaccine} key={vaccine} className={classes.liItems}>
       {vaccine}
     </MenuItem>
@@ -361,80 +309,26 @@ export function StockManagementPanel() {
 
   const refillRateEndMonthFilter =
     groupedMonths &&
-    Object.keys(groupedMonths)
-      .filter((year) => year === lastYear.toString())
-      .map((year) => (
-        <>
-          <optgroup label={year} className={classes.liItems}></optgroup>
-          {Object.values(groupedMonths[year]).map((y) => (
-            <>
-              <option value={y.name} className={classes.liItems}>
-                {y.name}
-              </option>
-            </>
-          ))}
-        </>
-      ));
+    Object.keys(groupedMonths).map((year) => (
+      <>
+        <optgroup label={year} className={classes.liItems}></optgroup>
+        {Object.values(groupedMonths[year]).map((y) => (
+          <>
+            <option value={y.name} className={classes.liItems}>
+              {y.name}
+            </option>
+          </>
+        ))}
+      </>
+    ));
 
-  const refillRateDataVaccinesFilter = VACCINES.map((vaccine) => (
+  const refillRateDataVaccinesFilter = vaccines.map((vaccine) => (
     <MenuItem value={vaccine} key={vaccine} className={classes.liItems}>
       {vaccine}
     </MenuItem>
   ));
 
   const refillRateDataDistrictsFilter =
-    districts &&
-    districts.map((district) => (
-      <MenuItem
-        value={district.name}
-        key={district.name}
-        className={classes.liItems}
-      >
-        {district.name}
-      </MenuItem>
-    ));
-
-  // -----------------------------------------------------------------------
-  // Uptake Rate data filters
-  // -----------------------------------------------------------------------
-
-  const uptakeRateDataStartMonthFilter =
-    groupedMonths &&
-    Object.keys(groupedMonths).map((year) => (
-      <>
-        <optgroup label={year} className={classes.liItems}></optgroup>
-        {Object.values(groupedMonths[year]).map((y) => (
-          <>
-            <MenuItem value={y.name} className={classes.liItems}>
-              {y.name}
-            </MenuItem>
-          </>
-        ))}
-      </>
-    ));
-
-  const uptakeRateEndMonthFilter =
-    groupedMonths &&
-    Object.keys(groupedMonths).map((year) => (
-      <>
-        <optgroup label={year} className={classes.liItems}></optgroup>
-        {Object.values(groupedMonths[year]).map((y) => (
-          <>
-            <MenuItem value={y.name} className={classes.liItems}>
-              {y.name}
-            </MenuItem>
-          </>
-        ))}
-      </>
-    ));
-
-  const uptakeRateDataVaccinesFilter = VACCINES.map((vaccine) => (
-    <MenuItem value={vaccine} key={vaccine} className={classes.liItems}>
-      {vaccine}
-    </MenuItem>
-  ));
-
-  const uptakeRateDataDistrictsFilter =
     districts &&
     districts.map((district) => (
       <MenuItem
@@ -481,7 +375,7 @@ export function StockManagementPanel() {
       </>
     ));
 
-  const districtStockTrendVaccinesFilter = VACCINES.map((vaccine) => (
+  const districtStockTrendVaccinesFilter = vaccines.map((vaccine) => (
     <MenuItem value={vaccine} key={vaccine} className={classes.liItems}>
       {vaccine}
     </MenuItem>
@@ -507,10 +401,10 @@ export function StockManagementPanel() {
 
   const handleChangeDistrict = (event, tab) => {
     if (tab === "District Stock Trends") {
-      setDistrictStockTrendDistrict2(event.target.value);
+      setDistrictStockTrendDistrict(event.target.value);
       setDistrictStockTrendChipData(event.target.value);
     } else {
-      setRefillRateDistrict2(event.target.value);
+      setRefillRateDistrict(event.target.value);
       setRefillrateChipData(event.target.value);
     }
   };
@@ -519,15 +413,15 @@ export function StockManagementPanel() {
 
   const handleDeleteChip = (chipToDelete, tab) => () => {
     if (tab === "Refill Rate") {
-      setRefillRateDistrict2(
-        refillRateDistrict2.filter((chip) => chip !== chipToDelete)
+      setRefillRateDistrict(
+        refillRateDistrict.filter((chip) => chip !== chipToDelete)
       );
       setRefillrateChipData(
         refillrateChipData.filter((chip) => chip !== chipToDelete)
       );
     } else if (tab === "District Stock Trends") {
-      setDistrictStockTrendDistrict2(
-        districtStockTrendDistrict2.filter((chip) => chip !== chipToDelete)
+      setDistrictStockTrendDistrict(
+        districtStockTrendDistrict.filter((chip) => chip !== chipToDelete)
       );
       setDistrictStockTrendChipData(
         districtStockTrendChipData.filter((chip) => chip !== chipToDelete)
@@ -569,7 +463,7 @@ export function StockManagementPanel() {
                         title={
                           <React.Fragment>
                             <Typography color="inherit">
-                              <b>
+                              <b className={classes.toolTip}>
                                 {
                                   "Percentage of Districts reporting zero balance"
                                 }
@@ -591,7 +485,9 @@ export function StockManagementPanel() {
                         title={
                           <React.Fragment>
                             <Typography color="inherit">
-                              <b> {"Doses distributed by NMS / Doses"} </b>{" "}
+                              <b className={classes.toolTip}>
+                                {"Doses distributed by NMS / Doses"}
+                              </b>{" "}
                               ordered expressed as a percentage
                             </Typography>
                           </React.Fragment>
@@ -612,7 +508,9 @@ export function StockManagementPanel() {
                         title={
                           <React.Fragment>
                             <Typography color="inherit">
-                              <b> {"Doses consumed / Available doses"} </b>
+                              <b className={classes.toolTip}>
+                                {"Doses consumed / Available doses"}
+                              </b>
                               expressed as a percentage
                             </Typography>
                           </React.Fragment>
@@ -772,7 +670,7 @@ export function StockManagementPanel() {
                       displayEmpty
                       id="RR_district_name_selector"
                       input={<BootstrapInput />}
-                      value={refillRateDistrict2}
+                      value={refillRateDistrict}
                       onChange={(event) =>
                         handleChangeDistrict(event, "Refill Rate")
                       }
@@ -876,7 +774,7 @@ export function StockManagementPanel() {
                       displayEmpty
                       id={"DSL_district_name_selector"}
                       input={<BootstrapInput />}
-                      value={districtStockTrendDistrict2}
+                      value={districtStockTrendDistrict}
                       onChange={(event) =>
                         handleChangeDistrict(event, "District Stock Trends")
                       }
@@ -896,13 +794,7 @@ export function StockManagementPanel() {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <TabPanel value={value} index={0}>
-            <DistrictsStockLevels
-              atHandStockLevelsData={atHandStockByDistrictStockLevels}
-              isLoading={isLoadingDistrictStockLevels}
-              endMonth={districtStockLevelsEndMonth}
-              startMonth={districtStockLevelsStartMonth}
-              vaccine={districtStockLevelsVaccine}
-            />
+            <DistrictsStockLevels />
           </TabPanel>
 
           <TabPanel value={value} index={1}>
@@ -928,32 +820,8 @@ export function StockManagementPanel() {
                 </Grid>
               </Paper>
             </Grid>
-            <RefillRate
-              stockByDistrictVaccineRefillData={
-                stockByDistrictVaccineRefillData
-              }
-              atHandStockByDistrictRefillData={atHandStockByDistrictRefillData}
-              isLoading={isLoadingRefillRateData}
-              endMonth={refillRateEndMonth}
-              startMonth={refillRateStartMonth}
-              district={refillRateDistrict2}
-              vaccine={refillRateVaccine}
-            />
+            <RefillRate />
           </TabPanel>
-
-          {/* <TabPanel value={value} index={2}>
-            <UptakeRateAndDistrictStockTrends
-              data={stockByDistrictVaccineUptakeData}
-              atHandStockByDistrictUptakeData={atHandStockByDistrictUptakeData}
-              isLoading={isLoadingUptakeRateData}
-              endMonth={uptakeRateEndMonth}
-              startMonth={uptakeRateStartMonth}
-              district={uptakeRateDistrict}
-              vaccine={uptakeRateVaccine}
-              tab={"uptake-rate"}
-            />
-          </TabPanel> */}
-
           <TabPanel value={value} index={2}>
             <Grid item xs={12}>
               <Paper
@@ -980,18 +848,7 @@ export function StockManagementPanel() {
                 </Grid>
               </Paper>
             </Grid>
-            <UptakeRateAndDistrictStockTrends
-              data={stockByDistrictVaccineStockTrendData}
-              atHandStockByDistrictStockTrendData={
-                atHandStockByDistrictStockTrendData
-              }
-              isLoading={isLoadingStockTrendData}
-              endMonth={districtStockTrendEndMonth}
-              startMonth={districtStockTrendStartMonth}
-              district={districtStockTrendDistrict2}
-              vaccine={districtStockTrendVaccine}
-              tab={"district-stock-trends"}
-            />
+            <UptakeRateAndDistrictStockTrends tab={"district-stock-trends"} />
           </TabPanel>
         </Grid>
       </Grid>

@@ -1,4 +1,7 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useContext } from "react";
+
+// Bring in our cold chain context
+import { ColdChainContext } from "../../../../../../../context/ColdChain/ColdChainState";
 
 import MaterialTable from "material-table";
 
@@ -19,7 +22,6 @@ import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 
 import { useStyles } from "../../../../styles";
-import { Height } from "@material-ui/icons";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -45,8 +47,17 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-export const DataTable = ({ data, startQuarter, endQuarter, isLoading }) => {
+export const DataTable = () => {
   const classes = useStyles();
+
+  const { functionality } = useContext(ColdChainContext);
+  const {
+    functionalityDataTableData,
+    startQuarter,
+    endQuarter,
+    isLoading,
+  } = functionality;
+
   const title = `Functionality Status of CCE's at National Level for period ${startQuarter} - ${endQuarter}`;
 
   const columns = [
@@ -94,7 +105,13 @@ export const DataTable = ({ data, startQuarter, endQuarter, isLoading }) => {
     <MaterialTable
       title={<h3 className={classes.tableTitle}>{title}</h3>}
       // Filter out statisticts key
-      data={(data && Object.values(data).filter((v) => !v.statistics)) || []}
+      data={
+        (functionalityDataTableData &&
+          Object.values(functionalityDataTableData).filter(
+            (v) => !v.statistics
+          )) ||
+        []
+      }
       columns={columns}
       isLoading={isLoading}
       icons={tableIcons}

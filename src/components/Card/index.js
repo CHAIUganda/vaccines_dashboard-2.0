@@ -7,7 +7,9 @@ import { Typography } from "@material-ui/core";
 import { Paper } from "@material-ui/core";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
-import LocalConvenienceStoreIcon from "@material-ui/icons/LocalConvenienceStore";
+// import LocalConvenienceStoreIcon from "@material-ui/icons/LocalConvenienceStore";
+
+import { ColdChainIcon } from "../../icons/icons";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,16 +32,27 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     color: "#6F85FC",
-    fontSize: 60,
-    float: "right",
-    marginTop: 20,
+    marginTop: 35,
     marginRight: 10,
+    overflow: "visible",
+    opacity: 0.5,
+    fontSize: 44,
   },
   metricSubtitle: {
     fontSize: "initial",
     marginTop: "-40px",
     marginLeft: "3px",
     color: "blue",
+  },
+
+  metricTypeNeg: {
+    color: "red",
+    fontWeight: 700,
+  },
+
+  metricTypePos: {
+    color: "green",
+    fontWeight: 700,
   },
 }));
 
@@ -70,7 +83,7 @@ const CustomCardPaper = (props) => {
             </Typography>
             <Typography component="div">
               <Grid container spacing={3}>
-                <Grid item xs={9}>
+                <Grid item xs={6}>
                   <Typography
                     variant="overline"
                     display="block"
@@ -81,7 +94,17 @@ const CustomCardPaper = (props) => {
                     <Grid container spacing={1}>
                       {props.metric2 === undefined ? (
                         <>
-                          <Grid item xs={12}>
+                          <Grid
+                            item
+                            xs={12}
+                            className={
+                              props.metricType === "capacity_neg"
+                                ? classes.metricTypeNeg
+                                : props.metricType === "capacity_pos"
+                                ? classes.metricTypePos
+                                : ""
+                            }
+                          >
                             {props.metric}
                             {showPercentage ? <>%</> : <> </>}
                           </Grid>
@@ -125,8 +148,8 @@ const CustomCardPaper = (props) => {
                     </Grid>
                   </Typography>
                 </Grid>
-                <Grid item xs={3}>
-                  <LocalConvenienceStoreIcon className={classes.icon} />
+                <Grid item xs={6}>
+                  <ColdChainIcon className={classes.icon} />
                 </Grid>
               </Grid>
             </Typography>

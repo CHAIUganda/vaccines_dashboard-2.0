@@ -1,7 +1,7 @@
 // Various utility functions for graphs
 const _ = require("underscore");
 
-const getYearFromData = (data) => {
+const getYearFromData = (data = []) => {
   // Years returned as 201902 (year + period)
   // We map the period, cast it to string and remove the period and return unique years
   const periods = data.map((period) => String(period.period).slice(0, -2));
@@ -19,7 +19,7 @@ const getYearFromPeriod = (period) => {
   return Number(period.substr(0, 4));
 };
 
-const getPeriodsFromData = (data) => {
+const getPeriodsFromData = (data = []) => {
   const periods = [...new Set(data.map((p) => p.period))];
 
   return periods;
@@ -174,7 +174,7 @@ const computeRate = (doses, planned, path, dose) => {
   }
 };
 
-const aggregateYearAntigenData = (data, vaccineName) => {
+const aggregateYearAntigenData = (data = [], vaccineName) => {
   const yearIndexes = [];
   const result = data.reduce((acc, item) => {
     const vaccine = item.vaccine__name;
@@ -531,7 +531,7 @@ const generateChartTitle = (
 ) => {
   const duration = tabTitle[0] === "A" ? "Annualized" : "Monthly";
   const vaccine = vaccineName === "ALL" ? "antigens" : vaccineName;
-  let doseNumber = dose.replace("Dose ", "");
+  let doseNumber = dose?.replace("Dose ", "");
   if (vaccineName === "ALL") doseNumber = "";
   const antigenLabel = dose !== undefined ? `${vaccine}${doseNumber}` : vaccine;
   const yearType = reportYear === "CY" ? "Calendar Year" : "Financial Year";

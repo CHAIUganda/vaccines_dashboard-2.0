@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
+
+import { GlobalContext } from "../../context/GlobalState";
 
 // Material UI compoents
 import { makeStyles } from "@material-ui/core/styles";
@@ -15,6 +17,14 @@ import { ColdChainPanel } from "../Dashboard/components/ColdChainPanel/index";
 import { CoveragePanel } from "./components/CoveragePanel/index";
 import { StockManagementPanel } from "./components/StockManagementPanel/index";
 import { PerformanceManagementPanel } from "./components/PerformanceManagementPanel/index";
+import { AdminPanel } from "./components/AdminPanel/index";
+
+// Dashboard components context
+import { OverviewContextProvider } from "../../context/Overview/OverviewState";
+import { ColdChainContextProvider } from "../../context/ColdChain/ColdChainState";
+import { StockManagementContextProvider } from "../../context/StockManagement/StockManagementState";
+import { CoverageContextProvider } from "../../context/Coverage/CoverageState";
+import { PerformanceManagementContextProvider } from "../../context/PerformanceManagement/PerformanceManagementState";
 
 // Importing this at the top to provide pdf export functionality
 import Highcharts from "highcharts";
@@ -53,7 +63,9 @@ const useStyles = makeStyles((theme) => ({
 
 export function Dashboard() {
   const classes = useStyles();
-  const [value, setValue] = React.useState(4);
+  const [value, setValue] = React.useState(1);
+
+  const { isAuthenticated } = useContext(GlobalContext);
 
   function handleChange(event, newValue) {
     setValue(newValue);
@@ -61,23 +73,39 @@ export function Dashboard() {
 
   return (
     <BaseLayout onChange={handleChange} value={value}>
-      <div className={classes.root}>
-        <TabPanel value={value} index={0}>
-          <OverviewPanel />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <CoveragePanel />
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <StockManagementPanel />
-        </TabPanel>
-        <TabPanel value={value} index={3}>
-          <ColdChainPanel />
-        </TabPanel>
-        <TabPanel value={value} index={4}>
-          <PerformanceManagementPanel />
-        </TabPanel>
-      </div>
+      <OverviewContextProvider>
+        <div className={classes.root}>
+          <TabPanel value={value} index={0}>
+            <OverviewPanel />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <ColdChainContextProvider>
+              <ColdChainPanel />
+            </ColdChainContextProvider>
+          </TabPanel>
+
+          <TabPanel value={value} index={2}>
+            <StockManagementContextProvider>
+              <StockManagementPanel />
+            </StockManagementContextProvider>
+          </TabPanel>
+
+          <TabPanel value={value} index={3}>
+            <CoverageContextProvider>
+              <CoveragePanel />
+            </CoverageContextProvider>
+          </TabPanel>
+
+          <TabPanel value={value} index={4}>
+            <PerformanceManagementContextProvider>
+              <PerformanceManagementPanel />
+            </PerformanceManagementContextProvider>
+          </TabPanel>
+          <TabPanel value={value} index={5}>
+            <AdminPanel />
+          </TabPanel>
+        </div>
+      </OverviewContextProvider>
     </BaseLayout>
   );
 }

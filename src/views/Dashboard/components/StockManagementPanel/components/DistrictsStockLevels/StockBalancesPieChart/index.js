@@ -1,4 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
+
+// Bring in our stock management context
+import { StockManagementContext } from "../../../../../../../context/StockManagement/StockManagementState";
 
 // Highcharts for time series test
 import Highcharts from "highcharts";
@@ -10,36 +13,23 @@ import { Chart } from "../../../../../../../components";
 // Chart Template
 import { StockBalancesPieChartTemplate } from "./chart";
 
-const StockBalancesPieChart = ({
-  data,
-  isLoading,
-  endMonth,
-  startMonth,
-  district,
-  vaccine,
-}) => {
+const StockBalancesPieChart = () => {
   const [chart, setChart] = useState();
+  const { districtStockLevels } = useContext(StockManagementContext);
+
+  const { endMonth, vaccine, isLoading } = districtStockLevels;
 
   useMemo(() => {
-    if (data && data) {
-      setChart(
-        StockBalancesPieChartTemplate(
-          data,
-          endMonth,
-          startMonth,
-          district,
-          vaccine
-        )
-      );
-    }
-  }, [data, endMonth, startMonth, district, vaccine]);
+    setChart(StockBalancesPieChartTemplate());
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [endMonth, vaccine]);
 
   return (
     <Chart
       chart={
         <HighchartsReact highcharts={Highcharts} options={chart && chart} />
       }
-      isLoading={isLoading && isLoading}
+      isLoading={isLoading}
       chartData={chart && chart}
     />
   );

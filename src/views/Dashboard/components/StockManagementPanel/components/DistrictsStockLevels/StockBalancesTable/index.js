@@ -62,7 +62,7 @@ function a11yProps(index) {
   };
 }
 
-const StockBalancesTable = ({ data, vaccine, endMonth, isLoading }) => {
+const StockBalancesTable = () => {
   const [value, setValue] = useState(0);
   const classes = useStyles();
 
@@ -100,13 +100,7 @@ const StockBalancesTable = ({ data, vaccine, endMonth, isLoading }) => {
                 xs={12}
                 style={{ padding: 30 }}
               >
-                <DataTable
-                  data={data}
-                  isLoading={isLoading}
-                  tab="Stocked Out"
-                  vaccine={vaccine}
-                  endMonth={endMonth}
-                />
+                <DataTable tab="Stocked Out" />
               </Grid>
             </Grid>
           </TabPanel>
@@ -120,13 +114,7 @@ const StockBalancesTable = ({ data, vaccine, endMonth, isLoading }) => {
                 xs={12}
                 style={{ padding: 30 }}
               >
-                <DataTable
-                  data={data}
-                  isLoading={isLoading}
-                  tab="Below MIN"
-                  vaccine={vaccine}
-                  endMonth={endMonth}
-                />
+                <DataTable tab="Below MIN" />
               </Grid>
             </Grid>
           </TabPanel>
@@ -140,13 +128,7 @@ const StockBalancesTable = ({ data, vaccine, endMonth, isLoading }) => {
                 xs={12}
                 style={{ padding: 30 }}
               >
-                <DataTable
-                  data={data}
-                  isLoading={isLoading}
-                  tab="Within RANGE"
-                  vaccine={vaccine}
-                  endMonth={endMonth}
-                />
+                <DataTable tab="Within RANGE" />
               </Grid>
             </Grid>
           </TabPanel>
@@ -160,13 +142,7 @@ const StockBalancesTable = ({ data, vaccine, endMonth, isLoading }) => {
                 xs={12}
                 style={{ padding: 30 }}
               >
-                <DataTable
-                  data={data}
-                  isLoading={isLoading}
-                  tab="Above MAX"
-                  vaccine={vaccine}
-                  endMonth={endMonth}
-                />
+                <DataTable tab="Above MAX" />
               </Grid>
             </Grid>
           </TabPanel>

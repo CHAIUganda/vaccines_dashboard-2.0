@@ -1,4 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
+
+// Bring in our coverage contenxt
+import { CoverageContext } from "../../../../../../../context/Coverage/CoverageState";
 
 // Highcharts for time series test
 import Highcharts from "highcharts";
@@ -9,68 +12,39 @@ import { Chart } from "../../../../../../../components";
 
 // Chart Template
 import {
-  antigensAnnualizedCoverageCY,
-  antigensAnnualizedCoverageFY
+  AntigensAnnualizedCoverageCY,
+  AntigensAnnualizedCoverageFY,
 } from "./chart";
 
 // Utils
 import { generateChartTitle } from "../../../../../../../common/utils/utils";
 
-const CoverageForAntigensChart = props => {
-  const {
-    data,
-    tabTitle,
-    vaccineName,
-    dose,
-    isLoading,
-    startYear,
-    endYear,
-    reportYear,
-    district
-  } = props;
+const CoverageForAntigensChart = ({ tabTitle, reportYear }) => {
+  const { coverageByMonth } = useContext(CoverageContext);
+  const { startYear, vaccine, dose, isLoading, district } = coverageByMonth;
 
   const [chart, setChart] = useState();
-
   const [chartTitle, setChartTitle] = useState();
 
   useMemo(() => {
-    if (data && data) {
-      if (tabTitle === "Annualized (CY)" || tabTitle === "Monthly (CY)") {
-        setChart(
-          antigensAnnualizedCoverageCY(
-            data,
-            startYear,
-            endYear,
-            dose,
-            tabTitle,
-            district
-          )
-        );
-      } else {
-        setChart(
-          antigensAnnualizedCoverageFY(
-            data,
-            startYear,
-            endYear,
-            dose,
-            tabTitle,
-            district
-          )
-        );
-      }
-
-      setChartTitle(
-        generateChartTitle(
-          tabTitle && tabTitle,
-          vaccineName && vaccineName,
-          dose && dose,
-          "Coverage",
-          reportYear && reportYear,
-          startYear
-        )
-      );
+    if (tabTitle === "Annualized (CY)" || tabTitle === "Monthly (CY)") {
+      setChart(AntigensAnnualizedCoverageCY(tabTitle));
+    } else {
+      setChart(AntigensAnnualizedCoverageFY(tabTitle));
     }
-  }, [data, vaccineName, tabTitle, dose, startYear, endYear, district]);
+
+    setChartTitle(
+      generateChartTitle(
+        tabTitle,
+        vaccine,
+        dose,
+        "Coverage",
+        reportYear,
+        startYear
+      )
+    );
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vaccine, dose, startYear, district]);
 
   return (
     <Chart
@@ -78,7 +52,7 @@ const CoverageForAntigensChart = props => {
       chart={
         <HighchartsReact highcharts={Highcharts} options={chart && chart} />
       }
-      isLoading={isLoading && isLoading}
+      isLoading={isLoading}
       chartData={chart && chart}
     />
   );

@@ -1,4 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
+
+// Bring in our coverage contenxt
+import { CoverageContext } from "../../../../../../../context/Coverage/CoverageState";
 
 // Highcharts for time series test
 import Highcharts from "highcharts";
@@ -8,67 +11,40 @@ import HighchartsReact from "highcharts-react-official";
 import { Chart } from "../../../../../../../components";
 
 // Chart Template
-import { dropoutRateCoverageCY, dropoutRateCoverageFY } from "./chart";
+import { DropoutRateCoverageCY, DropoutRateCoverageFY } from "./chart";
 
 // Utils
 
 import { generateChartTitle } from "../../../../../../../common/utils/utils";
 
-const DropoutRateForAntigensChart = (props) => {
-  const {
-    data,
-    tabTitle,
-    vaccineName,
-    dose,
-    isLoading,
-    startYear,
-    endYear,
-    reportYear,
-    district,
-  } = props;
+const DropoutRateForAntigensChart = ({ tabTitle, reportYear }) => {
+  const { dropoutRate } = useContext(CoverageContext);
+  const { startYear, vaccine, dose, isLoading, district } = dropoutRate;
 
   const [chart, setChart] = useState();
 
   const [chartTitle, setChartTitle] = useState();
 
   useMemo(() => {
-    if (data && data) {
-      if (tabTitle === "Annualized (CY)" || tabTitle === "Monthly (CY)") {
-        setChart(
-          dropoutRateCoverageCY(
-            data,
-            startYear,
-            endYear,
-            dose,
-            tabTitle,
-            district
-          )
-        );
-      } else {
-        setChart(
-          dropoutRateCoverageFY(
-            data,
-            startYear,
-            endYear,
-            dose,
-            tabTitle,
-            district
-          )
-        );
-      }
-
-      setChartTitle(
-        generateChartTitle(
-          tabTitle && tabTitle,
-          vaccineName && vaccineName,
-          dose && dose,
-          "Dropout Rate",
-          reportYear && reportYear,
-          startYear && startYear
-        )
-      );
+    if (tabTitle === "Annualized (CY)" || tabTitle === "Monthly (CY)") {
+      setChart(DropoutRateCoverageCY(tabTitle));
+    } else {
+      setChart(DropoutRateCoverageFY(tabTitle));
     }
-  }, [data, vaccineName, tabTitle, dose, startYear, endYear]);
+
+    setChartTitle(
+      generateChartTitle(
+        tabTitle,
+        vaccine,
+        dose,
+        "Dropout Rate",
+        reportYear,
+        startYear
+      )
+    );
+
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vaccine, startYear, district]);
 
   return (
     <Chart
@@ -76,7 +52,7 @@ const DropoutRateForAntigensChart = (props) => {
       chart={
         <HighchartsReact highcharts={Highcharts} options={chart && chart} />
       }
-      isLoading={isLoading && isLoading}
+      isLoading={isLoading}
       chartData={chart && chart}
     />
   );

@@ -1,10 +1,21 @@
+import { useContext } from "react";
+
+// Bring in our cold chain context
+import { ColdChainContext } from "../../../../../../../context/ColdChain/ColdChainState";
+
 // Chart Options
 import { commonChartOptions } from "../../../../../../../common/chartOptions/chartOptions";
 
 import { getEligibilityChartData } from "../../../../../../../common/utils/coldchain/utils";
 
-export const EligibilityStatusPieChartTemplate = (data, district) => {
-  const chartData = getEligibilityChartData(data.cce_coverage_pie_chart);
+export const EligibilityStatusPieChartTemplate = () => {
+  const { eligibility } = useContext(ColdChainContext);
+
+  const { eligibilityMetricsChartData, district } = eligibility;
+
+  const chartData = getEligibilityChartData(
+    eligibilityMetricsChartData?.cce_coverage_pie_chart
+  );
 
   const chart = {
     chart: {
@@ -12,7 +23,7 @@ export const EligibilityStatusPieChartTemplate = (data, district) => {
       plotBackgroundColor: null,
       plotBorderWidth: null,
       plotShadow: false,
-      // height: 80 + "%",
+      height: 300,
     },
     credits: { ...commonChartOptions.credits },
     exporting: {
