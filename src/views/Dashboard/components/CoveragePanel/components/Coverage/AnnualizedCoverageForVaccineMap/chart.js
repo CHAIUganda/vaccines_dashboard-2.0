@@ -1,3 +1,8 @@
+import { useContext } from "react";
+
+// Bring in our coverage  context
+import { CoverageContext } from "../../../../../../../context/Coverage/CoverageState";
+
 // Chart Options
 import {
   commonChartOptions,
@@ -16,23 +21,20 @@ import {
 
 const ugandaMap2 = require("../../../../../../../common/maps/map2.json");
 
-export const vaccineAnnualizedCoverage = (
-  data,
-  startYear,
-  endYear,
-  tabTitle,
-  dose,
-  vaccineName
-) => {
-  let activeVaccine = vaccineName;
+export const VaccineAnnualizedCoverage = (tabTitle) => {
+  const { coverageByMonth } = useContext(CoverageContext);
 
-  if (vaccineName === "DPT" || vaccineName === "ALL") {
+  const { vacineDataForMap, vaccine, dose, startYear } = coverageByMonth;
+
+  let activeVaccine = vaccine;
+
+  if (vaccine === "DPT" || vaccine === "ALL") {
     activeVaccine = "PENTA";
   }
 
   let mapData = [];
 
-  const districtMapData = createDistrictDataMap(data);
+  const districtMapData = createDistrictDataMap(vacineDataForMap);
 
   for (let [key, value] of Object.entries(districtMapData)) {
     const district = key;
@@ -64,7 +66,7 @@ export const vaccineAnnualizedCoverage = (
     },
     chart: {
       map: ugandaMap2,
-      height: 74 + "%",
+      height: 500,
     },
     exporting: {
       scale: 2,
@@ -82,7 +84,7 @@ export const vaccineAnnualizedCoverage = (
           text: `${
             tabTitle === "Annualized (CY)" || tabTitle === "Annualized (FY)"
           } Coverage of ${
-            vaccineName === "ALL" ? "PENTA3" : vaccineName
+            vaccine === "ALL" ? "PENTA3" : vaccine
           } for ${startYear}`,
         },
       },

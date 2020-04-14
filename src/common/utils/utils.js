@@ -1,12 +1,29 @@
 // Various utility functions for graphs
 const _ = require("underscore");
 
-const getYearFromData = (data) => {
+const getYearFromData = (data = []) => {
   // Years returned as 201902 (year + period)
   // We map the period, cast it to string and remove the period and return unique years
   const periods = data.map((period) => String(period.period).slice(0, -2));
   const years = [...new Set(periods)];
   return years;
+};
+
+const getMonthName = (month) => {
+  const months = {};
+  months["1"] = "Jan";
+  months["2"] = "Feb";
+  months["3"] = "Mar";
+  months["4"] = "Apr";
+  months["5"] = "May";
+  months["6"] = "Jun";
+  months["7"] = "Jul";
+  months["8"] = "Aug";
+  months["9"] = "Sep";
+  months["10"] = "Oct";
+  months["11"] = "Nov";
+  months["12"] = "Dec";
+  return months[month];
 };
 
 const getMonthFromPeriod = (period) => {
@@ -19,14 +36,10 @@ const getYearFromPeriod = (period) => {
   return Number(period.substr(0, 4));
 };
 
-const getPeriodsFromData = (data) => {
+const getPeriodsFromData = (data = []) => {
   const periods = [...new Set(data.map((p) => p.period))];
 
   return periods;
-};
-
-const getYearRangeFromData = (periodRangesData) => {
-  const years = periodRangesData.years;
 };
 
 const getMonthsFromPeriod = (periods) => {
@@ -97,17 +110,17 @@ const aggregateData = (data, vaccine, fieldToAggregate) => {
 
 const getYearLabelFromPeriod = (period, yearType) => {
   period = period.toString();
-  var year = period.substr(0, 4);
-  var month = Number(period.substr(4, 2));
+  const year = period.substr(0, 4);
+  const month = Number(period.substr(4, 2));
 
   if (yearType === "CY") {
     return year;
   } else if (yearType === "FY") {
     if (month <= 6) {
-      var prevYear = Number(year) - 1;
+      const prevYear = Number(year) - 1;
       return prevYear + "-" + year;
     } else {
-      var nextYear = Number(year) + 1;
+      const nextYear = Number(year) + 1;
       return year + "-" + nextYear;
     }
   }
@@ -115,7 +128,7 @@ const getYearLabelFromPeriod = (period, yearType) => {
 
 const getMonthIndexFromPeriod = (period, yearType) => {
   period = period.toString();
-  var month = Number(period.substr(4, 2));
+  const month = Number(period.substr(4, 2));
 
   if (yearType === "CY") {
     return month;
@@ -135,11 +148,11 @@ const getActiveDoseNumber = (activeDose) => {
 };
 
 const fillMissingValues = (values) => {
-  var monthIndexes = _.range(1, 13);
-  var existingIndexes = values.map((item) => {
+  const monthIndexes = _.range(1, 13);
+  const existingIndexes = values.map((item) => {
     return item.x;
   });
-  var newIndexes = monthIndexes.filter((v) => {
+  const newIndexes = monthIndexes.filter((v) => {
     return existingIndexes.indexOf(v) < 0;
   });
   newIndexes.forEach((monthIndex) => {
@@ -174,7 +187,7 @@ const computeRate = (doses, planned, path, dose) => {
   }
 };
 
-const aggregateYearAntigenData = (data, vaccineName) => {
+const aggregateYearAntigenData = (data = [], vaccineName) => {
   const yearIndexes = [];
   const result = data.reduce((acc, item) => {
     const vaccine = item.vaccine__name;
@@ -521,6 +534,21 @@ const calculateCoverageRate = (consumption, planned) => {
   return Math.round((consumption / planned) * 100);
 };
 
+const calculateDropoutRate = (firstDose, lastDose) => {
+  return Math.round(((firstDose - lastDose) / firstDose) * 100);
+};
+
+const calculateRedCategory = (firstDose, lastDose, planned) => {
+  const access = calculateCoverageRate(firstDose, planned);
+  const dropoutRate = calculateDropoutRate(firstDose, lastDose);
+
+  if (access >= 90 && dropoutRate >= 0 && dropoutRate <= 10) return 1;
+  else if (access >= 90 && (dropoutRate < 0 || dropoutRate > 10)) return 2;
+  else if (access < 90 && dropoutRate >= 0 && dropoutRate <= 10) return 3;
+  else if (access < 90 && (dropoutRate < 0 || dropoutRate > 10)) return 4;
+  else return 0;
+};
+
 const generateChartTitle = (
   tabTitle,
   vaccineName,
@@ -531,12 +559,129 @@ const generateChartTitle = (
 ) => {
   const duration = tabTitle[0] === "A" ? "Annualized" : "Monthly";
   const vaccine = vaccineName === "ALL" ? "antigens" : vaccineName;
-  let doseNumber = dose.replace("Dose ", "");
+  let doseNumber = dose?.replace("Dose ", "");
   if (vaccineName === "ALL") doseNumber = "";
   const antigenLabel = dose !== undefined ? `${vaccine}${doseNumber}` : vaccine;
   const yearType = reportYear === "CY" ? "Calendar Year" : "Financial Year";
 
   return `Trend of ${duration} ${parentTab} of ${antigenLabel} for ${year} ${yearType}`;
+};
+
+const getValueSum = (data, name, vaccine) => {
+  return data.reduce((accumulator, value) => {
+    if (value.vaccine__name === vaccine) return accumulator + value[name];
+    return accumulator;
+  }, 0);
+};
+
+const getUnepiCoverage = (data = [], period) => {
+  const tableData = [];
+  let pentaCR = 0,
+    pcvCR = 0;
+
+  let Gap = 0;
+  let dropout_Penta = 0;
+  let dropout_hpv = 0;
+  let category = 0;
+  // let periodMonth = periodDisplay(data?.period);
+
+  for (const i in data) {
+    const dataPeriod = data[i].period;
+    const lastDose = data[i].total_last_dose;
+    const firstDose = data[i].total_first_dose;
+    const planned = data[i].total_planned;
+    const vaccine = data[i].vaccine__name;
+
+    if (dataPeriod != period) continue;
+
+    /* Sum up the values from start of year to selected period
+     to calculate Annualized Coverage (avoc) */
+    const totalLastDose = getValueSum(data, "total_last_dose", vaccine);
+    const totalPlanned = getValueSum(data, "total_planned", vaccine);
+
+    const coverageRate = calculateCoverageRate(lastDose, planned);
+    const dropoutRate = calculateDropoutRate(firstDose, lastDose);
+    const redCategory = calculateRedCategory(firstDose, lastDose, planned);
+    const avoc = calculateCoverageRate(totalLastDose, totalPlanned);
+
+    tableData.push({
+      vaccine: vaccine,
+      planned_consumption: planned,
+      coverage_rate: coverageRate,
+      avoc: avoc,
+    });
+
+    // eslint-disable-next-line default-case
+    switch (vaccine) {
+      case "PENTA":
+        pentaCR = coverageRate;
+        dropout_Penta = dropoutRate;
+        category = redCategory;
+        break;
+      case "PCV":
+        pcvCR = coverageRate;
+        break;
+      case "HPV":
+        dropout_hpv = dropoutRate;
+        break;
+    }
+  }
+  Gap = pentaCR - pcvCR;
+
+  return { Gap, dropout_Penta, dropout_hpv, category };
+};
+
+const getUnepiNationalStock = (data = []) => {
+  const allStockData = [];
+  let stockedOutAntigens = 0;
+
+  /* Turn the district based data into aggregated
+      vaccine based data */
+  const vaccineData = data.reduce(function (acc, item) {
+    if (!(item.vaccine in acc))
+      acc[item.vaccine] = {
+        at_hand: 0,
+        stock_requirement__minimum: 0,
+        received: 0,
+        ordered: 0,
+        consumed: 0,
+        available_stock: 0,
+      };
+
+    acc[item.vaccine].at_hand += item.at_hand;
+    acc[item.vaccine].stock_requirement__minimum +=
+      item.stock_requirement__minimum;
+    acc[item.vaccine].received += item.received;
+    acc[item.vaccine].ordered += item.ordered;
+    acc[item.vaccine].consumed += item.consumed;
+    acc[item.vaccine].available_stock += item.available_stock;
+
+    return acc;
+  }, {});
+
+  for (let vaccine in vaccineData) {
+    const atHand = vaccineData[vaccine].at_hand;
+    const minStock = vaccineData[vaccine].stock_requirement__minimum;
+    const ordered = vaccineData[vaccine].ordered;
+    const received = vaccineData[vaccine].received;
+    const consumed = vaccineData[vaccine].consumed;
+    const availableStock = atHand + received;
+    const monthsStock = Math.round(atHand / minStock);
+
+    if (monthsStock === 0) stockedOutAntigens++;
+
+    allStockData.push({
+      vaccine: vaccine,
+      monthsStock: monthsStock,
+      refillRate: ordered === 0 ? 0 : Math.round((received / ordered) * 100),
+      uptakeRate:
+        availableStock === 0
+          ? 0
+          : Math.round((consumed / availableStock) * 100),
+    });
+  }
+
+  return { stockedOutAntigens, allStockData };
 };
 
 export {
@@ -546,7 +691,8 @@ export {
   getPeriodsFromData,
   getMonthsFromPeriodNumber,
   generateChartTitle,
-  getYearRangeFromData,
   aggregateYearAntigenData,
   getChartData,
+  getUnepiNationalStock,
+  getUnepiCoverage,
 };

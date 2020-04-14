@@ -1,3 +1,8 @@
+import { useContext } from "react";
+
+// Bring in our cold chain context
+import { ColdChainContext } from "../../../../../../../context/ColdChain/ColdChainState";
+
 // Chart Options
 import {
   commonChartOptions,
@@ -9,9 +14,15 @@ import {
   getQuarters,
 } from "../../../../../../../common/utils/coldchain/utils";
 
-export const OptimalityStatusBarChartTemplate = (data, district) => {
-  const quarters = getQuarters(data.optimal_bar_graph_metrics);
-  const chartData = getOptimalityChartData(data.optimal_bar_graph_metrics);
+export const OptimalityStatusBarChartTemplate = () => {
+  const { optimality } = useContext(ColdChainContext);
+
+  const { optimalityMetricsChartData, district } = optimality;
+
+  const data = optimalityMetricsChartData?.optimal_bar_graph_metrics;
+
+  const quarters = getQuarters(data);
+  const chartData = getOptimalityChartData(data);
 
   const chart = {
     chart: {

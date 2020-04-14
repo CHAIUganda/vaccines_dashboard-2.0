@@ -1,5 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
+
+// Bring in the global context
+import { GlobalContext } from "../../../../context/GlobalState";
+
+// Bring in our cold chain context
+import { CoverageContext } from "../../../../context/Coverage/CoverageState";
 
 // Material components
 import { Grid } from "@material-ui/core";
@@ -18,44 +24,12 @@ import Chip from "@material-ui/core/Chip";
 import InputBase from "@material-ui/core/InputBase";
 import MenuItem from "@material-ui/core/MenuItem";
 
-// Data Fetcher
-import {
-  useVaccineDosesForRedCategory,
-  useVaccineDosesForCoverageByMonth,
-  useVaccineDosesForCoverageByYear,
-  useVaccineDosesForDropoutRate,
-  useGetDistricts,
-} from "../../../../helpers/apiDataFetcher";
-
 // Import coverage components
 import Coverage from "./components/Coverage/index";
 
 // Import common styles
 import { useStyles } from "../styles";
 
-// Variables
-const date = new Date(),
-  years = [],
-  year = date.getFullYear();
-
-// Get last 5 years from now
-for (let i = year; i > year - 5; i--) {
-  years.push(i);
-}
-
-const VACCINES = [
-  "ALL",
-  "HPV",
-  "DPT",
-  "PCV",
-  "IPV",
-  "OPV",
-  "BCG",
-  "MEASLES",
-  "TT",
-  "ROTA",
-];
-const DOSES = ["Dose 1", "Dose 2", "Dose 3"];
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -147,231 +121,182 @@ const BootstrapInput = withStyles((theme) => ({
 }))(InputBase);
 
 export function CoveragePanel() {
+  // Extract required global state variables
+  const {
+    districts,
+    vaccines,
+    getDistricts,
+    getVaccines,
+    currentYear,
+  } = useContext(GlobalContext);
+
+  // Extract required coverage state variables
+  const {
+    defaultVaccine,
+    district,
+    defaultDose,
+    doses,
+    coverageYears,
+    getCoverageByMonthData,
+    getCoverageByYearData,
+    getDropoutRateData,
+    getRedCategoryData,
+  } = useContext(CoverageContext);
+
+  useEffect(() => {
+    getDistricts();
+    getVaccines();
+    //
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const classes = useStyles();
   const [value, setValue] = useState(0);
-  const [endYear, setEndYear] = useState(years[0]);
-  const [district, setDistrict] = useState("National");
+
+  const VACCINES = [defaultVaccine, ...vaccines];
 
   // -----------------------------------------------------------------------
   // Coverage By Month state data
   // -----------------------------------------------------------------------
   const [coverageByMonthStartYear, setCoverageByMonthStartYear] = useState(
-    years[0]
+    currentYear
   );
 
   const [coverageByMonthVaccine, setCoverageByMonthVaccine] = useState(
-    VACCINES[0]
+    defaultVaccine
   );
 
-  const [coverageByMonthDose, setCoverageByMonthDose] = useState(DOSES[2]);
+  const [coverageByMonthDose, setCoverageByMonthDose] = useState(defaultDose);
 
-  const [coverageByMonthDistrict, setCoverageByMonthDistrict] = useState([
-    "National",
-  ]);
+  const [coverageByMonthDistrict, setCoverageByMonthDistrict] = useState(
+    district
+  );
 
   const [
     coverageByMonthDistrictChipData,
-    setcoverageByMonthDistrictChipData,
+    setCoverageByMonthDistrictChipData,
   ] = useState(coverageByMonthDistrict);
+
+  useEffect(() => {
+    getCoverageByMonthData(
+      currentYear,
+      coverageByMonthStartYear,
+      coverageByMonthDose,
+      coverageByMonthVaccine,
+      coverageByMonthDistrict
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    coverageByMonthStartYear,
+    coverageByMonthDose,
+    coverageByMonthVaccine,
+    coverageByMonthDistrict,
+  ]);
 
   // -----------------------------------------------------------------------
   // Coverage By Year state data
   // -----------------------------------------------------------------------
 
   const [coverageByYearStartYear, setCoverageByYearStartYear] = useState(
-    years[0]
+    currentYear
   );
 
-  const [coverageByYearEndYear, setCoverageByYearEndYear] = useState(years[0]);
+  const [coverageByYearEndYear, setCoverageByYearEndYear] = useState(
+    currentYear
+  );
 
   const [coverageByYearVaccine, setCoverageByYearVaccine] = useState(
-    VACCINES[0]
+    defaultVaccine
   );
 
-  const [coverageByYearDistrict, setCoverageByYearDistrict] = useState([
-    "National",
-  ]);
-
-  const [coverageByYearDose, setCoverageByYearDose] = useState(DOSES[2]);
+  const [coverageByYearDistrict, setCoverageByYearDistrict] = useState(
+    district
+  );
 
   const [
     coverageByYearDistrictChipData,
     setCoverageByYearDistrictChipData,
   ] = useState(coverageByYearDistrict);
 
+  useEffect(() => {
+    getCoverageByYearData(
+      coverageByYearEndYear,
+      coverageByYearStartYear,
+      defaultDose,
+      coverageByYearVaccine,
+      coverageByYearDistrict
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    coverageByYearStartYear,
+    coverageByYearEndYear,
+    coverageByYearVaccine,
+    coverageByYearDistrict,
+  ]);
+
   // -----------------------------------------------------------------------
   // Dropout Rate state data
   // -----------------------------------------------------------------------
 
   const [coverageDropoutRateYear, setCoverageDropoutrateYear] = useState(
-    years[0]
+    currentYear
   );
   const [coverageDropoutRateVaccine, setCoverageDropoutrateVaccine] = useState(
-    VACCINES[0]
+    defaultVaccine
   );
 
   const [
     coverageDropoutRateDistrict,
     setCoverageDropoutrateDistrict,
-  ] = useState(["National"]);
-
-  const [coverageDropoutRateDose, setCoverageDropoutRateDose] = useState(
-    DOSES[2]
-  );
+  ] = useState(district);
 
   const [
     coverageDropoutrateDistrictChipData,
     setCoverageDropoutrateDistrictChipData,
   ] = useState(coverageDropoutRateDistrict);
 
+  useEffect(() => {
+    getDropoutRateData(
+      currentYear,
+      coverageDropoutRateYear,
+      defaultDose,
+      coverageDropoutRateVaccine,
+      coverageDropoutRateDistrict
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    coverageDropoutRateYear,
+    defaultDose,
+    coverageDropoutRateVaccine,
+    coverageDropoutRateDistrict,
+  ]);
+
   // -----------------------------------------------------------------------
   // Redcategory state data
   // -----------------------------------------------------------------------
   const [coverageRedCategoryYear, setCoverageRedCategoryYear] = useState(
-    years[0]
+    currentYear
   );
 
   const [coverageRedCategoryVaccine, setCoverageRedCategoryVaccine] = useState(
-    VACCINES[2]
+    "PENTA"
   );
 
-  const [coverageRedCategoryDose, setCoverageRedCategoryDose] = useState(
-    DOSES[2]
-  );
-
-  const [
-    coverageRedCategoryDistrict,
-    setCoverageRedCategoryDistrict,
-  ] = useState(["National"]);
-
-  // Fetch data
-  const [
-    {
-      vaccineDosesForCoverageRedCategory,
-      vaccineDosesForCoverageRedCategoryMap,
-      isLoadingRedCategory,
-    },
-  ] = useVaccineDosesForRedCategory(
-    endYear,
-    coverageRedCategoryYear,
-    coverageRedCategoryDose,
-    coverageRedCategoryVaccine,
-    coverageRedCategoryDistrict
-  );
-
-  // -----------------------------------------------------------------------
-  // Fetch Coverage by month data
-  // -----------------------------------------------------------------------
-
-  const [
-    {
-      vaccineDosesForCoverageByMonth,
-      vaccineDosesForCoverageByMonthMap,
-      isLoadingCoverageByMonth,
-    },
-  ] = useVaccineDosesForCoverageByMonth(
-    endYear,
-    coverageByMonthStartYear,
-    coverageByMonthDose,
-    coverageByMonthVaccine,
-    coverageByMonthDistrict
-  );
-
-  // -----------------------------------------------------------------------
-  // Fetch Coverage by year data
-  // -----------------------------------------------------------------------
-
-  const [
-    { vaccineDosesForCoverageByYear, isLoadingCoverageByYear },
-  ] = useVaccineDosesForCoverageByYear(
-    coverageByYearEndYear,
-    coverageByYearStartYear,
-    coverageByYearDose,
-    coverageByYearVaccine,
-    coverageByYearDistrict
-  );
-
-  // -----------------------------------------------------------------------
-  // Fetch Dropout rate data
-  // -----------------------------------------------------------------------
-
-  const [
-    {
-      vaccineDosesForCoverageDropoutRate,
-      vaccineDosesForCoverageDropoutRateMap,
-      isLoadingDropoutRate,
-    },
-  ] = useVaccineDosesForDropoutRate(
-    endYear,
-    coverageDropoutRateYear,
-    coverageDropoutRateDose,
-    coverageDropoutRateVaccine,
-    coverageDropoutRateDistrict
-  );
-
-  // -----------------------------------------------------------------------
-  // Fetch Districts
-  // -----------------------------------------------------------------------
-  const [{ districts }] = useGetDistricts(district);
-
-  const data = {
-    coverageByMonth: {
-      vacineDataForMap:
-        vaccineDosesForCoverageByMonthMap && vaccineDosesForCoverageByMonthMap,
-      vaccineDosesForChart:
-        vaccineDosesForCoverageByMonth && vaccineDosesForCoverageByMonth,
-      vaccineName: coverageByMonthVaccine && coverageByMonthVaccine,
-      dose: coverageByMonthDose && coverageByMonthDose,
-      isLoading: isLoadingCoverageByMonth && isLoadingCoverageByMonth,
-      startYear: coverageByMonthStartYear,
-      endYear: endYear,
-      district: coverageByMonthDistrict && coverageByMonthDistrict,
-    },
-    coverageByYear: {
-      vacineData:
-        vaccineDosesForCoverageByYear && vaccineDosesForCoverageByYear,
-      startYear: coverageByYearStartYear,
-      endYear: coverageByYearEndYear,
-      isLoading: isLoadingCoverageByYear && isLoadingCoverageByYear,
-      vaccineName: coverageByYearVaccine,
-      district: coverageByYearDistrict && coverageByYearDistrict,
-    },
-    dropoutRate: {
-      vacineDataForMap:
-        vaccineDosesForCoverageDropoutRateMap &&
-        vaccineDosesForCoverageDropoutRateMap,
-      vaccineDosesForChart:
-        vaccineDosesForCoverageDropoutRate &&
-        vaccineDosesForCoverageDropoutRate,
-      vaccineName: coverageDropoutRateVaccine && coverageDropoutRateVaccine,
-      dose: coverageDropoutRateDose && coverageDropoutRateDose,
-      isLoading: isLoadingDropoutRate && isLoadingDropoutRate,
-      startYear: coverageDropoutRateYear,
-      endYear: endYear,
-      district: coverageDropoutRateDistrict && coverageDropoutRateDistrict,
-    },
-    redCategorisation: {
-      vacineDataForMap:
-        vaccineDosesForCoverageRedCategoryMap &&
-        vaccineDosesForCoverageRedCategoryMap,
-      vaccineDosesForChart:
-        vaccineDosesForCoverageRedCategory &&
-        vaccineDosesForCoverageRedCategory,
-      vaccineName: coverageRedCategoryVaccine && coverageRedCategoryVaccine,
-      dose: coverageRedCategoryDose && coverageRedCategoryDose,
-      isLoading: isLoadingRedCategory && isLoadingRedCategory,
-      startYear: coverageRedCategoryYear,
-      endYear: endYear,
-      // Set district to an empty array since we dont filter by district under red category
-      district: [],
-    },
-  };
+  useEffect(() => {
+    getRedCategoryData(
+      currentYear,
+      coverageRedCategoryYear,
+      defaultDose,
+      coverageRedCategoryVaccine,
+      district
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [coverageRedCategoryVaccine, coverageRedCategoryYear]);
 
   // -----------------------------------------------------------------------
   // Coverage By Month Filters
   // -----------------------------------------------------------------------
-
-  const coverageByMonthYearFilter = years.map((year) => (
+  const coverageByMonthYearFilter = coverageYears.map((year) => (
     <MenuItem value={year} key={year} className={classes.liItems}>
       {year}
     </MenuItem>
@@ -383,35 +308,33 @@ export function CoveragePanel() {
     </MenuItem>
   ));
 
-  const coverageByMonthDoseFilter = DOSES.map((dose) => (
+  const coverageByMonthDoseFilter = doses.map((dose) => (
     <MenuItem value={dose} key={dose} className={classes.liItems}>
       {dose}
     </MenuItem>
   ));
 
-  const coverageByMonthDistrictFilter =
-    districts &&
-    districts.map((district) => (
-      <MenuItem
-        value={district.name}
-        key={district.name}
-        className={classes.liItems}
-      >
-        {district.name}
-      </MenuItem>
-    ));
+  const coverageByMonthDistrictFilter = districts.map((district) => (
+    <MenuItem
+      value={district.name}
+      key={district.name}
+      className={classes.liItems}
+    >
+      {district.name}
+    </MenuItem>
+  ));
 
   // -----------------------------------------------------------------------
   // Coverage By Year Filters
   // -----------------------------------------------------------------------
 
-  const coverageByYearStartYearFilter = years.map((year) => (
+  const coverageByYearStartYearFilter = coverageYears.map((year) => (
     <MenuItem value={year} key={year} className={classes.liItems}>
       {year}
     </MenuItem>
   ));
 
-  const coverageByYearEndYearFilter = years.map((year) => (
+  const coverageByYearEndYearFilter = coverageYears.map((year) => (
     <MenuItem value={year} key={year} className={classes.liItems}>
       {year}
     </MenuItem>
@@ -423,23 +346,21 @@ export function CoveragePanel() {
     </MenuItem>
   ));
 
-  const coverageByYearDistrictFilter =
-    districts &&
-    districts.map((district) => (
-      <MenuItem
-        value={district.name}
-        key={district.name}
-        className={classes.liItems}
-      >
-        {district.name}
-      </MenuItem>
-    ));
+  const coverageByYearDistrictFilter = districts.map((district) => (
+    <MenuItem
+      value={district.name}
+      key={district.name}
+      className={classes.liItems}
+    >
+      {district.name}
+    </MenuItem>
+  ));
 
   // -----------------------------------------------------------------------
   // Dropout Rate filters
   // -----------------------------------------------------------------------
 
-  const coverageDropoutRateYearFilter = years.map((year) => (
+  const coverageDropoutRateYearFilter = coverageYears.map((year) => (
     <MenuItem value={year} key={year} className={classes.liItems}>
       {year}
     </MenuItem>
@@ -451,23 +372,21 @@ export function CoveragePanel() {
     </MenuItem>
   ));
 
-  const coverageDropoutRateDistrictFilter =
-    districts &&
-    districts.map((district) => (
-      <MenuItem
-        value={district.name}
-        key={district.name}
-        className={classes.liItems}
-      >
-        {district.name}
-      </MenuItem>
-    ));
+  const coverageDropoutRateDistrictFilter = districts.map((district) => (
+    <MenuItem
+      value={district.name}
+      key={district.name}
+      className={classes.liItems}
+    >
+      {district.name}
+    </MenuItem>
+  ));
 
   // -----------------------------------------------------------------------
   // Redcategory filters
   // -----------------------------------------------------------------------
 
-  const redcategoryYearFilter = years.map((year) => (
+  const redcategoryYearFilter = coverageYears.map((year) => (
     <MenuItem value={year} key={year} className={classes.liItems}>
       {year}
     </MenuItem>
@@ -488,7 +407,7 @@ export function CoveragePanel() {
   const handleChangeDistrict = (event, tab) => {
     if (tab === "Coverage (By Month)") {
       setCoverageByMonthDistrict(event.target.value);
-      setcoverageByMonthDistrictChipData(event.target.value);
+      setCoverageByMonthDistrictChipData(event.target.value);
     } else if (tab === "Coverage (By Year)") {
       setCoverageByYearDistrict(event.target.value);
       setCoverageByYearDistrictChipData(event.target.value);
@@ -504,7 +423,7 @@ export function CoveragePanel() {
       setCoverageByMonthDistrict(
         coverageByMonthDistrict.filter((chip) => chip !== chipToDelete)
       );
-      setcoverageByMonthDistrictChipData(
+      setCoverageByMonthDistrictChipData(
         coverageByMonthDistrict.filter((chip) => chip !== chipToDelete)
       );
     } else if (tab === "Coverage (By Year)") {
@@ -558,7 +477,7 @@ export function CoveragePanel() {
                         title={
                           <React.Fragment>
                             <Typography color="inherit">
-                              <b>
+                              <b className={classes.toolTip}>
                                 {
                                   "Actual number of children immunized / projected number to be immunized expressed as a percentage"
                                 }
@@ -580,7 +499,7 @@ export function CoveragePanel() {
                         title={
                           <React.Fragment>
                             <Typography color="inherit">
-                              <b>
+                              <b className={classes.toolTip}>
                                 {
                                   "Actual number of children immunized / projected number to be immunized expressed as a percentage"
                                 }
@@ -602,7 +521,7 @@ export function CoveragePanel() {
                         title={
                           <React.Fragment>
                             <Typography color="inherit">
-                              <b>
+                              <b className={classes.toolTip}>
                                 {
                                   "Percentage of children that did not receive the last dose of scheduled vaccines (E.g total DPT3 = total DPT1 numbers)"
                                 }
@@ -617,7 +536,7 @@ export function CoveragePanel() {
                       </HtmlTooltip>
                     }
                   />
-                  <TabStyle {...a11yProps(3)} label="Red Categorisation" />
+                  <TabStyle {...a11yProps(3)} label="Red Categorization" />
                 </Tabs>
               </AppBar>
             </Grid>
@@ -1003,10 +922,7 @@ export function CoveragePanel() {
                 </Grid>
               </Paper>
             </Grid>
-            <Coverage
-              data={data.coverageByMonth}
-              parentTab={"monthlyCoverage"}
-            />
+            <Coverage parentTab={"monthlyCoverage"} />
           </TabPanel>
           <TabPanel value={value} index={1}>
             <Grid item xs={12}>
@@ -1036,7 +952,7 @@ export function CoveragePanel() {
                 </Grid>
               </Paper>
             </Grid>
-            <Coverage data={data.coverageByYear} parentTab={"yearlyCoverage"} />
+            <Coverage parentTab={"yearlyCoverage"} />
           </TabPanel>
           <TabPanel value={value} index={2}>
             <Grid item xs={12}>
@@ -1066,13 +982,10 @@ export function CoveragePanel() {
                 </Grid>
               </Paper>
             </Grid>
-            <Coverage data={data.dropoutRate} parentTab={"dropoutRate"} />
+            <Coverage parentTab={"dropoutRate"} />
           </TabPanel>
           <TabPanel value={value} index={3}>
-            <Coverage
-              data={data.redCategorisation}
-              parentTab={"redcategorisation"}
-            />
+            <Coverage parentTab={"redcategorisation"} />
           </TabPanel>
         </Grid>
       </Grid>

@@ -1,3 +1,8 @@
+import { useContext } from "react";
+
+// Bring in our cold chain context
+import { ColdChainContext } from "../../../../../../../context/ColdChain/ColdChainState";
+
 // Chart Options
 import {
   commonChartOptions,
@@ -6,15 +11,24 @@ import {
 
 import { getTemperatureMonitoringReportRateChartData } from "../../../../../../../common/utils/coldchain/utils";
 
-export const TemperatureMonitoringReportRateChartTemplate = (
-  data,
-  district,
-  year,
-  month
-) => {
+export const TemperatureMonitoringReportRateChartTemplate = () => {
+  const { temperatureMonitoring } = useContext(ColdChainContext);
+
+  const {
+    temperatureMonitoringReportingRatesData,
+    year,
+  } = temperatureMonitoring;
+
+  const data =
+    temperatureMonitoringReportingRatesData?.submission_percentages_graph_data;
+
   // Extract submissions_percentages from data object
-  const _data = Object.values(data.submission_percentages_graph_data[0]);
-  const chartData = getTemperatureMonitoringReportRateChartData(_data);
+  const _data = data && Object.values(data[0]);
+
+  const chartData = getTemperatureMonitoringReportRateChartData(_data && _data);
+
+  console.log(chartData);
+
   const monthsInYear = [
     "Jan",
     "Feb",
@@ -59,6 +73,12 @@ export const TemperatureMonitoringReportRateChartTemplate = (
         ...commonChartOptions.labels,
       },
     },
+    tooltip: {
+      pointFormat:
+        "Reporting Rate: <b>{point.y}%</b><br/>Reporting districts: <b>{point.districts}",
+      shared: true,
+    },
+
     plotOptions: {
       line: {
         ...commonChartPlotOptions.plotOptions.line,

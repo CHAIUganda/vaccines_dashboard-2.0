@@ -1,6 +1,6 @@
 // Functions for stockmanagement
 
-const getMonthNumber = function(month) {
+const getMonthNumber = function (month) {
   var months = {};
   months["Jan"] = 1;
   months["Feb"] = 2;
@@ -20,17 +20,17 @@ const getMonthNumber = function(month) {
 // For highcharts to plot a timeseried data for our charts, we need to sort the data in ascending order
 // https://www.highcharts.com/errors/15/
 
-const dataSorter = data => {
+const dataSorter = (data) => {
   if (Array.isArray(data[0])) {
     return data.sort();
   } else {
-    return data.sort(function(a, b) {
+    return data.sort(function (a, b) {
       return a.x - b.x;
     });
   }
 };
 
-const convertToTimeSeries = period => {
+const convertToTimeSeries = (period) => {
   // Convert to number so we can get the year
   const str_period = period.toString();
 
@@ -45,14 +45,7 @@ const convertToTimeSeries = period => {
   return Date.UTC(year, month - 1, 1);
 };
 
-export const getStockChartData = (
-  data,
-  endMonth,
-  startMonth,
-  district,
-  vaccine,
-  type
-) => {
+export const getStockChartData = (data = [], endMonth, type) => {
   if (type === "table") {
     let tabledata_so = [];
     let tabledata_bm = [];
@@ -60,25 +53,25 @@ export const getStockChartData = (
     let tabledata_am = [];
     let tabledata_search = [];
 
-    tabledata_so = data.filter(value => value.at_hand === 0);
+    tabledata_so = data.filter((value) => value.at_hand === 0);
 
-    tabledata_am = data.filter(function(value) {
+    tabledata_am = data.filter(function (value) {
       return value.at_hand > value.stock_requirement__maximum;
     });
 
-    tabledata_wr = data.filter(function(value) {
+    tabledata_wr = data.filter(function (value) {
       return (
         value.at_hand > value.stock_requirement__minimum &&
         value.at_hand < value.stock_requirement__maximum
       );
     });
 
-    tabledata_bm = data.filter(function(value) {
+    tabledata_bm = data.filter(function (value) {
       return (
         value.at_hand < value.stock_requirement__minimum && value.at_hand > 0
       );
     });
-    tabledata_search = data.filter(function(value) {
+    tabledata_search = data.filter(function (value) {
       return value;
     });
 
@@ -123,24 +116,24 @@ export const getStockChartData = (
           {
             name: "Stocked Out",
             y: (nothing / data.length) * 100,
-            selected: true
+            selected: true,
           },
           {
             name: "Within Range",
             y: (within / data.length) * 100,
-            color: "#008000"
+            color: "#008000",
           },
           {
             name: "Below MIN",
             y: (belowminimum / data.length) * 100,
-            color: "#FFA500"
+            color: "#FFA500",
           },
           {
             name: "Above MAX",
             y: (abovemaximum / data.length) * 100,
-            color: "#90EE90"
-          }
-        ]
+            color: "#90EE90",
+          },
+        ],
       };
     }
   } else if (type === "line") {
@@ -151,19 +144,19 @@ export const getStockChartData = (
     let max_seriesDistribution = [];
     let refreshrate = 0;
 
-    Object.values(data).map(period => {
+    Object.values(data).map((period) => {
       seriesDistribution.push([
         convertToTimeSeries(period.period),
-        parseInt(period.received)
+        parseInt(period.received),
       ]);
       seriesOrders.push([convertToTimeSeries(period.period), period.ordered]);
       min_seriesDistribution.push([
         convertToTimeSeries(period.period),
-        period.stock_requirement__minimum
+        period.stock_requirement__minimum,
       ]);
       max_seriesDistribution.push([
         convertToTimeSeries(period.period),
-        period.stock_requirement__maximum
+        period.stock_requirement__maximum,
       ]);
       if (period.month === getMonthNumber(endMonth.split(" ")[0])) {
         refreshrate =
@@ -182,23 +175,23 @@ export const getStockChartData = (
     graphdataDistribution.push({
       name: "Min",
       data: sortedMin_seriesDistribution,
-      color: "#A5E816"
+      color: "#A5E816",
     });
     graphdataDistribution.push({
       name: "Issued",
       data: sortedSeriesDistribution,
-      color: "#1F77B4"
+      color: "#1F77B4",
     });
     graphdataDistribution.push({
       name: "Ordered",
       data: sortedSeriesOrders,
-      color: "red"
+      color: "red",
     });
 
     graphdataDistribution.push({
       name: "Max",
       data: sortedMax_seriesDistribution,
-      color: "#FF7F0E"
+      color: "#FF7F0E",
     });
     return graphdataDistribution;
   } else if (type === "column_uptake_rate") {
@@ -238,7 +231,7 @@ export const getStockChartData = (
       immunisationData.push({ x: periodIndex, y: Number(consumed.toFixed(0)) });
       monthlyTargetData.push({
         x: periodIndex,
-        y: Number(monthlyTarget.toFixed(0))
+        y: Number(monthlyTarget.toFixed(0)),
       });
       forceStartZeroData.push({ x: periodIndex, y: 0 });
 
@@ -264,7 +257,7 @@ export const getStockChartData = (
       maxPointWidth: 50,
       color: "green",
       data: sortedStockData,
-      yAxis: 0
+      yAxis: 0,
     });
     graphdataUptake.push({
       name: "Children Immunised",
@@ -272,19 +265,19 @@ export const getStockChartData = (
       maxPointWidth: 50,
       color: "DodgerBlue",
       data: sortedImmunisationData,
-      yAxis: 1
+      yAxis: 1,
     });
     graphdataUptake.push({
       name: "Monthly Targets",
       type: "line",
       data: sortedMonthlyTargetData,
-      color: "red"
+      color: "red",
     });
     graphdataUptake.push({
       name: "",
       type: "line",
       color: "white", // strokeWidth: 0,
-      data: sortedForceStartZeroData
+      data: sortedForceStartZeroData,
     });
 
     return graphdataUptake;
@@ -325,19 +318,19 @@ export const getStockChartData = (
       name: "Stock Balance",
       color: "green",
       data: sortedStockData,
-      maxPointWidth: 50
+      maxPointWidth: 50,
     });
     graphData.push({
       name: "Orders",
       color: "DodgerBlue",
       data: sortedOrderedData,
-      maxPointWidth: 50
+      maxPointWidth: 50,
     });
     graphData.push({
       name: "Supply By NMS",
       color: "Orange",
       data: sortedSupplyData,
-      maxPointWidth: 50
+      maxPointWidth: 50,
     });
     return graphData;
   }

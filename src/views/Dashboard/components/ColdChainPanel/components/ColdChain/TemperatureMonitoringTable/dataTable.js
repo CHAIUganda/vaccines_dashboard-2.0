@@ -1,4 +1,7 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useContext } from "react";
+
+// Bring in our cold chain context
+import { ColdChainContext } from "../../../../../../../context/ColdChain/ColdChainState";
 
 import MaterialTable from "material-table";
 
@@ -44,8 +47,16 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-export const DataTable = ({ data = [], year, isLoading }) => {
+export const DataTable = () => {
   const classes = useStyles();
+
+  const { temperatureMonitoring } = useContext(ColdChainContext);
+  const {
+    temperatureMonitoringDataTableData,
+    year,
+    isLoading,
+  } = temperatureMonitoring;
+
   const title = `Total number of freeze and heat alarms ${"at National Level"} for ${year}`;
 
   const columns = [
@@ -75,9 +86,10 @@ export const DataTable = ({ data = [], year, isLoading }) => {
   ];
   return (
     <MaterialTable
+      style={{ height: "100%" }}
       title={<h3 className={classes.tableTitle}>{title}</h3>}
       isLoading={isLoading}
-      data={data}
+      data={temperatureMonitoringDataTableData}
       columns={columns}
       icons={tableIcons}
       options={
@@ -85,7 +97,7 @@ export const DataTable = ({ data = [], year, isLoading }) => {
           sorting: true,
         },
         { exportButton: true },
-        { pageSize: 7 })
+        { pageSize: 10 })
       }
     />
   );

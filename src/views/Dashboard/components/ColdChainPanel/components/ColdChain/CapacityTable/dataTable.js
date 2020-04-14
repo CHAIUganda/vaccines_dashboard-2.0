@@ -1,4 +1,7 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useContext } from "react";
+
+// Bring in our cold chain context
+import { ColdChainContext } from "../../../../../../../context/ColdChain/ColdChainState";
 
 import MaterialTable from "material-table";
 
@@ -44,14 +47,19 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-export const DataTable = ({
-  data = [],
-  startQuarter,
-  endQuarter,
-  district,
-  isLoading,
-}) => {
+export const DataTable = () => {
   const classes = useStyles();
+
+  const { capacity } = useContext(ColdChainContext);
+
+  const {
+    capacityDataTableData,
+    startQuarter,
+    endQuarter,
+    isLoading,
+    district,
+  } = capacity;
+
   const title = `Capacity Status of CCE in ${
     district === "national" ? "National" : district
   } for period ${startQuarter} - ${endQuarter}`;
@@ -96,7 +104,11 @@ export const DataTable = ({
     <MaterialTable
       title={<h3 className={classes.tableTitle}>{title}</h3>}
       // Filter out statisticts key
-      data={(data && Object.values(data).filter((v) => !v.statistics)) || []}
+      data={
+        (capacityDataTableData &&
+          Object.values(capacityDataTableData).filter((v) => !v.statistics)) ||
+        []
+      }
       isLoading={isLoading}
       columns={columns}
       style={{ height: "100%" }}

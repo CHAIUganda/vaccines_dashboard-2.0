@@ -1,52 +1,38 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
+
+// Bring in our coverage context
+import { CoverageContext } from "../../../../../../../context/Coverage/CoverageState";
 
 // Highcharts for time series test
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
-// Shared componenrs
+// Shared components
 import { Chart } from "../../../../../../../components";
 
 // Chart Template
-import { vaccineAnnualizedCoverage } from "./chart";
+import { VaccineAnnualizedCoverage } from "./chart";
 
 // High Maps components
 require("highcharts/modules/map")(Highcharts);
 
-const AnnualizedCoverageForVaccineMap = ({
-  data,
-  endYear,
-  tabTitle,
-  dose,
-  vaccineName,
-  isLoading,
-  reportYear,
-  startYear
-}) => {
+const AnnualizedCoverageForVaccineMap = ({ tabTitle }) => {
+  const { coverageByMonth } = useContext(CoverageContext);
+
+  const { vaccine, startYear, isLoading } = coverageByMonth;
+
   const [map, setMap] = useState();
 
   const mapTitle = `${
     tabTitle === "Annualized (CY)" || tabTitle === "Annualized (FY)"
       ? "Annualized"
       : "Monthly"
-  } Coverage of ${
-    vaccineName === "ALL" ? "PENTA3" : vaccineName
-  } for ${startYear}`;
+  } Coverage of ${vaccine === "ALL" ? "PENTA3" : vaccine} for ${startYear}`;
 
   useMemo(() => {
-    if (data && data) {
-      setMap(
-        vaccineAnnualizedCoverage(
-          data,
-          startYear,
-          endYear,
-          tabTitle,
-          dose,
-          vaccineName
-        )
-      );
-    }
-  }, [data, tabTitle, dose, vaccineName, startYear, endYear]);
+    setMap(VaccineAnnualizedCoverage(tabTitle));
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
 
   return (
     <Chart
@@ -58,7 +44,7 @@ const AnnualizedCoverageForVaccineMap = ({
           constructorType={"mapChart"}
         />
       }
-      isLoading={isLoading && isLoading}
+      isLoading={isLoading}
     />
   );
 };

@@ -1,36 +1,34 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
+
+// Bring in our cold chain context
+import { ColdChainContext } from "../../../../../../../context/ColdChain/ColdChainState";
+
 // Highcharts for time series test
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
-// Shared componenrs
+// Shared components
 import { Chart } from "../../../../../../../components";
 
 // Chart Template
 import { FunctionalityStatusBarChartTemplate } from "./chart";
 
-const FunctionalityStatusBarChart = ({
-  data,
-  isLoading,
-  district,
-  careLevel,
-  startYearHalf,
-  endYearHalf,
-}) => {
+const FunctionalityStatusBarChart = () => {
   const [chart, setChart] = useState();
+  const { functionality } = useContext(ColdChainContext);
+
+  const {
+    isLoading,
+    district,
+    careLevel,
+    startQuarter,
+    endQuarter,
+  } = functionality;
+
   useMemo(() => {
-    if (data && data) {
-      setChart(
-        FunctionalityStatusBarChartTemplate(
-          data,
-          district,
-          careLevel,
-          startYearHalf,
-          endYearHalf
-        )
-      );
-    }
-  }, [data, district, careLevel, startYearHalf, endYearHalf]);
+    setChart(FunctionalityStatusBarChartTemplate());
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [district, careLevel, startQuarter, endQuarter]);
 
   return (
     <Chart

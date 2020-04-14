@@ -11,18 +11,8 @@ import RefillRateTable from "./RefillRateTable/index";
 // Import common styles
 import { useStyles } from "../../../styles";
 
-export default function RefillRate(props) {
+export default function RefillRate() {
   const classes = useStyles();
-
-  const {
-    atHandStockByDistrictRefillData,
-    stockByDistrictVaccineRefillData,
-    isLoading,
-    endMonth,
-    startMonth,
-    district,
-    vaccine,
-  } = props;
 
   return (
     <Grid container spacing={3}>
@@ -38,22 +28,10 @@ export default function RefillRate(props) {
                 xs={12}
                 style={{ maxHeight: 630 }}
               >
-                <RefillRateLineChart
-                  data={stockByDistrictVaccineRefillData}
-                  isLoading={isLoading}
-                  endMonth={endMonth}
-                  startMonth={startMonth}
-                  district={district}
-                  vaccine={vaccine}
-                />
+                <RefillRateLineChart />
               </Grid>
               <Grid item lg={6} md={6} xl={6} xs={12}>
-                <RefillRateTable
-                  data={atHandStockByDistrictRefillData}
-                  endMonth={endMonth}
-                  vaccine={vaccine}
-                  isLoading={isLoading}
-                />
+                <RefillRateTable />
               </Grid>
             </Grid>
           </Grid>

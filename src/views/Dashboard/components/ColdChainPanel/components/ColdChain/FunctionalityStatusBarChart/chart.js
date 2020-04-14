@@ -1,3 +1,8 @@
+import { useContext } from "react";
+
+// Bring in our cold chain context
+import { ColdChainContext } from "../../../../../../../context/ColdChain/ColdChainState";
+
 // Chart Options
 import {
   commonChartOptions,
@@ -9,9 +14,16 @@ import {
   getQuarters,
 } from "../../../../../../../common/utils/coldchain/utils";
 
-export const FunctionalityStatusBarChartTemplate = (data) => {
-  const quarters = getQuarters(data);
-  const chartData = getFunctionalityChartData(data);
+export const FunctionalityStatusBarChartTemplate = () => {
+  const { functionality } = useContext(ColdChainContext);
+
+  const { functionalityMetricsChartData } = functionality;
+
+  const quarters = getQuarters(functionalityMetricsChartData);
+  const chartData = getFunctionalityChartData(
+    functionalityMetricsChartData,
+    "bar"
+  );
 
   const chart = {
     chart: {

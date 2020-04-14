@@ -1,3 +1,8 @@
+import { useContext } from "react";
+
+// Bring in our coverage context
+import { CoverageContext } from "../../../../../../../context/Coverage/CoverageState";
+
 // Chart Options
 import {
   commonChartOptions,
@@ -7,14 +12,10 @@ import {
 // Utility functions
 import { getChartData } from "../../../../../../../common/utils/utils";
 
-export const antigensAnnualizedCoverageCY = (
-  data,
-  startYear,
-  endYear,
-  dose,
-  tabTitle,
-  district
-) => {
+export const AntigensAnnualizedCoverageCY = (tabTitle) => {
+  const { coverageByMonth } = useContext(CoverageContext);
+  const { vaccineDosesForChart, startYear, endYear, dose } = coverageByMonth;
+
   const monthsInYear = [
     "",
     "Jan",
@@ -36,7 +37,7 @@ export const antigensAnnualizedCoverageCY = (
   switch (tabTitle) {
     case "Annualized (CY)":
       chartData = getChartData(
-        data,
+        vaccineDosesForChart,
         startYear,
         endYear,
         "CY",
@@ -48,7 +49,7 @@ export const antigensAnnualizedCoverageCY = (
 
     case "Monthly (CY)":
       chartData = getChartData(
-        data,
+        vaccineDosesForChart,
         startYear,
         endYear,
         "CY",
@@ -60,7 +61,7 @@ export const antigensAnnualizedCoverageCY = (
 
     default:
       chartData = getChartData(
-        data,
+        vaccineDosesForChart,
         startYear,
         endYear,
         "CY",
@@ -76,7 +77,8 @@ export const antigensAnnualizedCoverageCY = (
     },
 
     chart: {
-      ...(district.length === 1 ? { height: 50 + "%" } : { height: 28 + "%" }),
+      // ...(district?.length === 1 ? { height: 500 } : { height: 280 }),
+      height: 500,
     },
     exporting: {
       ...commonChartOptions.exporting,
@@ -119,14 +121,16 @@ export const antigensAnnualizedCoverageCY = (
   };
 };
 
-export const antigensAnnualizedCoverageFY = (
-  data,
-  startYear,
-  endYear,
-  dose,
-  tabTitle,
-  district
-) => {
+export const AntigensAnnualizedCoverageFY = (tabTitle) => {
+  const { coverageByMonth } = useContext(CoverageContext);
+  const {
+    vaccineDosesForChart,
+    startYear,
+    endYear,
+    dose,
+    district,
+  } = coverageByMonth;
+
   const monthsFinancialYear = [
     "",
     "Jul",
@@ -144,7 +148,7 @@ export const antigensAnnualizedCoverageFY = (
   ];
 
   const chartData = getChartData(
-    data,
+    vaccineDosesForChart,
     startYear,
     endYear,
     "FY",
@@ -156,7 +160,8 @@ export const antigensAnnualizedCoverageFY = (
   return {
     ...commonChartOptions,
     chart: {
-      ...(district.length === 1 ? { height: 50 + "%" } : { height: 28 + "%" }),
+      // ...(district?.length === 1 ? { height: 50 + "%" } : { height: 28 + "%" }),
+      height: 500,
     },
     exporting: {
       ...commonChartOptions.exporting,

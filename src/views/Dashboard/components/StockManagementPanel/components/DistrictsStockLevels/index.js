@@ -8,7 +8,6 @@ import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
 
 // Custom components
-
 import StockBalancesTable from "./StockBalancesTable/index";
 import StockBalancesPieChart from "./StockBalancesPieChart/index";
 
@@ -32,18 +31,8 @@ function TabPanel(props) {
   );
 }
 
-export default function DistrictsStockLevels(props) {
+export default function DistrictsStockLevels() {
   const classes = useStyles();
-
-  const {
-    atHandStockLevelsData,
-    isLoading,
-    endMonth,
-    startMonth,
-    district,
-    vaccine,
-  } = props;
-
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
@@ -58,24 +47,10 @@ export default function DistrictsStockLevels(props) {
                 xs={12}
                 style={{ maxHeight: 630 }}
               >
-                <StockBalancesPieChart
-                  data={atHandStockLevelsData}
-                  isLoading={isLoading}
-                  endMonth={endMonth}
-                  startMonth={startMonth}
-                  district={district}
-                  vaccine={vaccine}
-                />
+                <StockBalancesPieChart />
               </Grid>
               <Grid item lg={7} md={7} xl={7} xs={12}>
-                <StockBalancesTable
-                  data={atHandStockLevelsData}
-                  isLoading={isLoading}
-                  endMonth={endMonth}
-                  startMonth={startMonth}
-                  district={district}
-                  vaccine={vaccine}
-                />
+                <StockBalancesTable />
               </Grid>
             </Grid>
           </Grid>

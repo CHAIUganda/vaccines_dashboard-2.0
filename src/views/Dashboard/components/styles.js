@@ -24,6 +24,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     float: "right",
   },
+  toolTip: {
+    fontSize: "small",
+    fontWeight: 400,
+  },
 
   filters2: {
     float: "right",
@@ -140,7 +144,7 @@ const useStyles = makeStyles((theme) => ({
     color: "#28354A",
   },
 
-  swithFormControl: {
+  switchFormControl: {
     marginTop: 15,
     marginRight: 40,
   },
@@ -200,6 +204,12 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
     marginRight: theme.spacing(5),
     maxWidth: 300,
+  },
+
+  fundingStatusComponents: {
+    width: "100%",
+    maxWidth: "100%",
+    height: 345,
   },
 }));
 

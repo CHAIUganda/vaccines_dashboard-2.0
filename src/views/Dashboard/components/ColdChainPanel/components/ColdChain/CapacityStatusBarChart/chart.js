@@ -1,3 +1,8 @@
+import { useContext } from "react";
+
+// Bring in our cold chain context
+import { ColdChainContext } from "../../../../../../../context/ColdChain/ColdChainState";
+
 // Chart Options
 import {
   commonChartOptions,
@@ -9,16 +14,24 @@ import {
   getQuarters,
 } from "../../../../../../../common/utils/coldchain/utils";
 
-export const CapacityStatusBarChartTemplate = (data, district) => {
-  const quarters = getQuarters(data.required_available_comparison_metrics);
-  const chartData = getCapacityChartData(
-    data.required_available_comparison_metrics
-  );
+export const CapacityStatusBarChartTemplate = () => {
+  const { capacity } = useContext(ColdChainContext);
+
+  const { capacityMetricsChartData, district } = capacity;
+
+  const data = capacityMetricsChartData?.required_available_comparison_metrics;
+
+  const quarters = getQuarters(data);
+  const chartData = getCapacityChartData(data);
 
   const chart = {
     chart: {
       type: "column",
       height: "75%",
+      plotBackgroundColor: null,
+      plotBorderWidth: null,
+      backgroundColor: null,
+      plotShadow: false,
     },
     credits: { ...commonChartOptions.credits },
     exporting: {
@@ -26,7 +39,9 @@ export const CapacityStatusBarChartTemplate = (data, district) => {
       chartOptions: {
         ...commonChartOptions.exporting.chartOptions,
         title: {
-          text: `Stock Balances of ${district} at the beginning of ${district}`,
+          text: `Storage capacity in litres at ${
+            district === "national" ? "at National Level" : "in " + district
+          }`,
         },
       },
       title: "",
@@ -41,7 +56,7 @@ export const CapacityStatusBarChartTemplate = (data, district) => {
     plotOptions: {
       column: {
         ...commonChartPlotOptions.plotOptions.column,
-        stacking: "normal",
+        // stacking: "normal",
         dataLabels: {
           enabled: true,
         },

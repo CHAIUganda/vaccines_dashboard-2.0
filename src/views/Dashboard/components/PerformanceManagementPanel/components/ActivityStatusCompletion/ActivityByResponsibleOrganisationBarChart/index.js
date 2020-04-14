@@ -1,20 +1,35 @@
-import React, { useState, useMemo } from "react";
-// Highcharts for time series test
+import React, { useState, useMemo, useContext } from "react";
+
+// Bring in our performance management context
+import { PerformanceManagementContext } from "../../../../../../../context/PerformanceManagement/PerformanceManagementState";
+
+// Highcharts for time series
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
-// Shared componenrs
+// Shared components
 import { Chart } from "../../../../../../../components";
 
 // Chart Template
 import { ActivityByResponsibleOrganisationChartTemplate } from "./chart";
 
-const ActivityByResponsibleOrganisationBarChart = ({ data, isLoading }) => {
+const ActivityByResponsibleOrganisationBarChart = () => {
+  const { activityCompletionStatus } = useContext(PerformanceManagementContext);
+  const {
+    isLoading,
+    activitiesByResponsibleOrganisation,
+  } = activityCompletionStatus;
+
   const [chart, setChart] = useState();
 
   useMemo(() => {
-    setChart(ActivityByResponsibleOrganisationChartTemplate(data));
-  }, [data]);
+    setChart(
+      ActivityByResponsibleOrganisationChartTemplate(
+        activitiesByResponsibleOrganisation
+      )
+    );
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
 
   return (
     <Chart
@@ -22,7 +37,7 @@ const ActivityByResponsibleOrganisationBarChart = ({ data, isLoading }) => {
       chart={
         <HighchartsReact highcharts={Highcharts} options={chart && chart} />
       }
-      isLoading={isLoading && isLoading}
+      isLoading={isLoading}
       chartData={chart && chart}
     />
   );

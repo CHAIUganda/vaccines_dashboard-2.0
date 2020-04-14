@@ -1,10 +1,10 @@
 import React from "react";
 
-// Shared componenrs
+// Shared components
 import { HeatTable } from "./heatTable.js";
 
-const TemperatureMonitoringReportRateHeatMap = ({ data, isLoading, year }) => {
-  return <HeatTable data={data} year={year} isLoading={isLoading} />;
+const TemperatureMonitoringReportRateHeatMap = () => {
+  return <HeatTable />;
 };
 
 export default TemperatureMonitoringReportRateHeatMap;

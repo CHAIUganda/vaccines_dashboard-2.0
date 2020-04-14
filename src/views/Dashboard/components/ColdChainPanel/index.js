@@ -1,4 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+
+// Bring in the global context
+import { GlobalContext } from "../../../../context/GlobalState";
+
+// Bring in our cold chain context
+import { ColdChainContext } from "../../../../context/ColdChain/ColdChainState";
 
 // Material components
 import { Grid } from "@material-ui/core";
@@ -16,48 +22,11 @@ import Tooltip from "@material-ui/core/Tooltip";
 import InputBase from "@material-ui/core/InputBase";
 import MenuItem from "@material-ui/core/MenuItem";
 
-// Data Fetcher
-import {
-  useGetDistricts,
-  useGetFunctionalityData,
-  useGetCapacityData,
-  useGetEligibilityData,
-  useGetOptimalityData,
-  useGetTemperatureData,
-  useGetQuarters,
-} from "../../../../helpers/apiDataFetcher";
-
 // Import common component for ColdChain components
 import ColdChain from "./components/ColdChain/index";
 
 // Import common styles
 import { useStyles } from "../styles";
-
-// Variables
-const date = new Date(),
-  years = [],
-  year = date.getFullYear();
-
-// Get last 2 years from now
-for (let i = year; i > year - 2; i--) {
-  years.push(i);
-}
-
-const CARE_LEVELS = [
-  "District Store",
-
-  "Public HCIV",
-
-  "Public HCII",
-
-  "Public HCIII",
-
-  "NGO Hospital",
-
-  "Public Hospital",
-
-  "NGO HCIII",
-];
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -90,12 +59,12 @@ const TabStyle = withStyles((theme) => ({
     fontSize: 12,
     color: "#28354A",
     "&:hover": {
-      backgroundColor: "#6F85FC",
+      backgroundColor: "#1e3c72",
       color: "white",
       opacity: 1,
     },
     "&$selected": {
-      backgroundColor: "#6F85FC",
+      backgroundColor: "#1e3c72",
       color: "white",
       fontWeight: theme.typography.fontWeightMedium,
       fontSize: 12,
@@ -152,303 +121,297 @@ const BootstrapInput = withStyles((theme) => ({
 export function ColdChainPanel() {
   const classes = useStyles();
   const [value, setValue] = useState(0);
-  const [district, setDistrict] = useState("National");
+
+  // Extract required global state variables
+  const {
+    currentYear,
+    districts,
+    quarters,
+    getDistricts,
+    getQuarters,
+  } = useContext(GlobalContext);
+
+  // Extract required cold chain state variables
+  const {
+    coldChainYears,
+    coldChainCareLevels,
+    getEligibilityData,
+    getFunctionalityData,
+    getCapacityData,
+    getOptimalityData,
+    getTemperatureMonitoringData,
+    district,
+    defaultCareLevel,
+  } = useContext(ColdChainContext);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  // Data Fetch
-  // -----------------------------------------------------------------------
-  // Fetch Districts
-  // -----------------------------------------------------------------------
-  const [{ districts }] = useGetDistricts(district);
+  useEffect(() => {
+    getDistricts();
+    getQuarters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // Tab state variables.
   // Eligible Facilities
+  // Tab state variables.
 
-  const [eligibilityDistrict, setEligibilityDistrict] = useState("national");
+  const [eligibilityDistrict, setEligibilityDistrict] = useState(district);
 
   const [eligibilityStartQuarter, setEligibilityStartQuarter] = useState(
-    `${year}01`
+    `${currentYear - 1}01`
   );
 
   const [eligibilityEndQuarter, setEligibilityEndQuarter] = useState(
-    `${year}04`
+    `${currentYear - 1}04`
   );
+
+  // Fetch Eligibility Data
+  useEffect(() => {
+    getEligibilityData(
+      eligibilityStartQuarter,
+      eligibilityEndQuarter,
+      eligibilityDistrict
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [eligibilityStartQuarter, eligibilityEndQuarter, eligibilityDistrict]);
 
   // Functionality
 
-  const [functionalityDistrict, setFunctionalityDistrict] = useState(
-    "national"
-  );
+  const [functionalityDistrict, setFunctionalityDistrict] = useState(district);
   const [functionalityCareLevel, setFunctionalityCareLevel] = useState(
-    CARE_LEVELS[0]
+    // coldChainCareLevels[0]
+    defaultCareLevel
   );
 
   const [functionalityStartQuarter, setFunctionalityStartQuarter] = useState(
-    `${year}01`
+    `${currentYear - 1}01`
   );
 
   const [functionalityEndQuarter, setFunctionalityEndQuarter] = useState(
-    `${year}04`
+    `${currentYear - 1}04`
   );
 
+  // Fetch Functionality Data
+  useEffect(() => {
+    getFunctionalityData(
+      functionalityStartQuarter,
+      functionalityEndQuarter,
+      functionalityDistrict,
+      functionalityCareLevel
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    functionalityStartQuarter,
+    functionalityEndQuarter,
+    functionalityDistrict,
+    functionalityCareLevel,
+  ]);
+
   // Capacity
-  const [capacityDistrict, setCapacityDistrict] = useState("national");
-  const [capacityCareLevel, setCapacityCareLevel] = useState(CARE_LEVELS[0]);
+  const [capacityDistrict, setCapacityDistrict] = useState(district);
+  const [capacityCareLevel, setCapacityCareLevel] = useState(
+    // coldChainCareLevels[0]
+    defaultCareLevel
+  );
 
-  const [capacityStartQuarter, setCapacityStartQuarter] = useState(`${year}01`);
+  const [capacityStartQuarter, setCapacityStartQuarter] = useState(
+    `${currentYear - 1}01`
+  );
 
-  const [capacityEndQuarter, setCapacityEndQuarter] = useState(`${year}04`);
+  const [capacityEndQuarter, setCapacityEndQuarter] = useState(
+    `${currentYear - 1}04`
+  );
+
+  // Fetch Capacity Data
+  useEffect(() => {
+    getCapacityData(
+      capacityStartQuarter,
+      capacityEndQuarter,
+      capacityDistrict,
+      capacityCareLevel
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    capacityStartQuarter,
+    capacityEndQuarter,
+    capacityDistrict,
+    capacityCareLevel,
+  ]);
 
   // Optimality
 
-  const [optimalityDistrict, setOptimalityDistrict] = useState("national");
+  const [optimalityDistrict, setOptimalityDistrict] = useState(district);
   const [optimalityCareLevel, setOptimalityCareLevel] = useState(
-    CARE_LEVELS[0]
+    // coldChainCareLevels[0]
+    defaultCareLevel
   );
 
-  const [optimalityYear, setOptimalityYear] = useState(`${year}`);
+  const [optimalityYear, setOptimalityYear] = useState(`${currentYear - 1}`);
+
+  // Fetch Optimality Data
+  useEffect(() => {
+    getOptimalityData(optimalityYear, optimalityDistrict, optimalityCareLevel);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [optimalityYear, optimalityDistrict, optimalityCareLevel]);
 
   // Temperature Monitoring
-
   const [
     temperatureMonitoringDistrict,
     setTemperatureMonitoringDistrict,
-  ] = useState("national");
+  ] = useState(district);
   const [temperatureMonitoringYear, setTemperatureMonitoringYear] = useState(
-    `${year}`
+    `${currentYear}`
   );
 
-  // -----------------------------------------------------------------------
-  // Fetch Data
-  // -----------------------------------------------------------------------
-
-  const [
-    {
-      functionalityDataTableData,
-      functionalityMetricsChartData,
-      isLoadingFunctionalityData,
-    },
-  ] = useGetFunctionalityData(
-    functionalityCareLevel,
-    functionalityDistrict,
-    functionalityStartQuarter,
-    functionalityEndQuarter
-  );
-
-  const [
-    { capacityDataTableData, capacityMetricsChartData, isLoadingCapacityData },
-  ] = useGetCapacityData(
-    capacityCareLevel,
-    capacityDistrict,
-    capacityStartQuarter,
-    capacityEndQuarter
-  );
-
-  const [
-    {
-      eligibilityDataTableData,
-      eligibilityMetricsChartData,
-      isLoadingEligibilityData,
-    },
-  ] = useGetEligibilityData(
-    eligibilityDistrict,
-    eligibilityStartQuarter,
-    eligibilityEndQuarter
-  );
-
-  const [
-    {
-      optimalityDataTableData,
-      optimalityMetricsChartData,
-      isLoadingOptimalityData,
-    },
-  ] = useGetOptimalityData(
-    optimalityCareLevel,
-    optimalityDistrict,
-    optimalityYear
-  );
-
-  const [
-    {
-      temperatureMonitoringDataTableData,
-      temperatureMonitoringMetricsChartData,
-      temperatureMonitoringReportingRatesData,
-      isLoadingTemperatureMonitoringData,
-    },
-  ] = useGetTemperatureData(
-    temperatureMonitoringYear,
-    temperatureMonitoringDistrict
-  );
-
-  const [{ quarters }] = useGetQuarters();
+  // Fetch Optimality Data
+  useEffect(() => {
+    getTemperatureMonitoringData(
+      temperatureMonitoringYear,
+      temperatureMonitoringDistrict
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [temperatureMonitoringDistrict, temperatureMonitoringYear]);
 
   // -----------------------------------------------------------------------
   // Eligibility  Filters
   // -----------------------------------------------------------------------
-
-  const eligibilityStartQuarterFilter = years.map((year) => (
+  const eligibilityStartQuarterFilter = coldChainYears?.map((year) => (
     <>
       <optgroup label={year}></optgroup>
-      {quarters &&
-        quarters
-          .filter(
-            (quarter) => quarter.value.substring(0, 4) === year.toString()
-          )
-          .map((quarter) => (
-            <option value={quarter.value}>{quarter.name}</option>
-          ))}
+      {quarters
+
+        .filter((quarter) => quarter.value.substring(0, 4) === year.toString())
+        .map((quarter) => (
+          <option value={quarter.value}>{quarter.name}</option>
+        ))}
     </>
   ));
 
-  const eligibilityEndQuarterFilter = years.map((year) => (
+  const eligibilityEndQuarterFilter = coldChainYears?.map((year) => (
     <>
       <optgroup label={year}></optgroup>
-      {quarters &&
-        quarters
-          .filter(
-            (quarter) => quarter.value.substring(0, 4) === year.toString()
-          )
-          .map((quarter) => (
-            <option value={quarter.value}>{quarter.name}</option>
-          ))}
+      {quarters
+        .filter((quarter) => quarter.value.substring(0, 4) === year.toString())
+        .map((quarter) => (
+          <option value={quarter.value}>{quarter.name}</option>
+        ))}
     </>
   ));
 
-  const eligibilityDistrictFilter =
-    districts &&
-    districts.map((district) => (
-      <MenuItem
-        value={district.name}
-        key={district.name}
-        className={classes.liItems}
-      >
-        {district.name}
-      </MenuItem>
-    ));
+  const eligibilityDistrictFilter = districts?.map((district) => (
+    <MenuItem
+      value={district.name}
+      key={district.name}
+      className={classes.liItems}
+    >
+      {district.name}
+    </MenuItem>
+  ));
 
   // -----------------------------------------------------------------------
   // Functionality  Filters
   // -----------------------------------------------------------------------
-  const functionalityCareLevelFilter = CARE_LEVELS.map((careLevel) => (
+  const functionalityCareLevelFilter = coldChainCareLevels?.map((careLevel) => (
     <MenuItem value={careLevel} key={careLevel} className={classes.liItems}>
       {careLevel}
     </MenuItem>
   ));
 
-  const functionalityStartYearFilter = years.map((year) => (
+  const functionalityStartYearFilter = coldChainYears?.map((year) => (
     <>
       <optgroup label={year}></optgroup>
-      {quarters &&
-        quarters
-          .filter(
-            (quarter) => quarter.value.substring(0, 4) === year.toString()
-          )
-          .map((quarter) => (
-            <option value={quarter.value}>{quarter.name}</option>
-          ))}
+      {quarters
+        .filter((quarter) => quarter.value.substring(0, 4) === year.toString())
+        .map((quarter) => (
+          <option value={quarter.value}>{quarter.name}</option>
+        ))}
     </>
   ));
 
-  const functionalityEndYearFilter = years.map((year) => (
+  const functionalityEndYearFilter = coldChainYears?.map((year) => (
     <>
       <optgroup label={year}></optgroup>
-      {quarters &&
-        quarters
-          .filter(
-            (quarter) => quarter.value.substring(0, 4) === year.toString()
-          )
-          .map((quarter) => (
-            <option value={quarter.value}>{quarter.name}</option>
-          ))}
+      {quarters
+        .filter((quarter) => quarter.value.substring(0, 4) === year.toString())
+        .map((quarter) => (
+          <option value={quarter.value}>{quarter.name}</option>
+        ))}
     </>
   ));
 
-  const functionalityDistrictFilter =
-    districts &&
-    districts.map((district) => (
-      <MenuItem
-        value={district.name}
-        key={district.name}
-        className={classes.liItems}
-      >
-        {district.name}
-      </MenuItem>
-    ));
+  const functionalityDistrictFilter = districts?.map((district) => (
+    <MenuItem
+      value={district.name}
+      key={district.name}
+      className={classes.liItems}
+    >
+      {district.name}
+    </MenuItem>
+  ));
 
   // -----------------------------------------------------------------------
   // Capacity  Filters
   // -----------------------------------------------------------------------
-  const capacityCareLevelFilter = CARE_LEVELS.map((careLevel) => (
+  const capacityCareLevelFilter = coldChainCareLevels?.map((careLevel) => (
     <MenuItem value={careLevel} key={careLevel} className={classes.liItems}>
       {careLevel}
     </MenuItem>
   ));
 
-  const capacityStartQuarterFilter = years.map((year) => (
+  const capacityStartQuarterFilter = coldChainYears?.map((year) => (
     <>
       <optgroup label={year}></optgroup>
-      {quarters &&
-        quarters
-          .filter(
-            (quarter) => quarter.value.substring(0, 4) === year.toString()
-          )
-          .map((quarter) => (
-            <option value={quarter.value}>{quarter.name}</option>
-          ))}
+      {quarters
+        .filter((quarter) => quarter.value.substring(0, 4) === year.toString())
+        .map((quarter) => (
+          <option value={quarter.value}>{quarter.name}</option>
+        ))}
     </>
   ));
 
-  const capacityEndQuarterFilter = years.map((year) => (
+  const capacityEndQuarterFilter = coldChainYears?.map((year) => (
     <>
       <optgroup label={year}></optgroup>
-      {quarters &&
-        quarters
-          .filter(
-            (quarter) => quarter.value.substring(0, 4) === year.toString()
-          )
-          .map((quarter) => (
-            <option value={quarter.value}>{quarter.name}</option>
-          ))}
+      {quarters
+        .filter((quarter) => quarter.value.substring(0, 4) === year.toString())
+        .map((quarter) => (
+          <option value={quarter.value}>{quarter.name}</option>
+        ))}
     </>
   ));
 
-  const capacityDistrictFilter =
-    districts &&
-    districts.map((district) => (
-      <MenuItem
-        value={district.name}
-        key={district.name}
-        className={classes.liItems}
-      >
-        {district.name}
-      </MenuItem>
-    ));
+  const capacityDistrictFilter = districts?.map((district) => (
+    <MenuItem
+      value={district.name}
+      key={district.name}
+      className={classes.liItems}
+    >
+      {district.name}
+    </MenuItem>
+  ));
 
   // -----------------------------------------------------------------------
   // Optimality  Filters
   // -----------------------------------------------------------------------
-  const optimalityYearFilter = years.map((year) => (
+  const optimalityYearFilter = coldChainYears?.map((year) => (
     <MenuItem value={year} key={year} className={classes.liItems}>
       {year}
     </MenuItem>
   ));
 
-  const optimalityDistrictFilter =
-    districts &&
-    districts.map((district) => (
-      <MenuItem
-        value={district.name}
-        key={district.name}
-        className={classes.liItems}
-      >
-        {district.name}
-      </MenuItem>
-    ));
+  const optimalityDistrictFilter = districts?.map((district) => (
+    <MenuItem
+      value={district.name}
+      key={district.name}
+      className={classes.liItems}
+    >
+      {district.name}
+    </MenuItem>
+  ));
 
-  const optimalityCareLevelFilter = CARE_LEVELS.map((careLevel) => (
+  const optimalityCareLevelFilter = coldChainCareLevels?.map((careLevel) => (
     <MenuItem value={careLevel} key={careLevel} className={classes.liItems}>
       {careLevel}
     </MenuItem>
@@ -457,83 +420,21 @@ export function ColdChainPanel() {
   // -----------------------------------------------------------------------
   // Temperature Monitoring  Filters
   // -----------------------------------------------------------------------
-  const temperatureMonitoringYearFilter = years.map((year) => (
+  const temperatureMonitoringYearFilter = coldChainYears?.map((year) => (
     <MenuItem value={year} key={year} className={classes.liItems}>
       {year}
     </MenuItem>
   ));
 
-  const temperatureMonitoringDistrictFilter =
-    districts &&
-    districts.map((district) => (
-      <MenuItem
-        value={district.name}
-        key={district.name}
-        className={classes.liItems}
-      >
-        {district.name}
-      </MenuItem>
-    ));
-  //----------------------------------------------------------------------
-  //  Data Object
-  // ---------------------------------------------------------------------
-  const data = {
-    eligibility: {
-      eligibilityDataTableData:
-        eligibilityDataTableData && eligibilityDataTableData,
-      eligibilityMetricsChartData:
-        eligibilityMetricsChartData && eligibilityMetricsChartData,
-      isLoading: isLoadingEligibilityData,
-      district: eligibilityDistrict,
-      startQuarter: eligibilityStartQuarter,
-      endQuarter: eligibilityEndQuarter,
-    },
-    functionality: {
-      functionalityDataTableData:
-        functionalityDataTableData && functionalityDataTableData,
-      functionalityMetricsChartData:
-        functionalityMetricsChartData && functionalityMetricsChartData,
-      isLoading: isLoadingFunctionalityData,
-      district: functionalityDistrict,
-      careLevel: functionalityCareLevel,
-      startQuarter: functionalityStartQuarter,
-      endQuarter: functionalityEndQuarter,
-    },
-    capacity: {
-      capacityDataTableData: capacityDataTableData && capacityDataTableData,
-      capacityMetricsChartData:
-        capacityMetricsChartData && capacityMetricsChartData,
-      isLoading: isLoadingCapacityData,
-      district: capacityDistrict,
-      careLevel: capacityCareLevel,
-      startQuarter: capacityStartQuarter,
-      endQuarter: capacityEndQuarter,
-    },
-    optimality: {
-      optimalityDataTableData:
-        optimalityDataTableData && optimalityDataTableData,
-      optimalityMetricsChartData:
-        optimalityMetricsChartData && optimalityMetricsChartData,
-      isLoading: isLoadingOptimalityData,
-      district: optimalityDistrict,
-      careLevel: optimalityCareLevel,
-      year: optimalityYear,
-    },
-    temperatureMonitoring: {
-      temperatureMonitoringDataTableData:
-        temperatureMonitoringDataTableData &&
-        temperatureMonitoringDataTableData,
-      temperatureMonitoringMetricsChartData:
-        temperatureMonitoringMetricsChartData &&
-        temperatureMonitoringMetricsChartData,
-      temperatureMonitoringReportingRatesData:
-        temperatureMonitoringReportingRatesData &&
-        temperatureMonitoringReportingRatesData,
-      district: temperatureMonitoringDistrict,
-      year: temperatureMonitoringYear,
-      isLoading: isLoadingTemperatureMonitoringData,
-    },
-  };
+  const temperatureMonitoringDistrictFilter = districts?.map((district) => (
+    <MenuItem
+      value={district.name}
+      key={district.name}
+      className={classes.liItems}
+    >
+      {district.name}
+    </MenuItem>
+  ));
 
   return (
     <div>
@@ -559,7 +460,7 @@ export function ColdChainPanel() {
                   aria-label="Cold Chain Key metrics"
                   className={classes.tabs}
                   TabIndicatorProps={{
-                    style: { backgroundColor: "#6F85FC" },
+                    style: { backgroundColor: "#1e3c72" },
                   }}
                 >
                   <TabStyle
@@ -569,9 +470,9 @@ export function ColdChainPanel() {
                         title={
                           <React.Fragment>
                             <Typography color="inherit">
-                              <b>
+                              <b className={classes.toolTip}>
                                 {
-                                  "Actual number of facilities that carry out immunization services"
+                                  "Number of facilities offering static and outreach services / Total number of ELIGIBLE  facilities in the district"
                                 }
                               </b>
                             </Typography>
@@ -591,7 +492,11 @@ export function ColdChainPanel() {
                         title={
                           <React.Fragment>
                             <Typography color="inherit">
-                              <b>{"Text goes here"}</b>
+                              <b className={classes.toolTip}>
+                                {
+                                  "Proportion of functional Fridges & Freezers / Total number of Fridges & Freezers"
+                                }
+                              </b>
                             </Typography>
                           </React.Fragment>
                         }
@@ -609,7 +514,12 @@ export function ColdChainPanel() {
                         title={
                           <React.Fragment>
                             <Typography color="inherit">
-                              <b>{"Text goes here"}</b>
+                              <b className={classes.toolTip}>
+                                {" "}
+                                {
+                                  "Total sum of vaccine storage space of all functional fridges available at the site"
+                                }
+                              </b>
                             </Typography>
                           </React.Fragment>
                         }
@@ -627,7 +537,9 @@ export function ColdChainPanel() {
                         title={
                           <React.Fragment>
                             <Typography color="inherit">
-                              <b>{"Text goes here"}</b>
+                              <b className={classes.toolTip}>
+                                {"Text goes here"}
+                              </b>
                             </Typography>
                           </React.Fragment>
                         }
@@ -645,7 +557,9 @@ export function ColdChainPanel() {
                         title={
                           <React.Fragment>
                             <Typography color="inherit">
-                              <b>{"Text goes here"}</b>
+                              <b className={classes.toolTip}>
+                                {"Text goes here"}
+                              </b>
                             </Typography>
                           </React.Fragment>
                         }
@@ -729,7 +643,7 @@ export function ColdChainPanel() {
                         setEligibilityDistrict(event.target.value)
                       }
                       input={<BootstrapInput />}
-                      renderValue={(selected) => "National"}
+                      // renderValue={(selected) => selected}
                     >
                       {eligibilityDistrictFilter}
                     </Select>
@@ -1084,22 +998,20 @@ export function ColdChainPanel() {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <TabPanel value={value} index={0}>
-            <ColdChain data={data.eligibility} parentTab={"eligibility"} />
+            <ColdChain parentTab={"eligibility"} />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <ColdChain data={data.functionality} parentTab={"functionality"} />
+            <ColdChain parentTab={"functionality"} />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <ColdChain data={data.capacity} parentTab={"capacity"} />
+            <ColdChain parentTab={"capacity"} />
           </TabPanel>
           <TabPanel value={value} index={3}>
-            <ColdChain data={data.optimality} parentTab={"optimality"} />
+            <ColdChain parentTab={"optimality"} />
           </TabPanel>
+
           <TabPanel value={value} index={4}>
-            <ColdChain
-              data={data.temperatureMonitoring}
-              parentTab={"temperatureMonitoring"}
-            />
+            <ColdChain parentTab={"temperatureMonitoring"} />
           </TabPanel>
         </Grid>
       </Grid>

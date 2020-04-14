@@ -4,7 +4,7 @@ import React, { useState, useMemo } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
-// Shared componenrs
+// Shared components
 import { Chart } from "../../../../../../../components";
 
 // Chart Template
@@ -16,7 +16,7 @@ const UptakeRateChart = ({
   endMonth,
   startMonth,
   district,
-  vaccine
+  vaccine,
 }) => {
   const [chart, setChart] = useState();
 
