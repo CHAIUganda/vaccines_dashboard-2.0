@@ -6,9 +6,9 @@ import { Grid } from "@material-ui/core";
 // Import Funding Status  Components.
 import BudgetAllocationBarChart from "./BudgetAllocationBarChart/index";
 import BudgetAllocationPieChart from "./BudgetAllocationPieChart/index";
-import FundingSourcesBarChart from "./FundingSourcesBarChart/index";
+import BudgetAllocationPerImplementingAgencyBarChart from "./BudgetAllocationPerImplementingAgencyBarChart/index";
 import ISCActivitiesTable from "./ISCActivitiesTable/index";
-import BudgetAllocationPerComponentBarChart from "./BudgetAllocationPerComponentBarChart/index";
+import BudgetAllocationPerFundingSourceBarChart from "./BudgetAllocationPerFundingSourceBarChart/index";
 
 export default function FundingStatus() {
   return (
@@ -30,7 +30,7 @@ export default function FundingStatus() {
               </Grid>
 
               <Grid item lg={12} md={12} xs={12}>
-                <BudgetAllocationPerComponentBarChart />
+                <BudgetAllocationPerFundingSourceBarChart />
               </Grid>
             </Grid>
           </Grid>
@@ -38,7 +38,7 @@ export default function FundingStatus() {
             <ISCActivitiesTable />
           </Grid>
           <Grid item lg={3} md={3} xs={12}>
-            <FundingSourcesBarChart />
+            <BudgetAllocationPerImplementingAgencyBarChart />
           </Grid>
         </Grid>
       </Grid>

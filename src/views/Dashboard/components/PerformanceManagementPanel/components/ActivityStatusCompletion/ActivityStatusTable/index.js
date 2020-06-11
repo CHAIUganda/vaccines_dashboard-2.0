@@ -94,7 +94,7 @@ const ActivityStatusTable = () => {
                   {"Completed"}
                 </TableCell>
                 <TableCell align="right" className={classes.rowContent}>
-                  {completionStatus?.completed}
+                  {completionStatus?.count?.completed_count}
                 </TableCell>
               </TableRow>
               <TableRow key={2}>
@@ -103,7 +103,7 @@ const ActivityStatusTable = () => {
                   {"Not Done"}
                 </TableCell>
                 <TableCell align="right" className={classes.rowContent}>
-                  {completionStatus?.not_done}
+                  {completionStatus?.count?.not_done_count}
                 </TableCell>
               </TableRow>
               <TableRow key={3}>
@@ -113,7 +113,17 @@ const ActivityStatusTable = () => {
                   {"Ongoing"}
                 </TableCell>
                 <TableCell align="right" className={classes.rowContent}>
-                  {completionStatus?.ongoing}
+                  {completionStatus?.count?.ongoing_count}
+                </TableCell>
+              </TableRow>
+              <TableRow key={4}>
+                <TableCell align="right" className={classes.rowCategory}>
+                  <span className={classes.ongoing}></span>
+
+                  {"Partially Done"}
+                </TableCell>
+                <TableCell align="right" className={classes.rowContent}>
+                  {completionStatus?.count?.partially_done}
                 </TableCell>
               </TableRow>
             </TableBody>

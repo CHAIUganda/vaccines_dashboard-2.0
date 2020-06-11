@@ -1,5 +1,3 @@
-import { district } from "../../../context/GlobalState";
-
 export const getUniqueYearsFromData = (data) => {
   const years = [
     ...new Set(

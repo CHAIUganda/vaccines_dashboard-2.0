@@ -106,13 +106,16 @@ export function PerformanceManagementPanel() {
   const {
     defaultOrganisation,
     defaultISC,
+    defaultFundingSource,
     defaultFundingStatus,
     organisations,
     ISC,
+    fundingSources,
     currentYearStartQuarter,
     lastWorkPlanQuarter,
     quarters,
     getOrganistations,
+    getFundingSources,
     getISCs,
     getActivityCompletionStatusData,
     getFundingStatusData,
@@ -123,6 +126,7 @@ export function PerformanceManagementPanel() {
   useEffect(() => {
     getOrganistations();
     getISCs();
+    getFundingSources();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -188,6 +192,9 @@ export function PerformanceManagementPanel() {
   const [fundingStatusEndQuarter, setFundingStatusEndQuarter] = useState(
     lastWorkPlanQuarter
   );
+  const [fundingSourceOrg, setFundingSourceOrg] = useState(
+    defaultFundingSource
+  );
 
   const [fundingStatusOrg, setFundingStatusOrg] = useState(defaultOrganisation);
 
@@ -201,6 +208,7 @@ export function PerformanceManagementPanel() {
     getFundingStatusData(
       fundingStatusStartQuarter,
       fundingStatusEndQuarter,
+      fundingSourceOrg,
       fundingStatusOrg,
       fundingStatusISC,
       fundingStatusStatus
@@ -209,6 +217,7 @@ export function PerformanceManagementPanel() {
   }, [
     fundingStatusStartQuarter,
     fundingStatusEndQuarter,
+    fundingSourceOrg,
     fundingStatusOrg,
     fundingStatusISC,
     fundingStatusStatus,
@@ -306,6 +315,12 @@ export function PerformanceManagementPanel() {
       className={classes.liItems}
     >
       {quarter.name}
+    </MenuItem>
+  ));
+
+  const fundingSourceOrgFilter = fundingSources.map((org) => (
+    <MenuItem value={org} key={org} className={classes.liItems}>
+      {org}
     </MenuItem>
   ));
 
@@ -500,10 +515,36 @@ export function PerformanceManagementPanel() {
                   margin="dense"
                 >
                   <InputLabel
-                    htmlFor="FSOrg"
+                    htmlFor="FSourceOrg"
                     className={classes.selectorLables}
                   >
-                    Organization
+                    Funding Source
+                  </InputLabel>
+                  <Select
+                    className={classes.selector_background}
+                    value={fundingSourceOrg}
+                    onChange={(event) =>
+                      setFundingSourceOrg(event.target.value)
+                    }
+                    inputProps={{
+                      name: "FSourceORG_selector",
+                      id: "FSourceORG_selector",
+                    }}
+                  >
+                    {fundingSourceOrgFilter}
+                  </Select>
+                </FormControl>
+                <FormControl
+                  className={classes.formControl}
+                  variant="outlined"
+                  margin="dense"
+                >
+                  <InputLabel
+                    htmlFor="FSOrg"
+                    className={classes.selectorLables}
+                    style={{ width: 180 }}
+                  >
+                    Implementing Agency
                   </InputLabel>
                   <Select
                     className={classes.selector_background}

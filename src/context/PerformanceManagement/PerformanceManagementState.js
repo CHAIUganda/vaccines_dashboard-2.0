@@ -56,8 +56,10 @@ const initialColdChainState = {
   lastWorkPlanQuarter,
   ISC: [],
   organisations: [],
+  fundingSources: [],
   defaultOrganisation: "All",
   defaultISC: "All",
+  defaultFundingSource: "All",
   defaultFundingStatus: true,
   activityCompletionStatus: {},
   fundingStatus: {},
@@ -120,6 +122,29 @@ export const PerformanceManagementContextProvider = ({ children }) => {
     }
   };
 
+  const getFundingSources = async () => {
+    try {
+      const organisations = await axios.get(
+        `http://${apiEndpoint}${port}/performance_management/api/fundingsources`
+      );
+
+      const FUNDING_SOURCES = [
+        "All",
+        ...organisations.data.results.map((org) => org.name),
+      ];
+
+      dispatch({
+        type: "GET_FUNDING_SOURCES",
+        payload: FUNDING_SOURCES,
+      });
+    } catch (err) {
+      dispatch({
+        type: "GET_FUNDING_SOURCES_ERROR",
+        payload: "An error occured getting funding sources from backend",
+      });
+    }
+  };
+
   const getActivityCompletionStatusData = async (
     startQuarter,
     endQuarter,
@@ -137,7 +162,7 @@ export const PerformanceManagementContextProvider = ({ children }) => {
       );
 
       const activityCompletionStatusData = await axios.get(
-        `http://${apiEndpoint}${port}/performance_management/api/activitystatusprogressstatsstart_period=${startQuarter}&end_period=${endQuarter}&organization=${organization}&isc=${isc}`
+        `http://${apiEndpoint}${port}/performance_management/api/activitystatuspercentages?start_period=${startQuarter}&end_period=${endQuarter}&organization=${organization}&isc=${isc}`
       );
 
       const activitiesByResponsibleOrganisationData = await axios.get(
@@ -167,6 +192,7 @@ export const PerformanceManagementContextProvider = ({ children }) => {
   const getFundingStatusData = async (
     startQuarter,
     endQuarter,
+    fundingSource,
     organization,
     isc,
     fundingStatus
@@ -180,19 +206,23 @@ export const PerformanceManagementContextProvider = ({ children }) => {
 
     try {
       const budgetAllocationPerQuarter = await axios.get(
-        `http://${apiEndpoint}${port}/performance_management/api/budgetperquarter?start_period=${startQuarter}&end_period=${endQuarter}&organization=${organization}&isc=${isc}&funding=${status}`
+        `http://${apiEndpoint}${port}/performance_management/api/budgetperquarter?start_period=${startQuarter}&end_period=${endQuarter}&fundingsource=${fundingSource}&organization=${organization}&isc=${isc}&funding=${status}`
       );
 
       const budgetAllocationPerRegion = await axios.get(
-        `http://${apiEndpoint}${port}/performance_management/api/budgetallocationperregion?start_period=${startQuarter}&end_period=${endQuarter}&organization=${organization}&isc=${isc}&funding=${status}`
+        `http://${apiEndpoint}${port}/performance_management/api/budgetallocationperregion?start_period=${startQuarter}&end_period=${endQuarter}&fundingsource=${fundingSource}&organization=${organization}&isc=${isc}&funding=${status}`
       );
 
       const ISCFundingStats = await axios.get(
-        `http://${apiEndpoint}${port}/performance_management/api/iscfundingstats?start_period=${startQuarter}&end_period=${endQuarter}&organization=${organization}&isc=${isc}&funding=${status}`
+        `http://${apiEndpoint}${port}/performance_management/api/iscfundingstats?start_period=${startQuarter}&end_period=${endQuarter}&fundingsource=${fundingSource}&organization=${organization}&isc=${isc}&funding=${status}`
       );
 
       const fundingSourcesStats = await axios.get(
-        `http://${apiEndpoint}${port}/performance_management/api/fundsourcemetrics?start_period=${startQuarter}&end_period=${endQuarter}&organization=${organization}&isc=${isc}&funding=${status}`
+        `http://${apiEndpoint}${port}/performance_management/api/fundsourcemetrics?start_period=${startQuarter}&end_period=${endQuarter}&fundingsource=${fundingSource}&organization=${organization}&isc=${isc}&funding=${status}`
+      );
+
+      const implementingAgencyStats = await axios.get(
+        `http://${apiEndpoint}${port}/performance_management/api/budgetallocationperimplementingagency?start_period=${startQuarter}&end_period=${endQuarter}&fundingsource=${fundingSource}&organization=${organization}&isc=${isc}&funding=${status}`
       );
 
       const payload = {
@@ -200,6 +230,7 @@ export const PerformanceManagementContextProvider = ({ children }) => {
         budgetAllocationPerQuarter: budgetAllocationPerQuarter.data,
         ISTableData: ISCFundingStats.data,
         fundingSourcesData: fundingSourcesStats.data,
+        implementingAgencyStats: implementingAgencyStats.data,
         isLoading: false,
       };
 
@@ -309,8 +340,10 @@ export const PerformanceManagementContextProvider = ({ children }) => {
         currentYearStartQuarter: state.currentYearStartQuarter,
         lastWorkPlanQuarter: state.lastWorkPlanQuarter,
         ISC: state.ISC,
+        fundingSources: state.fundingSources,
         defaultOrganisation: state.defaultOrganisation,
         defaultISC: state.defaultISC,
+        defaultFundingSource: state.defaultFundingSource,
         defaultFundingStatus: state.defaultFundingStatus,
         activityCompletionStatus: state.activityCompletionStatus,
         plannedActivitiesPerQuarter: state.plannedActivitiesPerQuarter,
@@ -318,6 +351,7 @@ export const PerformanceManagementContextProvider = ({ children }) => {
         activities: state.activities,
         getOrganistations,
         getISCs,
+        getFundingSources,
         getActivityCompletionStatusData,
         getFundingStatusData,
         getActivitiesData,

@@ -6,23 +6,29 @@ import { PerformanceManagementContext } from "../../../../../../../context/Perfo
 // Chart Options
 import { commonChartOptions } from "../../../../../../../common/chartOptions/chartOptions";
 
-import { getFundingSourcesChartData } from "../../../../../../../common/utils/performancemanagement/utils";
+import { getBudgetAllocationByImplementingAgencyChartData } from "../../../../../../../common/utils/performancemanagement/utils";
 
-export const FundingSourcesBarChartTemplate = () => {
-  const { organisations, fundingStatus } = useContext(
-    PerformanceManagementContext
+export const BudgetAllocationByImplementingAgencyChartTemplate = () => {
+  const { fundingStatus } = useContext(PerformanceManagementContext);
+
+  const { implementingAgencyStats } = fundingStatus;
+
+  // Flip the chart to a colum chart if filtered
+  const chartType =
+    implementingAgencyStats?.map((org) => org.name).length > 1
+      ? "bar"
+      : "column";
+
+  const chartData = getBudgetAllocationByImplementingAgencyChartData(
+    implementingAgencyStats
   );
-
-  const { fundingSourcesData } = fundingStatus;
-
-  const chartData = getFundingSourcesChartData(fundingSourcesData);
 
   const chart = {
     credits: {
       ...commonChartOptions.credits,
     },
     chart: {
-      type: "bar",
+      type: chartType,
       plotBackgroundColor: null,
       plotBorderWidth: 0,
       plotShadow: false,
@@ -33,7 +39,7 @@ export const FundingSourcesBarChartTemplate = () => {
       text: "",
     },
     xAxis: {
-      categories: organisations.filter((org) => org !== "All"),
+      categories: implementingAgencyStats?.map((org) => org.name),
     },
     yAxis: {
       title: {
@@ -48,6 +54,18 @@ export const FundingSourcesBarChartTemplate = () => {
       footerFormat: "</table>",
       shared: true,
       useHTML: true,
+    },
+    plotOptions: {
+      column: {
+        pointPadding: 0,
+        borderWidth: 0,
+      },
+      series: {
+        minPointLength: 20,
+        pointWidth: 20,
+        groupPadding: 0.3,
+        pointPadding: 0,
+      },
     },
     series: chartData,
   };

@@ -163,10 +163,12 @@ export const getPlannedActivitiesChartData = (data = []) => {
     color: gradients.partially_done,
   });
 
+  console.log(chartData);
+
   return chartData;
 };
 
-export const getFundingSourcesChartData = (data = []) => {
+export const getBudgetAllocationByImplementingAgencyChartData = (data = []) => {
   const chartData = [];
 
   const activity_cost_usd = data.map((org) => org.activity_cost_usd);
@@ -217,15 +219,13 @@ export const getBudgetAllocationPieChartData = (data = {}) => {
   ];
 };
 
-export const getBudgetAllocationPerComponentChartData = (data = []) => {
-  const activity_cost_usd_data = data.map(
-    (activity) => activity.activity_cost_usd
-  );
+export const getBudgetAllocationPerFundingSourceChartData = (data = []) => {
+  const total_budget = data.map((source) => source.total_budget);
 
   return [
     {
-      name: "Immunization System Components",
-      data: activity_cost_usd_data,
+      name: "Funding Source",
+      data: total_budget,
       color: {
         linearGradient: {
           x1: 0,
@@ -242,6 +242,31 @@ export const getBudgetAllocationPerComponentChartData = (data = []) => {
   ];
 };
 
+// export const getBudgetAllocationPerComponentChartData = (data = []) => {
+//   const activity_cost_usd_data = data.map(
+//     (activity) => activity.activity_cost_usd
+//   );
+
+//   return [
+//     {
+//       name: "Immunization System Components",
+//       data: activity_cost_usd_data,
+//       color: {
+//         linearGradient: {
+//           x1: 0,
+//           x2: 0,
+//           y1: 0,
+//           y2: 1,
+//         },
+//         stops: [
+//           [0, "#4E596A"],
+//           [1, "#9CA2AB"],
+//         ],
+//       },
+//     },
+//   ];
+// };
+
 export const getActivityCompletionStatusChartData = (data = []) => {
   return [
     {
@@ -249,18 +274,23 @@ export const getActivityCompletionStatusChartData = (data = []) => {
       data: [
         {
           name: "Ongoing Activities",
-          y: data.ongoing_percentage,
+          y: data?.percentages?.ongoing_percentage,
           color: "#FC6F6F",
         },
         {
           name: "Not Completed Activities",
-          y: data.not_done_percentage,
+          y: data?.percentages?.not_done_percentage,
           color: "#F8E658",
         },
         {
           name: "Completed Activities",
-          y: data?.completed_percentage,
+          y: data?.percentages?.completed_percentage,
           color: "#4E596A",
+        },
+        {
+          name: "Partially Done Activities",
+          y: data?.percentages?.partially_done_percentage,
+          color: "#45BA34",
         },
       ],
       size: "80%",

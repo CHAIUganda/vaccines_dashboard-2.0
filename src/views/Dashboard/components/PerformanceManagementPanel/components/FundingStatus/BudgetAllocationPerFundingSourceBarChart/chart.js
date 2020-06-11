@@ -6,15 +6,17 @@ import { PerformanceManagementContext } from "../../../../../../../context/Perfo
 // Chart Options
 import { commonChartOptions } from "../../../../../../../common/chartOptions/chartOptions";
 
-import { getBudgetAllocationPerComponentChartData } from "../../../../../../../common/utils/performancemanagement/utils";
+import { getBudgetAllocationPerFundingSourceChartData } from "../../../../../../../common/utils/performancemanagement/utils";
 
-export const BudgetAllocationPerComponentBarChartTemplate = () => {
+export const BudgetAllocationPerFundingSourceBarChartTemplate = () => {
   const { fundingStatus } = useContext(PerformanceManagementContext);
 
-  const { ISTableData } = fundingStatus;
+  const { fundingSourcesData } = fundingStatus;
 
-  const categories = ISTableData?.data?.map((component) => component.component);
-  const chartData = getBudgetAllocationPerComponentChartData(ISTableData?.data);
+  const categories = fundingSourcesData?.map((source) => source.name);
+  const chartData = getBudgetAllocationPerFundingSourceChartData(
+    fundingSourcesData
+  );
 
   const chart = {
     credits: { ...commonChartOptions.credits },
@@ -47,8 +49,14 @@ export const BudgetAllocationPerComponentBarChartTemplate = () => {
     },
     plotOptions: {
       column: {
-        pointPadding: 0.2,
+        pointPadding: 0,
         borderWidth: 0,
+      },
+      series: {
+        minPointLength: 20,
+        pointWidth: 20,
+        groupPadding: 0.3,
+        pointPadding: 0,
       },
     },
     series: [...chartData],

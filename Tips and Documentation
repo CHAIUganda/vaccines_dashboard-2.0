@@ -53,8 +53,8 @@ On Staging
 
 backend
 Pull from git
-docker cp vaccines_db.01.05.2020_new.sql vc_dashboard_postgres_1:/vaccines_db.01.05.2020_new.sql
-docker exec vc_dashboard_postgres_1 psql -d vaccines_db -U postgres -f vaccines_db.01.05.2020_new.sql
+docker cp vaccines_db.11.06.2020_new.sql vc_dashboard_postgres_1:/vaccines_db.11.06.2020_new.sql
+docker exec vc_dashboard_postgres_1 psql -d vaccines_db -U postgres -f vaccines_db.11.06.2020_new.sql
 
 Pull from git
 sudo yarn build

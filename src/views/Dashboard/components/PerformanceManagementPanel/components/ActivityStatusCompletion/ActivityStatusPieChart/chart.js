@@ -44,7 +44,6 @@ export const ActivityStatusChartTemplate = (data) => {
         return "<b>" + this.point.name + "</b>: " + this.y + " %";
       },
     },
-
     series: [...chartData],
   };
 

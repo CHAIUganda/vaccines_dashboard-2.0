@@ -34,6 +34,12 @@ export default (state, action) => {
         organisations: action.payload,
       };
 
+    case "GET_FUNDING_SOURCES":
+      return {
+        ...state,
+        fundingSources: action.payload,
+      };
+
     case "GET_ISCs":
       return {
         ...state,
@@ -61,6 +67,12 @@ export default (state, action) => {
     //   Errors
 
     case "GET_ORGANISATIONS_ERROR":
+      return {
+        ...state,
+        error: action.payload,
+      };
+
+    case "GET_FUNDING_SOURCES_ERROR":
       return {
         ...state,
         error: action.payload,
