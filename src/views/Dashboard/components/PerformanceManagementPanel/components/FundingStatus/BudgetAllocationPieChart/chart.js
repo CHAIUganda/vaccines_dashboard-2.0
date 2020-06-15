@@ -30,10 +30,14 @@ export const BudgetAllocationPieChartTemplate = () => {
     title: {
       text:
         "<center>" +
-        budgetAllocationPerRegion?.national_percentage +
+        (budgetAllocationPerRegion?.national_percentage === undefined
+          ? 0
+          : budgetAllocationPerRegion?.national_percentage) +
         "%<center>" +
         "<b>National</b> <br><br><center>" +
-        budgetAllocationPerRegion?.district_percentage +
+        (budgetAllocationPerRegion?.district_percentage === undefined
+          ? 0
+          : budgetAllocationPerRegion?.district_percentage) +
         "%<center>" +
         "District",
       verticalAlign: "middle",
@@ -44,13 +48,7 @@ export const BudgetAllocationPieChartTemplate = () => {
       style: {
         padding: 0,
       },
-      // y: this.y,
     },
-    // yAxis: {
-    //   title: {
-    //     text: "Total percent market share",
-    //   },
-    // },
     plotOptions: {
       pie: {
         shadow: false,

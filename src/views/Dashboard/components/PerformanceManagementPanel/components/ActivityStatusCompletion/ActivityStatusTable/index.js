@@ -76,6 +76,7 @@ const ActivityStatusTable = () => {
   return (
     <Chart
       elevate={0}
+      title={"Activity completion status – Absolute"}
       chart={
         <TableContainer component={Paper} elevation={0}>
           <Table className={classes.table} aria-label="activity-status">

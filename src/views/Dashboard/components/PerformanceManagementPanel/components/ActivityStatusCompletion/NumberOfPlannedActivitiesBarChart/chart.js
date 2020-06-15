@@ -36,7 +36,7 @@ export const NumberOfPlannedActivitiesBarChartTemplate = () => {
     },
     yAxis: {
       title: {
-        text: "Number planned of activities",
+        text: "Number of activities",
       },
     },
     plotOptions: {

@@ -1,7 +1,7 @@
 import React from "react";
 
 // Shared components
-import { DataTable } from "./dataTableOld.js";
+import { DataTable } from "./dataTable.js";
 
 const ActivitiesTable = () => {
   return <DataTable />;

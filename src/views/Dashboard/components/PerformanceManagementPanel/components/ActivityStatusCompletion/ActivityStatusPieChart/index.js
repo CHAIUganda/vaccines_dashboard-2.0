@@ -27,7 +27,7 @@ const ActivityStatusPieChart = () => {
   return (
     <Chart
       elevate={0}
-      title={"Activity status"}
+      title={"Activity completion status - Percentages"}
       chart={
         <HighchartsReact highcharts={Highcharts} options={chart && chart} />
       }

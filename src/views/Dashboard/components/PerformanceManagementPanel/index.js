@@ -26,6 +26,7 @@ import FormLabel from "@material-ui/core/FormLabel";
 import ActivityStatusCompletion from "./components/ActivityStatusCompletion/index";
 import FundingStatus from "./components/FundingStatus/index";
 import Activities from "./components/Activities/index";
+import Activities2 from "./components/Activities/index2";
 
 // Import common styles
 import { useStyles } from "../styles";
@@ -161,18 +162,12 @@ export function PerformanceManagementPanel() {
     setActivityCompletionStatusISC,
   ] = useState(defaultISC);
 
-  // const [
-  //   activityCompletionStatusFundingStatus,
-  //   setActivitiyCompletionStatusFundingStatus,
-  // ] = useState(defaultFundingStatus);
-
   useEffect(() => {
     getActivityCompletionStatusData(
       activityCompletionStatusStartQuarter,
       activityCompletionStatusEndQuarter,
       activityCompletionStatusOrg,
       activityCompletionStatusISC
-      // activityCompletionStatusFundingStatus
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -180,7 +175,6 @@ export function PerformanceManagementPanel() {
     activityCompletionStatusEndQuarter,
     activityCompletionStatusOrg,
     activityCompletionStatusISC,
-    // activityCompletionStatusFundingStatus,
   ]);
 
   // -----------------------------------------------------------------------
@@ -189,12 +183,15 @@ export function PerformanceManagementPanel() {
   const [fundingStatusStartQuarter, setFundingStatusStartQuarter] = useState(
     currentYearStartQuarter
   );
+
   const [fundingStatusEndQuarter, setFundingStatusEndQuarter] = useState(
     lastWorkPlanQuarter
   );
-  const [fundingSourceOrg, setFundingSourceOrg] = useState(
-    defaultFundingSource
-  );
+
+  const [
+    fundingStatusFundingSourceOrg,
+    setFundingStatusFundingSourceOrg,
+  ] = useState(defaultFundingSource);
 
   const [fundingStatusOrg, setFundingStatusOrg] = useState(defaultOrganisation);
 
@@ -208,7 +205,7 @@ export function PerformanceManagementPanel() {
     getFundingStatusData(
       fundingStatusStartQuarter,
       fundingStatusEndQuarter,
-      fundingSourceOrg,
+      fundingStatusFundingSourceOrg,
       fundingStatusOrg,
       fundingStatusISC,
       fundingStatusStatus
@@ -217,7 +214,7 @@ export function PerformanceManagementPanel() {
   }, [
     fundingStatusStartQuarter,
     fundingStatusEndQuarter,
-    fundingSourceOrg,
+    fundingStatusFundingSourceOrg,
     fundingStatusOrg,
     fundingStatusISC,
     fundingStatusStatus,
@@ -233,6 +230,10 @@ export function PerformanceManagementPanel() {
     lastWorkPlanQuarter
   );
 
+  const [activitiesFundingSourceOrg, setActivitiesFundingSourceOrg] = useState(
+    defaultFundingSource
+  );
+
   const [activitiesOrg, setActivitiesOrg] = useState(defaultOrganisation);
 
   const [activitiesISC, setActivitiesISC] = useState(defaultISC);
@@ -245,6 +246,7 @@ export function PerformanceManagementPanel() {
     getActivitiesData(
       activitiesStartQuarter,
       activitiesEndQuarter,
+      activitiesFundingSourceOrg,
       activitiesOrg,
       activitiesISC,
       activitiesFundingStatus
@@ -253,6 +255,7 @@ export function PerformanceManagementPanel() {
   }, [
     activitiesStartQuarter,
     activitiesEndQuarter,
+    activitiesFundingSourceOrg,
     activitiesOrg,
     activitiesISC,
     activitiesFundingStatus,
@@ -318,7 +321,7 @@ export function PerformanceManagementPanel() {
     </MenuItem>
   ));
 
-  const fundingSourceOrgFilter = fundingSources.map((org) => (
+  const fundingStatusFundingSourceOrgFilter = fundingSources.map((org) => (
     <MenuItem value={org} key={org} className={classes.liItems}>
       {org}
     </MenuItem>
@@ -357,6 +360,12 @@ export function PerformanceManagementPanel() {
       className={classes.liItems}
     >
       {quarter.name}
+    </MenuItem>
+  ));
+
+  const activitiesFundingSourceOrgFilter = fundingSources.map((org) => (
+    <MenuItem value={org} key={org} className={classes.liItems}>
+      {org}
     </MenuItem>
   ));
 
@@ -430,7 +439,6 @@ export function PerformanceManagementPanel() {
                     </HtmlTooltip>
                   }
                 />
-                {/* {isAuthenticated ? ( */}
                 <TabStyle
                   {...a11yProps(2)}
                   label={
@@ -445,13 +453,28 @@ export function PerformanceManagementPanel() {
                       enterDelay={500}
                       leaveDelay={200}
                     >
-                      <span>Activities</span>
+                      <span>Activities Old Design</span>
                     </HtmlTooltip>
                   }
                 />
-                {/* ) : ( */}
-                {/* <></> */}
-                {/* )} */}
+                <TabStyle
+                  {...a11yProps(3)}
+                  label={
+                    <HtmlTooltip
+                      title={
+                        <React.Fragment>
+                          <Typography color="inherit">
+                            <b> {"Help text goes here"}</b>
+                          </Typography>
+                        </React.Fragment>
+                      }
+                      enterDelay={500}
+                      leaveDelay={200}
+                    >
+                      <span>Activities New Design</span>
+                    </HtmlTooltip>
+                  }
+                />
               </Tabs>
             </AppBar>
           </Grid>
@@ -522,16 +545,16 @@ export function PerformanceManagementPanel() {
                   </InputLabel>
                   <Select
                     className={classes.selector_background}
-                    value={fundingSourceOrg}
+                    value={fundingStatusFundingSourceOrg}
                     onChange={(event) =>
-                      setFundingSourceOrg(event.target.value)
+                      setFundingStatusFundingSourceOrg(event.target.value)
                     }
                     inputProps={{
                       name: "FSourceORG_selector",
                       id: "FSourceORG_selector",
                     }}
                   >
-                    {fundingSourceOrgFilter}
+                    {fundingStatusFundingSourceOrgFilter}
                   </Select>
                 </FormControl>
                 <FormControl
@@ -682,8 +705,9 @@ export function PerformanceManagementPanel() {
                   <InputLabel
                     htmlFor="ACSOrg"
                     className={classes.selectorLables}
+                    style={{ width: 180 }}
                   >
-                    Organization
+                    Implementing Agency
                   </InputLabel>
                   <Select
                     className={classes.selector_background}
@@ -785,10 +809,36 @@ export function PerformanceManagementPanel() {
                   margin="dense"
                 >
                   <InputLabel
-                    htmlFor="ActivityOrg"
+                    htmlFor="ActivityFSourceOrg"
                     className={classes.selectorLables}
                   >
-                    Organization
+                    Funding Source
+                  </InputLabel>
+                  <Select
+                    className={classes.selector_background}
+                    value={activitiesFundingSourceOrg}
+                    onChange={(event) =>
+                      setActivitiesFundingSourceOrg(event.target.value)
+                    }
+                    inputProps={{
+                      name: "ActivityFSourceOrg_selector",
+                      id: "ActivityFSourceOrg_selector",
+                    }}
+                  >
+                    {activitiesFundingSourceOrgFilter}
+                  </Select>
+                </FormControl>
+                <FormControl
+                  className={classes.formControl}
+                  variant="outlined"
+                  margin="dense"
+                >
+                  <InputLabel
+                    htmlFor="ActivityOrg"
+                    className={classes.selectorLables}
+                    style={{ width: 180 }}
+                  >
+                    Implementing Agency
                   </InputLabel>
                   <Select
                     className={classes.selector_background}
@@ -873,6 +923,9 @@ export function PerformanceManagementPanel() {
           </TabPanel>
           <TabPanel value={value} index={2}>
             <Activities />
+          </TabPanel>
+          <TabPanel value={value} index={3}>
+            <Activities2 />
           </TabPanel>
         </Grid>
       </Grid>

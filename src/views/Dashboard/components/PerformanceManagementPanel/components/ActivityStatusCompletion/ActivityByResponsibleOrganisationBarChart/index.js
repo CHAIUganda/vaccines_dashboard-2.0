@@ -33,7 +33,7 @@ const ActivityByResponsibleOrganisationBarChart = () => {
 
   return (
     <Chart
-      title={"Activity by Responsible Organisation"}
+      title={"Activity completion rates Implementing Agency"}
       chart={
         <HighchartsReact highcharts={Highcharts} options={chart && chart} />
       }

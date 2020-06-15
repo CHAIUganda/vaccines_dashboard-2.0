@@ -3,7 +3,7 @@ import React from "react";
 // Material components
 import { makeStyles } from "@material-ui/core/styles";
 
-import ActivitiesTable from "./ActivitiesTable/index";
+import ActivitiesTable from "./ActivitiesTable/index2";
 
 const useStyles = makeStyles((theme) => ({
   tableContainer: {

@@ -26,7 +26,7 @@ const NumberOfPlannedActivitiesBarChart = () => {
 
   return (
     <Chart
-      title={"Number of Planned Activities"}
+      title={"Activity completion rates per quarter"}
       chart={
         <HighchartsReact highcharts={Highcharts} options={chart && chart} />
       }
