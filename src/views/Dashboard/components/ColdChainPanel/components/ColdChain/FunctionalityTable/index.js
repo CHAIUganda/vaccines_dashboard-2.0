@@ -1,17 +1,10 @@
 import React from "react";
 
-// Shared componenrs
+// Shared components
 import { DataTable } from "./dataTable.js";
 
-const FunctionalityTable = ({ data, startQuarter, endQuarter, isLoading }) => {
-  return (
-    <DataTable
-      data={data}
-      isLoading={isLoading}
-      startQuarter={startQuarter}
-      endQuarter={endQuarter}
-    />
-  );
+const FunctionalityTable = () => {
+  return <DataTable />;
 };
 
 export default FunctionalityTable;

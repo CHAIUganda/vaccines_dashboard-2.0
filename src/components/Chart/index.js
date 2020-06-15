@@ -8,20 +8,30 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    // flexGrow: 1,
+    // display: "flex",
+    // flexDirection: "column",
     padding: theme.spacing(2, 2),
     height: "100%",
+    // justifyContent: "center",
   },
   text: {
     color: "#28354A",
     opacity: "100%",
-    fontWeight: theme.typography.fontWeightRegular,
+    fontWeight: "500",
     fontSize: "medium",
   },
 }));
 
-const CustomeChartPaper = (props) => {
-  const { children, isLoading, centerTitle, chartData, ...rest } = props;
+const CustomChartPaper = (props) => {
+  const {
+    children,
+    isLoading,
+    centerTitle,
+    chartData,
+    elevate,
+    ...rest
+  } = props;
 
   // Used to store state of the series chart data.
   // If empty, means no data and we render appropriate message
@@ -38,52 +48,54 @@ const CustomeChartPaper = (props) => {
   const classes = useStyles();
 
   return (
-    <React.Fragment>
-      <Paper {...rest} className={classes.root}>
-        {isLoading ? (
-          <div style={{ marginTop: 200, marginLeft: 20 }}>
-            <LinearProgress />
-            <Typography variant="overline" display="block" gutterBottom>
-              Loading data ....
-            </Typography>
-          </div>
-        ) : (
-          <>
-            <Typography
-              component="h3"
-              variant="h6"
-              gutterBottom
-              className={classes.text}
-            >
-              {centerTitle ? (
-                <center>{props.title} </center>
-              ) : (
-                <> {props.title} </>
-              )}
-            </Typography>
-            <Typography component="div">
-              {dataState ? (
-                <p
-                  style={{
-                    margin: 200,
-                    marginLeft: 300,
-                    fontSize: 20,
-                    color: "red",
-                  }}
-                >
-                  No Data Available
-                </p>
-              ) : (
-                <>
-                  <div>{props.chart}</div>
-                </>
-              )}
-            </Typography>
-          </>
-        )}
-      </Paper>
-    </React.Fragment>
+    <Paper {...rest} className={classes.root} elevation={elevate}>
+      {isLoading ? (
+        // <div style={{ marginTop: 200, marginLeft: 20 }}>
+        <>
+          <LinearProgress />
+          <Typography variant="overline" display="block" gutterBottom>
+            Loading data ....
+          </Typography>
+        </>
+      ) : (
+        <>
+          <Typography
+            component="h3"
+            variant="h6"
+            gutterBottom
+            className={classes.text}
+          >
+            {centerTitle ? (
+              <center>{props.title} </center>
+            ) : (
+              <> {props.title} </>
+            )}
+          </Typography>
+          <Typography
+            component="div"
+            style={{
+              margin: "50px 0px 0px 0px",
+            }}
+          >
+            {dataState ? (
+              <p
+                style={{
+                  float: "inherit",
+                  textAlign: "center",
+                  fontSize: 20,
+                  color: "red",
+                }}
+              >
+                No Data Available
+              </p>
+            ) : (
+              <>{props.chart}</>
+            )}
+          </Typography>
+        </>
+      )}
+    </Paper>
   );
 };
 
-export default CustomeChartPaper;
+export default CustomChartPaper;

@@ -1,66 +1,70 @@
+import { useContext } from "react";
+
+// Bring in our stock management context
+import { StockManagementContext } from "../../../../../../../context/StockManagement/StockManagementState";
+
 // Chart Options
 import {
   commonChartOptions,
-  commonChartPlotOptions
+  commonChartPlotOptions,
 } from "../../../../../../../common/chartOptions/chartOptions";
 
 // Utility functions
 import { getStockChartData } from "../../../../../../../common/utils/stockmanagement/utils";
 
-export const RefillRateLineChartTemplate = (
-  data,
-  endMonth,
-  startMonth,
-  district,
-  vaccine
-) => {
-  const chartData = getStockChartData(
-    data,
+export const RefillRateLineChartTemplate = () => {
+  const { refillRate } = useContext(StockManagementContext);
+
+  const {
+    stockByDistrictVaccineData,
     endMonth,
-    startMonth,
-    district,
     vaccine,
+    district,
+  } = refillRate;
+  const chartData = getStockChartData(
+    stockByDistrictVaccineData,
+    endMonth,
     "line"
   );
 
   return {
     credits: {
-      ...commonChartOptions.credits
+      ...commonChartOptions.credits,
     },
     exporting: {
       ...commonChartOptions.exporting,
       chartOptions: {
         ...commonChartOptions.exporting.chartOptions,
         title: {
-          text: `Distribution of ${vaccine} for ${district}`
-        }
-      }
+          text: `Distribution of ${vaccine} for ${district}`,
+        },
+      },
     },
     title: {
-      text: ""
+      text: "",
     },
     xAxis: {
       type: "datetime",
       labels: {
-        ...commonChartOptions.labels
-      }
+        ...commonChartOptions.labels,
+      },
     },
 
     tooltip: {
-      ...commonChartOptions.lineTooltip
+      ...commonChartOptions.lineTooltip,
     },
 
     yAxis: {
       labels: {
-        ...commonChartOptions.labels
+        ...commonChartOptions.labels,
       },
-      min: 0
+      min: 0,
     },
     plotOptions: {
       line: {
-        ...commonChartPlotOptions.plotOptions.line
-      }
+        ...commonChartPlotOptions.plotOptions.line,
+      },
     },
-    series: [...chartData]
+    series: [...chartData],
   };
 };

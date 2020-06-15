@@ -1,6 +1,9 @@
-import React, { useState, useMemo, forwardRef } from "react";
+import React, { useState, useMemo, forwardRef, useContext } from "react";
 
 import MaterialTable from "material-table";
+
+// Bring in our stock management context
+import { StockManagementContext } from "../../../../../../../context/StockManagement/StockManagementState";
 
 // Import common styles
 import { useStyles } from "../../../../styles";
@@ -48,16 +51,16 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-export const DataTable = (props) => {
+export const DataTable = ({ tab }) => {
+  const { districtStockLevels } = useContext(StockManagementContext);
+
   const {
-    data = [],
     endMonth,
-    startMonth,
-    district,
+    atHandStockLevelsData,
     vaccine,
-    tab,
     isLoading,
-  } = props;
+  } = districtStockLevels;
+
   const title = `Stock Balances of ${vaccine} at the Beginning of ${endMonth}`;
   const classes = useStyles();
 
@@ -102,19 +105,8 @@ export const DataTable = (props) => {
   const [tableData, setTableData] = useState(null);
 
   useMemo(() => {
-    if (data && data) {
-      setTableData(
-        getStockChartData(
-          data,
-          endMonth,
-          startMonth,
-          district,
-          vaccine,
-          "table"
-        )
-      );
-    }
-  }, [data, endMonth, startMonth, district, vaccine]);
+    setTableData(getStockChartData(atHandStockLevelsData, endMonth, "table"));
+  }, [endMonth, vaccine]);
 
   const tableDataStockedOut =
     tableData && tableData.map((i) => i.tabledata_so)[0];

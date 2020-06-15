@@ -1,4 +1,7 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useContext } from "react";
+
+// Bring in our cold chain context
+import { ColdChainContext } from "../../../../../../../context/ColdChain/ColdChainState";
 
 import MaterialTable from "material-table";
 
@@ -44,8 +47,12 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-export const DataTable = ({ data, year, isLoading }) => {
+export const DataTable = () => {
   const classes = useStyles();
+
+  const { optimality } = useContext(ColdChainContext);
+  const { optimalityDataTableData, year, isLoading } = optimality;
+
   const title = `Optimality of CCEs ${"at National Level"} for ${year}`;
 
   const columns = [
@@ -85,8 +92,12 @@ export const DataTable = ({ data, year, isLoading }) => {
     <MaterialTable
       title={<h3 className={classes.tableTitle}>{title}</h3>}
       // Filter out statisticts key
-      data={data && Object.values(data).filter((v) => !v.statistics)}
+      data={
+        optimalityDataTableData &&
+        Object.values(optimalityDataTableData).filter((v) => !v.statistics)
+      }
       columns={columns}
+      isLoading={isLoading}
       style={{ height: "100%" }}
       icons={tableIcons}
       options={

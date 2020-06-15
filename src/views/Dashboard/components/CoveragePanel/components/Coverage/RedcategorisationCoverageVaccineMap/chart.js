@@ -1,7 +1,12 @@
+import { useContext } from "react";
+
+// Bring in our coverage  context
+import { CoverageContext } from "../../../../../../../context/Coverage/CoverageState";
+
 // Chart Options
 import {
   commonChartOptions,
-  mapLegend
+  mapLegend,
 } from "../../../../../../../common/chartOptions/chartOptions";
 
 //  Map utilities
@@ -9,28 +14,26 @@ import {
 import {
   createDistrictDataMap,
   calculateRedCategoryValue,
-  getPeriodList
+  getPeriodList,
 } from "../../../../../../../common/utils/mapUtils";
 
 //  Map
 const ugandaMap2 = require("../../../../../../../common/maps/map2.json");
 
-export const redcategorisationCoverageMap = (
-  data,
-  endYear,
-  tabTitle,
-  dose,
-  vaccineName
-) => {
-  let activeVaccine = vaccineName;
+export const RedcategorisationCoverageMap = (tabTitle) => {
+  const { redCategorisation } = useContext(CoverageContext);
 
-  if (vaccineName === "DPT" || vaccineName === "ALL") {
+  const { vacineDataForMap, vaccine, endYear } = redCategorisation;
+
+  let activeVaccine = vaccine;
+
+  if (vaccine === "DPT" || vaccine === "ALL") {
     activeVaccine = "PENTA";
   }
 
   let mapData = [];
 
-  const districtMapData = createDistrictDataMap(data);
+  const districtMapData = createDistrictDataMap(vacineDataForMap);
 
   for (let [key, value] of Object.entries(districtMapData)) {
     const district = key;
@@ -48,19 +51,19 @@ export const redcategorisationCoverageMap = (
   }
 
   // Calculate legend values
-  const values = mapData.map(v => v[1]);
-  const CAT1 = values.filter(a => a === 1 && a !== null).length;
-  const CAT2 = values.filter(a => a === 2 && a !== null).length;
-  const CAT3 = values.filter(a => a === 3 && a !== null).length;
-  const CAT4 = values.filter(a => a === 4 && a !== null).length;
+  const values = mapData.map((v) => v[1]);
+  const CAT1 = values.filter((a) => a === 1 && a !== null).length;
+  const CAT2 = values.filter((a) => a === 2 && a !== null).length;
+  const CAT3 = values.filter((a) => a === 3 && a !== null).length;
+  const CAT4 = values.filter((a) => a === 4 && a !== null).length;
 
   return {
     credits: {
-      ...commonChartOptions.credits
+      ...commonChartOptions.credits,
     },
     chart: {
       map: ugandaMap2,
-      height: 74 + "%"
+      height: 500,
     },
     exporting: {
       ...commonChartOptions.exportingMap,
@@ -70,23 +73,23 @@ export const redcategorisationCoverageMap = (
             ? "Annualized"
             : "Monthly"
         } Red Categorization of ${
-          vaccineName === "ALL" ? "PENTA3" : vaccineName
-        } for ${endYear}`
+          vaccine === "ALL" ? "PENTA3" : vaccine
+        } for ${endYear}`,
       },
       buttons: {
-        ...commonChartOptions.exporting.buttons
+        ...commonChartOptions.exporting.buttons,
       },
-      fallbackToExportServer: false
+      fallbackToExportServer: false,
     },
 
     title: {
-      text: ""
+      text: "",
     },
     mapNavigation: {
-      mapNavigation: { ...commonChartOptions.mapNavigation }
+      mapNavigation: { ...commonChartOptions.mapNavigation },
     },
     legend: {
-      ...mapLegend
+      ...mapLegend,
     },
     colorAxis: {
       dataClasses: [
@@ -95,30 +98,30 @@ export const redcategorisationCoverageMap = (
           to: 1.9,
           color: "green",
           legendName: "CAT1",
-          count: CAT1
+          count: CAT1,
         },
         {
           from: 2,
           to: 2.9,
           color: "yellow",
           legendName: "CAT2",
-          count: CAT2
+          count: CAT2,
         },
         {
           from: 3,
           to: 3.9,
           color: "orange",
           legendName: "CAT3",
-          count: CAT3
+          count: CAT3,
         },
         {
           from: 4,
           to: 4.9,
           color: "red",
           legendName: "CAT4",
-          count: CAT4
-        }
-      ]
+          count: CAT4,
+        },
+      ],
     },
 
     tooltip: { ...commonChartOptions.mapTooltip },
@@ -132,10 +135,10 @@ export const redcategorisationCoverageMap = (
         borderWidth: 1,
         states: {
           hover: {
-            color: "#a4edba"
-          }
-        }
-      }
-    ]
+            color: "#a4edba",
+          },
+        },
+      },
+    ],
   };
 };

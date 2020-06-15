@@ -11,17 +11,8 @@ import DistrictStockTrendsChart from "./DistrictStockTrendsChart/index";
 // Import common styles
 import { useStyles } from "../../../styles";
 
-export default function UptakeRateAndDistrictStockTrends(props) {
+export default function UptakeRateAndDistrictStockTrends({ tab }) {
   const classes = useStyles();
-  const {
-    data,
-    startMonth,
-    endMonth,
-    isLoading,
-    vaccine,
-    district,
-    tab,
-  } = props;
 
   return (
     <Grid container spacing={3}>
@@ -30,25 +21,11 @@ export default function UptakeRateAndDistrictStockTrends(props) {
           <Grid item lg={12} md={12} xl={12} xs={12}>
             {tab === "uptake-rate" ? (
               <>
-                <UptakeRateChart
-                  data={data && data}
-                  startMonth={startMonth && startMonth}
-                  endMonth={endMonth && endMonth}
-                  isLoading={isLoading && isLoading}
-                  vaccine={vaccine && vaccine}
-                  district={district && district}
-                />
+                <UptakeRateChart />
               </>
             ) : (
               <>
-                <DistrictStockTrendsChart
-                  data={data && data}
-                  startMonth={startMonth && startMonth}
-                  endMonth={endMonth && endMonth}
-                  isLoading={isLoading && isLoading}
-                  vaccine={vaccine && vaccine}
-                  district={district && district}
-                />
+                <DistrictStockTrendsChart />
               </>
             )}
           </Grid>

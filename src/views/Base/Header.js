@@ -16,15 +16,19 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { Grid } from "@material-ui/core";
 
 // Material icons
-import HomeIcon from "@material-ui/icons/Home";
-import PieChartIcon from "@material-ui/icons/PieChart";
-import LocalShippingIcon from "@material-ui/icons/LocalShipping";
-import BusinessIcon from "@material-ui/icons/Business";
-import TimelineIcon from "@material-ui/icons/Timeline";
 import DashboardIcon from "@material-ui/icons/Dashboard";
-import SettingsIcon from "@material-ui/icons/Settings";
 
 import FlagStripImage from "../../common/image/flag-ug.png";
+
+// Custom Icons
+import {
+  ColdChainIcon,
+  HomeIcon,
+  StockManagementIcon,
+  CoverageIcon,
+  PerformanceManagementIcon,
+  SettingsIcon,
+} from "../../icons/icons";
 
 const drawerWidth = 80;
 
@@ -72,7 +76,6 @@ const useStyles = makeStyles((theme) => ({
       display: "none",
     },
   },
-  //   toolbar: theme.mixins.toolbar,
   toolbar: {
     minHeight: 75,
   },
@@ -96,17 +99,17 @@ const useStyles = makeStyles((theme) => ({
     height: 45,
     marginRight: 10,
   },
-  //   ugandaMapLogo: {
-  //     marginLeft: `calc(100% + ${drawerWidth}px)`
-  //   },
+
   iconLabelWrapper: {
     color: "#28354A",
     flexDirection: "row",
-    fontWeight: "fontWeightBold",
     fontSize: 12,
   },
   iconSpacing: {
-    marginRight: 5,
+    overflow: "visible",
+    height: 25,
+    marginRight: 7,
+    marginTop: 10,
   },
   grow: {
     flexGrow: 1,
@@ -118,10 +121,9 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   verticalIcon: {
-    marginTop: 50,
     color: "white",
-    fontSize: 40,
-    minWidth: 0,
+    overflow: "visible",
+    margin: "auto",
   },
 
   dashboardIcon: {
@@ -130,17 +132,26 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 0,
   },
 
-  verticalIconLabelWrapper: {
-    color: "white",
+  linkTab: {
+    minWidth: 0,
+    minHeight: 55,
   },
+
+  wrapper: {
+    width: "100%",
+    display: "inline-flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    margin: "auto",
+    height: 80,
+  },
+
   verticalBar: {
     backgroundColor: "#28354A",
     marginLeft: 0,
     minHeight: "100%",
-  },
-
-  verticalLabelContainer: {
-    height: 100,
+    marginTop: 10,
   },
 
   verticalIconSpacing: {
@@ -192,42 +203,56 @@ function Header(props) {
         }}
       >
         <LinkTab
+          style={{ minWidth: 0, minHeight: 55 }}
           classes={{
-            verticalIconLabelWrapper: classes.verticalIconLabelWrapper,
-            verticalLabelContainer: classes.verticalLabelContainer,
+            wrapper: classes.wrapper,
           }}
           icon={<HomeIcon className={classes.verticalIcon} />}
           href="/overview"
           {...a11yProps(0)}
-          disabled={true}
         />
+
         <LinkTab
           classes={{
-            verticalIconLabelWrapper: classes.verticalIconLabelWrapper,
-            verticalLabelContainer: classes.verticalLabelContainer,
+            wrapper: classes.wrapper,
           }}
-          icon={<PieChartIcon className={classes.verticalIcon} />}
-          href="/coverage"
+          icon={<ColdChainIcon className={classes.verticalIcon} />}
+          href="/cold-chain"
           {...a11yProps(1)}
         />
         <LinkTab
           classes={{
-            verticalIconLabelWrapper: classes.verticalIconLabelWrapper,
-            verticalLabelContainer: classes.verticalLabelContainer,
+            wrapper: classes.wrapper,
           }}
-          icon={<LocalShippingIcon className={classes.verticalIcon} />}
+          icon={<StockManagementIcon className={classes.verticalIcon} />}
           href="/stock-management"
           {...a11yProps(2)}
         />
         <LinkTab
           classes={{
-            verticalIconLabelWrapper: classes.verticalIconLabelWrapper,
-            verticalLabelContainer: classes.verticalLabelContainer,
+            wrapper: classes.wrapper,
           }}
-          icon={<BusinessIcon className={classes.verticalIcon} />}
-          href="/cold-chain"
+          icon={<CoverageIcon className={classes.verticalIcon} />}
+          href="/coverage"
           {...a11yProps(3)}
-          disabled={false}
+        />
+
+        <LinkTab
+          classes={{
+            wrapper: classes.wrapper,
+          }}
+          icon={<PerformanceManagementIcon className={classes.verticalIcon} />}
+          href="/performance-management"
+          {...a11yProps(4)}
+        />
+
+        <LinkTab
+          classes={{
+            wrapper: classes.wrapper,
+          }}
+          icon={<SettingsIcon className={classes.verticalIcon} />}
+          href="/login"
+          {...a11yProps(5)}
         />
       </Tabs>
     </div>
@@ -235,7 +260,7 @@ function Header(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed" color="white" className={classes.appBar}>
+      <AppBar position="fixed" color="inherit" className={classes.appBar}>
         <div className={classes.grow} />
         <Box className={classes.flagStrip}></Box>
         <Toolbar>
@@ -280,70 +305,79 @@ function Header(props) {
                 aria-label="Vaccine dashboard navigation tabs"
                 TabIndicatorProps={{
                   style: {
-                    height: "1px",
+                    height: "3px",
                   },
                 }}
               >
                 <LinkTab
                   classes={{
                     wrapper: classes.iconLabelWrapper,
+                    linkTab: classes.linkTab,
                   }}
                   icon={<HomeIcon className={classes.iconSpacing} />}
                   label="Overview"
                   href="/overview"
                   {...a11yProps(0)}
-                  disabled={true}
                 />
                 <LinkTab
                   classes={{
                     wrapper: classes.iconLabelWrapper,
+                    linkTab: classes.linkTab,
                   }}
-                  icon={<PieChartIcon className={classes.iconSpacing} />}
-                  label="Coverage"
-                  href="/coverage"
+                  icon={<ColdChainIcon className={classes.iconSpacing} />}
+                  label="Cold Chain"
+                  href="/cold-chain"
                   {...a11yProps(1)}
                 />
                 <LinkTab
                   classes={{
                     wrapper: classes.iconLabelWrapper,
+                    linkTab: classes.linkTab,
                   }}
-                  icon={<LocalShippingIcon className={classes.iconSpacing} />}
+                  icon={<StockManagementIcon className={classes.iconSpacing} />}
                   label="Stock Management"
                   href="/stock-management"
                   {...a11yProps(2)}
-                  disabled={false}
                 />
+
                 <LinkTab
                   classes={{
                     wrapper: classes.iconLabelWrapper,
+                    linkTab: classes.linkTab,
                   }}
-                  icon={<BusinessIcon className={classes.iconSpacing} />}
-                  label="Cold Chain"
-                  href="/cold-chain"
+                  icon={<CoverageIcon className={classes.iconSpacing} />}
+                  label="Coverage"
                   {...a11yProps(3)}
-                  disabled={false}
+                />
+
+                <LinkTab
+                  classes={{
+                    wrapper: classes.iconLabelWrapper,
+                    linkTab: classes.linkTab,
+                  }}
+                  icon={
+                    <PerformanceManagementIcon
+                      className={classes.iconSpacing}
+                    />
+                  }
+                  label="Work Planning"
+                  {...a11yProps(4)}
                 />
                 <LinkTab
                   classes={{
                     wrapper: classes.iconLabelWrapper,
+                    linkTab: classes.linkTab,
                   }}
-                  icon={<TimelineIcon className={classes.iconSpacing} />}
-                  label="Performance Management"
-                  href="/performance-management"
-                  {...a11yProps(4)}
-                  disabled={true}
+                  icon={
+                    <SettingsIcon
+                      className={classes.iconSpacing}
+                      style={{ marginBottom: 12, fontSize: 20 }}
+                    />
+                  }
+                  label="Settings"
+                  href="/login"
+                  {...a11yProps(5)}
                 />
-                <Button color="inherit" href="/login" icon={<SettingsIcon />}>
-                  Login
-                </Button>
-                {/* <Avatar
-                  alt="Map of Uganda"
-                  src="/uganda-flag.png"
-                  variant="square"
-                  classes={{
-                    wrapper: classes.iconLabelWrapper
-                  }}
-                /> */}
               </Tabs>
             </div>
           </Hidden>

@@ -1,10 +1,10 @@
 import React from "react";
 
-// Shared componenrs
+// Shared components
 import { DataTable } from "./dataTable.js";
 
-const OptimalityTable = ({ data, district, year, isLoading }) => {
-  return <DataTable data={data} year={year} isLoading={isLoading} />;
+const OptimalityTable = () => {
+  return <DataTable />;
 };
 
 export default OptimalityTable;

@@ -47,3 +47,16 @@ server {
 const [capacityStartYear, setCapacityStartYear] = useState(`${year - 1}01`);
 
 const [capacityEndYear, setCapacityEndYear] = useState(`${year}01`);
+
+
+On Staging
+
+backend
+Pull from git
+docker cp vaccines_db.11.06.2020_new.sql vc_dashboard_postgres_1:/vaccines_db.11.06.2020_new.sql
+docker exec vc_dashboard_postgres_1 psql -d vaccines_db -U postgres -f vaccines_db.11.06.2020_new.sql
+
+Pull from git
+sudo yarn build
+sudo cp -r ~/vaccines_dashboard-2.0/build/* /var/www/html/
+

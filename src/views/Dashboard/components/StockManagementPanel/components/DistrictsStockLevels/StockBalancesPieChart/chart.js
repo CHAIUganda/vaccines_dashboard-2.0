@@ -1,22 +1,22 @@
+import { useContext } from "react";
+
+// Bring in our stock management context
+import { StockManagementContext } from "../../../../../../../context/StockManagement/StockManagementState";
+
 // Utility functions
 import { getStockChartData } from "../../../../../../../common/utils/stockmanagement/utils";
 
 // Chart Options
 import { commonChartOptions } from "../../../../../../../common/chartOptions/chartOptions";
 
-export const StockBalancesPieChartTemplate = (
-  data,
-  endMonth,
-  startMonth,
-  district,
-  vaccine
-) => {
+export const StockBalancesPieChartTemplate = () => {
+  const { districtStockLevels } = useContext(StockManagementContext);
+
+  const { atHandStockLevelsData, endMonth, vaccine } = districtStockLevels;
+
   const chartData = getStockChartData(
-    data,
+    atHandStockLevelsData,
     endMonth,
-    startMonth,
-    district,
-    vaccine,
     "piechart"
   );
 
@@ -27,33 +27,33 @@ export const StockBalancesPieChartTemplate = (
       plotBackgroundColor: null,
       plotBorderWidth: null,
       plotShadow: false,
-      ...commonChartOptions.chart
+      ...commonChartOptions.chart,
     },
     exporting: {
       ...commonChartOptions.exporting,
       chartOptions: {
         ...commonChartOptions.exporting.chartOptions,
         title: {
-          text: `Stock Balances of ${vaccine} at the beginning of ${startMonth}`
-        }
-      }
+          text: `Stock Balances of ${vaccine} at the beginning of ${endMonth}`,
+        },
+      },
     },
     plotOptions: {
       pie: {
         dataLabels: {
           enabled: true,
           ...commonChartOptions.labels,
-          formatter: function() {
+          formatter: function () {
             return this.point.name + " " + this.percentage.toFixed(0) + "%";
-          }
-        }
-      }
+          },
+        },
+      },
     },
 
     title: "",
     tooltip: {
-      ...commonChartOptions.pieToolTip
+      ...commonChartOptions.pieToolTip,
     },
-    series: [chartData]
+    series: [chartData],
   };
 };

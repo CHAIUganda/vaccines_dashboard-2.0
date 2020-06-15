@@ -1,19 +1,22 @@
+import { useContext } from "react";
+
+// Bring in our coverage context
+import { CoverageContext } from "../../../../../../../context/Coverage/CoverageState";
+
 // Chart Options
 import {
   commonChartOptions,
-  commonChartPlotOptions
+  commonChartPlotOptions,
 } from "../../../../../../../common/chartOptions/chartOptions";
 
 // Utility functions
 import { getChartData } from "../../../../../../../common/utils/utils";
 
-export const redCategorisationCoverageChart = (
-  data,
-  startYear,
-  endYear,
-  dose,
-  tabTitle
-) => {
+export const RedCategorisationCoverageChart = (tabTitle) => {
+  const { redCategorisation } = useContext(CoverageContext);
+
+  const { vaccineDosesForChart, startYear, endYear, dose } = redCategorisation;
+
   const monthsInYear = [
     "",
     "Jan",
@@ -27,7 +30,7 @@ export const redCategorisationCoverageChart = (
     "Sept",
     "Oct",
     "Nov",
-    "Dec"
+    "Dec",
   ];
 
   let chartData;
@@ -35,7 +38,7 @@ export const redCategorisationCoverageChart = (
   switch (tabTitle) {
     case "Annualized (CY)":
       chartData = getChartData(
-        data,
+        vaccineDosesForChart,
         startYear,
         endYear,
         "CY",
@@ -47,7 +50,7 @@ export const redCategorisationCoverageChart = (
 
     case "Monthly (CY)":
       chartData = getChartData(
-        data,
+        vaccineDosesForChart,
         startYear,
         endYear,
         "CY",
@@ -59,7 +62,7 @@ export const redCategorisationCoverageChart = (
 
     case "Annualized (FY)":
       chartData = getChartData(
-        data,
+        vaccineDosesForChart,
         startYear,
         endYear,
         "FY",
@@ -71,7 +74,7 @@ export const redCategorisationCoverageChart = (
 
     case "Monthly (FY)":
       chartData = getChartData(
-        data,
+        vaccineDosesForChart,
         startYear,
         endYear,
         "FY",
@@ -83,7 +86,7 @@ export const redCategorisationCoverageChart = (
 
     default:
       chartData = getChartData(
-        data,
+        vaccineDosesForChart,
         startYear,
         endYear,
         "CY",
@@ -93,36 +96,39 @@ export const redCategorisationCoverageChart = (
       );
   }
 
+  console.log(chartData);
+
   return {
     ...commonChartOptions,
     chart: {
-      height: 50 + "%"
+      height: 50 + "%",
+      type: "line",
     },
     title: {
-      text: ""
+      text: "",
     },
     xAxis: {
       categories: monthsInYear,
       labels: {
-        ...commonChartOptions.labels
-      }
+        ...commonChartOptions.labels,
+      },
     },
     yAxis: {
       title: {
-        text: "Percentage (%)"
+        text: "Percentage (%)",
       },
       labels: {
-        ...commonChartOptions.labels
+        ...commonChartOptions.labels,
       },
-      min: 0
+      min: 0,
     },
     plotOptions: {
       line: {
-        ...commonChartPlotOptions.plotOptions.line
-      }
+        ...commonChartPlotOptions.plotOptions.line,
+      },
     },
     tooltip: { ...commonChartOptions.lineTooltip },
 
-    series: [...chartData]
+    series: [...chartData],
   };
 };

@@ -1,3 +1,8 @@
+import { useContext } from "react";
+
+// Bring in our stock management context
+import { StockManagementContext } from "../../../../../../../context/StockManagement/StockManagementState";
+
 // Highcharts for time series test
 import Highcharts from "highcharts";
 
@@ -10,25 +15,24 @@ import {
 // Utility functions
 import { getStockChartData } from "../../../../../../../common/utils/stockmanagement/utils";
 
-export const districtStockTrendsChartTemplate = (
-  data,
-  endMonth,
-  startMonth,
-  district,
-  vaccine
-) => {
-  const chartData = getStockChartData(
-    data,
+export const DistrictStockTrendsChartTemplate = () => {
+  const { districtStockTrends } = useContext(StockManagementContext);
+
+  const {
+    stockByDistrictVaccineStockTrendData,
     endMonth,
-    startMonth,
-    district,
     vaccine,
+    district,
+  } = districtStockTrends;
+
+  const chartData = getStockChartData(
+    stockByDistrictVaccineStockTrendData,
+    endMonth,
     "column_district_stock_trends"
   );
 
   // Used to determine the width of the bars we render.
   const dataLength = chartData[0].data.length;
-  console.log(dataLength);
 
   return {
     credits: {

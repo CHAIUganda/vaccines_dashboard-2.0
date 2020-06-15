@@ -1,70 +1,52 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
+
+// Bring in our coverage context
+import { CoverageContext } from "../../../../../../../context/Coverage/CoverageState";
 
 // Highcharts for time series test
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
-// Shared componenrs
+// Shared components
 import { Chart } from "../../../../../../../components";
 
 // Chart Template
-import { redCategorisationCoverageChart } from "./chart";
+import { RedCategorisationCoverageChart } from "./chart";
 
 // Utils
 
 import { generateChartTitle } from "../../../../../../../common/utils/utils";
 
-const RedCategorisationForAntigensChart = props => {
-  const {
-    data,
-    tabTitle,
-    vaccineName,
-    dose,
-    isLoading,
-    startYear,
-    endYear,
-    reportYear
-  } = props;
+const RedCategorisationForAntigensChart = ({ tabTitle, reportYear }) => {
+  const { redCategorisation } = useContext(CoverageContext);
 
-  const [
-    redcategorisationCoverageForAntigensChart,
-    setRedcategorisationCoverageForAntigensChart
-  ] = useState();
+  const { startYear, vaccine, dose, isLoading } = redCategorisation;
+
+  const [chat, setChart] = useState();
 
   const [chartTitle, setChartTitle] = useState();
 
   useMemo(() => {
-    if (data && data) {
-      setRedcategorisationCoverageForAntigensChart(
-        redCategorisationCoverageChart(data, startYear, endYear, dose, tabTitle)
-      );
+    setChart(RedCategorisationCoverageChart(tabTitle));
 
-      setChartTitle(
-        generateChartTitle(
-          tabTitle && tabTitle,
-          vaccineName && vaccineName,
-          dose && dose,
-          "Red Categorization",
-          reportYear && reportYear,
-          startYear && startYear
-        )
-      );
-    }
-  }, [data, vaccineName, tabTitle, dose, startYear, endYear, reportYear]);
+    setChartTitle(
+      generateChartTitle(
+        tabTitle,
+        vaccine,
+        dose,
+        "Red Categorization",
+        reportYear,
+        startYear
+      )
+    );
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startYear, vaccine]);
 
   return (
     <Chart
       title={chartTitle}
-      chart={
-        <HighchartsReact
-          highcharts={Highcharts}
-          options={
-            redcategorisationCoverageForAntigensChart &&
-            redcategorisationCoverageForAntigensChart
-          }
-        />
-      }
-      isLoading={isLoading && isLoading}
+      chart={<HighchartsReact highcharts={Highcharts} options={chat && chat} />}
+      isLoading={isLoading}
     />
   );
 };

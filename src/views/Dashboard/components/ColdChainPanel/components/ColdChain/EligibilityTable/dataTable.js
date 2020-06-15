@@ -1,4 +1,7 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useContext } from "react";
+
+// Bring in our cold chain context
+import { ColdChainContext } from "../../../../../../../context/ColdChain/ColdChainState";
 
 import MaterialTable from "material-table";
 
@@ -44,8 +47,18 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-export const DataTable = ({ data, startQuarter, endQuarter, isLoading }) => {
+export const DataTable = () => {
   const classes = useStyles();
+
+  const { eligibility } = useContext(ColdChainContext);
+
+  const {
+    eligibilityDataTableData,
+    startQuarter,
+    endQuarter,
+    isLoading,
+  } = eligibility;
+
   const title = `Eligibility Status of CCE's at National Level for period ${startQuarter} - ${endQuarter}`;
 
   const columns = [
@@ -76,7 +89,7 @@ export const DataTable = ({ data, startQuarter, endQuarter, isLoading }) => {
   return (
     <MaterialTable
       title={<h3 className={classes.tableTitle}>{title}</h3>}
-      data={data || []}
+      data={eligibilityDataTableData || []}
       columns={columns}
       icons={tableIcons}
       isLoading={isLoading}
@@ -87,7 +100,7 @@ export const DataTable = ({ data, startQuarter, endQuarter, isLoading }) => {
         },
         { maxBodyHeight: 890 },
         { exportButton: true },
-        { pageSize: 7 })
+        { pageSize: 10 })
       }
     />
   );

@@ -24,6 +24,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     float: "right",
   },
+  toolTip: {
+    fontSize: "small",
+    fontWeight: 400,
+  },
 
   filters2: {
     float: "right",
@@ -120,6 +124,31 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
 
+  switch: {
+    marginTop: 8,
+    borderStyle: "solid",
+    borderRadius: 4,
+    borderWidth: "thin",
+    borderColor: "#CCCCCC",
+    backgroundColor: "white",
+    padding: 5,
+    paddingRight: 20,
+  },
+  switchLable: {
+    fontSize: "small",
+    color: "#28354A",
+  },
+
+  lable: {
+    fontSize: "small !important",
+    color: "#28354A",
+  },
+
+  switchFormControl: {
+    marginTop: 15,
+    marginRight: 40,
+  },
+
   // Table
   tableRoot: {
     width: "100%",
@@ -175,6 +204,12 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
     marginRight: theme.spacing(5),
     maxWidth: 300,
+  },
+
+  fundingStatusComponents: {
+    width: "100%",
+    maxWidth: "100%",
+    height: 345,
   },
 }));
 

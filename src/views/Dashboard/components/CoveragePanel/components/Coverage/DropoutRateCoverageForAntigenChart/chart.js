@@ -1,20 +1,21 @@
+import { useContext } from "react";
+
+// Bring in our coverage context
+import { CoverageContext } from "../../../../../../../context/Coverage/CoverageState";
+
 // Chart Options
 import {
   commonChartOptions,
-  commonChartPlotOptions
+  commonChartPlotOptions,
 } from "../../../../../../../common/chartOptions/chartOptions";
 
 // Utility functions
 import { getChartData } from "../../../../../../../common/utils/utils";
 
-export const dropoutRateCoverageCY = (
-  data,
-  startYear,
-  endYear,
-  dose,
-  tabTitle,
-  district
-) => {
+export const DropoutRateCoverageCY = (tabTitle) => {
+  const { dropoutRate } = useContext(CoverageContext);
+  const { vaccineDosesForChart, startYear, endYear, dose } = dropoutRate;
+
   const monthsInYear = [
     "",
     "Jan",
@@ -28,7 +29,7 @@ export const dropoutRateCoverageCY = (
     "Sept",
     "Oct",
     "Nov",
-    "Dec"
+    "Dec",
   ];
 
   let chartData;
@@ -36,7 +37,7 @@ export const dropoutRateCoverageCY = (
   switch (tabTitle) {
     case "Annualized (CY)":
       chartData = getChartData(
-        data,
+        vaccineDosesForChart,
         startYear,
         endYear,
         "CY",
@@ -47,7 +48,7 @@ export const dropoutRateCoverageCY = (
       break;
     case "Monthly (CY)":
       chartData = getChartData(
-        data,
+        vaccineDosesForChart,
         startYear,
         endYear,
         "CY",
@@ -59,7 +60,7 @@ export const dropoutRateCoverageCY = (
 
     default:
       chartData = getChartData(
-        data,
+        vaccineDosesForChart,
         startYear,
         endYear,
         "CY",
@@ -73,54 +74,51 @@ export const dropoutRateCoverageCY = (
     credits: { ...commonChartOptions.credits },
 
     chart: {
-      ...(district.length === 1 ? { height: 50 + "%" } : { height: 28 + "%" })
+      // ...(district.length === 1 ? { height: 50 + "%" } : { height: 28 + "%" }),
+      height: 500,
     },
     exporting: {
       ...commonChartOptions.exporting,
       chartOptions: {
         ...commonChartOptions.exporting.chartOptions,
         title: {
-          text: `Trend of Annualized Dropout Rate of antigens for ${endYear} Calendar Year`
-        }
-      }
+          text: `Trend of Annualized Dropout Rate of antigens for ${endYear} Calendar Year`,
+        },
+      },
     },
     title: {
-      text: ""
+      text: "",
     },
     xAxis: {
       categories: monthsInYear,
       labels: {
-        ...commonChartOptions.labels
-      }
+        ...commonChartOptions.labels,
+      },
     },
     yAxis: {
       title: {
-        text: "Percentage (%)"
+        text: "Percentage (%)",
       },
       labels: {
-        ...commonChartOptions.labels
-      }
+        ...commonChartOptions.labels,
+      },
     },
     plotOptions: {
       line: {
-        ...commonChartPlotOptions.plotOptions.line
-      }
+        ...commonChartPlotOptions.plotOptions.line,
+      },
     },
     tooltip: {
-      ...commonChartOptions.lineTooltip
+      ...commonChartOptions.lineTooltip,
     },
-    series: [...chartData]
+    series: [...chartData],
   };
 };
 
-export const dropoutRateCoverageFY = (
-  data,
-  startYear,
-  endYear,
-  dose,
-  tabTitle,
-  district
-) => {
+export const DropoutRateCoverageFY = (tabTitle) => {
+  const { dropoutRate } = useContext(CoverageContext);
+  const { vaccineDosesForChart, startYear, endYear, dose } = dropoutRate;
+
   const monthsFinancialYear = [
     "",
     "Jul",
@@ -134,7 +132,7 @@ export const dropoutRateCoverageFY = (
     "Mar",
     "Apr",
     "May",
-    "Jun"
+    "Jun",
   ];
 
   let chartData;
@@ -142,7 +140,7 @@ export const dropoutRateCoverageFY = (
   switch (tabTitle) {
     case "Annualized (FY)":
       chartData = getChartData(
-        data,
+        vaccineDosesForChart,
         startYear,
         endYear,
         "FY",
@@ -154,7 +152,7 @@ export const dropoutRateCoverageFY = (
 
     case "Monthly (FY)":
       chartData = getChartData(
-        data,
+        vaccineDosesForChart,
         startYear,
         endYear,
         "FY",
@@ -166,7 +164,7 @@ export const dropoutRateCoverageFY = (
 
     default:
       chartData = getChartData(
-        data,
+        vaccineDosesForChart,
         startYear,
         endYear,
         "FY",
@@ -179,10 +177,10 @@ export const dropoutRateCoverageFY = (
 
   return {
     credits: {
-      ...commonChartOptions.credits
+      ...commonChartOptions.credits,
     },
     chart: {
-      ...(district.length === 1 ? { height: 50 + "%" } : { height: 28 + "%" })
+      height: 500,
     },
 
     exporting: {
@@ -190,36 +188,36 @@ export const dropoutRateCoverageFY = (
       chartOptions: {
         ...commonChartOptions.exporting.chartOptions,
         title: {
-          text: `Trend of Annualized Dropout Rate of antigens for ${endYear} Financial Year`
-        }
-      }
+          text: `Trend of Annualized Dropout Rate of antigens for ${endYear} Financial Year`,
+        },
+      },
     },
     title: {
-      text: ""
+      text: "",
     },
     xAxis: {
       categories: monthsFinancialYear,
       labels: {
-        ...commonChartOptions.labels
-      }
+        ...commonChartOptions.labels,
+      },
     },
 
     tooltip: {
-      ...commonChartOptions.lineTooltip
+      ...commonChartOptions.lineTooltip,
     },
     yAxis: {
       title: {
-        text: "Percentage (%)"
+        text: "Percentage (%)",
       },
       labels: {
-        ...commonChartOptions.labels
-      }
+        ...commonChartOptions.labels,
+      },
     },
     plotOptions: {
       line: {
-        ...commonChartPlotOptions.plotOptions.line
-      }
+        ...commonChartPlotOptions.plotOptions.line,
+      },
     },
-    series: [...chartData]
+    series: [...chartData],
   };
 };
