@@ -17,8 +17,7 @@ import { Chart } from "../../../../../../../components";
 
 const useStyles = makeStyles({
   headerFont: {
-    color: "#727880",
-    fontWeight: 400,
+    fontWeight: 700,
   },
 
   rowContent: {
@@ -46,18 +45,21 @@ const ISCActivitiesTable = () => {
           >
             <TableHead style={{ color: "#727880" }}>
               <TableRow>
-                <TableCell className={classes.headerFont}>Component</TableCell>
-                <TableCell className={classes.headerFont} align="right">
+                <TableCell
+                  className={classes.headerFont}
+                  style={{ width: 300 }}
+                >
+                  Component
+                </TableCell>
+                <TableCell
+                  className={classes.headerFont}
+                  align="right"
+                  style={{ width: 150 }}
+                >
                   Allocated Fund (USD)
                 </TableCell>
                 <TableCell className={classes.headerFont} align="right">
-                  Secured
-                </TableCell>
-                <TableCell className={classes.headerFont} align="right">
-                  Unsecured
-                </TableCell>
-                <TableCell className={classes.headerFont} align="right">
-                  Total
+                  Total Funded Activities
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -78,20 +80,22 @@ const ISCActivitiesTable = () => {
                       )}
                   </TableCell>
                   <TableCell align="right" className={classes.rowContent}>
-                    {row.secured}
-                  </TableCell>
-                  <TableCell align="right" className={classes.rowContent}>
-                    {row.unsecured}
-                  </TableCell>
-                  <TableCell align="right" className={classes.rowContent}>
                     {row.total}
                   </TableCell>
                 </TableRow>
               ))}
-              <TableCell align="right" className={classes.rowContent}>
+              <TableCell
+                align="right"
+                className={classes.rowContent}
+                style={{ fontWeight: 700 }}
+              >
                 Totals
               </TableCell>
-              <TableCell align="right" className={classes.rowContent}>
+              <TableCell
+                align="right"
+                className={classes.rowContent}
+                style={{ fontWeight: 700 }}
+              >
                 {"$" +
                   new Intl.NumberFormat("lg-UG").format(
                     ISTableData?.data
@@ -99,21 +103,11 @@ const ISCActivitiesTable = () => {
                       .reduce((a, b) => a + b, 0)
                   )}
               </TableCell>
-              <TableCell align="right" className={classes.rowContent}>
-                {new Intl.NumberFormat("lg-UG").format(
-                  ISTableData?.data
-                    ?.map((row) => row.secured)
-                    .reduce((a, b) => a + b, 0)
-                )}
-              </TableCell>
-              <TableCell align="right" className={classes.rowContent}>
-                {new Intl.NumberFormat("lg-UG").format(
-                  ISTableData?.data
-                    ?.map((row) => row.unsecured)
-                    .reduce((a, b) => a + b, 0)
-                )}
-              </TableCell>
-              <TableCell align="right" className={classes.rowContent}>
+              <TableCell
+                align="right"
+                className={classes.rowContent}
+                style={{ fontWeight: 700 }}
+              >
                 {new Intl.NumberFormat("lg-UG").format(
                   ISTableData?.data
                     ?.map((row) => row.total)

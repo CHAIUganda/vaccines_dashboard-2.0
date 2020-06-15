@@ -75,8 +75,8 @@ export const getBudgetAllocationPerQuarterChartData = (data = []) => {
           y2: 1,
         },
         stops: [
-          [0, "#4E596A"],
-          [1, "#9CA2AB"],
+          [0, "#1e3c72"],
+          [1, "#526fa3"],
         ],
       },
     },
@@ -182,8 +182,8 @@ export const getBudgetAllocationByImplementingAgencyChartData = (data = []) => {
         y2: 1,
       },
       stops: [
-        [0, "#FC6F6F"],
-        [1, "#FF9D9D"],
+        [0, "#f83245"],
+        [1, "#fa5666"],
       ],
     },
   });
@@ -199,12 +199,12 @@ export const getBudgetAllocationPieChartData = (data = {}) => {
         {
           name: "National",
           y: data?.national_percentage,
-          color: "#F8E658",
+          color: "#f83245",
         },
         {
           name: "District",
           y: data?.district_percentage,
-          color: "#4E596A",
+          color: "#24c53f",
         },
       ],
       size: "95%",
@@ -232,8 +232,8 @@ export const getBudgetAllocationPerFundingSourceChartData = (data = []) => {
           y2: 1,
         },
         stops: [
-          [0, "#4E596A"],
-          [1, "#9CA2AB"],
+          [0, "#ed7d31"],
+          [1, "#f28c47"],
         ],
       },
     },
