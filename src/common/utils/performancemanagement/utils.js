@@ -163,8 +163,6 @@ export const getPlannedActivitiesChartData = (data = []) => {
     color: gradients.partially_done,
   });
 
-  console.log(chartData);
-
   return chartData;
 };
 

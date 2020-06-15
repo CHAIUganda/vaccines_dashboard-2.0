@@ -32,7 +32,8 @@ export const ActivityStatusChartTemplate = (data) => {
         dataLabels: {
           enabled: true,
           formatter: function () {
-            return Math.round(this.percentage * 100) / 100 + " %";
+            // return Math.round(this.percentage * 100) / 100 + " %";
+            return this.y + " %";
           },
           distance: -30,
           color: "white",
