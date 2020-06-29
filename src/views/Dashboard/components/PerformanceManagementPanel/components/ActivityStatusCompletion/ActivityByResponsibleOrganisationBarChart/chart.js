@@ -37,7 +37,7 @@ export const ActivityByResponsibleOrganisationChartTemplate = (data) => {
     yAxis: {
       min: 0,
       title: {
-        text: "Number of funded activities",
+        text: "Number of activities",
         align: "low",
       },
       labels: {

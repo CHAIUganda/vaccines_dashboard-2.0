@@ -7,8 +7,8 @@ const gradients = {
       y2: 1,
     },
     stops: [
-      [0, "#453216"],
-      [1, "#6e4810"],
+      [0, "#1e3c72"],
+      [1, "#526fa3"],
     ],
   },
 
@@ -20,8 +20,8 @@ const gradients = {
       y2: 1,
     },
     stops: [
-      [0, "#4E596A"],
-      [1, "#73849e"],
+      [0, "#0a3210"],
+      [1, "#156523"],
     ],
   },
   not_done: {
@@ -32,8 +32,8 @@ const gradients = {
       y2: 1,
     },
     stops: [
-      [0, "#FFFF71"],
-      [1, "#FFFFB2"],
+      [0, "#f83245"],
+      [1, "#fa5666"],
     ],
   },
   ongoing: {
@@ -44,8 +44,8 @@ const gradients = {
       y2: 1,
     },
     stops: [
-      [0, "#FC6F6F"],
-      [1, "#FF9D9D"],
+      [0, "#ed7d31"],
+      [1, "#f28c47"],
     ],
   },
 
@@ -57,8 +57,8 @@ const gradients = {
       y2: 1,
     },
     stops: [
-      [0, "#5a0d58"],
-      [1, "#b401af"],
+      [0, "#24c53f"],
+      [1, "#11b22d"],
     ],
   },
 };
@@ -75,8 +75,8 @@ export const getBudgetAllocationPerQuarterChartData = (data = []) => {
           y2: 1,
         },
         stops: [
-          [0, "#4E596A"],
-          [1, "#9CA2AB"],
+          [0, "#1e3c72"],
+          [1, "#526fa3"],
         ],
       },
     },
@@ -182,8 +182,8 @@ export const getBudgetAllocationByImplementingAgencyChartData = (data = []) => {
         y2: 1,
       },
       stops: [
-        [0, "#FC6F6F"],
-        [1, "#FF9D9D"],
+        [0, "#f83245"],
+        [1, "#fa5666"],
       ],
     },
   });
@@ -198,13 +198,19 @@ export const getBudgetAllocationPieChartData = (data = {}) => {
       data: [
         {
           name: "National",
-          y: data?.national_percentage,
-          color: "#F8E658",
+          y:
+            data?.national_percentage === undefined
+              ? 0
+              : data?.national_percentage,
+          color: "#f83245",
         },
         {
           name: "District",
-          y: data?.district_percentage,
-          color: "#4E596A",
+          y:
+            data?.district_percentage === undefined
+              ? 0
+              : data?.district_percentage,
+          color: "#24c53f",
         },
       ],
       size: "95%",
@@ -232,8 +238,8 @@ export const getBudgetAllocationPerFundingSourceChartData = (data = []) => {
           y2: 1,
         },
         stops: [
-          [0, "#4E596A"],
-          [1, "#9CA2AB"],
+          [0, "#ed7d31"],
+          [1, "#f28c47"],
         ],
       },
     },
@@ -271,22 +277,22 @@ export const getActivityCompletionStatusChartData = (data = []) => {
       name: "Activity Completion Status",
       data: [
         {
-          name: "Ongoing Activities",
+          name: "Ongoing",
           y: data?.percentages?.ongoing_percentage,
           color: "#FC6F6F",
         },
         {
-          name: "Not Completed Activities",
+          name: "Not Completed",
           y: data?.percentages?.not_done_percentage,
           color: "#F8E658",
         },
         {
-          name: "Completed Activities",
+          name: "Completed",
           y: data?.percentages?.completed_percentage,
           color: "#4E596A",
         },
         {
-          name: "Partially Done Activities",
+          name: "Partially Done",
           y: data?.percentages?.partially_done_percentage,
           color: "#45BA34",
         },
@@ -304,7 +310,7 @@ export const getActivityByResponsibleOrganisationOrganisationName = (
 export const getActivityByResponsibleOrganisationChartData = (data = []) => {
   const chartData = [
     {
-      name: "Total Activities",
+      name: "Planned",
       data: data?.map((a) => a.activity_count).sort((a, b) => a - b),
       color: gradients.total,
     },

@@ -249,6 +249,7 @@ export const PerformanceManagementContextProvider = ({ children }) => {
   const getActivitiesData = async (
     startQuarter,
     endQuarter,
+    fundingSource,
     organization,
     isc,
     fundingStatus
@@ -261,7 +262,7 @@ export const PerformanceManagementContextProvider = ({ children }) => {
 
     try {
       const allActivities = await axios.get(
-        `http://${apiEndpoint}${port}/performance_management/api/activities?start_period=${startQuarter}&end_period=${endQuarter}&organization=${organization}&isc=${isc}&funding=${status}`
+        `http://${apiEndpoint}${port}/performance_management/api/activities?start_period=${startQuarter}&end_period=${endQuarter}&fundingsource=${fundingSource}&organization=${organization}&isc=${isc}&funding=${status}`
       );
 
       dispatch({
@@ -279,49 +280,70 @@ export const PerformanceManagementContextProvider = ({ children }) => {
     }
   };
 
-  const updateActivitiesData = async (newData, oldData) => {
-    const { activity_status } = newData;
-    const old_activity_status_data = oldData?.activity_status;
-    const ids = activity_status.map((a) => a.id);
+  const updateActivitiesData2 = async ({
+    id,
+    status,
+    comment,
+    data,
+    index,
+    statusIndex,
+  }) => {
+    if (status === "" && comment === "") {
+      // silent fail (No changes)
+      return;
+    }
 
-    dispatch({
-      type: "UPDATING_ACTIVITY",
-      payload: { isLoading: true },
-    });
+    // Very ugly way to show updated values in the UI
+    const dataUpdate = [...data];
+    dataUpdate[index].activity_status[statusIndex].status = status;
+    dataUpdate[index].activity_status[statusIndex].comment = comment;
+
+    const payload = { comment, status };
+
+    await axios.patch(
+      `http://${apiEndpoint}${port}/performance_management/api/activitystatuses/${id}`,
+      payload
+    );
+  };
+
+  const updateActivitiesData = async (newData, oldData, data) => {
+    const dataUpdate = [...data];
+    const index = oldData.tableData.id;
+    dataUpdate[index] = newData;
+    const ids = dataUpdate[index].activity_status.map((a) => a.id);
 
     try {
       ids.forEach(async (id) => {
-        const new_status = activity_status
+        const _data = dataUpdate[index]["activity_status"];
+        const new_status = _data
           .filter((a) => a.id === id)
           .map((a) => a.status);
-        const new_comment = activity_status
+
+        const new_comment = _data
           .filter((a) => a.id === id)
           .map((a) => a.comment);
 
-        const old_status = old_activity_status_data
-          ?.filter((a) => a.id === id)
-          .map((a) => a.status);
-        const old_comment = old_activity_status_data
-          ?.filter((a) => a.id === id)
-          .map((a) => a.comment);
+        console.log(new_comment);
 
-        if (
-          old_status[0] === new_status[0] &&
-          old_comment[0] === new_comment[0]
-        ) {
-          // No changes, so no need to patch. Silent fail
-        } else {
-          //  Patch changes
-          const payload = {
-            comment: new_comment[0],
-            status: new_status[0],
-          };
+        //  Patch changes
+        const payload = {
+          comment: new_comment[0],
+          status: new_status[0],
+        };
 
-          await axios.patch(
-            `http://${apiEndpoint}${port}/performance_management/api/activitystatuses/${id}`,
-            payload
-          );
-        }
+        await axios.patch(
+          `http://${apiEndpoint}${port}/performance_management/api/activitystatuses/${id}`,
+          payload
+        );
+      });
+
+      // trigger data reload to reflect new changes
+      dispatch({
+        type: "GET_ALL_ACTIVITIES_DATA",
+        payload: {
+          allActivities: [...dataUpdate],
+          isLoading: false,
+        },
       });
     } catch (err) {
       dispatch({
@@ -330,7 +352,6 @@ export const PerformanceManagementContextProvider = ({ children }) => {
       });
     }
   };
-
   return (
     <PerformanceManagementContext.Provider
       value={{
@@ -356,6 +377,7 @@ export const PerformanceManagementContextProvider = ({ children }) => {
         getFundingStatusData,
         getActivitiesData,
         updateActivitiesData,
+        updateActivitiesData2,
       }}
     >
       {children}
