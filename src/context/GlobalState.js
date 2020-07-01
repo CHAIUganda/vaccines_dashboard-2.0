@@ -199,8 +199,6 @@ export const GlobalStateProvider = ({ children }) => {
         ? (uploadUrl = `http://${apiEndpoint}${port}/import/generic/coverage_targets`)
         : (uploadUrl = `http://${apiEndpoint}${port}/import/generic/min_max`);
 
-      console.log(uploadUrl);
-
       const data = new FormData();
       data.append("data_file", file);
       data.append("param1", year);
@@ -244,6 +242,43 @@ export const GlobalStateProvider = ({ children }) => {
       data.append("import_file", file);
       data.append("year", year);
       data.append("month", month);
+
+      // Works but disabled for now
+
+      // try {
+      //   await axios({
+      //     url: uploadUrl,
+      //     method: "post",
+      //     withCredentials: true,
+      //     data: data,
+      //     headers: {
+      //       "X-CSRFToken": Cookies.get("csrftoken"),
+      //     },
+      //   });
+      // } catch (err) {
+      //   console.log(err);
+      // }
+    } else if (module === "performanceManagement") {
+      uploadUrl = `http://${apiEndpoint}${port}/import/generic/performance_management_performance_management_command`;
+      const data = new FormData();
+      data.append("import_file", file);
+      data.append("year", year);
+
+      // Works but disabled for now
+
+      // try {
+      //   await axios({
+      //     url: uploadUrl,
+      //     method: "post",
+      //     withCredentials: true,
+      //     data: data,
+      //     headers: {
+      //       "X-CSRFToken": Cookies.get("csrftoken"),
+      //     },
+      //   });
+      // } catch (err) {
+      //   console.log(err);
+      // }
     }
   };
   return (
