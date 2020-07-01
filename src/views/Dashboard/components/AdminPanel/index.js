@@ -120,6 +120,9 @@ const useStylesAdminPanel = makeStyles((theme) => ({
     justifyContent: "space-evenly",
     margin: 40,
   },
+  span: {
+    marginTop: 10,
+  },
 }));
 
 export function AdminPanel() {
@@ -135,25 +138,37 @@ export function AdminPanel() {
   const classes = useStylesAdminPanel();
   const globalClasses = useStyles();
 
+  const accessLevels = ["Warehouse", "District", "IP"];
+
   const [value, setValue] = useState(0);
 
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
 
   const [plannedTargetsYear, setPlannedTargetsYear] = useState(null);
-  const [plannedTargetsFile, setPlannedTargetsFile] = useState(null);
+  const [plannedTargetsDataFile, setPlannedTargetsDataFile] = useState(null);
 
   const [coverageTargetsYear, setCoverageTargetsYear] = useState(null);
-  const [coverageTargetsFile, setCoverageTargetsFile] = useState(null);
+  const [coverageTargetsDataFile, setCoverageTargetsDataFile] = useState(null);
 
   const [stockRequirementsYear, setStockRequirementsYear] = useState(null);
-  const [stockRequirementsFile, setStockRequirementsFile] = useState(null);
+  const [stockRequirementsDataFile, setStockRequirementsDataFile] = useState(
+    null
+  );
 
   const [stockManagementDataYear, setStockManagementDataYear] = useState(null);
   const [stockManagementDataMonth, setStockManagementDataMonth] = useState(
     null
   );
   const [stockManagementDataFile, setStockManagementDataFile] = useState(null);
+
+  const [performanceManagementYear, setPerformanceManagementYear] = useState(
+    null
+  );
+  const [
+    performanceManagementDataFile,
+    setPerformanceManagementDataFile,
+  ] = useState(null);
 
   const [accessLevel, setAccessLevel] = useState(null);
 
@@ -196,8 +211,6 @@ export function AdminPanel() {
       {month.month}
     </MenuItem>
   ));
-
-  const accessLevels = ["Warehouse", "District", "IP"];
 
   const accessLevelsFilter = accessLevels.map((level) => (
     <MenuItem value={level} key={level}>
@@ -305,7 +318,7 @@ export function AdminPanel() {
                           width: 500,
                         }}
                       >
-                        <span>Email Address</span>
+                        <span className={classes.span}>Email Address</span>
                         <TextField
                           id="email_address"
                           size="small"
@@ -317,7 +330,7 @@ export function AdminPanel() {
                             // setStockManagementDataYear(e.target.value)
                           }
                         />
-                        <span>Superuser status</span>
+                        <span className={classes.span}>Superuser status</span>
                         <Checkbox
                           checked={superUserStatus}
                           color="primary"
@@ -328,7 +341,7 @@ export function AdminPanel() {
                           Designates that this user has all permissions without
                           explicitly assigning them.
                         </h6>
-                        <span>Access level</span>
+                        <span className={classes.span}>Access level</span>
                         <Select
                           className={globalClasses.selector_background}
                           value={accessLevel}
@@ -341,8 +354,8 @@ export function AdminPanel() {
                           {accessLevelsFilter}
                         </Select>
 
-                        <span>Access area</span>
-                        <span>Password</span>
+                        {/* <span>Access area</span> */}
+                        <span className={classes.span}>Password</span>
                         <TextField
                           id="password"
                           size="small"
@@ -354,7 +367,9 @@ export function AdminPanel() {
                             // setStockManagementDataYear(e.target.value)
                           }
                         />
-                        <span>Password confirmation</span>
+                        <span className={classes.span}>
+                          Password confirmation
+                        </span>
                         <TextField
                           id="password_confirmation"
                           type="password"
@@ -466,7 +481,7 @@ export function AdminPanel() {
                           e,
                           stockRequirementsYear,
                           undefined,
-                          stockRequirementsFile,
+                          stockRequirementsDataFile,
                           "stockManagementMinMax"
                         )
                       }
@@ -490,7 +505,7 @@ export function AdminPanel() {
                           type="file"
                           name="data_file"
                           onChange={(e) =>
-                            setStockRequirementsFile(e.target.files[0])
+                            setStockRequirementsDataFile(e.target.files[0])
                           }
                         />
                       </div>
@@ -515,7 +530,7 @@ export function AdminPanel() {
                           e,
                           coverageTargetsYear,
                           undefined,
-                          coverageTargetsFile,
+                          coverageTargetsDataFile,
                           "coverageTargets"
                         )
                       }
@@ -539,7 +554,7 @@ export function AdminPanel() {
                           type="file"
                           name="data_file"
                           onChange={(e) =>
-                            setCoverageTargetsFile(e.target.files[0])
+                            setCoverageTargetsDataFile(e.target.files[0])
                           }
                         />
                       </div>
@@ -565,7 +580,7 @@ export function AdminPanel() {
                           e,
                           plannedTargetsYear,
                           undefined,
-                          plannedTargetsFile,
+                          plannedTargetsDataFile,
                           "plannedTargets"
                         )
                       }
@@ -589,7 +604,7 @@ export function AdminPanel() {
                           type="file"
                           name="data_file"
                           onChange={(e) =>
-                            setPlannedTargetsFile(e.target.files[0])
+                            setPlannedTargetsDataFile(e.target.files[0])
                           }
                         />
                       </div>
@@ -607,6 +622,53 @@ export function AdminPanel() {
                   </TabPanel>
                   <TabPanel value={value} index={6}>
                     <h4 className={classes.h4}>Import Workplan file</h4>
+
+                    <form
+                      className={classes.dataUploadForm}
+                      noValidate
+                      autoComplete="off"
+                      id="performance-management-form"
+                      onSubmit={(e) =>
+                        handleDataUpload(
+                          e,
+                          performanceManagementYear,
+                          undefined,
+                          performanceManagementDataFile,
+                          "performanceManagement"
+                        )
+                      }
+                    >
+                      <CSRFToken />
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <label style={{ marginRight: 60 }}>Year</label>
+                        <TextField
+                          id="performance_management_year"
+                          type="text"
+                          variant="outlined"
+                          name="name"
+                          onChange={(e) =>
+                            setPerformanceManagementYear(e.target.value)
+                          }
+                        />
+                      </div>
+                      <div>
+                        <label style={{ marginRight: 30 }}>Data File</label>
+                        <input
+                          type="file"
+                          name="data_file"
+                          onChange={(e) =>
+                            setPerformanceManagementDataFile(e.target.files[0])
+                          }
+                        />
+                      </div>
+                      <Button
+                        variant="outlined"
+                        type="submit"
+                        form="performance-management-form"
+                      >
+                        Import
+                      </Button>
+                    </form>
                   </TabPanel>
                 </div>
               </div>
