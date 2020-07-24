@@ -38,6 +38,9 @@ const initialState = {
   currentYear: date.getFullYear(),
   isAuthenticated: sessionStorage.getItem("token") === null ? false : true,
   token: sessionStorage.getItem("token"),
+  loggedInUser: sessionStorage.getItem("email"),
+  isSuperUser: sessionStorage.getItem("isSuperAdmin"),
+  users: [],
   months: [
     { key: 1, month: "Jan" },
     { key: 2, month: "Feb" },
@@ -115,6 +118,22 @@ export const GlobalStateProvider = ({ children }) => {
     }
   };
 
+  const getAllUsers = async () => {
+    try {
+      const res = await axios.get(`http://${apiEndpoint}${port}/api/users`);
+
+      dispatch({
+        type: "GET_USERS",
+        payload: res.data.results,
+      });
+    } catch (err) {
+      dispatch({
+        type: "GET_USERS_ERROR",
+        payload: "An error occured getting users from backend",
+      });
+    }
+  };
+
   const loginUser = async (email, password) => {
     const loginUrl = `http://${apiEndpoint}${port}/auth/login/`;
     const data = {
@@ -125,18 +144,28 @@ export const GlobalStateProvider = ({ children }) => {
     try {
       const _data = await axios.post(loginUrl, data, OPTIONS_UNSECURE);
 
+      const users = await axios.get(`http://${apiEndpoint}${port}/api/users`);
+
+      const isSuperUser = users.data.results
+        ?.filter((user) => user?.email === email)
+        ?.map((status) => status?.is_superuser);
+
       sessionStorage.removeItem("email");
       sessionStorage.removeItem("token");
 
       sessionStorage.setItem("email", email);
       sessionStorage.setItem("token", _data.data.auth_token);
+      sessionStorage.setItem("isSuperUser", isSuperUser[0]);
 
       dispatch({
         type: "LOG_IN",
-        payload: { token: _data.data.auth_token, isAuthenticated: true },
+        payload: {
+          token: _data.data.auth_token,
+          isAuthenticated: true,
+          loggedInUser: email,
+          isSuperUser: isSuperUser[0],
+        },
       });
-
-      console.log(`User Logged in successfully`);
     } catch (err) {
       dispatch({
         type: "LOGIN_ERROR",
@@ -162,16 +191,44 @@ export const GlobalStateProvider = ({ children }) => {
       );
       sessionStorage.removeItem("email");
       sessionStorage.removeItem("token");
+      sessionStorage.removeItem("isSuperUser");
 
       dispatch({
         type: "LOG_OUT",
-        payload: { token: "", isAuthenticated: false },
+        payload: {
+          token: "",
+          isAuthenticated: false,
+          loggedInUser: "",
+          isSuperUser: false,
+        },
       });
-      console.log(`User Logged out successfully`);
     } catch (err) {
       dispatch({
         type: "LOGOUT_ERROR",
         payload: "An error occurred logging out.",
+      });
+    }
+  };
+
+  const registerUser = async (email, password) => {
+    const registerUserUrl = `http://${apiEndpoint}${port}/auth/register/`;
+    const data = {
+      password,
+      email,
+    };
+
+    try {
+      const _data = await axios.post(registerUserUrl, data);
+
+      dispatch({
+        type: "CREATE_USER",
+        payload: {},
+      });
+    } catch (err) {
+      dispatch({
+        type: "CREATE_USER_ERROR",
+        payload:
+          "An error occurred creating a user in. Please check your username and or password!",
       });
     }
   };
@@ -191,13 +248,13 @@ export const GlobalStateProvider = ({ children }) => {
     if (
       module === "plannedTargets" ||
       module === "coverageTargets" ||
-      module === "stockManagementMinMax"
+      module === "coldChain"
     ) {
       module === "plannedTargets"
         ? (uploadUrl = `http://${apiEndpoint}${port}/import/generic/planned_targets`)
         : module === "coverageTargets"
         ? (uploadUrl = `http://${apiEndpoint}${port}/import/generic/coverage_targets`)
-        : (uploadUrl = `http://${apiEndpoint}${port}/import/generic/min_max`);
+        : (uploadUrl = `http://${apiEndpoint}${port}/import/generic/import_coldchainmain`);
 
       const data = new FormData();
       data.append("data_file", file);
@@ -266,19 +323,19 @@ export const GlobalStateProvider = ({ children }) => {
 
       // Works but disabled for now
 
-      // try {
-      //   await axios({
-      //     url: uploadUrl,
-      //     method: "post",
-      //     withCredentials: true,
-      //     data: data,
-      //     headers: {
-      //       "X-CSRFToken": Cookies.get("csrftoken"),
-      //     },
-      //   });
-      // } catch (err) {
-      //   console.log(err);
-      // }
+      try {
+        await axios({
+          url: uploadUrl,
+          method: "post",
+          withCredentials: true,
+          data: data,
+          headers: {
+            "X-CSRFToken": Cookies.get("csrftoken"),
+          },
+        });
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
   return (
@@ -294,12 +351,17 @@ export const GlobalStateProvider = ({ children }) => {
         vaccines: state.vaccines,
         isAuthenticated: state.isAuthenticated,
         token: state.token,
+        loggedInUser: state.loggedInUser,
+        isSuperUser: state.isSuperUser,
+        users: state.users,
         months: state.months,
         getVaccines,
         getDistricts,
         getQuarters,
+        getAllUsers,
         loginUser,
         logoutUser,
+        registerUser,
         uploadData,
       }}
     >

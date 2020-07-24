@@ -76,8 +76,8 @@ const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
-function Row({ row, data, index }) {
-  const { isAuthenticated } = useContext(GlobalContext);
+function Row({ row, data, logEntriesData, index }) {
+  const { isAuthenticated, loggedInUser } = useContext(GlobalContext);
   const { updateActivitiesData2 } = useContext(PerformanceManagementContext);
 
   const [open, setOpen] = useState(false);
@@ -103,6 +103,7 @@ function Row({ row, data, index }) {
       data,
       index,
       statusIndex,
+      loggedInUser,
     };
 
     // Patch the data
@@ -166,6 +167,8 @@ function Row({ row, data, index }) {
                     </TableCell>
                     <TableCell style={{ width: 180 }}>Status</TableCell>
                     <TableCell>Comment</TableCell>
+                    <TableCell>Last Updated By</TableCell>
+                    <TableCell>Last Update Date and Time</TableCell>
                     {isAuthenticated ? <TableCell></TableCell> : ""}
                   </TableRow>
                 </TableHead>
@@ -228,6 +231,8 @@ function Row({ row, data, index }) {
                           <> {status.comment} </>
                         )}
                       </TableCell>
+                      <TableCell>{status.updated_by?.email}</TableCell>
+                      <TableCell>{status.updated_at}</TableCell>
                       {isAuthenticated ? (
                         <TableCell>
                           {/* By default edit status is set to false. */}
@@ -283,6 +288,7 @@ function Row({ row, data, index }) {
 export const DataTable = () => {
   const classes = useStyles();
   const [data, setData] = useState([]);
+  const [logEntriesData, setLogEntriesData] = useState([]);
 
   const {
     activities,
@@ -290,13 +296,14 @@ export const DataTable = () => {
     lastWorkPlanQuarter,
   } = useContext(PerformanceManagementContext);
 
-  const { allActivities, isLoading } = activities;
+  const { allActivities, logEntries, isLoading } = activities;
 
   const title = `Activities workplan for ${currentYearStartQuarter} - ${lastWorkPlanQuarter}`;
 
   useEffect(() => {
     setData(allActivities);
-  }, [allActivities]);
+    setLogEntriesData(logEntries);
+  }, [allActivities, logEntries]);
 
   return (
     <TableContainer component={Paper}>
@@ -338,6 +345,8 @@ export const DataTable = () => {
                   isAuthenticated
                   data={data}
                   index={index}
+                  logEntriesData={logEntriesData}
+                  // .filter((entry => entry.id === (row?.activity_status?.map(status => status))))}
                 />
               ))}
             </>

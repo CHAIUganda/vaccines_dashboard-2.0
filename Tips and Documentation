@@ -48,6 +48,12 @@ const [capacityStartYear, setCapacityStartYear] = useState(`${year - 1}01`);
 
 const [capacityEndYear, setCapacityEndYear] = useState(`${year}01`);
 
+On testing
+backend
+- Create db backup
+docker exec vc_dashboard_postgres_1 pg_dump vaccines_db -U postgres -f vaccines_db.24.07.2020.sql
+- Copy to out of container
+docker cp vc_dashboard_postgres_1:/vaccines_db.24.07.2020.sql vaccines_db.24.07.2020.sql
 
 On Staging
 

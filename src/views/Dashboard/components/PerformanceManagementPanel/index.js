@@ -25,7 +25,7 @@ import FormLabel from "@material-ui/core/FormLabel";
 
 import ActivityStatusCompletion from "./components/ActivityStatusCompletion/index";
 import FundingStatus from "./components/FundingStatus/index";
-import Activities from "./components/Activities/index";
+// import Activities from "./components/Activities/index";
 import Activities2 from "./components/Activities/index2";
 
 // Import common styles
@@ -453,11 +453,11 @@ export function PerformanceManagementPanel() {
                       enterDelay={500}
                       leaveDelay={200}
                     >
-                      <span>Activities Old Design</span>
+                      <span>Activities</span>
                     </HtmlTooltip>
                   }
                 />
-                <TabStyle
+                {/* <TabStyle
                   {...a11yProps(3)}
                   label={
                     <HtmlTooltip
@@ -474,7 +474,7 @@ export function PerformanceManagementPanel() {
                       <span>Activities New Design</span>
                     </HtmlTooltip>
                   }
-                />
+                /> */}
               </Tabs>
             </AppBar>
           </Grid>
@@ -922,11 +922,11 @@ export function PerformanceManagementPanel() {
             <ActivityStatusCompletion />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <Activities />
-          </TabPanel>
-          <TabPanel value={value} index={3}>
             <Activities2 />
           </TabPanel>
+          {/* <TabPanel value={value} index={3}>
+            <Activities2 />
+          </TabPanel> */}
         </Grid>
       </Grid>
     </div>

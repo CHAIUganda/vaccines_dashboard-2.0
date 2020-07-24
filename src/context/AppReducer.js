@@ -5,6 +5,8 @@ export default (state, action) => {
         ...state,
         isAuthenticated: true,
         token: action.payload.token,
+        loggedInUser: action.payload.loggedInUser,
+        isSuperUser: action.payload.isSuperUser,
       };
 
     case "LOG_OUT":
@@ -12,6 +14,8 @@ export default (state, action) => {
         ...state,
         isAuthenticated: false,
         token: action.payload.token,
+        loggedInUser: action.payload.loggedInUser,
+        isSuperUser: action.payload.isSuperUser,
       };
 
     case "GET_VACCINES":
@@ -32,6 +36,13 @@ export default (state, action) => {
         ...state,
         loading: false,
         quarters: action.payload,
+      };
+
+    case "GET_USERS":
+      return {
+        ...state,
+        loading: false,
+        users: action.payload,
       };
 
     case "GET_ELIGIBILITY_DATA":
@@ -74,6 +85,12 @@ export default (state, action) => {
       };
 
     case "LOGOUT_ERROR":
+      return {
+        ...state,
+        error: action.payload,
+      };
+
+    case "GET_USERS_ERROR":
       return {
         ...state,
         error: action.payload,
