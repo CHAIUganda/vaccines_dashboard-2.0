@@ -1,8 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Cookies from "js-cookie";
 
 // Bring in the global context
-import { GlobalContext, port } from "../../../../context/GlobalState";
+import { GlobalContext } from "../../../../context/GlobalState";
 
 // Material UI components
 
@@ -19,6 +19,13 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Modal from "@material-ui/core/Modal";
 
 const csrftoken = Cookies.get("csrftoken");
 
@@ -54,6 +61,21 @@ function a11yProps(index) {
   };
 }
 
+function rand() {
+  return Math.round(Math.random() * 20) - 10;
+}
+
+function getModalStyle() {
+  const top = 50 + rand();
+  const left = 50 + rand();
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
+
 const useStylesAdminPanel = makeStyles((theme) => ({
   formRoot: {
     flexGrow: 1,
@@ -61,6 +83,26 @@ const useStylesAdminPanel = makeStyles((theme) => ({
     border: `1px solid ${theme.palette.divider}`,
     borderRadius: 3,
     display: "flex",
+  },
+  modalPaper: {
+    position: "absolute",
+    // width: 400,
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+  buttonRoot: {
+    "& > *": {
+      margin: theme.spacing(1),
+    },
+  },
+  manageUsers: {
+    "& > *": {
+      margin: theme.spacing(1),
+      display: "flex",
+      justifyContent: "space-between",
+    },
   },
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`,
@@ -77,7 +119,9 @@ const useStylesAdminPanel = makeStyles((theme) => ({
     height: 500,
     flexDirection: "column",
   },
-
+  usersTable: {
+    minWidth: 650,
+  },
   color: {
     color: "#28354A",
   },
@@ -129,14 +173,35 @@ export function AdminPanel() {
   const {
     months,
     loginUser,
+    registerUser,
+    getAllUsers,
     logoutUser,
     uploadData,
     isAuthenticated,
+    isSuperUser,
     token,
+    users,
   } = useContext(GlobalContext);
+
+  // get users
+  useEffect(() => {
+    getAllUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const classes = useStylesAdminPanel();
   const globalClasses = useStyles();
+
+  const [modalStyle] = React.useState(getModalStyle);
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpenModal = () => {
+    setOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpen(false);
+  };
 
   const accessLevels = ["Warehouse", "District", "IP"];
 
@@ -170,19 +235,30 @@ export function AdminPanel() {
     setPerformanceManagementDataFile,
   ] = useState(null);
 
+  const [coldChainDataFile, setColdChainDataFile] = useState(null);
+  const [coldChainYear, setColdChainYear] = useState(null);
+  const [coldChainMonth, setColdChainMonth] = useState(null);
+
+  const [emailAddress, setEmailAddress] = useState(null);
+  const [userPassword, setUserPassword] = useState(null);
+  const [userPasswordConfirm, setUserPasswordConfirm] = useState(null);
+
   const [accessLevel, setAccessLevel] = useState(null);
 
   const [superUserStatus, setSuperUserStatus] = React.useState(false);
 
   const handleSetSuperUserStatus = (event) => {
-    console.log(event.target.checked);
     setSuperUserStatus(event.target.checked);
   };
-  // console.log(plannedTargetsYear);
 
   const handleLogin = (event) => {
     event.preventDefault();
     loginUser(email, password);
+  };
+
+  const handleCreateUser = (event) => {
+    event.preventDefault();
+    registerUser(emailAddress, userPassword, userPasswordConfirm);
   };
 
   const handleLogout = (event) => {
@@ -217,6 +293,89 @@ export function AdminPanel() {
       {level}
     </MenuItem>
   ));
+
+  const addUserModal = (
+    <div style={modalStyle} className={classes.modalPaper}>
+      <h4 className={classes.h4}>Add User</h4>
+      <form
+        noValidate
+        autoComplete="off"
+        id="login-form"
+        onSubmit={handleCreateUser}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            marginTop: 10,
+            marginLeft: 40,
+            width: 500,
+          }}
+        >
+          <span className={classes.span}>Email Address</span>
+          <TextField
+            id="email_address"
+            size="small"
+            type="text"
+            variant="outlined"
+            name="email_address"
+            onChange={(e) => setEmailAddress(e.target.value)}
+          />
+          <span className={classes.span}>Superuser status</span>
+          <Checkbox
+            checked={superUserStatus}
+            color="primary"
+            onChange={(e) => handleSetSuperUserStatus(e)}
+            inputProps={{ "aria-label": "primary checkbox" }}
+          />
+          <h6>
+            Designates that this user has all permissions without explicitly
+            assigning them.
+          </h6>
+          <span className={classes.span}>Access level</span>
+          <Select
+            className={globalClasses.selector_background}
+            value={accessLevel}
+            onChange={(e) => setAccessLevel(e.target.value)}
+            inputProps={{
+              id: "access_level",
+              name: "access_level",
+            }}
+          >
+            {accessLevelsFilter}
+          </Select>
+
+          <span className={classes.span}>Password</span>
+          <TextField
+            id="password"
+            size="small"
+            type="password"
+            variant="outlined"
+            name="password"
+            onChange={(e) => setUserPassword(e.target.event)}
+          />
+          <span className={classes.span}>Password confirmation</span>
+          <TextField
+            id="password_confirmation"
+            type="password"
+            size="small"
+            variant="outlined"
+            name="password_confirmation"
+            onChange={(e) => setUserPasswordConfirm(e.target.value)}
+          />
+          <h6>Enter the same password as above, for verification.</h6>
+          <Button
+            style={{ marginTop: 20 }}
+            variant="outlined"
+            type="submit"
+            form="create-user-form"
+          >
+            Submit
+          </Button>
+        </div>
+      </form>
+    </div>
+  );
 
   return (
     <div className={classes.root}>
@@ -275,6 +434,7 @@ export function AdminPanel() {
                       label="Manage Users"
                       {...a11yProps(0)}
                     />
+
                     <Tab
                       className={classes.tabsWidth}
                       label="Import Stock Management Files"
@@ -306,95 +466,86 @@ export function AdminPanel() {
                       {...a11yProps(6)}
                     />
                   </Tabs>
-                  <TabPanel value={value} index={0}>
-                    <h4 className={classes.h4}>Manage Users</h4>
-                    <form>
+                  {isSuperUser && isAuthenticated ? (
+                    <TabPanel value={value} index={0}>
                       <div
                         style={{
                           display: "flex",
-                          flexDirection: "column",
-                          marginTop: 10,
-                          marginLeft: 40,
-                          width: 500,
+                          justifyContent: "space-between",
                         }}
                       >
-                        <span className={classes.span}>Email Address</span>
-                        <TextField
-                          id="email_address"
-                          size="small"
-                          type="text"
-                          variant="outlined"
-                          name="email_address"
-                          onChange={
-                            (e) => console.log(e.target.value)
-                            // setStockManagementDataYear(e.target.value)
-                          }
-                        />
-                        <span className={classes.span}>Superuser status</span>
-                        <Checkbox
-                          checked={superUserStatus}
-                          color="primary"
-                          onChange={(e) => handleSetSuperUserStatus(e)}
-                          inputProps={{ "aria-label": "primary checkbox" }}
-                        />
-                        <h6>
-                          Designates that this user has all permissions without
-                          explicitly assigning them.
-                        </h6>
-                        <span className={classes.span}>Access level</span>
-                        <Select
-                          className={globalClasses.selector_background}
-                          value={accessLevel}
-                          onChange={(e) => setAccessLevel(e.target.value)}
-                          inputProps={{
-                            id: "access_level",
-                            name: "access_level",
-                          }}
-                        >
-                          {accessLevelsFilter}
-                        </Select>
-
-                        {/* <span>Access area</span> */}
-                        <span className={classes.span}>Password</span>
-                        <TextField
-                          id="password"
-                          size="small"
-                          type="password"
-                          variant="outlined"
-                          name="password"
-                          onChange={
-                            (e) => console.log(e.target.value)
-                            // setStockManagementDataYear(e.target.value)
-                          }
-                        />
-                        <span className={classes.span}>
-                          Password confirmation
-                        </span>
-                        <TextField
-                          id="password_confirmation"
-                          type="password"
-                          size="small"
-                          variant="outlined"
-                          name="password_confirmation"
-                          onChange={
-                            (e) => console.log(e.target.value)
-                            // setStockManagementDataYear(e.target.value)
-                          }
-                        />
-                        <h6>
-                          Enter the same password as above, for verification.
-                        </h6>
-                        <Button
-                          style={{ marginTop: 20 }}
-                          variant="outlined"
-                          type="submit"
-                          form="create-user-form"
-                        >
-                          Submit
-                        </Button>
+                        <h4>Manage Users</h4>
+                        <div className={classes.buttonRoot}>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleOpenModal}
+                          >
+                            Add Users
+                          </Button>
+                          <Modal
+                            open={open}
+                            onClose={handleCloseModal}
+                            aria-labelledby="Add users"
+                            aria-describedby="Add users"
+                          >
+                            {addUserModal}
+                          </Modal>
+                        </div>
                       </div>
-                    </form>
-                  </TabPanel>
+                      <TableContainer component={Paper}>
+                        <Table
+                          className={classes.table}
+                          size="small"
+                          aria-label="users table"
+                        >
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>Id</TableCell>
+                              <TableCell align="left">Email Address</TableCell>
+                              <TableCell align="left">Access Level</TableCell>
+                              <TableCell align="left">Access Area</TableCell>
+                              <TableCell align="left">Is Admin</TableCell>
+                              <TableCell align="left">Actions</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {users.map((user) => (
+                              <TableRow key={user.id}>
+                                <TableCell component="th" scope="row">
+                                  {user.id}
+                                </TableCell>
+                                <TableCell align="left">{user.email}</TableCell>
+                                <TableCell align="left">
+                                  {user.access_level}
+                                </TableCell>
+                                <TableCell align="left">
+                                  {user.access_area === null ? "None" : ""}
+                                </TableCell>
+                                <TableCell align="left">
+                                  {user.is_superuser === true ? "Yes" : "No"}
+                                </TableCell>
+                                <TableCell align="left">
+                                  <div className={classes.buttonRoot}>
+                                    <Button variant="contained" color="primary">
+                                      Edit
+                                    </Button>
+                                    <Button variant="contained" color="primary">
+                                      Change Password
+                                    </Button>
+                                  </div>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </TabPanel>
+                  ) : (
+                    <p style={{ margin: "auto" }}>
+                      You have to be an admin user to manage users
+                    </p>
+                  )}
                   <TabPanel value={value} index={1}>
                     <h4 className={classes.h4}>Import Stock Management file</h4>
                     <form
@@ -619,10 +770,54 @@ export function AdminPanel() {
                   </TabPanel>
                   <TabPanel value={value} index={5}>
                     <h4 className={classes.h4}>Import Cold chain data file</h4>
+
+                    <form
+                      className={classes.dataUploadForm}
+                      noValidate
+                      autoComplete="off"
+                      id="coldchain-management-form"
+                      onSubmit={(e) =>
+                        handleDataUpload(
+                          e,
+                          coldChainYear,
+                          coldChainMonth,
+                          coldChainDataFile,
+                          "coldChain"
+                        )
+                      }
+                    >
+                      <CSRFToken />
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <label style={{ marginRight: 60 }}>Year</label>
+                        <TextField
+                          id="coldChain_year"
+                          type="text"
+                          variant="outlined"
+                          name="name"
+                          onChange={(e) => setColdChainYear(e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <label style={{ marginRight: 30 }}>Data File</label>
+                        <input
+                          type="file"
+                          name="data_file"
+                          onChange={(e) =>
+                            setColdChainDataFile(e.target.files[0])
+                          }
+                        />
+                      </div>
+                      <Button
+                        variant="outlined"
+                        type="submit"
+                        form="coldchain-management-form"
+                      >
+                        Import
+                      </Button>
+                    </form>
                   </TabPanel>
                   <TabPanel value={value} index={6}>
                     <h4 className={classes.h4}>Import Workplan file</h4>
-
                     <form
                       className={classes.dataUploadForm}
                       noValidate

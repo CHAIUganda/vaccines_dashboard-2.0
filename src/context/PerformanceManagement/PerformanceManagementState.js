@@ -6,6 +6,13 @@ import PerformanceManagementReducer from "./reducer";
 import { port, date } from "../GlobalState";
 
 const apiEndpoint = require("../../env_config").default;
+const sessionStorage = window.sessionStorage;
+const token = sessionStorage.getItem("token");
+
+const OPTIONS = {
+  "Content-Type": "application/json",
+  Authorization: "Token " + token,
+};
 
 const generate_quarters = () => {
   let quarters = [];
@@ -287,6 +294,7 @@ export const PerformanceManagementContextProvider = ({ children }) => {
     data,
     index,
     statusIndex,
+    loggedInUser,
   }) => {
     if (status === "" && comment === "") {
       // silent fail (No changes)
@@ -297,12 +305,16 @@ export const PerformanceManagementContextProvider = ({ children }) => {
     const dataUpdate = [...data];
     dataUpdate[index].activity_status[statusIndex].status = status;
     dataUpdate[index].activity_status[statusIndex].comment = comment;
+    dataUpdate[index].activity_status[statusIndex].updated_by = {
+      email: loggedInUser,
+    };
 
     const payload = { comment, status };
 
     await axios.patch(
       `http://${apiEndpoint}${port}/performance_management/api/activitystatuses/${id}`,
-      payload
+      payload,
+      { headers: OPTIONS }
     );
   };
 
