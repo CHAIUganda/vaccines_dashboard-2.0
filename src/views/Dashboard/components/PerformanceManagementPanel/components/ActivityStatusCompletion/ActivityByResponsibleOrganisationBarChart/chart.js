@@ -49,12 +49,12 @@ export const ActivityByResponsibleOrganisationChartTemplate = (data) => {
     },
     plotOptions: {
       column: {
-        pointPadding: 0,
+        pointPadding: 3,
         borderWidth: 0,
       },
       series: {
-        minPointLength: 8,
-        pointWidth: 8,
+        minPointLength: 12,
+        pointWidth: 12,
         groupPadding: 0.3,
         pointPadding: 0,
       },

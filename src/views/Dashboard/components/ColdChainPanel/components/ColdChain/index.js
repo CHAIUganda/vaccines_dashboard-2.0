@@ -246,7 +246,7 @@ export default function ColdChain({ parentTab }) {
                       </Grid>
                       <Grid item lg={4} md={4} xl={4} xs={12}>
                         <ColdChainCard
-                          title={"Surplus (+ve Gap)"}
+                          title={"Filled Capacity"}
                           metric={capacity_shortage_positive}
                           isPercentage
                           backgroundImage={surplusCardBackgroundImage}

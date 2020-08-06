@@ -79,7 +79,7 @@ export const DataTable = () => {
     },
     {
       field: "cce_coverage_rate",
-      title: "Coverage Rate",
+      title: "Proportion of Facilities with CCE Equipment",
       cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
       render: (rowData) =>

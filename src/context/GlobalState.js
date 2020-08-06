@@ -39,7 +39,8 @@ const initialState = {
   isAuthenticated: sessionStorage.getItem("token") === null ? false : true,
   token: sessionStorage.getItem("token"),
   loggedInUser: sessionStorage.getItem("email"),
-  isSuperUser: sessionStorage.getItem("isSuperAdmin"),
+  isSuperUser: sessionStorage.getItem("isSuperUser"),
+  userISC: [],
   users: [],
   months: [
     { key: 1, month: "Jan" },
@@ -65,6 +66,28 @@ export const GlobalStateProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
   //////  Actions
+
+  //   Actions
+  const getUserISCs = async () => {
+    try {
+      const ISCdata = await axios.get(
+        `http://${apiEndpoint}${port}/performance_management/api/immunizationcomponents`
+      );
+
+      // const ISC = ["All", ...ISCdata.data.results.map((isc) => isc.name)];
+      const ISC = [{ id: 1, name: "All" }, ...ISCdata.data.results];
+
+      dispatch({
+        type: "GET_USER_ISCs",
+        payload: ISC,
+      });
+    } catch (err) {
+      dispatch({
+        type: "GET_USER_ISCs_ERROR",
+        payload: "An error occured getting ISCs from backend",
+      });
+    }
+  };
 
   const getVaccines = async () => {
     try {
@@ -119,8 +142,18 @@ export const GlobalStateProvider = ({ children }) => {
   };
 
   const getAllUsers = async () => {
+    dispatch({
+      type: "LOADING_ALL_USERS",
+      payload: { isLoading: true },
+    });
+
     try {
       const res = await axios.get(`http://${apiEndpoint}${port}/api/users`);
+
+      // const payload = {
+      //   users: res.data.results,
+      //   isLoading: false,
+      // };
 
       dispatch({
         type: "GET_USERS",
@@ -149,6 +182,8 @@ export const GlobalStateProvider = ({ children }) => {
       const isSuperUser = users.data.results
         ?.filter((user) => user?.email === email)
         ?.map((status) => status?.is_superuser);
+
+      console.log(isSuperUser);
 
       sessionStorage.removeItem("email");
       sessionStorage.removeItem("token");
@@ -210,13 +245,8 @@ export const GlobalStateProvider = ({ children }) => {
     }
   };
 
-  const registerUser = async (email, password) => {
-    const registerUserUrl = `http://${apiEndpoint}${port}/auth/register/`;
-    const data = {
-      password,
-      email,
-    };
-
+  const registerUser = async (data) => {
+    const registerUserUrl = `http://${apiEndpoint}${port}/api/users/`;
     try {
       const _data = await axios.post(registerUserUrl, data);
 
@@ -355,10 +385,12 @@ export const GlobalStateProvider = ({ children }) => {
         isSuperUser: state.isSuperUser,
         users: state.users,
         months: state.months,
+        userISC: state.userISC,
         getVaccines,
         getDistricts,
         getQuarters,
         getAllUsers,
+        getUserISCs,
         loginUser,
         logoutUser,
         registerUser,

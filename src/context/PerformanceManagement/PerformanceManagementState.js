@@ -318,6 +318,69 @@ export const PerformanceManagementContextProvider = ({ children }) => {
     );
   };
 
+  const updateAdminEdits = async ({
+    id,
+    editActivityName,
+    editISC,
+    editObjective,
+    editFundingSource,
+    editFundingState,
+    editFundingStatus,
+    editFundingPriority,
+    editMoV,
+    editLevel,
+    editActivityTimeFrame,
+    editResponsibleFocalPoint,
+    editStakeHolderFocalPoint,
+    editCostUSD,
+    editQuarterBudgetUSD,
+  }) => {
+    if (
+      editActivityName === "" &&
+      editISC === "" &&
+      editObjective &&
+      editFundingSource &&
+      editFundingState &&
+      editFundingStatus &&
+      editFundingPriority &&
+      editMoV &&
+      editLevel &&
+      editActivityTimeFrame &&
+      editResponsibleFocalPoint &&
+      editStakeHolderFocalPoint &&
+      editCostUSD &&
+      editQuarterBudgetUSD
+    ) {
+      // silent fail (No changes)
+      return;
+    }
+
+    const payload = {
+      name: editActivityName,
+      immunization_component: { name: editISC },
+      objective: editObjective,
+      funding_source_organization: { name: editFundingSource },
+      funding_state: editFundingState,
+      funding_status: editFundingStatus,
+      funding_priority_level: editFundingPriority,
+      verification: editMoV,
+      level: editLevel,
+      time_frame: editActivityTimeFrame,
+      responsible_focal_point: editResponsibleFocalPoint,
+      stackholder_focal_point: editStakeHolderFocalPoint,
+      activity_cost_usd: editCostUSD,
+      editQuarterBudgetUSD,
+    };
+
+    console.log(payload);
+
+    await axios.patch(
+      `http://${apiEndpoint}${port}/performance_management/api/activities/${id}`,
+      payload,
+      { headers: OPTIONS }
+    );
+  };
+
   const updateActivitiesData = async (newData, oldData, data) => {
     const dataUpdate = [...data];
     const index = oldData.tableData.id;
@@ -390,6 +453,7 @@ export const PerformanceManagementContextProvider = ({ children }) => {
         getActivitiesData,
         updateActivitiesData,
         updateActivitiesData2,
+        updateAdminEdits,
       }}
     >
       {children}
