@@ -7,6 +7,7 @@ export default (state, action) => {
         token: action.payload.token,
         loggedInUser: action.payload.loggedInUser,
         isSuperUser: action.payload.isSuperUser,
+        imcID: action.payload.imcID,
       };
 
     case "LOG_OUT":
@@ -16,6 +17,7 @@ export default (state, action) => {
         token: action.payload.token,
         loggedInUser: action.payload.loggedInUser,
         isSuperUser: action.payload.isSuperUser,
+        imcID: action.payload.imcID,
       };
 
     case "LOADING_ALL_USERS":

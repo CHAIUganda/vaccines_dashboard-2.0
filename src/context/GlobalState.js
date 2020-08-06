@@ -39,7 +39,8 @@ const initialState = {
   isAuthenticated: sessionStorage.getItem("token") === null ? false : true,
   token: sessionStorage.getItem("token"),
   loggedInUser: sessionStorage.getItem("email"),
-  isSuperUser: sessionStorage.getItem("isSuperUser"),
+  isSuperUser: sessionStorage.getItem("isSuperUser") === "true" ? true : false,
+  imcID: sessionStorage.getItem("imcID"),
   userISC: [],
   users: [],
   months: [
@@ -75,7 +76,7 @@ export const GlobalStateProvider = ({ children }) => {
       );
 
       // const ISC = ["All", ...ISCdata.data.results.map((isc) => isc.name)];
-      const ISC = [{ id: 1, name: "All" }, ...ISCdata.data.results];
+      const ISC = [...ISCdata.data.results];
 
       dispatch({
         type: "GET_USER_ISCs",
@@ -183,14 +184,19 @@ export const GlobalStateProvider = ({ children }) => {
         ?.filter((user) => user?.email === email)
         ?.map((status) => status?.is_superuser);
 
-      console.log(isSuperUser);
+      const imcID = users.data.results
+        ?.filter((user) => user?.email === email)
+        ?.map((imc) => imc?.immunization_component?.id);
 
       sessionStorage.removeItem("email");
       sessionStorage.removeItem("token");
+      sessionStorage.removeItem("isSuperUser");
+      sessionStorage.removeItem("imcID");
 
       sessionStorage.setItem("email", email);
       sessionStorage.setItem("token", _data.data.auth_token);
       sessionStorage.setItem("isSuperUser", isSuperUser[0]);
+      sessionStorage.setItem("imcID", parseInt(imcID[0]));
 
       dispatch({
         type: "LOG_IN",
@@ -199,6 +205,7 @@ export const GlobalStateProvider = ({ children }) => {
           isAuthenticated: true,
           loggedInUser: email,
           isSuperUser: isSuperUser[0],
+          imcID: parseInt(imcID[0]),
         },
       });
     } catch (err) {
@@ -227,6 +234,7 @@ export const GlobalStateProvider = ({ children }) => {
       sessionStorage.removeItem("email");
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("isSuperUser");
+      sessionStorage.removeItem("imcID");
 
       dispatch({
         type: "LOG_OUT",
@@ -235,6 +243,7 @@ export const GlobalStateProvider = ({ children }) => {
           isAuthenticated: false,
           loggedInUser: "",
           isSuperUser: false,
+          imcID: "",
         },
       });
     } catch (err) {
@@ -246,7 +255,7 @@ export const GlobalStateProvider = ({ children }) => {
   };
 
   const registerUser = async (data) => {
-    const registerUserUrl = `http://${apiEndpoint}${port}/api/users/`;
+    const registerUserUrl = `http://${apiEndpoint}${port}/api/users`;
     try {
       const _data = await axios.post(registerUserUrl, data);
 
@@ -386,6 +395,7 @@ export const GlobalStateProvider = ({ children }) => {
         users: state.users,
         months: state.months,
         userISC: state.userISC,
+        imcID: state.imcID,
         getVaccines,
         getDistricts,
         getQuarters,

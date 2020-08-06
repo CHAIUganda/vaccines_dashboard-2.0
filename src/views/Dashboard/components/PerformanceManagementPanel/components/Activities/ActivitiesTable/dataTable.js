@@ -18,7 +18,6 @@ import SaveIcon from "@material-ui/icons/Save";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import Modal from "@material-ui/core/Modal";
@@ -104,7 +103,7 @@ const StyledTableCell = withStyles((theme) => ({
 }))(TableCell);
 
 function Row({ row, data, logEntriesData, index }) {
-  const { isAuthenticated, loggedInUser, isSuperUser } = useContext(
+  const { isAuthenticated, loggedInUser, isSuperUser, userISC } = useContext(
     GlobalContext
   );
   const {
@@ -748,6 +747,8 @@ export const DataTable = () => {
   const [data, setData] = useState([]);
   const [logEntriesData, setLogEntriesData] = useState([]);
 
+  const { imcID, isAuthenticated, isSuperUser } = useContext(GlobalContext);
+
   const {
     activities,
     currentYearStartQuarter,
@@ -797,16 +798,40 @@ export const DataTable = () => {
             </TableRow>
           ) : (
             <>
-              {data?.map((row, index) => (
-                <Row
-                  key={row.name}
-                  row={row}
-                  isAuthenticated
-                  data={data}
-                  index={index}
-                  logEntriesData={logEntriesData}
-                />
-              ))}
+              {isSuperUser
+                ? data?.map((row, index) => (
+                    <Row
+                      key={row.name}
+                      row={row}
+                      isAuthenticated
+                      data={data}
+                      index={index}
+                      logEntriesData={logEntriesData}
+                    />
+                  ))
+                : isAuthenticated
+                ? data
+                    ?.filter((imc) => imc.immunization_component.id === imcID)
+                    ?.map((row, index) => (
+                      <Row
+                        key={row.name}
+                        row={row}
+                        isAuthenticated
+                        data={data}
+                        index={index}
+                        logEntriesData={logEntriesData}
+                      />
+                    ))
+                : data?.map((row, index) => (
+                    <Row
+                      key={row.name}
+                      row={row}
+                      isAuthenticated
+                      data={data}
+                      index={index}
+                      logEntriesData={logEntriesData}
+                    />
+                  ))}
             </>
           )}
         </TableBody>
