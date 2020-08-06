@@ -21,6 +21,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
+import Modal from "@material-ui/core/Modal";
+import Button from "@material-ui/core/Button";
 
 // Bring in our performance management context
 import { PerformanceManagementContext } from "../../../../../../../context/PerformanceManagement/PerformanceManagementState";
@@ -58,11 +60,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function rand() {
+  return Math.round(Math.random() * 20) - 10;
+}
+
+function getModalStyle() {
+  const top = 50 + rand();
+  const left = 50 + rand();
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
+
 const useRowStyles = makeStyles((theme) => ({
   root: {
     "& > *": {
       borderBottom: "unset",
     },
+  },
+  modalPaper: {
+    position: "absolute",
+    width: 700,
+    height: 700,
+    backgroundColor: theme.palette.background.paper,
+    border: "1px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+    overflow: "scroll",
   },
 }));
 
@@ -77,23 +104,62 @@ const StyledTableCell = withStyles((theme) => ({
 }))(TableCell);
 
 function Row({ row, data, logEntriesData, index }) {
-  const { isAuthenticated, loggedInUser } = useContext(GlobalContext);
-  const { updateActivitiesData2 } = useContext(PerformanceManagementContext);
+  const { isAuthenticated, loggedInUser, isSuperUser } = useContext(
+    GlobalContext
+  );
+  const {
+    updateActivitiesData2,
+    updateAdminEdits,
+    fundingSources,
+    ISC,
+  } = useContext(PerformanceManagementContext);
+
+  const [modalStyle] = React.useState(getModalStyle);
+  const [modelOpen, setModelOpen] = React.useState(false);
+  const handleOpenModal = () => {
+    setModelOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModelOpen(false);
+  };
 
   const [open, setOpen] = useState(false);
+
   const [editingStatus, setEditingStatus] = useState({
     id: "",
     editing: false,
   });
 
+  const [superUserEditStatus, setSuperUserEditStatus] = useState({
+    editing: false,
+  });
+
+  // Normal user can only edit activity status and the activity comment
   const [activityStatus, setActivityStatus] = useState("");
   const [editComment, setEditComment] = useState("");
 
-  const classes = useRowStyles();
+  //Super user can edit everything
+  const [editActivityName, setEditActivityName] = useState("");
+  const [editISC, setEditISC] = useState("");
+  const [editObjective, setEditObjective] = useState("");
+  const [editFundingSource, setFundingSource] = useState("");
+  const [editFundingState, setEditFundingState] = useState("");
+  const [editFundingStatus, setEditFundingStatus] = useState("");
+  const [editFundingPriority, setEditFundingPriority] = useState("");
+  const [editMoV, setEditMoV] = useState("");
+  const [editLevel, setEditLevel] = useState("");
+  const [editActivityTimeFrame, setEditActivityTimeFrame] = useState("");
+  const [editResponsibleFocalPoint, setEditResponsibleFocalPoint] = useState(
+    ""
+  );
+  const [editStakeHolderFocalPoint, setEditStakeHolderFocalPoint] = useState(
+    ""
+  );
+  const [editCostUSD, setEditCostUSD] = useState("");
+  const [editQuarterBudgetUSD, setEditQuarterBudgetUSD] = useState("");
 
-  const handleStatusChange = (event) => {
-    setActivityStatus(event.target.value);
-  };
+  const classes = useRowStyles();
 
   const handleEditStatus = (id, status, comment, data, statusIndex) => {
     const payload = {
@@ -119,6 +185,371 @@ function Row({ row, data, logEntriesData, index }) {
     setActivityStatus("");
     setEditComment("");
   };
+
+  const handleSuperUserEdit = (
+    id,
+    editActivityName,
+    editISC,
+    editObjective,
+    editFundingSource,
+    editFundingState,
+    editFundingStatus,
+    editFundingPriority,
+    editMoV,
+    editLevel,
+    editActivityTimeFrame,
+    editResponsibleFocalPoint,
+    editStakeHolderFocalPoint,
+    editCostUSD,
+    editQuarterBudgetUSD
+  ) => {
+    const payload = {
+      id,
+      editActivityName,
+      editISC,
+      editObjective,
+      editFundingSource,
+      editFundingState,
+      editFundingStatus,
+      editFundingPriority,
+      editMoV,
+      editLevel,
+      editActivityTimeFrame,
+      editResponsibleFocalPoint,
+      editStakeHolderFocalPoint,
+      editCostUSD,
+      editQuarterBudgetUSD,
+    };
+
+    // Patch admin data
+
+    updateAdminEdits(payload);
+
+    handleCloseModal();
+    // setSuperUserEditStatus({
+    //   editing: !superUserEditStatus.editing,
+    // });
+  };
+
+  const handleStatusChange = (event) => {
+    setActivityStatus(event.target.value);
+  };
+
+  // Filters
+  const ISCFilter = ISC.filter((isc) => isc !== "All").map((isc) => (
+    <MenuItem value={isc} key={isc} className={classes.liItems}>
+      {isc}
+    </MenuItem>
+  ));
+
+  const fundingSourcesFilter = fundingSources
+    .filter((fundingSource) => fundingSource !== "All")
+    .map((fundingSource) => (
+      <MenuItem
+        value={fundingSource}
+        key={fundingSource}
+        className={classes.liItems}
+      >
+        {fundingSource}
+      </MenuItem>
+    ));
+
+  const superUserEditModal = (
+    <div style={modalStyle} className={classes.modalPaper}>
+      <h4 className={classes.h4}>Edit Activity Details</h4>
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Field</TableCell>
+              <TableCell align="right"> </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                Activity Name
+              </TableCell>
+              <TableCell component="th" scope="row">
+                <div>
+                  <TextareaAutosize
+                    style={{ width: "100%" }}
+                    rowsMin={4}
+                    id="standard-helperText"
+                    defaultValue={row.name}
+                    onChange={(event) =>
+                      setEditActivityName(event.target.value)
+                    }
+                  />
+                </div>
+              </TableCell>
+            </TableRow>
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                Immunization System Component Name
+              </TableCell>
+              <TableCell component="th" scope="row">
+                <FormControl className={classes.formControl}>
+                  <Select
+                    labelId="ISC-select-label"
+                    id="ISC-select"
+                    value={editISC}
+                    onChange={(event) => setEditISC(event.target.value)}
+                  >
+                    {ISCFilter}
+                  </Select>
+                </FormControl>
+              </TableCell>
+            </TableRow>
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                Objective
+              </TableCell>
+              <TableCell component="th" scope="row">
+                <div>
+                  <TextareaAutosize
+                    style={{ width: "100%" }}
+                    rowsMin={4}
+                    id="standard-helperText"
+                    defaultValue={row.objective}
+                    onChange={(event) => setEditObjective(event.target.value)}
+                  />
+                </div>
+              </TableCell>
+            </TableRow>
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                Funding Source Organization
+              </TableCell>
+              <TableCell component="th" scope="row">
+                <FormControl className={classes.formControl}>
+                  <Select
+                    labelId="fundingSource-select-label"
+                    id="fundingSource-select"
+                    value={editFundingSource}
+                    onChange={(event) => setFundingSource(event.target.value)}
+                  >
+                    {fundingSourcesFilter}
+                  </Select>
+                </FormControl>
+              </TableCell>
+            </TableRow>
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                Funding State
+              </TableCell>
+              <TableCell component="th" scope="row">
+                <FormControl className={classes.formControl}>
+                  <Select
+                    labelId="fundingState-select-label"
+                    id="fundingState-select"
+                    value={editFundingState}
+                    onChange={(event) =>
+                      setEditFundingState(event.target.value)
+                    }
+                  >
+                    <MenuItem value={"Funded"}>Funded</MenuItem>
+                    <MenuItem value={"Not Funded"}>Not Funded</MenuItem>
+                  </Select>
+                </FormControl>
+              </TableCell>
+            </TableRow>
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                Funding Status
+              </TableCell>
+              <TableCell component="th" scope="row">
+                <FormControl className={classes.formControl}>
+                  <Select
+                    labelId="fundingStatus-select-label"
+                    id="fundingStatus-select"
+                    value={editFundingStatus}
+                    onChange={(event) =>
+                      setEditFundingStatus(event.target.value)
+                    }
+                  >
+                    <MenuItem value={"Secured"}>Secured</MenuItem>
+                    <MenuItem value={"Unsecured"}>Unsecured</MenuItem>
+                  </Select>
+                </FormControl>
+              </TableCell>
+            </TableRow>
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                Funding Priority
+              </TableCell>
+              <TableCell component="th" scope="row">
+                <FormControl className={classes.formControl}>
+                  <Select
+                    labelId="fundingPriority-select-label"
+                    id="fundingPriority-select"
+                    value={editFundingPriority}
+                    onChange={(event) =>
+                      setEditFundingPriority(event.target.value)
+                    }
+                  >
+                    <MenuItem value={"Secured"}>High</MenuItem>
+                    <MenuItem value={"Medium"}>Medium</MenuItem>
+                    <MenuItem value={"Low"}>Low</MenuItem>
+                  </Select>
+                </FormControl>
+              </TableCell>
+            </TableRow>
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                Means of Verification
+              </TableCell>
+              <TableCell component="th" scope="row">
+                <div>
+                  <TextareaAutosize
+                    style={{ width: "100%" }}
+                    rowsMin={4}
+                    id="standard-helperText"
+                    defaultValue={row.verification}
+                    onChange={(event) => setEditMoV(event.target.value)}
+                  />
+                </div>
+              </TableCell>
+            </TableRow>
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                Level
+              </TableCell>
+              <TableCell component="th" scope="row">
+                <FormControl className={classes.formControl}>
+                  <Select
+                    labelId="level-select-label"
+                    id="level-select"
+                    value={editLevel}
+                    onChange={(event) => setEditLevel(event.target.value)}
+                  >
+                    <MenuItem value={"National"}>National</MenuItem>
+                    <MenuItem value={"District"}>District</MenuItem>
+                  </Select>
+                </FormControl>
+              </TableCell>
+            </TableRow>
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                Activity Time Frame
+              </TableCell>
+              <TableCell component="th" scope="row">
+                <div>
+                  <TextareaAutosize
+                    style={{ width: "100%" }}
+                    rowsMin={4}
+                    id="standard-helperText"
+                    defaultValue={row.time_frame}
+                    onChange={(event) =>
+                      setEditActivityTimeFrame(event.target.value)
+                    }
+                  />
+                </div>
+              </TableCell>
+            </TableRow>
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                Responsible Focal Point
+              </TableCell>
+              <TableCell component="th" scope="row">
+                <div>
+                  <TextareaAutosize
+                    style={{ width: "100%" }}
+                    rowsMin={4}
+                    id="standard-helperText"
+                    defaultValue={row.responsible_focal_point}
+                    onChange={(event) =>
+                      setEditResponsibleFocalPoint(event.target.value)
+                    }
+                  />
+                </div>
+              </TableCell>
+            </TableRow>
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                Stakeholder Focal Point
+              </TableCell>
+              <TableCell component="th" scope="row">
+                <div>
+                  <TextareaAutosize
+                    style={{ width: "100%" }}
+                    rowsMin={4}
+                    id="standard-helperText"
+                    defaultValue={row.stackholder_focal_point}
+                    onChange={(event) =>
+                      setEditStakeHolderFocalPoint(event.target.value)
+                    }
+                  />
+                </div>
+              </TableCell>
+            </TableRow>
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                Cost (USD)
+              </TableCell>
+              <TableCell component="th" scope="row">
+                <div>
+                  <TextareaAutosize
+                    style={{ width: "100%" }}
+                    rowsMin={4}
+                    id="standard-helperText"
+                    defaultValue={row.activity_cost_usd}
+                    onChange={(event) => setEditCostUSD(event.target.value)}
+                  />
+                </div>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <Button
+        style={{ marginTop: 20 }}
+        variant="contained"
+        color="primary"
+        onClick={() =>
+          handleSuperUserEdit(
+            row.id,
+            editActivityName === "" ? row.name : editActivityName,
+            editISC === "" ? row.immunization_component.name : editISC,
+            editObjective === "" ? row.objective : editObjective,
+            editFundingSource === ""
+              ? row.funding_source_organization.name
+              : editFundingSource,
+            editFundingState === "" ? row.funding_state : editFundingState,
+            editFundingStatus === "" ? row.funding_status : editFundingStatus,
+            editFundingPriority === ""
+              ? row.funding_priority_level
+              : editFundingPriority,
+            editMoV === "" ? row.verification : editMoV,
+            editLevel === "" ? row.level : editLevel,
+            editActivityTimeFrame === ""
+              ? row.time_frame
+              : editActivityTimeFrame,
+            editResponsibleFocalPoint === ""
+              ? row.responsible_focal_point
+              : editResponsibleFocalPoint,
+            editStakeHolderFocalPoint === ""
+              ? row.stackholder_focal_point
+              : editStakeHolderFocalPoint,
+            editCostUSD === "" ? row.activity_cost_usd : editCostUSD,
+            editQuarterBudgetUSD
+          )
+        }
+      >
+        Save
+      </Button>
+
+      <Button
+        style={{ marginTop: 20, marginLeft: 300 }}
+        variant="contained"
+        color="secondary"
+        onClick={handleCloseModal}
+      >
+        Cancel
+      </Button>
+    </div>
+  );
 
   return (
     <React.Fragment>
@@ -149,6 +580,33 @@ function Row({ row, data, logEntriesData, index }) {
         <TableCell className={classes.cost}>
           {new Intl.NumberFormat("lg-UG").format(row.activity_cost_usd)}
         </TableCell>
+        {isAuthenticated && isSuperUser ? (
+          <TableCell>
+            {/* By default edit status is set to false. */}
+            {superUserEditStatus.editing ? (
+              ""
+            ) : (
+              <IconButton aria-label="edit">
+                <EditIcon
+                  aria-label="edit activity"
+                  size="small"
+                  onClick={handleOpenModal}
+                ></EditIcon>
+              </IconButton>
+            )}
+
+            <Modal
+              open={modelOpen}
+              onClose={handleCloseModal}
+              aria-labelledby="Edit activities"
+              aria-describedby="Edit activities"
+            >
+              {superUserEditModal}
+            </Modal>
+          </TableCell>
+        ) : (
+          ""
+        )}
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={14}>
@@ -324,15 +782,16 @@ export const DataTable = () => {
             <StyledTableCell>Responsible Focal Point</StyledTableCell>
             <StyledTableCell>Stakeholder Focal Point</StyledTableCell>
             <StyledTableCell>Cost (USD)</StyledTableCell>
+            <StyledTableCell>Actions</StyledTableCell>
           </TableRow>
           <TableRow>
-            <TableCell colSpan={14}>{title}</TableCell>
+            <TableCell colSpan={15}>{title}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody stripedRows>
           {isLoading ? (
             <TableRow>
-              <TableCell colSpan={14}>
+              <TableCell colSpan={15}>
                 <LinearProgress />
               </TableCell>
             </TableRow>
@@ -346,7 +805,6 @@ export const DataTable = () => {
                   data={data}
                   index={index}
                   logEntriesData={logEntriesData}
-                  // .filter((entry => entry.id === (row?.activity_status?.map(status => status))))}
                 />
               ))}
             </>

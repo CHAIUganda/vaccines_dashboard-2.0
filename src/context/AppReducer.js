@@ -18,6 +18,17 @@ export default (state, action) => {
         isSuperUser: action.payload.isSuperUser,
       };
 
+    case "LOADING_ALL_USERS":
+      return {
+        ...state,
+        users: action.payload,
+      };
+
+    case "GET_USER_ISCs":
+      return {
+        ...state,
+        userISC: action.payload,
+      };
     case "GET_VACCINES":
       return {
         ...state,
@@ -42,7 +53,7 @@ export default (state, action) => {
       return {
         ...state,
         loading: false,
-        users: action.payload,
+        users: { users: action.payload, isLoading: false },
       };
 
     case "GET_ELIGIBILITY_DATA":
@@ -96,6 +107,11 @@ export default (state, action) => {
         error: action.payload,
       };
 
+    case "GET_USER_ISCs_ERROR":
+      return {
+        ...state,
+        error: action.payload,
+      };
     default:
       return state;
   }

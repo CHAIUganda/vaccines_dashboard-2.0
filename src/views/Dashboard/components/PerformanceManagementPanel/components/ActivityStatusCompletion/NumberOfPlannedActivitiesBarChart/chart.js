@@ -45,8 +45,8 @@ export const NumberOfPlannedActivitiesBarChartTemplate = () => {
         borderWidth: 0,
       },
       series: {
-        minPointLength: 3,
-        pointWidth: 10,
+        minPointLength: 12,
+        pointWidth: 12,
         groupPadding: 0.3,
         pointPadding: 0,
       },

@@ -19,7 +19,7 @@ const SurplusGapCard = () => {
 
   return (
     <ColdChainCard
-      title={"Surplus (+ve gap)"}
+      title={"Filled Capacity"}
       metric={capacity_shortage_positive}
       isPercentage={true}
       backgroundImage={backgroundImage}
