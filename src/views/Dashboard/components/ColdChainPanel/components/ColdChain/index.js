@@ -89,7 +89,7 @@ export default function ColdChain({ parentTab }) {
   // Grab our context
 
   const { eligibility, functionality, capacity, optimality } = useContext(
-    ColdChainContext
+    ColdChainContext,
   );
 
   const classes = useStyles();
@@ -100,14 +100,14 @@ export default function ColdChain({ parentTab }) {
   };
 
   const eligibleFacilities = new Intl.NumberFormat("lg-UG").format(
-    eligibility?.eligibilityMetricsChartData?.total_eligible_facilities
+    eligibility?.eligibilityMetricsChartData?.total_eligible_facilities,
   );
 
   const functionality_percentage =
     Math.round(
       functionality?.functionalityMetricsChartData
         ?.filter((a) => a.functionality_percentage)
-        ?.map((d) => d.functionality_percentage)
+        ?.map((d) => d.functionality_percentage),
     ) || 0;
 
   const capacity_shortage_negative =
@@ -117,7 +117,7 @@ export default function ColdChain({ parentTab }) {
     capacity?.capacityMetricsChartData?.gap_metrics.positive_gap_percentage;
 
   const totalAvailableLiters = new Intl.NumberFormat("lg-UG").format(
-    capacity?.capacityMetricsChartData?.overall_total_available
+    capacity?.capacityMetricsChartData?.overall_total_available,
   );
 
   const CCE_dvs_optimality_percentage =

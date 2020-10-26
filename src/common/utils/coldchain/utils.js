@@ -3,7 +3,7 @@ export const getUniqueYearsFromData = (data) => {
     ...new Set(
       Object.values(data)
         .filter((d) => !d.functionality_percentage)
-        .map((y) => y.year)
+        .map((y) => y.year),
     ),
   ];
 
@@ -25,7 +25,6 @@ export const getQuarters = (data = []) => {
 };
 
 export const getTemperatureMonitoringReportRateChartData = (data = []) => {
-  console.log(data);
   const chartData = [{ data: [] }];
 
   const percentages = Object.values(data[0] || []);
@@ -183,7 +182,7 @@ export const getFunctionalityChartData = (data = [], type) => {
   const needsRepairData = [];
 
   const dataObject = Object.values(data).filter(
-    (d) => !d.functionality_percentage
+    (d) => !d.functionality_percentage,
   );
 
   for (let i = 0; i < dataObject.length; i++) {

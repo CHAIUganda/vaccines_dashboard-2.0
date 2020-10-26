@@ -19,9 +19,12 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FunctionalityPieChart from "./components/FunctionalityPieChart/index";
 import EligibilityStatusPieChart from "./components/EligibilityStatusPieChart/index";
 import FunctionalityTable from "./components/FunctionalityTable/index";
-import TotalLitresCard from "./components/TotalLitresCard/index";
-import SurplusGapCard from "./components/SurplusGapCard/index";
-import ShortageGapCard from "./components/ShortageGapCard/index";
+import SufficiencyNationalCard from "./components/SufficiencyNationalCard/index";
+import SufficiencyDVSCard from "./components/SufficiencyDVSCard/index";
+import SufficiencyHFCard from "./components/SufficiencyHFCard/index";
+import OptimalityNationalCard from "./components/OptimalityNationalCard/index";
+import OptimalityDVSCard from "./components/OptimalityDVSCard/index";
+import OptimalityHFCard from "./components/OptimalityHFCard/index";
 import MonthsOfStockCard from "./components/MonthsOfStockCard/index";
 import RefillRateCard from "./components/RefillRateCard/index";
 import UptakeRateCard from "./components/UptakeRateCard/index";
@@ -68,6 +71,15 @@ const overviewStyles = makeStyles((theme) => ({
     justifyContent: "space-between",
   },
 
+  coldChainContent1: {
+    margin: 10,
+    width: "66%",
+    display: "flex",
+    flexDirection: "column",
+    boxShadow:
+      "0 1px 3px rgba(0,0,0,0.06),0 2px 6px rgba(0,0,0,0.06),0 3px 8px rgba(0,0,0,0.09)",
+  },
+
   content: {
     margin: 10,
     width: "33%",
@@ -86,6 +98,13 @@ const overviewStyles = makeStyles((theme) => ({
   },
 
   chartContainer: {
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
+    width: "50%",
+  },
+
+  chartContainerFunctionality: {
     display: "flex",
     flexDirection: "column",
     height: "100%",
@@ -169,7 +188,7 @@ export function OverviewPanel() {
   const { districts, getDistricts } = useContext(GlobalContext);
 
   const { months, getStockManagementData, getCoverageData } = useContext(
-    OverviewContext
+    OverviewContext,
   );
 
   useEffect(() => {
@@ -315,27 +334,42 @@ export function OverviewPanel() {
           <ArrowForwardIosSharpIcon style={{ marginLeft: 10 }} />
         </span>
         <div className={classes.ColdChainSectionWrapper}>
-          <Paper className={classes.content}>
+          <Paper className={classes.coldChainContent1}>
             <h3 className={classes.sectionTitle}>
               Working Status of Fridges in all Districts
             </h3>
-            <div className={classes.chartContainer}>
-              <span className={classes.capacityMetricsContainer}>
-                <TotalLitresCard />
-              </span>
-              <span className={classes.capacityMetricsContainer}>
-                <SurplusGapCard />
-              </span>
-              <span className={classes.capacityMetricsContainer}>
-                <ShortageGapCard />
-              </span>
+            <div
+              style={{ width: "100%", flexDirection: "row", display: "flex" }}
+            >
+              <div className={classes.chartContainer}>
+                <span className={classes.capacityMetricsContainer}>
+                  <SufficiencyNationalCard />
+                </span>
+                <span className={classes.capacityMetricsContainer}>
+                  <SufficiencyDVSCard />
+                </span>
+                <span className={classes.capacityMetricsContainer}>
+                  <SufficiencyHFCard />
+                </span>
+              </div>
+              <div className={classes.chartContainer}>
+                <span className={classes.capacityMetricsContainer}>
+                  <OptimalityNationalCard />
+                </span>
+                <span className={classes.capacityMetricsContainer}>
+                  <OptimalityDVSCard />
+                </span>
+                <span className={classes.capacityMetricsContainer}>
+                  <OptimalityHFCard />
+                </span>
+              </div>
             </div>
           </Paper>
           <Paper className={classes.content}>
             <h3 className={classes.sectionTitle}>
               Cold Chain Equipment Functionality
             </h3>
-            <div className={classes.chartContainer}>
+            <div className={classes.chartContainerFunctionality}>
               <span className={classes.chartContainerContent}>
                 <FunctionalityPieChart />
               </span>
@@ -344,14 +378,14 @@ export function OverviewPanel() {
               </span>
             </div>
           </Paper>
-          <Paper className={classes.content}>
+          {/* <Paper className={classes.content}>
             <h3 className={classes.sectionTitle}>
               Eligible Facilities in all Districts
             </h3>
             <div className={classes.chartContainer}>
               <EligibilityStatusPieChart />
             </div>
-          </Paper>
+          </Paper> */}
         </div>
       </div>
       <div>

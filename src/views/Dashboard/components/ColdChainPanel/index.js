@@ -1,40 +1,40 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from 'react';
 
 // Bring in the global context
-import { GlobalContext } from "../../../../context/GlobalState";
+import { GlobalContext } from '../../../../context/GlobalState';
 
 // Bring in our cold chain context
-import { ColdChainContext } from "../../../../context/ColdChain/ColdChainState";
+import { ColdChainContext } from '../../../../context/ColdChain/ColdChainState';
 
 // Material components
-import { Grid } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
-import Paper from "@material-ui/core/Paper";
-import Tooltip from "@material-ui/core/Tooltip";
-import InputBase from "@material-ui/core/InputBase";
-import MenuItem from "@material-ui/core/MenuItem";
+import { Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import Paper from '@material-ui/core/Paper';
+import Tooltip from '@material-ui/core/Tooltip';
+import InputBase from '@material-ui/core/InputBase';
+import MenuItem from '@material-ui/core/MenuItem';
 
 // Import common component for ColdChain components
-import ColdChain from "./components/ColdChain/index";
+import ColdChain from './components/ColdChain/index';
 
 // Import common styles
-import { useStyles } from "../styles";
+import { useStyles } from '../styles';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
     <Typography
-      component="div"
-      role="tabpanel"
+      component='div'
+      role='tabpanel'
       hidden={value !== index}
       id={`cold-chain-panel-keymetrics-tabpanel-${index}`}
       aria-labelledby={`cold-chain-panel-keymetrics-tab-${index}`}
@@ -48,24 +48,24 @@ function TabPanel(props) {
 function a11yProps(index) {
   return {
     id: `cold-chain-panel-keymetrics-tab-${index}`,
-    "aria-controls": `cold-chain-panel-keymetrics-tabpanel-${index}`,
+    'aria-controls': `cold-chain-panel-keymetrics-tabpanel-${index}`,
   };
 }
 
 const TabStyle = withStyles((theme) => ({
   root: {
-    textTransform: "none",
+    textTransform: 'none',
     fontWeight: theme.typography.fontWeightBold,
     fontSize: 12,
-    color: "#28354A",
-    "&:hover": {
-      backgroundColor: "#1e3c72",
-      color: "white",
+    color: '#28354A',
+    '&:hover': {
+      backgroundColor: '#1e3c72',
+      color: 'white',
       opacity: 1,
     },
-    "&$selected": {
-      backgroundColor: "#1e3c72",
-      color: "white",
+    '&$selected': {
+      backgroundColor: '#1e3c72',
+      color: 'white',
       fontWeight: theme.typography.fontWeightMedium,
       fontSize: 12,
     },
@@ -75,45 +75,45 @@ const TabStyle = withStyles((theme) => ({
 
 const HtmlTooltip = withStyles((theme) => ({
   tooltip: {
-    backgroundColor: "#f5f5f9",
-    color: "rgba(0, 0, 0, 0.87)",
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
     maxWidth: 220,
     fontSize: theme.typography.pxToRem(12),
-    border: "1px solid #dadde9",
+    border: '1px solid #dadde9',
   },
 }))(Tooltip);
 
 const BootstrapInput = withStyles((theme) => ({
   root: {
-    "label + &": {
+    'label + &': {
       marginTop: theme.spacing(3),
     },
   },
   input: {
     borderRadius: 4,
-    position: "relative",
+    position: 'relative',
     backgroundColor: theme.palette.background.paper,
-    border: "1px solid #ced4da",
-    fontSize: "small",
-    padding: "10px 26px 10px 12px",
-    transition: theme.transitions.create(["border-color", "box-shadow"]),
+    border: '1px solid #ced4da',
+    fontSize: 'small',
+    padding: '10px 26px 10px 12px',
+    transition: theme.transitions.create(['border-color', 'box-shadow']),
     // Use the system font instead of the default Roboto font.
     fontFamily: [
-      "-apple-system",
-      "BlinkMacSystemFont",
+      '-apple-system',
+      'BlinkMacSystemFont',
       '"Segoe UI"',
-      "Roboto",
+      'Roboto',
       '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
+      'Arial',
+      'sans-serif',
       '"Apple Color Emoji"',
       '"Segoe UI Emoji"',
       '"Segoe UI Symbol"',
-    ].join(","),
-    "&:focus": {
+    ].join(','),
+    '&:focus': {
       borderRadius: 4,
-      borderColor: "#80bdff",
-      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
+      borderColor: '#80bdff',
+      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
     },
   },
 }))(InputBase);
@@ -160,11 +160,11 @@ export function ColdChainPanel() {
   const [eligibilityDistrict, setEligibilityDistrict] = useState(district);
 
   const [eligibilityStartQuarter, setEligibilityStartQuarter] = useState(
-    `${currentYear - 1}01`
+    `${currentYear - 1}01`,
   );
 
   const [eligibilityEndQuarter, setEligibilityEndQuarter] = useState(
-    `${currentYear - 1}04`
+    `${currentYear - 1}04`,
   );
 
   // Fetch Eligibility Data
@@ -172,7 +172,7 @@ export function ColdChainPanel() {
     getEligibilityData(
       eligibilityStartQuarter,
       eligibilityEndQuarter,
-      eligibilityDistrict
+      eligibilityDistrict,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eligibilityStartQuarter, eligibilityEndQuarter, eligibilityDistrict]);
@@ -182,15 +182,15 @@ export function ColdChainPanel() {
   const [functionalityDistrict, setFunctionalityDistrict] = useState(district);
   const [functionalityCareLevel, setFunctionalityCareLevel] = useState(
     // coldChainCareLevels[0]
-    defaultCareLevel
+    defaultCareLevel,
   );
 
   const [functionalityStartQuarter, setFunctionalityStartQuarter] = useState(
-    `${currentYear - 1}01`
+    `${currentYear - 1}01`,
   );
 
   const [functionalityEndQuarter, setFunctionalityEndQuarter] = useState(
-    `${currentYear - 1}04`
+    `${currentYear - 1}04`,
   );
 
   // Fetch Functionality Data
@@ -199,7 +199,7 @@ export function ColdChainPanel() {
       functionalityStartQuarter,
       functionalityEndQuarter,
       functionalityDistrict,
-      functionalityCareLevel
+      functionalityCareLevel,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -213,15 +213,15 @@ export function ColdChainPanel() {
   const [capacityDistrict, setCapacityDistrict] = useState(district);
   const [capacityCareLevel, setCapacityCareLevel] = useState(
     // coldChainCareLevels[0]
-    defaultCareLevel
+    defaultCareLevel,
   );
 
   const [capacityStartQuarter, setCapacityStartQuarter] = useState(
-    `${currentYear - 1}01`
+    `${currentYear - 1}01`,
   );
 
   const [capacityEndQuarter, setCapacityEndQuarter] = useState(
-    `${currentYear - 1}04`
+    `${currentYear - 1}04`,
   );
 
   // Fetch Capacity Data
@@ -230,7 +230,7 @@ export function ColdChainPanel() {
       capacityStartQuarter,
       capacityEndQuarter,
       capacityDistrict,
-      capacityCareLevel
+      capacityCareLevel,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -245,7 +245,7 @@ export function ColdChainPanel() {
   const [optimalityDistrict, setOptimalityDistrict] = useState(district);
   const [optimalityCareLevel, setOptimalityCareLevel] = useState(
     // coldChainCareLevels[0]
-    defaultCareLevel
+    defaultCareLevel,
   );
 
   const [optimalityYear, setOptimalityYear] = useState(`${currentYear - 1}`);
@@ -262,14 +262,14 @@ export function ColdChainPanel() {
     setTemperatureMonitoringDistrict,
   ] = useState(district);
   const [temperatureMonitoringYear, setTemperatureMonitoringYear] = useState(
-    `${currentYear}`
+    `${currentYear}`,
   );
 
   // Fetch Optimality Data
   useEffect(() => {
     getTemperatureMonitoringData(
       temperatureMonitoringYear,
-      temperatureMonitoringDistrict
+      temperatureMonitoringDistrict,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [temperatureMonitoringDistrict, temperatureMonitoringYear]);
@@ -440,7 +440,7 @@ export function ColdChainPanel() {
     <div>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant='h6' className={classes.title}>
             Key Metrics
           </Typography>
         </Grid>
@@ -450,17 +450,17 @@ export function ColdChainPanel() {
           <Grid container spacing={3}>
             <Grid item lg={6} md={6} xl={6} xs={12}>
               <AppBar
-                position="static"
+                position='static'
                 className={classes.appBar}
                 elevation={0}
               >
                 <Tabs
                   value={value}
                   onChange={handleChange}
-                  aria-label="Cold Chain Key metrics"
+                  aria-label='Cold Chain Key metrics'
                   className={classes.tabs}
                   TabIndicatorProps={{
-                    style: { backgroundColor: "#1e3c72" },
+                    style: { backgroundColor: '#1e3c72' },
                   }}
                 >
                   <TabStyle
@@ -469,10 +469,10 @@ export function ColdChainPanel() {
                       <HtmlTooltip
                         title={
                           <React.Fragment>
-                            <Typography color="inherit">
+                            <Typography color='inherit'>
                               <b className={classes.toolTip}>
                                 {
-                                  "Number of facilities offering static and outreach services / Total number of ELIGIBLE  facilities in the district"
+                                  'Number of facilities offering static and outreach services / Total number of ELIGIBLE  facilities in the district'
                                 }
                               </b>
                             </Typography>
@@ -491,10 +491,10 @@ export function ColdChainPanel() {
                       <HtmlTooltip
                         title={
                           <React.Fragment>
-                            <Typography color="inherit">
+                            <Typography color='inherit'>
                               <b className={classes.toolTip}>
                                 {
-                                  "Proportion of functional Fridges & Freezers / Total number of Fridges & Freezers"
+                                  'Proportion of functional Fridges & Freezers / Total number of Fridges & Freezers'
                                 }
                               </b>
                             </Typography>
@@ -513,11 +513,11 @@ export function ColdChainPanel() {
                       <HtmlTooltip
                         title={
                           <React.Fragment>
-                            <Typography color="inherit">
+                            <Typography color='inherit'>
                               <b className={classes.toolTip}>
-                                {" "}
+                                {' '}
                                 {
-                                  "Total sum of vaccine storage space of all functional fridges available at the site"
+                                  'Total sum of vaccine storage space of all functional fridges available at the site'
                                 }
                               </b>
                             </Typography>
@@ -536,9 +536,9 @@ export function ColdChainPanel() {
                       <HtmlTooltip
                         title={
                           <React.Fragment>
-                            <Typography color="inherit">
+                            <Typography color='inherit'>
                               <b className={classes.toolTip}>
-                                {"Text goes here"}
+                                {'Text goes here'}
                               </b>
                             </Typography>
                           </React.Fragment>
@@ -556,9 +556,9 @@ export function ColdChainPanel() {
                       <HtmlTooltip
                         title={
                           <React.Fragment>
-                            <Typography color="inherit">
+                            <Typography color='inherit'>
                               <b className={classes.toolTip}>
-                                {"Text goes here"}
+                                {'Text goes here'}
                               </b>
                             </Typography>
                           </React.Fragment>
@@ -578,11 +578,11 @@ export function ColdChainPanel() {
                 <div className={classes.filters2}>
                   <FormControl
                     className={classes.districtSelectMargin}
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   >
                     <InputLabel
-                      htmlFor="EF_startQuarter"
+                      htmlFor='EF_startQuarter'
                       className={classes.selectorLables2}
                     >
                       Start Quarter
@@ -590,7 +590,7 @@ export function ColdChainPanel() {
                     <Select
                       native
                       className={classes.selector_background}
-                      id="EF_QuarterYear_selector"
+                      id='EF_QuarterYear_selector'
                       value={eligibilityStartQuarter}
                       onChange={(event) =>
                         setEligibilityStartQuarter(event.target.value)
@@ -602,11 +602,11 @@ export function ColdChainPanel() {
                   </FormControl>
                   <FormControl
                     className={classes.districtSelectMargin}
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   >
                     <InputLabel
-                      htmlFor="EF_endQuarter"
+                      htmlFor='EF_endQuarter'
                       className={classes.selectorLables2}
                     >
                       End Quarter
@@ -614,7 +614,7 @@ export function ColdChainPanel() {
                     <Select
                       native
                       className={classes.selector_background}
-                      id="EF_StartYear_selector"
+                      id='EF_StartYear_selector'
                       value={eligibilityEndQuarter}
                       onChange={(event) =>
                         setEligibilityEndQuarter(event.target.value)
@@ -626,18 +626,18 @@ export function ColdChainPanel() {
                   </FormControl>
                   <FormControl
                     className={classes.districtSelectMargin}
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   >
                     <InputLabel
-                      htmlFor="District"
+                      htmlFor='District'
                       className={classes.selectorLables2}
                     >
                       District
                     </InputLabel>
                     <Select
                       className={classes.selector_background}
-                      id="EF_district_selector"
+                      id='EF_district_selector'
                       value={eligibilityDistrict}
                       onChange={(event) =>
                         setEligibilityDistrict(event.target.value)
@@ -654,11 +654,11 @@ export function ColdChainPanel() {
                 <div className={classes.filters2}>
                   <FormControl
                     className={classes.districtSelectMargin}
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   >
                     <InputLabel
-                      htmlFor="startYear"
+                      htmlFor='startYear'
                       className={classes.selectorLables2}
                     >
                       Start Quarter
@@ -666,7 +666,7 @@ export function ColdChainPanel() {
                     <Select
                       native
                       className={classes.selector_background}
-                      id="Func_startYear_selector"
+                      id='Func_startYear_selector'
                       value={functionalityStartQuarter}
                       onChange={(event) =>
                         setFunctionalityStartQuarter(event.target.value)
@@ -678,11 +678,11 @@ export function ColdChainPanel() {
                   </FormControl>
                   <FormControl
                     className={classes.districtSelectMargin}
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   >
                     <InputLabel
-                      htmlFor="endYear"
+                      htmlFor='endYear'
                       className={classes.selectorLables2}
                     >
                       End Quarter
@@ -690,7 +690,7 @@ export function ColdChainPanel() {
                     <Select
                       native
                       className={classes.selector_background}
-                      id="Func_endYear_selector"
+                      id='Func_endYear_selector'
                       value={functionalityEndQuarter}
                       onChange={(event) =>
                         setFunctionalityEndQuarter(event.target.value)
@@ -702,25 +702,25 @@ export function ColdChainPanel() {
                   </FormControl>
                   <FormControl
                     className={classes.formControl}
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   >
                     <InputLabel
-                      htmlFor="District"
+                      htmlFor='District'
                       className={classes.selectorLables}
                     >
                       District
                     </InputLabel>
                     <Select
-                      renderValue={(selected) => "National"}
+                      renderValue={(selected) => 'National'}
                       className={classes.selector_background}
                       value={functionalityDistrict}
                       onChange={(event) =>
                         setFunctionalityDistrict(event.target.value)
                       }
                       inputProps={{
-                        name: "Func_district_selector",
-                        id: "Func_district_selector",
+                        name: 'Func_district_selector',
+                        id: 'Func_district_selector',
                       }}
                     >
                       {functionalityDistrictFilter}
@@ -728,11 +728,11 @@ export function ColdChainPanel() {
                   </FormControl>
                   <FormControl
                     className={classes.formControl}
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   >
                     <InputLabel
-                      htmlFor="vaccine"
+                      htmlFor='vaccine'
                       className={classes.selectorLables}
                     >
                       Level of Care
@@ -744,8 +744,8 @@ export function ColdChainPanel() {
                         setFunctionalityCareLevel(event.target.value)
                       }
                       inputProps={{
-                        name: "Func_careLevel_selector",
-                        id: "Func_careLevel_selector",
+                        name: 'Func_careLevel_selector',
+                        id: 'Func_careLevel_selector',
                       }}
                     >
                       {functionalityCareLevelFilter}
@@ -757,11 +757,11 @@ export function ColdChainPanel() {
                 <div className={classes.filters2}>
                   <FormControl
                     className={classes.districtSelectMargin}
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   >
                     <InputLabel
-                      htmlFor="startQuarter"
+                      htmlFor='startQuarter'
                       className={classes.selectorLables2}
                     >
                       Start Quarter
@@ -769,7 +769,7 @@ export function ColdChainPanel() {
                     <Select
                       native
                       className={classes.selector_background}
-                      id="Cap_startQuarter_selector"
+                      id='Cap_startQuarter_selector'
                       value={capacityStartQuarter}
                       onChange={(event) =>
                         setCapacityStartQuarter(event.target.value)
@@ -781,11 +781,11 @@ export function ColdChainPanel() {
                   </FormControl>
                   <FormControl
                     className={classes.districtSelectMargin}
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   >
                     <InputLabel
-                      htmlFor="endQuarter"
+                      htmlFor='endQuarter'
                       className={classes.selectorLables2}
                     >
                       End Quarter
@@ -793,7 +793,7 @@ export function ColdChainPanel() {
                     <Select
                       native
                       className={classes.selector_background}
-                      id="Cap_endQuarter_selector"
+                      id='Cap_endQuarter_selector'
                       value={capacityEndQuarter}
                       onChange={(event) =>
                         setCapacityEndQuarter(event.target.value)
@@ -805,25 +805,25 @@ export function ColdChainPanel() {
                   </FormControl>
                   <FormControl
                     className={classes.formControl}
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   >
                     <InputLabel
-                      htmlFor="District"
+                      htmlFor='District'
                       className={classes.selectorLables}
                     >
                       District
                     </InputLabel>
                     <Select
-                      renderValue={(selected) => "National"}
+                      renderValue={(selected) => 'National'}
                       className={classes.selector_background}
                       value={capacityDistrict}
                       onChange={(event) =>
                         setCapacityDistrict(event.target.value)
                       }
                       inputProps={{
-                        name: "Cap_district_selector",
-                        id: "Cap_district_selector",
+                        name: 'Cap_district_selector',
+                        id: 'Cap_district_selector',
                       }}
                     >
                       {capacityDistrictFilter}
@@ -831,11 +831,11 @@ export function ColdChainPanel() {
                   </FormControl>
                   <FormControl
                     className={classes.formControl}
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   >
                     <InputLabel
-                      htmlFor="vaccine"
+                      htmlFor='vaccine'
                       className={classes.selectorLables}
                     >
                       Level of Care
@@ -847,8 +847,8 @@ export function ColdChainPanel() {
                         setCapacityCareLevel(event.target.value)
                       }
                       inputProps={{
-                        name: "Cap_careLevel_selector",
-                        id: "Cap_careLevel_selector",
+                        name: 'Cap_careLevel_selector',
+                        id: 'Cap_careLevel_selector',
                       }}
                     >
                       {capacityCareLevelFilter}
@@ -860,11 +860,11 @@ export function ColdChainPanel() {
                 <div className={classes.filters2}>
                   <FormControl
                     className={classes.formControl}
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   >
                     <InputLabel
-                      htmlFor="startYear"
+                      htmlFor='startYear'
                       className={classes.selectorLables}
                     >
                       Year
@@ -876,8 +876,8 @@ export function ColdChainPanel() {
                         setOptimalityYear(event.target.value)
                       }
                       inputProps={{
-                        id: "OP_year_selector",
-                        name: "OP_year_selector",
+                        id: 'OP_year_selector',
+                        name: 'OP_year_selector',
                       }}
                     >
                       {optimalityYearFilter}
@@ -885,25 +885,25 @@ export function ColdChainPanel() {
                   </FormControl>
                   <FormControl
                     className={classes.formControl}
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   >
                     <InputLabel
-                      htmlFor="District"
+                      htmlFor='District'
                       className={classes.selectorLables}
                     >
                       District
                     </InputLabel>
                     <Select
-                      renderValue={(selected) => "National"}
+                      renderValue={(selected) => 'National'}
                       className={classes.selector_background}
                       value={optimalityDistrict}
                       onChange={(event) =>
                         setOptimalityDistrict(event.target.value)
                       }
                       inputProps={{
-                        name: "Cap_district_selector",
-                        id: "Cap_district_selector",
+                        name: 'Cap_district_selector',
+                        id: 'Cap_district_selector',
                       }}
                     >
                       {optimalityDistrictFilter}
@@ -911,11 +911,11 @@ export function ColdChainPanel() {
                   </FormControl>
                   <FormControl
                     className={classes.formControl}
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   >
                     <InputLabel
-                      htmlFor="vaccine"
+                      htmlFor='vaccine'
                       className={classes.selectorLables}
                     >
                       Level of Care
@@ -927,8 +927,8 @@ export function ColdChainPanel() {
                         setOptimalityCareLevel(event.target.value)
                       }
                       inputProps={{
-                        name: "Cap_careLevel_selector",
-                        id: "Cap_careLevel_selector",
+                        name: 'Cap_careLevel_selector',
+                        id: 'Cap_careLevel_selector',
                       }}
                     >
                       {optimalityCareLevelFilter}
@@ -940,11 +940,11 @@ export function ColdChainPanel() {
                 <div className={classes.filters2}>
                   <FormControl
                     className={classes.formControl}
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   >
                     <InputLabel
-                      htmlFor="year"
+                      htmlFor='year'
                       className={classes.selectorLables}
                     >
                       Year
@@ -956,8 +956,8 @@ export function ColdChainPanel() {
                         setTemperatureMonitoringYear(event.target.value)
                       }
                       inputProps={{
-                        id: "TM_year_selector",
-                        name: "TM_year_selector",
+                        id: 'TM_year_selector',
+                        name: 'TM_year_selector',
                       }}
                     >
                       {temperatureMonitoringYearFilter}
@@ -965,25 +965,25 @@ export function ColdChainPanel() {
                   </FormControl>
                   <FormControl
                     className={classes.formControl}
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   >
                     <InputLabel
-                      htmlFor="District"
+                      htmlFor='District'
                       className={classes.selectorLables}
                     >
                       District
                     </InputLabel>
                     <Select
-                      renderValue={(selected) => "National"}
+                      renderValue={(selected) => 'National'}
                       className={classes.selector_background}
                       value={temperatureMonitoringDistrict}
                       onChange={(event) =>
                         setTemperatureMonitoringDistrict(event.target.value)
                       }
                       inputProps={{
-                        name: "TM_district_selector",
-                        id: "TM_district_selector",
+                        name: 'TM_district_selector',
+                        id: 'TM_district_selector',
                       }}
                     >
                       {temperatureMonitoringDistrictFilter}
@@ -998,20 +998,20 @@ export function ColdChainPanel() {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <TabPanel value={value} index={0}>
-            <ColdChain parentTab={"eligibility"} />
+            <ColdChain parentTab={'eligibility'} />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <ColdChain parentTab={"functionality"} />
+            <ColdChain parentTab={'functionality'} />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <ColdChain parentTab={"capacity"} />
+            <ColdChain parentTab={'capacity'} />
           </TabPanel>
           <TabPanel value={value} index={3}>
-            <ColdChain parentTab={"optimality"} />
+            <ColdChain parentTab={'optimality'} />
           </TabPanel>
 
           <TabPanel value={value} index={4}>
-            <ColdChain parentTab={"temperatureMonitoring"} />
+            <ColdChain parentTab={'temperatureMonitoring'} />
           </TabPanel>
         </Grid>
       </Grid>

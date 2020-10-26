@@ -167,7 +167,7 @@ export function PerformanceManagementPanel() {
       activityCompletionStatusStartQuarter,
       activityCompletionStatusEndQuarter,
       activityCompletionStatusOrg,
-      activityCompletionStatusISC
+      activityCompletionStatusISC,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -181,11 +181,11 @@ export function PerformanceManagementPanel() {
   //  Funding Status State
   // -----------------------------------------------------------------------
   const [fundingStatusStartQuarter, setFundingStatusStartQuarter] = useState(
-    currentYearStartQuarter
+    currentYearStartQuarter,
   );
 
   const [fundingStatusEndQuarter, setFundingStatusEndQuarter] = useState(
-    lastWorkPlanQuarter
+    lastWorkPlanQuarter,
   );
 
   const [
@@ -198,7 +198,7 @@ export function PerformanceManagementPanel() {
   const [fundingStatusISC, setFundingStatusISC] = useState(defaultISC);
 
   const [fundingStatusStatus, setFundingStatusStatus] = useState(
-    defaultFundingStatus
+    defaultFundingStatus,
   );
 
   useEffect(() => {
@@ -208,7 +208,7 @@ export function PerformanceManagementPanel() {
       fundingStatusFundingSourceOrg,
       fundingStatusOrg,
       fundingStatusISC,
-      fundingStatusStatus
+      fundingStatusStatus,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -224,14 +224,14 @@ export function PerformanceManagementPanel() {
   //  Activities Status State
   // -----------------------------------------------------------------------
   const [activitiesStartQuarter, setActivitiesStartQuarter] = useState(
-    currentYearStartQuarter
+    currentYearStartQuarter,
   );
   const [activitiesEndQuarter, setActivitiesEndQuarter] = useState(
-    lastWorkPlanQuarter
+    lastWorkPlanQuarter,
   );
 
   const [activitiesFundingSourceOrg, setActivitiesFundingSourceOrg] = useState(
-    defaultFundingSource
+    defaultFundingSource,
   );
 
   const [activitiesOrg, setActivitiesOrg] = useState(defaultOrganisation);
@@ -239,7 +239,7 @@ export function PerformanceManagementPanel() {
   const [activitiesISC, setActivitiesISC] = useState(defaultISC);
 
   const [activitiesFundingStatus, setActivitiesFundingStatus] = useState(
-    defaultFundingStatus
+    defaultFundingStatus,
   );
 
   useEffect(() => {
@@ -249,7 +249,7 @@ export function PerformanceManagementPanel() {
       activitiesFundingSourceOrg,
       activitiesOrg,
       activitiesISC,
-      activitiesFundingStatus
+      activitiesFundingStatus,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -265,7 +265,19 @@ export function PerformanceManagementPanel() {
   //  Activity Completion Status Filters
   // -----------------------------------------------------------------------
 
-  const activityCompletionStatusStartQuarterFilter = quarters.map((quarter) => (
+  const activityCompletionStatusStartQuarterFilter = quarters?.map(
+    (quarter) => (
+      <MenuItem
+        value={quarter.value}
+        key={quarter.value}
+        className={classes.liItems}
+      >
+        {quarter.name}
+      </MenuItem>
+    ),
+  );
+
+  const activityCompletionStatusEndQuarterFilter = quarters?.map((quarter) => (
     <MenuItem
       value={quarter.value}
       key={quarter.value}
@@ -275,23 +287,13 @@ export function PerformanceManagementPanel() {
     </MenuItem>
   ));
 
-  const activityCompletionStatusEndQuarterFilter = quarters.map((quarter) => (
-    <MenuItem
-      value={quarter.value}
-      key={quarter.value}
-      className={classes.liItems}
-    >
-      {quarter.name}
-    </MenuItem>
-  ));
-
-  const activityCompletionStatusOrgFilter = organisations.map((org) => (
+  const activityCompletionStatusOrgFilter = organisations?.map((org) => (
     <MenuItem value={org} key={org} className={classes.liItems}>
       {org}
     </MenuItem>
   ));
 
-  const activityCompletionStatusISCFilter = ISC.map((isc) => (
+  const activityCompletionStatusISCFilter = ISC?.map((isc) => (
     <MenuItem value={isc} key={isc} className={classes.liItems}>
       {isc}
     </MenuItem>
@@ -301,7 +303,7 @@ export function PerformanceManagementPanel() {
   //  Funding Status Filters
   // -----------------------------------------------------------------------
 
-  const fundingStatusStartQuarterFilter = quarters.map((quarter) => (
+  const fundingStatusStartQuarterFilter = quarters?.map((quarter) => (
     <MenuItem
       value={quarter.value}
       key={quarter.value}
@@ -311,7 +313,7 @@ export function PerformanceManagementPanel() {
     </MenuItem>
   ));
 
-  const fundingStatusEndQuarterFilter = quarters.map((quarter) => (
+  const fundingStatusEndQuarterFilter = quarters?.map((quarter) => (
     <MenuItem
       value={quarter.value}
       key={quarter.value}
@@ -321,19 +323,19 @@ export function PerformanceManagementPanel() {
     </MenuItem>
   ));
 
-  const fundingStatusFundingSourceOrgFilter = fundingSources.map((org) => (
+  const fundingStatusFundingSourceOrgFilter = fundingSources?.map((org) => (
     <MenuItem value={org} key={org} className={classes.liItems}>
       {org}
     </MenuItem>
   ));
 
-  const fundingStatusOrgFilter = organisations.map((org) => (
+  const fundingStatusOrgFilter = organisations?.map((org) => (
     <MenuItem value={org} key={org} className={classes.liItems}>
       {org}
     </MenuItem>
   ));
 
-  const fundingStatusISCFilter = ISC.map((isc) => (
+  const fundingStatusISCFilter = ISC?.map((isc) => (
     <MenuItem value={isc} key={isc} className={classes.liItems}>
       {isc}
     </MenuItem>
@@ -343,7 +345,7 @@ export function PerformanceManagementPanel() {
   //  Activities Filters
   // -----------------------------------------------------------------------
 
-  const activitiesStartQuarterFilter = quarters.map((quarter) => (
+  const activitiesStartQuarterFilter = quarters?.map((quarter) => (
     <MenuItem
       value={quarter.value}
       key={quarter.value}
@@ -353,7 +355,7 @@ export function PerformanceManagementPanel() {
     </MenuItem>
   ));
 
-  const activitiesEndQuarterFilter = quarters.map((quarter) => (
+  const activitiesEndQuarterFilter = quarters?.map((quarter) => (
     <MenuItem
       value={quarter.value}
       key={quarter.value}
@@ -363,19 +365,19 @@ export function PerformanceManagementPanel() {
     </MenuItem>
   ));
 
-  const activitiesFundingSourceOrgFilter = fundingSources.map((org) => (
+  const activitiesFundingSourceOrgFilter = fundingSources?.map((org) => (
     <MenuItem value={org} key={org} className={classes.liItems}>
       {org}
     </MenuItem>
   ));
 
-  const activitiesOrgFilter = organisations.map((org) => (
+  const activitiesOrgFilter = organisations?.map((org) => (
     <MenuItem value={org} key={org} className={classes.liItems}>
       {org}
     </MenuItem>
   ));
 
-  const activitiesISCFilter = ISC.map((isc) => (
+  const activitiesISCFilter = ISC?.map((isc) => (
     <MenuItem value={isc} key={isc} className={classes.liItems}>
       {isc}
     </MenuItem>
@@ -661,7 +663,7 @@ export function PerformanceManagementPanel() {
                     value={activityCompletionStatusStartQuarter}
                     onChange={(event) =>
                       setActivityCompletionStatusStartQuarter(
-                        event.target.value
+                        event.target.value,
                       )
                     }
                     inputProps={{
