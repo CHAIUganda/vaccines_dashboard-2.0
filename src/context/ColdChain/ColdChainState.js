@@ -68,11 +68,11 @@ export const ColdChainContextProvider = ({ children }) => {
 
     try {
       const eligibilityDataTableData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/eligiblefacilitiesmetrics?start_period=${startQuarter}&end_period=${endQuarter}`
+        `http://${apiEndpoint}${port}/coldchain/api/eligiblefacilitiesmetrics?start_period=${startQuarter}&end_period=${endQuarter}`,
       );
 
       const eligibilityMetricsChartData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/eligiblefacilitiesstats?district=${district}&start_period=${startQuarter}&end_period=${endQuarter}`
+        `http://${apiEndpoint}${port}/coldchain/api/eligiblefacilitiesstats?district=${district}&start_period=${startQuarter}&end_period=${endQuarter}`,
       );
 
       const payload = {
@@ -103,7 +103,7 @@ export const ColdChainContextProvider = ({ children }) => {
     startQuarter,
     endQuarter,
     district,
-    careLevel
+    careLevel,
   ) => {
     dispatch({
       type: "LOADING_FUNCTIONALITY_DATA",
@@ -112,10 +112,10 @@ export const ColdChainContextProvider = ({ children }) => {
 
     try {
       const functionalityMetricsChartData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/functionalitymetricsgraph?carelevel=${careLevel}&district=${district}&start_period=${startQuarter}&end_period=${endQuarter}`
+        `http://${apiEndpoint}${port}/coldchain/api/functionalitymetricsgraph?carelevel=${careLevel}&district=${district}&start_period=${startQuarter}&end_period=${endQuarter}`,
       );
       const functionalityDataTableData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/functionalitymetrics?carelevel=${careLevel}&start_period=${startQuarter}&end_period=${endQuarter}`
+        `http://${apiEndpoint}${port}/coldchain/api/functionalitymetrics?carelevel=${careLevel}&start_period=${startQuarter}&end_period=${endQuarter}`,
       );
 
       const payload = {
@@ -148,7 +148,7 @@ export const ColdChainContextProvider = ({ children }) => {
     startQuarter,
     endQuarter,
     district,
-    careLevel
+    careLevel,
   ) => {
     dispatch({
       type: "LOADING_CAPACITY_DATA",
@@ -157,11 +157,11 @@ export const ColdChainContextProvider = ({ children }) => {
 
     try {
       const capacityMetricsChartData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/capacitymetricsstats?carelevel=${careLevel}&district=${district}&start_period=${startQuarter}&end_period=${endQuarter}`
+        `http://${apiEndpoint}${port}/coldchain/api/capacitymetricsstats?carelevel=${careLevel}&district=${district}&start_period=${startQuarter}&end_period=${endQuarter}`,
       );
 
       const capacityDataTableData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/capacitymetrics?carelevel=${careLevel}&start_period=${startQuarter}&end_period=${endQuarter}`
+        `http://${apiEndpoint}${port}/coldchain/api/capacitymetrics?carelevel=${careLevel}&start_period=${startQuarter}&end_period=${endQuarter}`,
       );
 
       const payload = {
@@ -197,11 +197,11 @@ export const ColdChainContextProvider = ({ children }) => {
 
     try {
       const optimalityMetricsChartData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/optimalitystats?carelevel=${careLevel}&district=${district}&year=${year}`
+        `http://${apiEndpoint}${port}/coldchain/api/optimalitystats?carelevel=${careLevel}&district=${district}&year=${year}`,
       );
 
       const optimalityDataTableData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/optimalitymetrics?carelevel=${careLevel}&year=${year}`
+        `http://${apiEndpoint}${port}/coldchain/api/optimalitymetrics?carelevel=${careLevel}&year=${year}`,
       );
 
       const payload = {
@@ -234,15 +234,15 @@ export const ColdChainContextProvider = ({ children }) => {
 
     try {
       const temperatureMonitoringMetricsChartData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/tempheatfreezestats?district=${district}&year=${year}`
+        `http://${apiEndpoint}${port}/coldchain/api/tempheatfreezestats?district=${district}&year=${year}`,
       );
 
       const temperatureMonitoringDataTableData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/tempreportmetrics?year=${year}`
+        `http://${apiEndpoint}${port}/coldchain/api/tempreportmetrics?year=${year}`,
       );
 
       const temperatureMonitoringReportingRatesData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/tempreportingratestats?year=${year}`
+        `http://${apiEndpoint}${port}/coldchain/api/tempreportingratestats?district=${district}&year=${year}`,
       );
 
       const payload = {

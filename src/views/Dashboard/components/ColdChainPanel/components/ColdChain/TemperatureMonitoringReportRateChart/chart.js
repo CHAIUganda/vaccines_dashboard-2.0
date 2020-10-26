@@ -27,8 +27,6 @@ export const TemperatureMonitoringReportRateChartTemplate = () => {
 
   const chartData = getTemperatureMonitoringReportRateChartData(_data && _data);
 
-  console.log(chartData);
-
   const monthsInYear = [
     "Jan",
     "Feb",
@@ -75,7 +73,7 @@ export const TemperatureMonitoringReportRateChartTemplate = () => {
     },
     tooltip: {
       pointFormat:
-        "Reporting Rate: <b>{point.y}%</b><br/>Reporting districts: <b>{point.districts}",
+        "Reporting Rate: <b>{point.y}%</b><br/>Number of reporting facilities in district: <b>{point.districts}",
       shared: true,
     },
 

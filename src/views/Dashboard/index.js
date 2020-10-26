@@ -1,40 +1,40 @@
-import React, { useContext } from "react";
-import PropTypes from "prop-types";
+import React, { useContext } from 'react';
+import PropTypes from 'prop-types';
 
 // Material UI components
-import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 
 // Layout
-import BaseLayout from "../Base/BaseLayout.js";
+import BaseLayout from '../Base/BaseLayout.js';
 
 // Dashboard components
-import { OverviewPanel } from "../Dashboard/components/OverviewPanel/index";
-import { ColdChainPanel } from "../Dashboard/components/ColdChainPanel/index";
-import { CoveragePanel } from "./components/CoveragePanel/index";
-import { StockManagementPanel } from "./components/StockManagementPanel/index";
-import { PerformanceManagementPanel } from "./components/PerformanceManagementPanel/index";
-import { AdminPanel } from "./components/AdminPanel/index";
+import { OverviewPanel } from '../Dashboard/components/OverviewPanel/index';
+import { ColdChainPanel } from '../Dashboard/components/ColdChainPanel/index';
+import { CoveragePanel } from './components/CoveragePanel/index';
+import { StockManagementPanel } from './components/StockManagementPanel/index';
+import { PerformanceManagementPanel } from './components/PerformanceManagementPanel/index';
+import { AdminPanel } from './components/AdminPanel/index';
 
 // Dashboard components context
-import { OverviewContextProvider } from "../../context/Overview/OverviewState";
-import { ColdChainContextProvider } from "../../context/ColdChain/ColdChainState";
-import { StockManagementContextProvider } from "../../context/StockManagement/StockManagementState";
-import { CoverageContextProvider } from "../../context/Coverage/CoverageState";
-import { PerformanceManagementContextProvider } from "../../context/PerformanceManagement/PerformanceManagementState";
+import { OverviewContextProvider } from '../../context/Overview/OverviewState';
+import { ColdChainContextProvider } from '../../context/ColdChain/ColdChainState';
+import { StockManagementContextProvider } from '../../context/StockManagement/StockManagementState';
+import { CoverageContextProvider } from '../../context/Coverage/CoverageState';
+import { PerformanceManagementContextProvider } from '../../context/PerformanceManagement/PerformanceManagementState';
 
 // Importing this at the top to provide pdf export functionality
-import Highcharts from "highcharts";
-require("highcharts/modules/exporting")(Highcharts);
+import Highcharts from 'highcharts';
+require('highcharts/modules/exporting')(Highcharts);
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
     <Typography
-      component="div"
-      role="tabpanel"
+      component='div'
+      role='tabpanel'
       hidden={value !== index}
       id={`nav-tabpanel-${index}`}
       aria-labelledby={`nav-tab-${index}`}

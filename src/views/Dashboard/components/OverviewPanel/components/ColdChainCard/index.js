@@ -25,7 +25,6 @@ const Card = ({
         backgroundImage: backgroundImage,
       }}
     >
-      <h3 style={{ color: "#ffff", fontWeight: 300 }}>{title}</h3>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <span
           style={{
@@ -122,6 +121,7 @@ const Card = ({
           )}
         </div>
       </div>
+      <h3 style={{ color: "#ffff", fontWeight: 300 }}>{title}</h3>
     </Paper>
   );
 };
