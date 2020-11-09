@@ -1,52 +1,53 @@
-import React, { useState, useMemo, useContext } from "react";
+import React, { useState, useMemo, useContext } from 'react';
 
 // Bring in our cold chain context
-import { ColdChainContext } from "../../../../../../context/ColdChain/ColdChainState";
+import { ColdChainContext } from '../../../../../../context/ColdChain/ColdChainState';
 
 // Material components
-import { Grid } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
-import Box from "@material-ui/core/Box";
+import { Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import Box from '@material-ui/core/Box';
 
 // Shared components
-import { Card } from "../../../../../../components/";
-import ColdChainCard from "../../../OverviewPanel/components/ColdChainCard/index";
+import ColdChainCard from '../../../OverviewPanel/components/ColdChainCard/index';
 
 // Custom components
-import EligibilityTable from "./EligibilityTable/index";
-import EligibilityStatusPieChart from "./EligibilityStatusPieChart/index";
-import FunctionalityStatusBarChart from "./FunctionalityStatusBarChart/index";
-import FunctionalityTable from "./FunctionalityTable/index";
-import CapacityStatusBarChart from "./CapacityStatusBarChart/index";
-import CapacityTable from "./CapacityTable/index";
-import OptimalityStatusBarChart from "./OptimalityStatusBarChart/index";
-import OptimalityTable from "./OptimalityTable/index";
-import TemperatureMonitoringTable from "./TemperatureMonitoringTable/index";
-import TemperatureMonitoringBarChart from "./TemperatureMonitoringBarChart/index";
-import TemperatureMonitoringReportRateChart from "./TemperatureMonitoringReportRateChart/index";
-import TemperatureMonitoringReportRateHeatMap from "./TemperatureMonitoringReportRateHeatMap/index";
+import EligibilityTable from './EligibilityTable/index';
+import EligibilityStatusPieChart from './EligibilityStatusPieChart/index';
+import FunctionalityStatusBarChart from './FunctionalityStatusBarChart/index';
+import FunctionalityTable from './FunctionalityTable/index';
+import CapacityStatusBarChart from './CapacityStatusBarChart/index';
+import CapacityTable from './CapacityTable/index';
+import OptimalityStatusBarChart from './OptimalityStatusBarChart/index';
+import OptimalityTable from './OptimalityTable/index';
+import TemperatureMonitoringTable from './TemperatureMonitoringTable/index';
+import TemperatureMonitoringBarChart from './TemperatureMonitoringBarChart/index';
+import TemperatureMonitoringReportRateChart from './TemperatureMonitoringReportRateChart/index';
+import TemperatureMonitoringReportRateHeatMap from './TemperatureMonitoringReportRateHeatMap/index';
 
 // Import common styles
-import { useStyles } from "../../../styles";
+import { useStyles } from '../../../styles';
 const mainCardBackgroundColor =
-  "linear-gradient(0deg,#1e3c72 0,#1e3c72 1%,#2a5298)";
-const surplusCardBackgroundImage =
-  "linear-gradient(0deg, rgb(36, 197, 63) 0px, rgb(36, 197, 63) 1%, rgb(93, 246, 115))";
+  'linear-gradient(0deg,#1e3c72 0,#1e3c72 1%,#2a5298)';
 
-const shortageCardBackgroundImage =
-  "linear-gradient(0deg, #f83245 0px, #f83245 1%, #ff6372)";
+// const surplusCardBackgroundImage =
+//   'linear-gradient(0deg, rgb(36, 197, 63) 0px, rgb(36, 197, 63) 1%, rgb(93, 246, 115))';
+
+// const shortageCardBackgroundImage =
+//   'linear-gradient(0deg, #f83245 0px, #f83245 1%, #ff6372)';
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
     <Typography
-      component="div"
-      role="tabpanel"
+      component='div'
+      role='tabpanel'
       hidden={value !== index}
       id={`coverage-by-months-tabpanel-${index}`}
       aria-labelledby={`coverage-by-months-tab-${index}`}
@@ -60,24 +61,24 @@ function TabPanel(props) {
 function a11yProps(index) {
   return {
     id: `coverage-by-months-tab-${index}`,
-    "aria-controls": `coverage-by-months-tabpanel-${index}`,
+    'aria-controls': `coverage-by-months-tabpanel-${index}`,
   };
 }
 
 const TabStyle = withStyles((theme) => ({
   root: {
-    padding: "1rem 0",
-    textTransform: "none",
+    padding: '1rem 0',
+    textTransform: 'none',
     fontWeight: theme.typography.fontWeightRegular,
     fontSize: 12,
-    "&:hover": {
-      backgroundColor: "#B2C0D6",
-      color: "black",
+    '&:hover': {
+      backgroundColor: '#B2C0D6',
+      color: 'black',
       opacity: 1,
     },
-    "&$selected": {
-      backgroundColor: "#B2C0D6",
-      color: "black",
+    '&$selected': {
+      backgroundColor: '#B2C0D6',
+      color: 'black',
       fontWeight: theme.typography.fontWeightMedium,
       fontSize: 12,
     },
@@ -99,7 +100,7 @@ export default function ColdChain({ parentTab }) {
     setValue(newValue);
   };
 
-  const eligibleFacilities = new Intl.NumberFormat("lg-UG").format(
+  const eligibleFacilities = new Intl.NumberFormat('lg-UG').format(
     eligibility?.eligibilityMetricsChartData?.total_eligible_facilities,
   );
 
@@ -110,13 +111,13 @@ export default function ColdChain({ parentTab }) {
         ?.map((d) => d.functionality_percentage),
     ) || 0;
 
-  const capacity_shortage_negative =
-    capacity?.capacityMetricsChartData?.gap_metrics.negative_gap_percentage;
+  // const capacity_shortage_negative =
+  //   capacity?.capacityMetricsChartData?.gap_metrics.negative_gap_percentage;
 
-  const capacity_shortage_positive =
-    capacity?.capacityMetricsChartData?.gap_metrics.positive_gap_percentage;
+  // const capacity_shortage_positive =
+  //   capacity?.capacityMetricsChartData?.gap_metrics.positive_gap_percentage;
 
-  const totalAvailableLiters = new Intl.NumberFormat("lg-UG").format(
+  const totalAvailableLiters = new Intl.NumberFormat('lg-UG').format(
     capacity?.capacityMetricsChartData?.overall_total_available,
   );
 
@@ -138,43 +139,45 @@ export default function ColdChain({ parentTab }) {
           style={{ paddingTop: 0 }}
         >
           <Grid item lg={12} md={12} xl={12} xs={12}>
-            {parentTab === "functionality" || parentTab === "eligibility" ? (
+            {parentTab === 'functionality' || parentTab === 'eligibility' ? (
               <>
                 <Grid
                   container
                   spacing={3}
                   className={classes.DST_section}
-                  style={{ paddingTop: 50, height: 775, width: "100%" }}
+                  style={{ paddingTop: 50, height: 775, width: '100%' }}
                 >
                   <Grid item lg={3} md={3} xl={3} xs={12}>
                     <Grid
                       container
-                      direction="column"
-                      justify="space-evenly"
-                      alignItems="flex-start"
+                      direction='column'
+                      justify='space-evenly'
+                      alignItems='flex-start'
                       spacing={3}
                     >
-                      <Grid item xs={12} style={{ width: "100%", height: 200 }}>
-                        {parentTab === "eligibility" ? (
+                      <Grid item xs={12} style={{ width: '100%', height: 200 }}>
+                        {parentTab === 'eligibility' ? (
                           <>
                             <ColdChainCard
-                              title={"Eligible Facilities"}
+                              title={'Eligible Facilities'}
+                              type='advanced'
                               metric={eligibleFacilities}
                               backgroundImage={mainCardBackgroundColor}
                               isLoading={eligibility.isLoading}
-                              icon={"UGMap"}
-                              module={"coldchain"}
+                              icon={'UGMap'}
+                              module={'coldchain'}
                             />
                           </>
                         ) : (
                           <>
                             <ColdChainCard
-                              title={"Functionality"}
+                              title={'Functionality'}
+                              type='advanced'
                               metric={functionality_percentage}
                               isPercentage
                               backgroundImage={mainCardBackgroundColor}
                               isLoading={functionality.isLoading}
-                              module={"coldchain"}
+                              module={'coldchain'}
                             />
                           </>
                         )}
@@ -182,9 +185,9 @@ export default function ColdChain({ parentTab }) {
                       <Grid
                         item
                         xs={12}
-                        style={{ width: "100%", height: "calc(775px - 200px)" }}
+                        style={{ width: '100%', height: 'calc(775px - 200px)' }}
                       >
-                        {parentTab === "eligibility" ? (
+                        {parentTab === 'eligibility' ? (
                           <>
                             <EligibilityStatusPieChart />
                           </>
@@ -198,7 +201,7 @@ export default function ColdChain({ parentTab }) {
                   </Grid>
 
                   <Grid item lg={9} md={9} xl={9} xs={12}>
-                    {parentTab === "functionality" ? (
+                    {parentTab === 'functionality' ? (
                       <>
                         <FunctionalityTable />
                       </>
@@ -210,7 +213,7 @@ export default function ColdChain({ parentTab }) {
                   </Grid>
                 </Grid>
               </>
-            ) : parentTab === "capacity" ? (
+            ) : parentTab === 'capacity' ? (
               <>
                 <Grid
                   container
@@ -222,19 +225,15 @@ export default function ColdChain({ parentTab }) {
                     <Grid container spacing={3} style={{ height: 200 }}>
                       <Grid item lg={4} md={4} xl={4} xs={12}>
                         <ColdChainCard
-                          title={`Total liters ${
-                            capacity?.district === "national"
-                              ? "at National Level"
-                              : "in " + capacity?.district
-                          }`}
+                          title={`CCE Sufficiency`}
                           metric={totalAvailableLiters}
-                          sign={"ltrs"}
+                          sign={'ltrs'}
                           backgroundImage={mainCardBackgroundColor}
                           isLoading={capacity.isLoading}
-                          module={"coldchain"}
+                          module={'coldchain'}
                         />
                       </Grid>
-                      <Grid item lg={4} md={4} xl={4} xs={12}>
+                      {/* <Grid item lg={4} md={4} xl={4} xs={12}>
                         <ColdChainCard
                           title={"Shortage (-ve Gap)"}
                           metric={capacity_shortage_negative}
@@ -253,14 +252,14 @@ export default function ColdChain({ parentTab }) {
                           isLoading={capacity.isLoading}
                           module={"coldchain"}
                         />
-                      </Grid>
+                      </Grid> */}
                     </Grid>
                   </Grid>
                   <Grid item xs={12}>
                     <Grid
                       container
                       spacing={3}
-                      style={{ height: "calc(775px - 200px)" }}
+                      style={{ height: 'calc(775px - 200px)' }}
                     >
                       <Grid item lg={4} md={4} xl={4} xs={12}>
                         <CapacityStatusBarChart />
@@ -272,14 +271,14 @@ export default function ColdChain({ parentTab }) {
                   </Grid>
                 </Grid>
               </>
-            ) : parentTab === "optimality" ? (
+            ) : parentTab === 'optimality' ? (
               <>
                 <Grid container spacing={3}>
                   <Grid item xs={12} style={{ paddingTop: 10 }}>
                     <Paper className={classes.paper} elevation={0}>
                       <Grid item lg={12} md={6} xl={6} xs={12}>
                         <AppBar
-                          position="static"
+                          position='static'
                           className={classes.sub_appBar}
                           elevation={0}
                         >
@@ -287,13 +286,13 @@ export default function ColdChain({ parentTab }) {
                             className={classes.tabs}
                             value={value}
                             onChange={handleChange}
-                            aria-label="Optimality tabs"
+                            aria-label='Optimality tabs'
                             TabIndicatorProps={{
-                              style: { backgroundColor: "#B2C0D6" },
+                              style: { backgroundColor: '#B2C0D6' },
                             }}
                           >
-                            <TabStyle {...a11yProps(0)} label="CCE" />
-                            <TabStyle {...a11yProps(1)} label="SITE" />
+                            <TabStyle {...a11yProps(0)} label='CCE' />
+                            <TabStyle {...a11yProps(1)} label='SITE' />
                           </Tabs>
                         </AppBar>
                       </Grid>
@@ -305,38 +304,39 @@ export default function ColdChain({ parentTab }) {
                             className={classes.C_section}
                             style={{
                               height: 735,
-                              width: "100%",
+                              width: '100%',
                             }}
                           >
                             <Grid item lg={3} md={3} xl={3} xs={12}>
                               <Grid
                                 container
-                                direction="column"
-                                justify="space-evenly"
-                                alignItems="flex-start"
+                                direction='column'
+                                justify='space-evenly'
+                                alignItems='flex-start'
                                 spacing={3}
                               >
                                 <Grid
                                   item
                                   xs={12}
-                                  style={{ width: "100%", height: 200 }}
+                                  style={{ width: '100%', height: 200 }}
                                 >
                                   <ColdChainCard
-                                    title={"CCE Optimality"}
+                                    type='advanced'
+                                    title={'CCE Optimality'}
                                     isPercentage
                                     metric={CCE_dvs_optimality_percentage}
                                     metric2={CCE_hf_optimality_percentage}
                                     isLoading={optimality.isLoading}
                                     backgroundImage={mainCardBackgroundColor}
-                                    module={"coldchain"}
+                                    module={'coldchain'}
                                   />
                                 </Grid>
                                 <Grid
                                   item
                                   xs={12}
                                   style={{
-                                    width: "100%",
-                                    height: "calc(735px - 200px)",
+                                    width: '100%',
+                                    height: 'calc(735px - 200px)',
                                   }}
                                 >
                                   <OptimalityStatusBarChart />
@@ -355,38 +355,39 @@ export default function ColdChain({ parentTab }) {
                             className={classes.C_section}
                             style={{
                               height: 735,
-                              width: "100%",
+                              width: '100%',
                             }}
                           >
                             <Grid item lg={3} md={3} xl={3} xs={12}>
                               <Grid
                                 container
-                                direction="column"
-                                justify="space-evenly"
-                                alignItems="flex-start"
+                                direction='column'
+                                justify='space-evenly'
+                                alignItems='flex-start'
                                 spacing={3}
                               >
                                 <Grid
                                   item
                                   xs={12}
-                                  style={{ width: "100%", height: 200 }}
+                                  style={{ width: '100%', height: 200 }}
                                 >
                                   <ColdChainCard
-                                    title={"Site Optimality"}
+                                    title={'Site Optimality'}
+                                    type='advanced'
                                     isPercentage
                                     metric={SITE_dvs_optimality_percentage}
                                     metric2={SITE_hf_optimality_percentage}
                                     isLoading={optimality.isLoading}
                                     backgroundImage={mainCardBackgroundColor}
-                                    module={"coldchain"}
+                                    module={'coldchain'}
                                   />
                                 </Grid>
                                 <Grid
                                   item
                                   xs={12}
                                   style={{
-                                    width: "100%",
-                                    height: "calc(735px - 200px)",
+                                    width: '100%',
+                                    height: 'calc(735px - 200px)',
                                   }}
                                 >
                                   <OptimalityStatusBarChart />
@@ -410,7 +411,7 @@ export default function ColdChain({ parentTab }) {
                     <Paper className={classes.paper} elevation={0}>
                       <Grid item lg={12} md={6} xl={6} xs={12}>
                         <AppBar
-                          position="static"
+                          position='static'
                           className={classes.sub_appBar}
                           elevation={0}
                         >
@@ -418,18 +419,18 @@ export default function ColdChain({ parentTab }) {
                             className={classes.tabs}
                             value={value}
                             onChange={handleChange}
-                            aria-label="Temperature monitoring tabs"
+                            aria-label='Temperature monitoring tabs'
                             TabIndicatorProps={{
-                              style: { backgroundColor: "#B2C0D6" },
+                              style: { backgroundColor: '#B2C0D6' },
                             }}
                           >
                             <TabStyle
                               {...a11yProps(0)}
-                              label="Reporting Rate"
+                              label='Reporting Rate'
                             />
                             <TabStyle
                               {...a11yProps(1)}
-                              label="Temperature Alarms"
+                              label='Temperature Alarms'
                             />
                           </Tabs>
                         </AppBar>
@@ -442,7 +443,7 @@ export default function ColdChain({ parentTab }) {
                             className={classes.C_section}
                             style={{
                               height: 735,
-                              width: "100%",
+                              width: '100%',
                             }}
                           >
                             <Grid item lg={5} md={5} xl={5} xs={12}>
@@ -460,7 +461,7 @@ export default function ColdChain({ parentTab }) {
                             className={classes.C_section}
                             style={{
                               height: 735,
-                              width: "100%",
+                              width: '100%',
                             }}
                           >
                             <Grid item lg={5} md={5} xl={5} xs={12}>

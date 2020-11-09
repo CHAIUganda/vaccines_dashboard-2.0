@@ -9,19 +9,17 @@ const backgroundImage =
   'linear-gradient(0deg, rgb(36, 197, 63) 0px, rgb(36, 197, 63) 1%, rgb(93, 246, 115))';
 
 const SurplusGapCard = () => {
-  const { coldChainCapacityData } = useContext(OverviewContext);
+  const { coldChainOverviewData } = useContext(OverviewContext);
 
-  const { isLoading } = coldChainCapacityData;
+  const { isLoading } = coldChainOverviewData;
 
-  const capacity_shortage_positive =
-    coldChainCapacityData?.capacityMetricsChartData?.gap_metrics
-      .positive_gap_percentage;
-
+  const sufficiencyAtDVS =
+    coldChainOverviewData?.coldChainOverviewData?.sufficiency_percentage_at_dvs;
   return (
     <ColdChainCard
       title={'Sufficiency (at DVS only)'}
-      metric={'85'}
-      // sign={'%'}
+      metric={sufficiencyAtDVS}
+      type='advanced'
       isPercentage={true}
       backgroundImage={backgroundImage}
       isLoading={isLoading}

@@ -1,6 +1,6 @@
 export default (state, action) => {
   switch (action.type) {
-    case "LOG_IN":
+    case 'LOG_IN':
       return {
         ...state,
         isAuthenticated: true,
@@ -10,7 +10,7 @@ export default (state, action) => {
         imcID: action.payload.imcID,
       };
 
-    case "LOG_OUT":
+    case 'LOG_OUT':
       return {
         ...state,
         isAuthenticated: false,
@@ -20,45 +20,52 @@ export default (state, action) => {
         imcID: action.payload.imcID,
       };
 
-    case "LOADING_ALL_USERS":
+    case 'LOADING_ALL_USERS':
       return {
         ...state,
         users: action.payload,
       };
 
-    case "GET_USER_ISCs":
+    case 'GET_USER_ISCs':
       return {
         ...state,
         userISC: action.payload,
       };
-    case "GET_VACCINES":
+    case 'GET_VACCINES':
       return {
         ...state,
         loading: false,
         vaccines: action.payload,
       };
 
-    case "GET_DISTRICTS":
+    case 'GET_DISTRICTS':
       return {
         ...state,
         loading: false,
         districts: action.payload,
       };
-    case "GET_QUARTERS":
+
+    case 'GET_REGIONS':
+      return {
+        ...state,
+        loading: false,
+        regions: action.payload,
+      };
+    case 'GET_QUARTERS':
       return {
         ...state,
         loading: false,
         quarters: action.payload,
       };
 
-    case "GET_USERS":
+    case 'GET_USERS':
       return {
         ...state,
         loading: false,
         users: { users: action.payload, isLoading: false },
       };
 
-    case "GET_ELIGIBILITY_DATA":
+    case 'GET_ELIGIBILITY_DATA':
       return {
         ...state,
         loading: false,
@@ -67,49 +74,55 @@ export default (state, action) => {
         },
       };
 
-    case "GET_VACCINES_ERROR":
+    case 'GET_VACCINES_ERROR':
       return {
         ...state,
         error: action.payload,
       };
 
-    case "GET_DISTRICTS_ERROR":
+    case 'GET_DISTRICTS_ERROR':
       return {
         ...state,
         error: action.payload,
       };
 
-    case "GET_QUARTERS_ERROR":
+    case 'GET_REGIONS_ERROR':
       return {
         ...state,
         error: action.payload,
       };
 
-    case "GET_ELIGIBILITY_DATA_ERROR":
+    case 'GET_QUARTERS_ERROR':
+      return {
+        ...state,
+        error: action.payload,
+      };
+
+    case 'GET_ELIGIBILITY_DATA_ERROR':
       return {
         state,
         error: action.payload,
       };
 
-    case "LOGIN_ERROR":
+    case 'LOGIN_ERROR':
       return {
         ...state,
         error: action.payload,
       };
 
-    case "LOGOUT_ERROR":
+    case 'LOGOUT_ERROR':
       return {
         ...state,
         error: action.payload,
       };
 
-    case "GET_USERS_ERROR":
+    case 'GET_USERS_ERROR':
       return {
         ...state,
         error: action.payload,
       };
 
-    case "GET_USER_ISCs_ERROR":
+    case 'GET_USER_ISCs_ERROR':
       return {
         ...state,
         error: action.payload,

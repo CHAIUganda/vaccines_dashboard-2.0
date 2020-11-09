@@ -8,22 +8,22 @@ import ColdChainCard from '../ColdChainCard/index';
 const backgroundImage = `linear-gradient(0deg, rgba(80,131,218,1) 0%, rgba(142,170,219,1) 100%)`;
 
 const OptimalityNationalCard = () => {
-  const { coldChainCapacityData } = useContext(OverviewContext);
+  const { coldChainOverviewData } = useContext(OverviewContext);
 
-  const { isLoading } = coldChainCapacityData;
-  const totalAvailableLiters = new Intl.NumberFormat('lg-UG').format(
-    coldChainCapacityData?.capacityMetricsChartData?.overall_total_available,
-  );
+  const { isLoading } = coldChainOverviewData;
+
+  const optimalityAtNational =
+    coldChainOverviewData?.coldChainOverviewData
+      ?.optimality_percentage_at_sites;
 
   return (
     <ColdChainCard
       title={'Optimality (Nationally across all sites)'}
-      metric={'60'}
-      // sign={"%"}
+      metric={optimalityAtNational}
+      type='advanced'
       isPercentage={true}
       backgroundImage={backgroundImage}
       isLoading={isLoading}
-      // icon={"UGMap"}
     />
   );
 };

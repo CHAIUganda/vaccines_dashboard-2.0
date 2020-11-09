@@ -1,27 +1,27 @@
-import React, { forwardRef, useContext } from "react";
+import React, { forwardRef, useContext } from 'react';
 
 // Bring in our cold chain context
-import { ColdChainContext } from "../../../../../../../context/ColdChain/ColdChainState";
+import { ColdChainContext } from '../../../../../../../context/ColdChain/ColdChainState';
 
-import MaterialTable from "material-table";
+import MaterialTable from 'material-table';
 
-import AddBox from "@material-ui/icons/AddBox";
-import ArrowDownward from "@material-ui/icons/ArrowDownward";
-import Check from "@material-ui/icons/Check";
-import ChevronLeft from "@material-ui/icons/ChevronLeft";
-import ChevronRight from "@material-ui/icons/ChevronRight";
-import Clear from "@material-ui/icons/Clear";
-import DeleteOutline from "@material-ui/icons/DeleteOutline";
-import Edit from "@material-ui/icons/Edit";
-import FilterList from "@material-ui/icons/FilterList";
-import FirstPage from "@material-ui/icons/FirstPage";
-import LastPage from "@material-ui/icons/LastPage";
-import Remove from "@material-ui/icons/Remove";
-import SaveAlt from "@material-ui/icons/SaveAlt";
-import Search from "@material-ui/icons/Search";
-import ViewColumn from "@material-ui/icons/ViewColumn";
+import AddBox from '@material-ui/icons/AddBox';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
+import Check from '@material-ui/icons/Check';
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+import Clear from '@material-ui/icons/Clear';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import Edit from '@material-ui/icons/Edit';
+import FilterList from '@material-ui/icons/FilterList';
+import FirstPage from '@material-ui/icons/FirstPage';
+import LastPage from '@material-ui/icons/LastPage';
+import Remove from '@material-ui/icons/Remove';
+import SaveAlt from '@material-ui/icons/SaveAlt';
+import Search from '@material-ui/icons/Search';
+import ViewColumn from '@material-ui/icons/ViewColumn';
 
-import { useStyles } from "../../../../styles";
+import { useStyles } from '../../../../styles';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -61,43 +61,62 @@ export const DataTable = () => {
   } = capacity;
 
   const title = `Capacity Status of CCE in ${
-    district === "national" ? "National" : district
+    district === 'national' ? 'National' : district
   } for period ${startQuarter} - ${endQuarter}`;
+
+  const cellStyleFormat = (rowData, month) => {
+    const style =
+      Math.sign(rowData.gap) === 1
+        ? { backgroundColor: '#24c53f' }
+        : { backgroundColor: '#f83245' };
+
+    return style;
+  };
 
   const columns = [
     {
-      field: "district",
-      title: "District",
+      field: 'district',
+      title: 'District',
       cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: (rowData) => rowData.name.replace(/ District/g, ""),
+      render: (rowData) => rowData.name.replace(/ District/g, ''),
     },
     {
-      field: "required_net_storage_volume",
-      title: "Required Capacity",
+      field: 'required_net_storage_volume',
+      title: 'Required Capacity',
       cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
       render: (rowData) =>
-        new Intl.NumberFormat("lg-UG").format(
-          rowData.required_net_storage_volume
+        new Intl.NumberFormat('lg-UG').format(
+          rowData.required_net_storage_volume,
         ),
     },
     {
-      field: "available_net_storage_volume",
-      title: "Available Capacity",
+      field: 'available_net_storage_volume',
+      title: 'Available Capacity',
       cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
       render: (rowData) =>
-        new Intl.NumberFormat("lg-UG").format(
-          rowData.available_net_storage_volume
+        new Intl.NumberFormat('lg-UG').format(
+          rowData.available_net_storage_volume,
         ),
     },
     {
-      field: "gap",
-      title: "Gap",
+      field: 'gap',
+      title: 'Gap (+/-)',
+      cellStyle: (param1, rowData = []) => {
+        return cellStyleFormat(rowData);
+      },
+      headerStyle: { fontSize: 15, fontWeight: 700 },
+      render: (rowData) => new Intl.NumberFormat('lg-UG').format(rowData.gap),
+    },
+    {
+      field: 'gap',
+      title: 'Status (Sufficient / Insufficient)',
       cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
-      render: (rowData) => new Intl.NumberFormat("lg-UG").format(rowData.gap),
+      render: (rowData) =>
+        Math.sign(rowData.gap) === 1 ? 'Sufficient' : 'Insufficient',
     },
   ];
   return (
@@ -111,7 +130,7 @@ export const DataTable = () => {
       }
       isLoading={isLoading}
       columns={columns}
-      style={{ height: "100%" }}
+      style={{ height: '100%' }}
       icons={tableIcons}
       options={
         ({

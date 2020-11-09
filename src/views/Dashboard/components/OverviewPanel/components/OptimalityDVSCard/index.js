@@ -9,18 +9,17 @@ const backgroundImage =
   'linear-gradient(0deg, rgba(150,217,106,1) 0%, rgba(197,224,179,1) 100%)';
 
 const OptimalityDVSCard = () => {
-  const { coldChainCapacityData } = useContext(OverviewContext);
+  const { coldChainOverviewData } = useContext(OverviewContext);
 
-  const { isLoading } = coldChainCapacityData;
+  const { isLoading } = coldChainOverviewData;
 
-  const capacity_shortage_positive =
-    coldChainCapacityData?.capacityMetricsChartData?.gap_metrics
-      .positive_gap_percentage;
-
+  const optimalityAtDVS =
+    coldChainOverviewData?.coldChainOverviewData?.optimality_percentage_at_dvs;
   return (
     <ColdChainCard
       title={'Optimality (at DVS only)'}
-      metric={'70'}
+      metric={optimalityAtDVS}
+      type='advanced'
       isPercentage={true}
       backgroundImage={backgroundImage}
       isLoading={isLoading}

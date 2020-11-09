@@ -1,40 +1,40 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from 'react';
 
 // Bring in the global context
-import { GlobalContext, date } from "../../../../context/GlobalState";
-import { OverviewContext } from "../../../../context/Overview/OverviewState";
+import { GlobalContext, date } from '../../../../context/GlobalState';
+import { OverviewContext } from '../../../../context/Overview/OverviewState';
 
 // Bring in our performance management context
 
 // Material components
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
-import ArrowForwardIosSharpIcon from "@material-ui/icons/ArrowForwardIosSharp";
-import InputBase from "@material-ui/core/InputBase";
-import MenuItem from "@material-ui/core/MenuItem";
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import ArrowForwardIosSharpIcon from '@material-ui/icons/ArrowForwardIosSharp';
+import InputBase from '@material-ui/core/InputBase';
+import MenuItem from '@material-ui/core/MenuItem';
 
-import FunctionalityPieChart from "./components/FunctionalityPieChart/index";
-import EligibilityStatusPieChart from "./components/EligibilityStatusPieChart/index";
-import FunctionalityTable from "./components/FunctionalityTable/index";
-import SufficiencyNationalCard from "./components/SufficiencyNationalCard/index";
-import SufficiencyDVSCard from "./components/SufficiencyDVSCard/index";
-import SufficiencyHFCard from "./components/SufficiencyHFCard/index";
-import OptimalityNationalCard from "./components/OptimalityNationalCard/index";
-import OptimalityDVSCard from "./components/OptimalityDVSCard/index";
-import OptimalityHFCard from "./components/OptimalityHFCard/index";
-import MonthsOfStockCard from "./components/MonthsOfStockCard/index";
-import RefillRateCard from "./components/RefillRateCard/index";
-import UptakeRateCard from "./components/UptakeRateCard/index";
-import DPT13Card from "./components/DPT1-3Card/index";
-import HPV12Card from "./components/HPV1-2Card/index";
-import DPT3PCV3GAPCard from "./components/DPT3-PCV3GAPCard/index";
-import RedCategoryCard from "./components/RedCategoryCard/index";
+import FunctionalityPieChart from './components/FunctionalityPieChart/index';
+import EligibilityStatusPieChart from './components/EligibilityStatusPieChart/index';
+import FunctionalityTable from './components/FunctionalityTable/index';
+import SufficiencyNationalCard from './components/SufficiencyNationalCard/index';
+import SufficiencyDVSCard from './components/SufficiencyDVSCard/index';
+import SufficiencyHFCard from './components/SufficiencyHFCard/index';
+import OptimalityNationalCard from './components/OptimalityNationalCard/index';
+import OptimalityDVSCard from './components/OptimalityDVSCard/index';
+import OptimalityHFCard from './components/OptimalityHFCard/index';
+import MonthsOfStockCard from './components/MonthsOfStockCard/index';
+import RefillRateCard from './components/RefillRateCard/index';
+import UptakeRateCard from './components/UptakeRateCard/index';
+import DPT13Card from './components/DPT1-3Card/index';
+import HPV12Card from './components/HPV1-2Card/index';
+import DPT3PCV3GAPCard from './components/DPT3-PCV3GAPCard/index';
+import RedCategoryCard from './components/RedCategoryCard/index';
 
 // Import common styles
-import { useStyles } from "../styles";
+import { useStyles } from '../styles';
 
 const overviewStyles = makeStyles((theme) => ({
   root: {
@@ -42,139 +42,139 @@ const overviewStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
-    textAlign: "left",
+    textAlign: 'left',
     color: theme.palette.text.secondary,
   },
 
   header: {
-    textAlign: "left",
+    textAlign: 'left',
     letterSpacing: 0,
     opacity: 1,
     // font: "Proxima Nova"
   },
 
   sectionHeader: {
-    display: "flex",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    color: "#28354A",
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    color: '#28354A',
   },
 
   ColdChainSectionWrapper: {
-    display: "flex",
-    justifyContent: "space-between",
+    display: 'flex',
+    justifyContent: 'space-between',
     height: 615,
   },
 
   stockManagementWrapper: {
-    display: "flex",
-    justifyContent: "space-between",
+    display: 'flex',
+    justifyContent: 'space-between',
   },
 
   coldChainContent1: {
     margin: 10,
-    width: "66%",
-    display: "flex",
-    flexDirection: "column",
+    width: '66%',
+    display: 'flex',
+    flexDirection: 'column',
     boxShadow:
-      "0 1px 3px rgba(0,0,0,0.06),0 2px 6px rgba(0,0,0,0.06),0 3px 8px rgba(0,0,0,0.09)",
+      '0 1px 3px rgba(0,0,0,0.06),0 2px 6px rgba(0,0,0,0.06),0 3px 8px rgba(0,0,0,0.09)',
   },
 
   content: {
     margin: 10,
-    width: "33%",
-    display: "flex",
-    flexDirection: "column",
+    width: '33%',
+    display: 'flex',
+    flexDirection: 'column',
     boxShadow:
-      "0 1px 3px rgba(0,0,0,0.06),0 2px 6px rgba(0,0,0,0.06),0 3px 8px rgba(0,0,0,0.09)",
+      '0 1px 3px rgba(0,0,0,0.06),0 2px 6px rgba(0,0,0,0.06),0 3px 8px rgba(0,0,0,0.09)',
   },
 
   sectionTitle: {
-    display: "flex",
-    justifyContent: "center",
-    fontSize: "inherit",
+    display: 'flex',
+    justifyContent: 'center',
+    fontSize: 'inherit',
     fontWeight: 400,
-    color: "#28354A",
+    color: '#28354A',
   },
 
   chartContainer: {
-    display: "flex",
-    flexDirection: "column",
-    height: "100%",
-    width: "50%",
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    width: '50%',
   },
 
   chartContainerFunctionality: {
-    display: "flex",
-    flexDirection: "column",
-    height: "100%",
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
   },
 
   cardContainer: {
-    display: "flex",
-    width: "100%",
+    display: 'flex',
+    width: '100%',
   },
 
   chartContainerContent: {
-    height: "40%",
-    margin: "0px 100px 0px 100px",
+    height: '40%',
+    margin: '0px 100px 0px 100px',
     padding: 3,
   },
   tableContainerContent: {
-    margin: "0px 50px 0px 50px",
+    margin: '0px 50px 0px 50px',
   },
 
   capacityMetricsContainer: {
-    display: "flex",
-    flexDirection: "column",
-    height: "33%",
-    justifyContent: "space-evenly",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    height: '33%',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
     padding: 7,
   },
 
   stockManagementMetricsContainer: {
-    width: "33%",
+    width: '33%',
     padding: 7,
   },
 
   top: {
-    display: "flex",
-    justifyContent: "space-between",
+    display: 'flex',
+    justifyContent: 'space-between',
   },
 }));
 
 const BootstrapInput = withStyles((theme) => ({
   root: {
-    "label + &": {
+    'label + &': {
       marginTop: theme.spacing(3),
     },
   },
   input: {
     borderRadius: 4,
-    position: "relative",
+    position: 'relative',
     backgroundColor: theme.palette.background.paper,
-    border: "1px solid #ced4da",
-    fontSize: "small",
-    padding: "10px 26px 10px 12px",
-    transition: theme.transitions.create(["border-color", "box-shadow"]),
+    border: '1px solid #ced4da',
+    fontSize: 'small',
+    padding: '10px 26px 10px 12px',
+    transition: theme.transitions.create(['border-color', 'box-shadow']),
     // Use the system font instead of the default Roboto font.
     fontFamily: [
-      "-apple-system",
-      "BlinkMacSystemFont",
+      '-apple-system',
+      'BlinkMacSystemFont',
       '"Segoe UI"',
-      "Roboto",
+      'Roboto',
       '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
+      'Arial',
+      'sans-serif',
       '"Apple Color Emoji"',
       '"Segoe UI Emoji"',
       '"Segoe UI Symbol"',
-    ].join(","),
-    "&:focus": {
+    ].join(','),
+    '&:focus': {
       borderRadius: 4,
-      borderColor: "#80bdff",
-      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
+      borderColor: '#80bdff',
+      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
     },
   },
 }))(InputBase);
@@ -182,14 +182,17 @@ const BootstrapInput = withStyles((theme) => ({
 export function OverviewPanel() {
   const classes = overviewStyles();
   const globalClasses = useStyles();
-  const vaccine = "PENTA";
+  const vaccine = 'PENTA';
 
   // Extract required global state variables
   const { districts, getDistricts } = useContext(GlobalContext);
 
-  const { months, getStockManagementData, getCoverageData } = useContext(
-    OverviewContext,
-  );
+  const {
+    months,
+    getStockManagementData,
+    getCoverageData,
+    getOverviewColdChainData,
+  } = useContext(OverviewContext);
 
   useEffect(() => {
     getDistricts();
@@ -207,15 +210,17 @@ export function OverviewPanel() {
     }, {});
   }
 
-  const groupedMonths = groupBy(months, "year");
+  const groupedMonths = groupBy(months, 'year');
 
-  const [district, setDistrict] = useState("National");
+  const [district, setDistrict] = useState('National');
   const [month, setMonth] = useState({
     month: date.toDateString().substring(4, 7) + ` ${date.getFullYear()}`,
     period: `${date.getFullYear()}${
-      date.getMonth().toString().length > 1 ? "" : 0
+      date.getMonth().toString().length > 1 ? '' : 0
     }${date.getMonth()}`,
   });
+
+  const year = month.month.substring(4, 8);
 
   const monthsFilter =
     groupedMonths &&
@@ -249,6 +254,7 @@ export function OverviewPanel() {
   useEffect(() => {
     getStockManagementData(month, district);
     getCoverageData(month, district, vaccine);
+    getOverviewColdChainData(year);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [month, district]);
 
@@ -259,11 +265,11 @@ export function OverviewPanel() {
         <div className={classes.filters2}>
           <FormControl
             className={globalClasses.districtSelectMargin}
-            variant="outlined"
-            margin="dense"
+            variant='outlined'
+            margin='dense'
           >
             <InputLabel
-              htmlFor="month"
+              htmlFor='month'
               className={globalClasses.selectorLables2}
             >
               Month
@@ -271,13 +277,13 @@ export function OverviewPanel() {
             <Select
               native
               className={globalClasses.selector_background}
-              id="month_selector"
+              id='month_selector'
               value={month.month}
               onChange={(event) => {
                 const period = event.target.options.selectedIndex;
                 setMonth({
                   month: event.target.value,
-                  period: event.target[period].getAttribute("period"),
+                  period: event.target[period].getAttribute('period'),
                 });
               }}
               input={<BootstrapInput />}
@@ -287,18 +293,18 @@ export function OverviewPanel() {
           </FormControl>
           <FormControl
             className={globalClasses.districtSelectMargin}
-            variant="outlined"
-            margin="dense"
+            variant='outlined'
+            margin='dense'
           >
             <InputLabel
-              htmlFor="District"
+              htmlFor='District'
               className={globalClasses.selectorLables2}
             >
               District
             </InputLabel>
             <Select
               className={globalClasses.selector_background}
-              id="district_selector"
+              id='district_selector'
               value={district}
               onChange={(event) => setDistrict(event.target.value)}
               input={<BootstrapInput />}
@@ -339,7 +345,7 @@ export function OverviewPanel() {
               Working Status of Fridges in all Districts
             </h3>
             <div
-              style={{ width: "100%", flexDirection: "row", display: "flex" }}
+              style={{ width: '100%', flexDirection: 'row', display: 'flex' }}
             >
               <div className={classes.chartContainer}>
                 <span className={classes.capacityMetricsContainer}>
