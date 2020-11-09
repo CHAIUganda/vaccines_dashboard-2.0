@@ -55,22 +55,22 @@ export const getTemperatureMonitoringChartData = (data = []) => {
     // If we have data, just append the working metric to the data key
     cold_alarm[0] === undefined
       ? cold_alarm.push({
-          name: "Freeze Alarms",
+          name: 'Freeze Alarms',
           data: [cold_alarm_sum],
           stack: month,
-          color: "#1e3c72",
-          dashStyle: "Dash",
+          color: '#1e3c72',
+          dashStyle: 'Dash',
         })
-      : cold_alarm[0]["data"].push(cold_alarm_sum);
+      : cold_alarm[0]['data'].push(cold_alarm_sum);
 
     heat_alarm[0] === undefined
       ? heat_alarm.push({
-          name: "Heat Alarms",
+          name: 'Heat Alarms',
           data: [heat_alarms_sum],
           stack: month,
-          color: "#f83245",
+          color: '#f83245',
         })
-      : heat_alarm[0]["data"].push(heat_alarms_sum);
+      : heat_alarm[0]['data'].push(heat_alarms_sum);
   }
 
   chartData.push(...cold_alarm, ...heat_alarm);
@@ -82,17 +82,55 @@ export const getEligibilityChartData = (data = []) => {
   return {
     data: [
       {
-        name: "Eligible Facilities",
+        name: 'Eligible Facilities',
         y: data.percentage_cce_coverage_rate,
-        color: "#1e3c72",
+        color: '#1e3c72',
       },
       {
-        name: "Ineligible Facilities",
+        name: 'Ineligible Facilities',
         y: data.percentage_not_cce_coverage_rate,
-        color: "#FE5C6B",
+        color: '#FE5C6B',
       },
     ],
   };
+};
+
+export const getCapacityChartData2 = (data = []) => {
+  console.log(data);
+  const chartData = [];
+  const negativePercentage = [];
+  const positivePercentage = [];
+
+  for (let i = 0; i < data.length; i++) {
+    let metric = data[i];
+    const quarter = metric.quarter;
+    const negative = metric.negative_gap_percentage;
+    const positive = metric.positive_gap_percentage;
+
+    negativePercentage.push({
+      x: quarter - 1,
+      y: negative,
+    });
+
+    positivePercentage.push({
+      x: quarter - 1,
+      y: positive,
+    });
+  }
+
+  chartData.push({
+    name: 'Sufficient',
+    color: '#B2C0D6',
+    data: positivePercentage,
+  });
+
+  chartData.push({
+    name: 'Insufficient',
+    color: '#1e3c72',
+    data: negativePercentage,
+  });
+
+  return chartData;
 };
 
 export const getCapacityChartData = (data = []) => {
@@ -120,16 +158,16 @@ export const getCapacityChartData = (data = []) => {
   }
 
   chartData.push({
-    name: "Total Available Litres",
-    type: "column",
-    color: "#1e3c72",
+    name: 'Total Available Litres',
+    type: 'column',
+    color: '#1e3c72',
     data: totalAvailable,
   });
 
   chartData.push({
-    name: "Total Required Litres",
-    type: "column",
-    color: "#B2C0D6",
+    name: 'Total Required Litres',
+    type: 'column',
+    color: '#B2C0D6',
     data: totalRequired,
   });
 
@@ -152,22 +190,22 @@ export const getOptimalityChartData = (data = []) => {
 
     CCEOptimal[0] === undefined
       ? CCEOptimal.push({
-          name: "Available CCEs",
+          name: 'Available CCEs',
           data: [total_optimal],
           stack: quarter,
-          color: "#B2C0D6",
-          dashStyle: "Dash",
+          color: '#B2C0D6',
+          dashStyle: 'Dash',
         })
-      : CCEOptimal[0]["data"].push(total_optimal);
+      : CCEOptimal[0]['data'].push(total_optimal);
 
     CCEOverallTotal[0] === undefined
       ? CCEOverallTotal.push({
-          name: "Required CCEs",
+          name: 'Required CCEs',
           data: [total_overall],
           stack: quarter,
-          color: "#1e3c72",
+          color: '#1e3c72',
         })
-      : CCEOverallTotal[0]["data"].push(total_overall);
+      : CCEOverallTotal[0]['data'].push(total_overall);
   }
 
   chartData.push(...CCEOverallTotal, ...CCEOptimal);
@@ -193,65 +231,65 @@ export const getFunctionalityChartData = (data = [], type) => {
     const notworking = metric.not_working;
     const needsrepair = metric.needs_repair;
 
-    if (type === "bar") {
+    if (type === 'bar') {
       // If we dont have any working data (first run), create the object with other properties
       // If we have data, just append the working metric to the data key
       workingData[0] === undefined
         ? workingData.push({
-            name: "Working",
+            name: 'Working',
             data: [working],
             stack: quarter,
-            color: "#24c53f",
+            color: '#24c53f',
           })
-        : workingData[0]["data"].push(working);
+        : workingData[0]['data'].push(working);
 
       notWorkingData[0] === undefined
         ? notWorkingData.push({
-            name: "Not Working",
+            name: 'Not Working',
             data: [notworking],
             stack: quarter,
-            color: "#FE5C6B",
+            color: '#FE5C6B',
           })
-        : notWorkingData[0]["data"].push(notworking);
+        : notWorkingData[0]['data'].push(notworking);
 
       needsRepairData[0] === undefined
         ? needsRepairData.push({
-            name: "Needs Repair",
+            name: 'Needs Repair',
             data: [needsrepair],
             stack: quarter,
-            color: "#1e3c72",
+            color: '#1e3c72',
           })
-        : needsRepairData[0]["data"].push(needsrepair);
-    } else if (type === "pie") {
+        : needsRepairData[0]['data'].push(needsrepair);
+    } else if (type === 'pie') {
       workingData.push(working);
       notWorkingData.push(notworking);
       needsRepairData.push(needsrepair);
     }
   }
 
-  if (type === "bar") {
+  if (type === 'bar') {
     chartData.push(...workingData, ...notWorkingData, ...needsRepairData);
   } else {
     chartData.push({
       data: [
         {
-          name: "Working",
+          name: 'Working',
           y: workingData.reduce((a, b) => a + b, 0),
-          color: "#24c53f",
+          color: '#24c53f',
         },
         {
-          name: "Not Working",
+          name: 'Not Working',
           y: notWorkingData.reduce((a, b) => a + b, 0),
-          color: "#FE5C6B",
+          color: '#FE5C6B',
         },
         {
-          name: "Needs Repair",
+          name: 'Needs Repair',
           y: needsRepairData.reduce((a, b) => a + b, 0),
-          color: "#1e3c72",
+          color: '#1e3c72',
         },
       ],
-      size: "80%",
-      innerSize: "80%",
+      size: '80%',
+      innerSize: '80%',
       showInLegend: false,
       dataLabels: {
         enabled: false,

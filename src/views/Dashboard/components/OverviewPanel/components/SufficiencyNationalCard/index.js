@@ -8,22 +8,22 @@ import ColdChainCard from '../ColdChainCard/index';
 const backgroundImage = 'linear-gradient(0deg,#1e3c72 0,#1e3c72 1%,#2a5298)';
 
 const SufficiencyNationalCard = () => {
-  const { coldChainCapacityData } = useContext(OverviewContext);
+  const { coldChainOverviewData } = useContext(OverviewContext);
 
-  const { isLoading } = coldChainCapacityData;
-  const totalAvailableLiters = new Intl.NumberFormat('lg-UG').format(
-    coldChainCapacityData?.capacityMetricsChartData?.overall_total_available,
-  );
+  const { isLoading } = coldChainOverviewData;
+
+  const sufficiencyAtNational =
+    coldChainOverviewData?.coldChainOverviewData
+      ?.sufficiency_percentage_at_sites;
 
   return (
     <ColdChainCard
       title={'Sufficiency (Nationally across all sites)'}
-      metric={'80'}
-      // sign={'%'}
+      metric={sufficiencyAtNational}
+      type='advanced'
       isPercentage={true}
       backgroundImage={backgroundImage}
       isLoading={isLoading}
-      // icon={"UGMap"}
     />
   );
 };

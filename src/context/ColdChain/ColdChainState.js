@@ -1,13 +1,13 @@
-import React, { useContext, createContext, useReducer } from "react";
-import axios from "axios";
+import React, { useContext, createContext, useReducer } from 'react';
+import axios from 'axios';
 
-import ColdChainReducer from "./reducer";
-import { port, date } from "../GlobalState";
+import ColdChainReducer from './reducer';
+import { port, date } from '../GlobalState';
 
 // Bring in our Overview context
-import { OverviewContext } from "../../context/Overview/OverviewState";
+import { OverviewContext } from '../../context/Overview/OverviewState';
 
-const apiEndpoint = require("../../env_config").default;
+const apiEndpoint = require('../../env_config').default;
 
 // Cold Chain Years
 const generateColdChainYears = () => {
@@ -20,19 +20,19 @@ const generateColdChainYears = () => {
 };
 
 const CARE_LEVELS = [
-  "District Store",
+  'District Store',
 
-  "Public HCIV",
+  'Public HCIV',
 
-  "Public HCII",
+  'Public HCII',
 
-  "Public HCIII",
+  'Public HCIII',
 
-  "NGO Hospital",
+  'NGO Hospital',
 
-  "Public Hospital",
+  'Public Hospital',
 
-  "NGO HCIII",
+  'NGO HCIII',
 ];
 
 const initialColdChainState = {
@@ -43,8 +43,9 @@ const initialColdChainState = {
   temperatureMonitoring: { isLoading: true },
   coldChainYears: generateColdChainYears(),
   coldChainCareLevels: CARE_LEVELS,
-  defaultCareLevel: "District Store",
-  district: "national",
+  defaultCareLevel: 'District Store',
+  district: 'national',
+  region: 'National',
 };
 
 // Create context
@@ -62,7 +63,7 @@ export const ColdChainContextProvider = ({ children }) => {
   // Actions
   const getEligibilityData = async (startQuarter, endQuarter, district) => {
     dispatch({
-      type: "LOADING_ELIGIBILITY_DATA",
+      type: 'LOADING_ELIGIBILITY_DATA',
       payload: { isLoading: true },
     });
 
@@ -85,7 +86,7 @@ export const ColdChainContextProvider = ({ children }) => {
       };
 
       dispatch({
-        type: "GET_ELIGIBILITY_DATA",
+        type: 'GET_ELIGIBILITY_DATA',
         payload: payload,
       });
 
@@ -93,8 +94,8 @@ export const ColdChainContextProvider = ({ children }) => {
       getEligibilityColdChainData(payload);
     } catch (err) {
       dispatch({
-        type: "GET_ELIGIBILITY_DATA_ERROR",
-        payload: "An error occured getting eligibility data from backend",
+        type: 'GET_ELIGIBILITY_DATA_ERROR',
+        payload: 'An error occured getting eligibility data from backend',
       });
     }
   };
@@ -106,7 +107,7 @@ export const ColdChainContextProvider = ({ children }) => {
     careLevel,
   ) => {
     dispatch({
-      type: "LOADING_FUNCTIONALITY_DATA",
+      type: 'LOADING_FUNCTIONALITY_DATA',
       payload: { isLoading: true },
     });
 
@@ -130,7 +131,7 @@ export const ColdChainContextProvider = ({ children }) => {
 
       //   Dispatch
       dispatch({
-        type: "GET_FUNCTIONALITY_DATA",
+        type: 'GET_FUNCTIONALITY_DATA',
         payload: payload,
       });
 
@@ -138,8 +139,8 @@ export const ColdChainContextProvider = ({ children }) => {
       getFunctionalityColdChainData(payload);
     } catch (err) {
       dispatch({
-        type: "GET_ELIGIBILITY_DATA_ERROR",
-        payload: "An error occured getting eligibility data from backend",
+        type: 'GET_ELIGIBILITY_DATA_ERROR',
+        payload: 'An error occured getting eligibility data from backend',
       });
     }
   };
@@ -151,7 +152,7 @@ export const ColdChainContextProvider = ({ children }) => {
     careLevel,
   ) => {
     dispatch({
-      type: "LOADING_CAPACITY_DATA",
+      type: 'LOADING_CAPACITY_DATA',
       payload: { isLoading: true },
     });
 
@@ -175,7 +176,7 @@ export const ColdChainContextProvider = ({ children }) => {
       };
       //   Dispatch
       dispatch({
-        type: "GET_CAPACITY_DATA",
+        type: 'GET_CAPACITY_DATA',
         payload: payload,
       });
 
@@ -183,15 +184,15 @@ export const ColdChainContextProvider = ({ children }) => {
       getCapacityColdChainData(payload);
     } catch (err) {
       dispatch({
-        type: "GET_CAPACITY_DATA_ERROR",
-        payload: "An error occured getting capacity data from backend",
+        type: 'GET_CAPACITY_DATA_ERROR',
+        payload: 'An error occured getting capacity data from backend',
       });
     }
   };
 
   const getOptimalityData = async (year, district, careLevel) => {
     dispatch({
-      type: "LOADING_OPTIMALITY_DATA",
+      type: 'LOADING_OPTIMALITY_DATA',
       payload: { isLoading: true },
     });
 
@@ -215,20 +216,20 @@ export const ColdChainContextProvider = ({ children }) => {
 
       //   Dispatch
       dispatch({
-        type: "GET_OPTIMALITY_DATA",
+        type: 'GET_OPTIMALITY_DATA',
         payload: payload,
       });
     } catch (err) {
       dispatch({
-        type: "GET_OPTIMALITY_DATA_ERROR",
-        payload: "An error occured getting optimality data from backend",
+        type: 'GET_OPTIMALITY_DATA_ERROR',
+        payload: 'An error occured getting optimality data from backend',
       });
     }
   };
 
-  const getTemperatureMonitoringData = async (year, district) => {
+  const getTemperatureMonitoringData = async (year, district, region) => {
     dispatch({
-      type: "LOADING_TEMPERATURE_DATA",
+      type: 'LOADING_TEMPERATURE_DATA',
       payload: { isLoading: true },
     });
 
@@ -242,7 +243,7 @@ export const ColdChainContextProvider = ({ children }) => {
       );
 
       const temperatureMonitoringReportingRatesData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/tempreportingratestats?district=${district}&year=${year}`,
+        `http://${apiEndpoint}${port}/coldchain/api/tempreportingratestats?district=${district}&year=${year}&region=${region}`,
       );
 
       const payload = {
@@ -254,18 +255,19 @@ export const ColdChainContextProvider = ({ children }) => {
           temperatureMonitoringReportingRatesData.data,
         district,
         year,
+        region,
         isLoading: false,
       };
 
       //   Dispatch
       dispatch({
-        type: "GET_TEMPERATURE_MONITORING_DATA",
+        type: 'GET_TEMPERATURE_MONITORING_DATA',
         payload: payload,
       });
     } catch (err) {
       dispatch({
-        type: "GET_TEMPERATURE_MONITORING_DATA_ERROR",
-        payload: "An error occured getting optimality data from backend",
+        type: 'GET_TEMPERATURE_MONITORING_DATA_ERROR',
+        payload: 'An error occured getting optimality data from backend',
       });
     }
   };
@@ -280,6 +282,7 @@ export const ColdChainContextProvider = ({ children }) => {
         coldChainCareLevels: state.coldChainCareLevels,
         coldChainYears: state.coldChainYears,
         district: state.district,
+        region: state.region,
         defaultCareLevel: state.defaultCareLevel,
         getEligibilityData,
         getFunctionalityData,

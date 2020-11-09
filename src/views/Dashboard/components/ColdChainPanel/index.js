@@ -120,14 +120,16 @@ const BootstrapInput = withStyles((theme) => ({
 
 export function ColdChainPanel() {
   const classes = useStyles();
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(4);
 
   // Extract required global state variables
   const {
     currentYear,
+    regions,
     districts,
     quarters,
     getDistricts,
+    getRegions,
     getQuarters,
   } = useContext(GlobalContext);
 
@@ -141,6 +143,7 @@ export function ColdChainPanel() {
     getOptimalityData,
     getTemperatureMonitoringData,
     district,
+    region,
     defaultCareLevel,
   } = useContext(ColdChainContext);
 
@@ -149,6 +152,7 @@ export function ColdChainPanel() {
   };
 
   useEffect(() => {
+    getRegions();
     getDistricts();
     getQuarters();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -211,10 +215,7 @@ export function ColdChainPanel() {
 
   // Capacity
   const [capacityDistrict, setCapacityDistrict] = useState(district);
-  const [capacityCareLevel, setCapacityCareLevel] = useState(
-    // coldChainCareLevels[0]
-    defaultCareLevel,
-  );
+  const [capacityCareLevel, setCapacityCareLevel] = useState(defaultCareLevel);
 
   const [capacityStartQuarter, setCapacityStartQuarter] = useState(
     `${currentYear - 1}01`,
@@ -244,7 +245,6 @@ export function ColdChainPanel() {
 
   const [optimalityDistrict, setOptimalityDistrict] = useState(district);
   const [optimalityCareLevel, setOptimalityCareLevel] = useState(
-    // coldChainCareLevels[0]
     defaultCareLevel,
   );
 
@@ -257,22 +257,44 @@ export function ColdChainPanel() {
   }, [optimalityYear, optimalityDistrict, optimalityCareLevel]);
 
   // Temperature Monitoring
+
+  const [
+    temperatureMonitoringDistricts,
+    setTemperatureMonitoringDistricts,
+  ] = useState(districts);
+
+  // console.log(temperatureMonitoringDistricts);
+
+  const [
+    temperatureMonitoringRegion,
+    setTemperatureMonitoringRegion,
+  ] = useState(region);
+
   const [
     temperatureMonitoringDistrict,
     setTemperatureMonitoringDistrict,
   ] = useState(district);
+
   const [temperatureMonitoringYear, setTemperatureMonitoringYear] = useState(
     `${currentYear}`,
   );
 
-  // Fetch Optimality Data
+  // Fetch Temperature Monitoring Data
   useEffect(() => {
     getTemperatureMonitoringData(
       temperatureMonitoringYear,
       temperatureMonitoringDistrict,
+      temperatureMonitoringRegion,
     );
+
+    getDistricts(temperatureMonitoringRegion);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [temperatureMonitoringDistrict, temperatureMonitoringYear]);
+  }, [
+    temperatureMonitoringDistrict,
+    temperatureMonitoringYear,
+    temperatureMonitoringRegion,
+  ]);
 
   // -----------------------------------------------------------------------
   // Eligibility  Filters
@@ -436,6 +458,12 @@ export function ColdChainPanel() {
     </MenuItem>
   ));
 
+  const temperatureMonitoringRegionFilter = regions?.map((region) => (
+    <MenuItem value={region} key={region} className={classes.liItems}>
+      {region}
+    </MenuItem>
+  ));
+
   return (
     <div>
       <Grid container spacing={3}>
@@ -537,9 +565,7 @@ export function ColdChainPanel() {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              <b className={classes.toolTip}>
-                                {'Text goes here'}
-                              </b>
+                              <b className={classes.toolTip}></b>
                             </Typography>
                           </React.Fragment>
                         }
@@ -557,9 +583,7 @@ export function ColdChainPanel() {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              <b className={classes.toolTip}>
-                                {'Text goes here'}
-                              </b>
+                              <b className={classes.toolTip}></b>
                             </Typography>
                           </React.Fragment>
                         }
@@ -969,13 +993,42 @@ export function ColdChainPanel() {
                     margin='dense'
                   >
                     <InputLabel
+                      htmlFor='Region'
+                      className={classes.selectorLables}
+                    >
+                      Region
+                    </InputLabel>
+                    <Select
+                      renderValue={(selected) => selected}
+                      className={classes.selector_background}
+                      value={temperatureMonitoringRegion}
+                      onChange={(event) => {
+                        setTemperatureMonitoringRegion(event.target.value);
+                        // setTemperatureMonitoringDistricts(
+                        //   getDistricts(event.target.value),
+                        // );
+                      }}
+                      inputProps={{
+                        name: 'TM_region_selector',
+                        id: 'TM_region_selector',
+                      }}
+                    >
+                      {temperatureMonitoringRegionFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    className={classes.formControl}
+                    variant='outlined'
+                    margin='dense'
+                  >
+                    <InputLabel
                       htmlFor='District'
                       className={classes.selectorLables}
                     >
                       District
                     </InputLabel>
                     <Select
-                      renderValue={(selected) => 'National'}
+                      renderValue={(selected) => selected}
                       className={classes.selector_background}
                       value={temperatureMonitoringDistrict}
                       onChange={(event) =>
@@ -1009,7 +1062,6 @@ export function ColdChainPanel() {
           <TabPanel value={value} index={3}>
             <ColdChain parentTab={'optimality'} />
           </TabPanel>
-
           <TabPanel value={value} index={4}>
             <ColdChain parentTab={'temperatureMonitoring'} />
           </TabPanel>

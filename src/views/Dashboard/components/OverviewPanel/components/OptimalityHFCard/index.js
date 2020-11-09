@@ -9,18 +9,18 @@ const backgroundImage =
   'linear-gradient(0deg, rgba(255,192,0,1) 0%, rgba(241,214,130,1) 100%)';
 
 const OptimalityHFCard = () => {
-  const { coldChainCapacityData } = useContext(OverviewContext);
+  const { coldChainOverviewData } = useContext(OverviewContext);
 
-  const { isLoading } = coldChainCapacityData;
+  const { isLoading } = coldChainOverviewData;
 
-  const capacity_shortage_negative =
-    coldChainCapacityData?.capacityMetricsChartData?.gap_metrics
-      .negative_gap_percentage;
+  const optimalityAtHF =
+    coldChainOverviewData?.coldChainOverviewData?.optimality_percentage_at_hfs;
 
   return (
     <ColdChainCard
-      title={'Sufficiency (at HF only)'}
-      metric={'55'}
+      title={'Optimality (at HF only)'}
+      metric={optimalityAtHF}
+      type='advanced'
       isPercentage={true}
       backgroundImage={backgroundImage}
       isLoading={isLoading}

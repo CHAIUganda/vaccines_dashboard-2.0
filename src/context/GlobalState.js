@@ -1,61 +1,62 @@
-import React, { createContext, useReducer } from "react";
-import axios from "axios";
-import Cookies from "js-cookie";
-import AppReducer from "./AppReducer";
+import React, { createContext, useReducer } from 'react';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import AppReducer from './AppReducer';
 
-const apiEndpoint = require("../env_config").default;
+const apiEndpoint = require('../env_config').default;
 const sessionStorage = window.sessionStorage;
-const token = sessionStorage.getItem("token");
+const token = sessionStorage.getItem('token');
 
 const OPTIONS = {
-  "Content-Type": "application/json",
-  Authorization: "Token " + token,
+  'Content-Type': 'application/json',
+  Authorization: 'Token ' + token,
 };
 
 const OPTIONS_UNSECURE = {
-  "Content-Type": "application/json",
+  'Content-Type': 'application/json',
 };
 
 // Because the backend on the production runs on port 80 (default port)
 export const port =
-  apiEndpoint === "localhost" || apiEndpoint === "104.197.111.191"
-    ? ":9000"
-    : "";
+  apiEndpoint === 'localhost' || apiEndpoint === '104.197.111.191'
+    ? ':9000'
+    : '';
 
 // Variables
-export const district = "national";
+export const district = 'national';
 export const date = new Date();
 
 // Initial state for APP.
 const initialState = {
   activeTab: 0,
   districts: [],
+  regions: [],
   vaccines: [],
   quarters: [],
   activeDistrict: district,
   error: null,
   loading: true,
   currentYear: date.getFullYear(),
-  isAuthenticated: sessionStorage.getItem("token") === null ? false : true,
-  token: sessionStorage.getItem("token"),
-  loggedInUser: sessionStorage.getItem("email"),
-  isSuperUser: sessionStorage.getItem("isSuperUser") === "true" ? true : false,
-  imcID: sessionStorage.getItem("imcID"),
+  isAuthenticated: sessionStorage.getItem('token') === null ? false : true,
+  token: sessionStorage.getItem('token'),
+  loggedInUser: sessionStorage.getItem('email'),
+  isSuperUser: sessionStorage.getItem('isSuperUser') === 'true' ? true : false,
+  imcID: sessionStorage.getItem('imcID'),
   userISC: [],
   users: [],
   months: [
-    { key: 1, month: "Jan" },
-    { key: 2, month: "Feb" },
-    { key: 3, month: "Mar" },
-    { key: 4, month: "Apr" },
-    { key: 5, month: "May" },
-    { key: 6, month: "Jun" },
-    { key: 7, month: "Jul" },
-    { key: 8, month: "Aug" },
-    { key: 9, month: "Sep" },
-    { key: 10, month: "Oct" },
-    { key: 11, month: "Nov" },
-    { key: 12, month: "Dec" },
+    { key: 1, month: 'Jan' },
+    { key: 2, month: 'Feb' },
+    { key: 3, month: 'Mar' },
+    { key: 4, month: 'Apr' },
+    { key: 5, month: 'May' },
+    { key: 6, month: 'Jun' },
+    { key: 7, month: 'Jul' },
+    { key: 8, month: 'Aug' },
+    { key: 9, month: 'Sep' },
+    { key: 10, month: 'Oct' },
+    { key: 11, month: 'Nov' },
+    { key: 12, month: 'Dec' },
   ],
 };
 
@@ -72,20 +73,20 @@ export const GlobalStateProvider = ({ children }) => {
   const getUserISCs = async () => {
     try {
       const ISCdata = await axios.get(
-        `http://${apiEndpoint}${port}/performance_management/api/immunizationcomponents`
+        `http://${apiEndpoint}${port}/performance_management/api/immunizationcomponents`,
       );
 
       // const ISC = ["All", ...ISCdata.data.results.map((isc) => isc.name)];
       const ISC = [...ISCdata.data.results];
 
       dispatch({
-        type: "GET_USER_ISCs",
+        type: 'GET_USER_ISCs',
         payload: ISC,
       });
     } catch (err) {
       dispatch({
-        type: "GET_USER_ISCs_ERROR",
-        payload: "An error occured getting ISCs from backend",
+        type: 'GET_USER_ISCs_ERROR',
+        payload: 'An error occured getting ISCs from backend',
       });
     }
   };
@@ -93,34 +94,73 @@ export const GlobalStateProvider = ({ children }) => {
   const getVaccines = async () => {
     try {
       const vaccines = await axios.get(
-        `http://${apiEndpoint}${port}/api/vaccines`
+        `http://${apiEndpoint}${port}/api/vaccines`,
       );
 
       const VACCINES = vaccines.data.map((vaccines) => vaccines.name);
 
       dispatch({
-        type: "GET_VACCINES",
+        type: 'GET_VACCINES',
         payload: VACCINES,
       });
     } catch (err) {
       dispatch({
-        type: "GET_VACCINES_ERROR",
-        payload: "An error occured getting vaccines from backend",
+        type: 'GET_VACCINES_ERROR',
+        payload: 'An error occured getting vaccines from backend',
       });
     }
   };
 
-  const getDistricts = async () => {
+  const getDistricts = async (region) => {
+    // console.log(region ? `We have region ${region}` : 'No region');
+
     try {
       const res = await axios.get(`http://${apiEndpoint}${port}/api/districts`);
-      dispatch({
-        type: "GET_DISTRICTS",
-        payload: res.data,
-      });
+
+      // const districts = [
+      //   'National',
+      //   ...res.data.map((district) => district.name),
+      // ];
+
+      if (region) {
+        const districtsInRegion = res.data.filter(
+          (district) => district.region__name === region,
+        );
+
+        dispatch({
+          type: 'GET_DISTRICTS',
+          payload: districtsInRegion,
+        });
+      } else {
+        dispatch({
+          type: 'GET_DISTRICTS',
+          payload: res.data,
+        });
+      }
     } catch (err) {
       dispatch({
-        type: "GET_DISTRICTS_ERROR",
-        payload: "An error occured getting districts from backend",
+        type: 'GET_DISTRICTS_ERROR',
+        payload: 'An error occured getting districts from backend',
+      });
+    }
+  };
+
+  const getRegions = async () => {
+    try {
+      const res = await axios.get(
+        `http://${apiEndpoint}${port}/coldchain/api/regions`,
+      );
+
+      const regions = ['National', ...res.data.map((region) => region.name)];
+
+      dispatch({
+        type: 'GET_REGIONS',
+        payload: regions,
+      });
+    } catch (error) {
+      dispatch({
+        type: 'GET_REGIONS_ERROR',
+        payload: 'An error occured getting regions from backend',
       });
     }
   };
@@ -128,23 +168,23 @@ export const GlobalStateProvider = ({ children }) => {
   const getQuarters = async () => {
     try {
       const res = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/quarters`
+        `http://${apiEndpoint}${port}/coldchain/api/quarters`,
       );
       dispatch({
-        type: "GET_QUARTERS",
+        type: 'GET_QUARTERS',
         payload: res.data,
       });
     } catch (err) {
       dispatch({
-        type: "GET_QUARTERS_ERROR",
-        payload: "An error occured getting districts from backend",
+        type: 'GET_QUARTERS_ERROR',
+        payload: 'An error occured getting districts from backend',
       });
     }
   };
 
   const getAllUsers = async () => {
     dispatch({
-      type: "LOADING_ALL_USERS",
+      type: 'LOADING_ALL_USERS',
       payload: { isLoading: true },
     });
 
@@ -157,13 +197,13 @@ export const GlobalStateProvider = ({ children }) => {
       // };
 
       dispatch({
-        type: "GET_USERS",
+        type: 'GET_USERS',
         payload: res.data.results,
       });
     } catch (err) {
       dispatch({
-        type: "GET_USERS_ERROR",
-        payload: "An error occured getting users from backend",
+        type: 'GET_USERS_ERROR',
+        payload: 'An error occured getting users from backend',
       });
     }
   };
@@ -188,18 +228,18 @@ export const GlobalStateProvider = ({ children }) => {
         ?.filter((user) => user?.email === email)
         ?.map((imc) => imc?.immunization_component?.id);
 
-      sessionStorage.removeItem("email");
-      sessionStorage.removeItem("token");
-      sessionStorage.removeItem("isSuperUser");
-      sessionStorage.removeItem("imcID");
+      sessionStorage.removeItem('email');
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('isSuperUser');
+      sessionStorage.removeItem('imcID');
 
-      sessionStorage.setItem("email", email);
-      sessionStorage.setItem("token", _data.data.auth_token);
-      sessionStorage.setItem("isSuperUser", isSuperUser[0]);
-      sessionStorage.setItem("imcID", parseInt(imcID[0]));
+      sessionStorage.setItem('email', email);
+      sessionStorage.setItem('token', _data.data.auth_token);
+      sessionStorage.setItem('isSuperUser', isSuperUser[0]);
+      sessionStorage.setItem('imcID', parseInt(imcID[0]));
 
       dispatch({
-        type: "LOG_IN",
+        type: 'LOG_IN',
         payload: {
           token: _data.data.auth_token,
           isAuthenticated: true,
@@ -210,9 +250,9 @@ export const GlobalStateProvider = ({ children }) => {
       });
     } catch (err) {
       dispatch({
-        type: "LOGIN_ERROR",
+        type: 'LOGIN_ERROR',
         payload:
-          "An error occurred logging in. Please check your username and or password!",
+          'An error occurred logging in. Please check your username and or password!',
       });
     }
   };
@@ -226,30 +266,30 @@ export const GlobalStateProvider = ({ children }) => {
         {},
         {
           headers: {
-            "Content-Type": "application/json",
-            Authorization: "Token " + _token,
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + _token,
           },
-        }
+        },
       );
-      sessionStorage.removeItem("email");
-      sessionStorage.removeItem("token");
-      sessionStorage.removeItem("isSuperUser");
-      sessionStorage.removeItem("imcID");
+      sessionStorage.removeItem('email');
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('isSuperUser');
+      sessionStorage.removeItem('imcID');
 
       dispatch({
-        type: "LOG_OUT",
+        type: 'LOG_OUT',
         payload: {
-          token: "",
+          token: '',
           isAuthenticated: false,
-          loggedInUser: "",
+          loggedInUser: '',
           isSuperUser: false,
-          imcID: "",
+          imcID: '',
         },
       });
     } catch (err) {
       dispatch({
-        type: "LOGOUT_ERROR",
-        payload: "An error occurred logging out.",
+        type: 'LOGOUT_ERROR',
+        payload: 'An error occurred logging out.',
       });
     }
   };
@@ -260,84 +300,84 @@ export const GlobalStateProvider = ({ children }) => {
       const _data = await axios.post(registerUserUrl, data);
 
       dispatch({
-        type: "CREATE_USER",
+        type: 'CREATE_USER',
         payload: {},
       });
     } catch (err) {
       dispatch({
-        type: "CREATE_USER_ERROR",
+        type: 'CREATE_USER_ERROR',
         payload:
-          "An error occurred creating a user in. Please check your username and or password!",
+          'An error occurred creating a user in. Please check your username and or password!',
       });
     }
   };
 
   const uploadData = async (payload) => {
-    axios.defaults.xsrfCookieName = "csrftoken";
-    axios.defaults.xsrfHeaderName = "X-CSRFToken";
+    axios.defaults.xsrfCookieName = 'csrftoken';
+    axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
     const { year, module, file, month } = payload;
 
     console.log(
-      `Year: ${year} | Month: ${month} | Module: ${module} | File: ${file}`
+      `Year: ${year} | Month: ${month} | Module: ${module} | File: ${file}`,
     );
 
-    let uploadUrl = "";
+    let uploadUrl = '';
 
     if (
-      module === "plannedTargets" ||
-      module === "coverageTargets" ||
-      module === "coldChain"
+      module === 'plannedTargets' ||
+      module === 'coverageTargets' ||
+      module === 'coldChain'
     ) {
-      module === "plannedTargets"
+      module === 'plannedTargets'
         ? (uploadUrl = `http://${apiEndpoint}${port}/import/generic/planned_targets`)
-        : module === "coverageTargets"
+        : module === 'coverageTargets'
         ? (uploadUrl = `http://${apiEndpoint}${port}/import/generic/coverage_targets`)
         : (uploadUrl = `http://${apiEndpoint}${port}/import/generic/import_coldchainmain`);
 
       const data = new FormData();
-      data.append("data_file", file);
-      data.append("param1", year);
+      data.append('data_file', file);
+      data.append('param1', year);
       try {
         await axios({
           url: uploadUrl,
-          method: "post",
+          method: 'post',
           withCredentials: true,
           data: data,
           headers: {
-            "X-CSRFToken": Cookies.get("csrftoken"),
+            'X-CSRFToken': Cookies.get('csrftoken'),
           },
         });
       } catch (err) {
         console.log(err);
       }
-    } else if (module === "stockManagement") {
+    } else if (module === 'stockManagement') {
       uploadUrl = `http://${apiEndpoint}${port}/import/`;
 
       const data = new FormData();
-      data.append("import_file", file);
-      data.append("year", year);
-      data.append("month", month);
+      data.append('import_file', file);
+      data.append('year', year);
+      data.append('month', month);
 
       try {
         await axios({
           url: uploadUrl,
-          method: "post",
+          method: 'post',
           withCredentials: true,
           data: data,
           headers: {
-            "X-CSRFToken": Cookies.get("csrftoken"),
+            'X-CSRFToken': Cookies.get('csrftoken'),
           },
         });
       } catch (err) {
         console.log(err);
       }
-    } else if (module === "stockManagementMinMax") {
+    } else if (module === 'stockManagementMinMax') {
       uploadUrl = `http://${apiEndpoint}${port}/import/generic/min_max`;
       const data = new FormData();
-      data.append("import_file", file);
-      data.append("year", year);
-      data.append("month", month);
+      data.append('import_file', file);
+      data.append('year', year);
+      data.append('month', month);
 
       // Works but disabled for now
 
@@ -354,22 +394,22 @@ export const GlobalStateProvider = ({ children }) => {
       // } catch (err) {
       //   console.log(err);
       // }
-    } else if (module === "performanceManagement") {
+    } else if (module === 'performanceManagement') {
       uploadUrl = `http://${apiEndpoint}${port}/import/generic/performance_management_performance_management_command`;
       const data = new FormData();
-      data.append("import_file", file);
-      data.append("year", year);
+      data.append('import_file', file);
+      data.append('year', year);
 
       // Works but disabled for now
 
       try {
         await axios({
           url: uploadUrl,
-          method: "post",
+          method: 'post',
           withCredentials: true,
           data: data,
           headers: {
-            "X-CSRFToken": Cookies.get("csrftoken"),
+            'X-CSRFToken': Cookies.get('csrftoken'),
           },
         });
       } catch (err) {
@@ -383,6 +423,7 @@ export const GlobalStateProvider = ({ children }) => {
         activeTab: state.activeTab,
         activeDistrict: state.activeDistrict,
         districts: state.districts,
+        regions: state.regions,
         quarters: state.quarters,
         currentYear: state.currentYear,
         error: state.error,
@@ -398,6 +439,7 @@ export const GlobalStateProvider = ({ children }) => {
         imcID: state.imcID,
         getVaccines,
         getDistricts,
+        getRegions,
         getQuarters,
         getAllUsers,
         getUserISCs,

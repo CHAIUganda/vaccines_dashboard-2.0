@@ -1,46 +1,46 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from 'react';
 
 // Bring in our stock management context
-import { PerformanceManagementContext } from "../../../../context/PerformanceManagement/PerformanceManagementState";
+import { PerformanceManagementContext } from '../../../../context/PerformanceManagement/PerformanceManagementState';
 
 // Material components
-import { Grid } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
-import Tooltip from "@material-ui/core/Tooltip";
-import MenuItem from "@material-ui/core/MenuItem";
-import Switch from "@material-ui/core/Switch";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormLabel from "@material-ui/core/FormLabel";
+import { Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import Tooltip from '@material-ui/core/Tooltip';
+import MenuItem from '@material-ui/core/MenuItem';
+import Switch from '@material-ui/core/Switch';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
 
 // Import Performance Management components.
 
-import ActivityStatusCompletion from "./components/ActivityStatusCompletion/index";
-import FundingStatus from "./components/FundingStatus/index";
+import ActivityStatusCompletion from './components/ActivityStatusCompletion/index';
+import FundingStatus from './components/FundingStatus/index';
 // import Activities from "./components/Activities/index";
-import Activities2 from "./components/Activities/index2";
+import Activities2 from './components/Activities/index2';
 
 // Import common styles
-import { useStyles } from "../styles";
+import { useStyles } from '../styles';
 
 // Shared components
 
 const CustomSwitch = withStyles({
   switchBase: {
-    color: "white",
-    "&$checked": {
-      color: "#4E596A",
+    color: 'white',
+    '&$checked': {
+      color: '#4E596A',
     },
-    "&$checked + $track": {
-      backgroundColor: "#4E596A",
+    '&$checked + $track': {
+      backgroundColor: '#4E596A',
     },
   },
   checked: {},
@@ -52,8 +52,8 @@ function TabPanel(props) {
 
   return (
     <Typography
-      component="div"
-      role="tabpanel"
+      component='div'
+      role='tabpanel'
       hidden={value !== index}
       id={`performance-management-keymetrics-tabpanel-${index}`}
       aria-labelledby={`performance-management-keymetrics-tab-${index}`}
@@ -67,34 +67,34 @@ function TabPanel(props) {
 function a11yProps(index) {
   return {
     id: `performance-management-keymetrics-tab-${index}`,
-    "aria-controls": `performance-management-keymetrics-tabpanel-${index}`,
+    'aria-controls': `performance-management-keymetrics-tabpanel-${index}`,
   };
 }
 
 const HtmlTooltip = withStyles((theme) => ({
   tooltip: {
-    backgroundColor: "#f5f5f9",
-    color: "rgba(0, 0, 0, 0.87)",
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
     maxWidth: 220,
     fontSize: theme.typography.pxToRem(12),
-    border: "1px solid #dadde9",
+    border: '1px solid #dadde9',
   },
 }))(Tooltip);
 
 const TabStyle = withStyles((theme) => ({
   root: {
-    textTransform: "none",
+    textTransform: 'none',
     fontWeight: theme.typography.fontWeightBold,
     fontSize: 12,
-    color: "#28354A",
-    "&:hover": {
-      backgroundColor: "#4E596A",
-      color: "white",
+    color: '#28354A',
+    '&:hover': {
+      backgroundColor: '#4E596A',
+      color: 'white',
       opacity: 1,
     },
-    "&$selected": {
-      backgroundColor: "#4E596A",
-      color: "white",
+    '&$selected': {
+      backgroundColor: '#4E596A',
+      color: 'white',
       fontWeight: theme.typography.fontWeightMedium,
       fontSize: 12,
     },
@@ -387,7 +387,7 @@ export function PerformanceManagementPanel() {
     <div>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant='h6' className={classes.title}>
             Key Metrics
           </Typography>
         </Grid>
@@ -395,14 +395,14 @@ export function PerformanceManagementPanel() {
       <Grid item xs={12}>
         <Grid container spacing={3}>
           <Grid item lg={6} md={6} xl={6} xs={12}>
-            <AppBar position="static" className={classes.appBar} elevation={0}>
+            <AppBar position='static' className={classes.appBar} elevation={0}>
               <Tabs
                 value={value}
                 onChange={handleChange}
-                aria-label="Cold Chain Key metrics"
+                aria-label='Cold Chain Key metrics'
                 className={classes.tabs}
                 TabIndicatorProps={{
-                  style: { backgroundColor: "#4E596A" },
+                  style: { backgroundColor: '#4E596A' },
                 }}
               >
                 <TabStyle
@@ -411,8 +411,8 @@ export function PerformanceManagementPanel() {
                     <HtmlTooltip
                       title={
                         <React.Fragment>
-                          <Typography color="inherit">
-                            <b> {"Help text goes here"}</b>
+                          <Typography color='inherit'>
+                            <b> {''}</b>
                           </Typography>
                         </React.Fragment>
                       }
@@ -429,8 +429,8 @@ export function PerformanceManagementPanel() {
                     <HtmlTooltip
                       title={
                         <React.Fragment>
-                          <Typography color="inherit">
-                            <b>{"Help text goes here"}</b>
+                          <Typography color='inherit'>
+                            <b>{''}</b>
                           </Typography>
                         </React.Fragment>
                       }
@@ -447,8 +447,8 @@ export function PerformanceManagementPanel() {
                     <HtmlTooltip
                       title={
                         <React.Fragment>
-                          <Typography color="inherit">
-                            <b> {"Help text goes here"}</b>
+                          <Typography color='inherit'>
+                            <b> {''}</b>
                           </Typography>
                         </React.Fragment>
                       }
@@ -485,11 +485,11 @@ export function PerformanceManagementPanel() {
               <div className={classes.filters2}>
                 <FormControl
                   className={classes.formControl}
-                  variant="outlined"
-                  margin="dense"
+                  variant='outlined'
+                  margin='dense'
                 >
                   <InputLabel
-                    htmlFor="FSStartQuarter"
+                    htmlFor='FSStartQuarter'
                     className={classes.selectorLables}
                   >
                     Start Quarter
@@ -501,8 +501,8 @@ export function PerformanceManagementPanel() {
                       setFundingStatusStartQuarter(event.target.value)
                     }
                     inputProps={{
-                      name: "FSStartQuarter_selector",
-                      id: "FSStartQuarter_selector",
+                      name: 'FSStartQuarter_selector',
+                      id: 'FSStartQuarter_selector',
                     }}
                   >
                     {fundingStatusStartQuarterFilter}
@@ -511,11 +511,11 @@ export function PerformanceManagementPanel() {
 
                 <FormControl
                   className={classes.formControl}
-                  variant="outlined"
-                  margin="dense"
+                  variant='outlined'
+                  margin='dense'
                 >
                   <InputLabel
-                    htmlFor="FSEndQuarter"
+                    htmlFor='FSEndQuarter'
                     className={classes.selectorLables}
                   >
                     End Quarter
@@ -527,8 +527,8 @@ export function PerformanceManagementPanel() {
                       setFundingStatusEndQuarter(event.target.value)
                     }
                     inputProps={{
-                      name: "FSEndQuarter_selector",
-                      id: "FSEndQuarter_selector",
+                      name: 'FSEndQuarter_selector',
+                      id: 'FSEndQuarter_selector',
                     }}
                   >
                     {fundingStatusEndQuarterFilter}
@@ -536,11 +536,11 @@ export function PerformanceManagementPanel() {
                 </FormControl>
                 <FormControl
                   className={classes.formControl}
-                  variant="outlined"
-                  margin="dense"
+                  variant='outlined'
+                  margin='dense'
                 >
                   <InputLabel
-                    htmlFor="FSourceOrg"
+                    htmlFor='FSourceOrg'
                     className={classes.selectorLables}
                   >
                     Funding Source
@@ -552,8 +552,8 @@ export function PerformanceManagementPanel() {
                       setFundingStatusFundingSourceOrg(event.target.value)
                     }
                     inputProps={{
-                      name: "FSourceORG_selector",
-                      id: "FSourceORG_selector",
+                      name: 'FSourceORG_selector',
+                      id: 'FSourceORG_selector',
                     }}
                   >
                     {fundingStatusFundingSourceOrgFilter}
@@ -561,11 +561,11 @@ export function PerformanceManagementPanel() {
                 </FormControl>
                 <FormControl
                   className={classes.formControl}
-                  variant="outlined"
-                  margin="dense"
+                  variant='outlined'
+                  margin='dense'
                 >
                   <InputLabel
-                    htmlFor="FSOrg"
+                    htmlFor='FSOrg'
                     className={classes.selectorLables}
                     style={{ width: 180 }}
                   >
@@ -578,22 +578,22 @@ export function PerformanceManagementPanel() {
                       setFundingStatusOrg(event.target.value)
                     }
                     inputProps={{
-                      name: "FSORG_selector",
-                      id: "FSORG_selector",
+                      name: 'FSORG_selector',
+                      id: 'FSORG_selector',
                     }}
                   >
                     {fundingStatusOrgFilter}
                   </Select>
                 </FormControl>
                 <FormControl
-                  component="fieldset"
+                  component='fieldset'
                   className={classes.switchFormControl}
                 >
-                  <FormLabel component="legend" className={classes.switchLable}>
+                  <FormLabel component='legend' className={classes.switchLable}>
                     Funding Status
                   </FormLabel>
                   <FormGroup
-                    aria-label="position"
+                    aria-label='position'
                     row
                     className={classes.switch}
                   >
@@ -604,26 +604,26 @@ export function PerformanceManagementPanel() {
                       value={fundingStatusStatus}
                       control={
                         <CustomSwitch
-                          size="small"
+                          size='small'
                           checked={fundingStatusStatus}
                           onChange={() =>
                             setFundingStatusStatus(!fundingStatusStatus)
                           }
                         />
                       }
-                      label="Secured"
-                      labelPlacement="start"
-                      style={{ fontSize: "small", color: "#28354A" }}
+                      label='Secured'
+                      labelPlacement='start'
+                      style={{ fontSize: 'small', color: '#28354A' }}
                     />
                   </FormGroup>
                 </FormControl>
                 <FormControl
                   className={classes.formControl}
-                  variant="outlined"
-                  margin="dense"
+                  variant='outlined'
+                  margin='dense'
                 >
                   <InputLabel
-                    htmlFor="FSISC"
+                    htmlFor='FSISC'
                     className={classes.selectorLables}
                   >
                     ISC
@@ -635,8 +635,8 @@ export function PerformanceManagementPanel() {
                       setFundingStatusISC(event.target.value)
                     }
                     inputProps={{
-                      name: "FSISC_selector",
-                      id: "FSISC_selector",
+                      name: 'FSISC_selector',
+                      id: 'FSISC_selector',
                     }}
                     style={{ maxWidth: 135 }}
                   >
@@ -649,11 +649,11 @@ export function PerformanceManagementPanel() {
               <div className={classes.filters2}>
                 <FormControl
                   className={classes.formControl}
-                  variant="outlined"
-                  margin="dense"
+                  variant='outlined'
+                  margin='dense'
                 >
                   <InputLabel
-                    htmlFor="ACSStartQuarter"
+                    htmlFor='ACSStartQuarter'
                     className={classes.selectorLables}
                   >
                     Start Quarter
@@ -667,8 +667,8 @@ export function PerformanceManagementPanel() {
                       )
                     }
                     inputProps={{
-                      name: "ACSStartQuarter_selector",
-                      id: "ACSStartQuarter_selector",
+                      name: 'ACSStartQuarter_selector',
+                      id: 'ACSStartQuarter_selector',
                     }}
                   >
                     {activityCompletionStatusStartQuarterFilter}
@@ -676,11 +676,11 @@ export function PerformanceManagementPanel() {
                 </FormControl>
                 <FormControl
                   className={classes.formControl}
-                  variant="outlined"
-                  margin="dense"
+                  variant='outlined'
+                  margin='dense'
                 >
                   <InputLabel
-                    htmlFor="ACSEndQuarter"
+                    htmlFor='ACSEndQuarter'
                     className={classes.selectorLables}
                   >
                     End Quarter
@@ -692,8 +692,8 @@ export function PerformanceManagementPanel() {
                       setActivityCompletionStatusEndQuarter(event.target.value)
                     }
                     inputProps={{
-                      name: "ACSEndQuarter_selector",
-                      id: "ACSEndQuarter_selector",
+                      name: 'ACSEndQuarter_selector',
+                      id: 'ACSEndQuarter_selector',
                     }}
                   >
                     {activityCompletionStatusEndQuarterFilter}
@@ -701,11 +701,11 @@ export function PerformanceManagementPanel() {
                 </FormControl>
                 <FormControl
                   className={classes.formControl}
-                  variant="outlined"
-                  margin="dense"
+                  variant='outlined'
+                  margin='dense'
                 >
                   <InputLabel
-                    htmlFor="ACSOrg"
+                    htmlFor='ACSOrg'
                     className={classes.selectorLables}
                     style={{ width: 180 }}
                   >
@@ -718,8 +718,8 @@ export function PerformanceManagementPanel() {
                       setActivityCompletionStatusOrg(event.target.value)
                     }
                     inputProps={{
-                      name: "ACSOrg_selector",
-                      id: "ACSOrg_selector",
+                      name: 'ACSOrg_selector',
+                      id: 'ACSOrg_selector',
                     }}
                   >
                     {activityCompletionStatusOrgFilter}
@@ -727,11 +727,11 @@ export function PerformanceManagementPanel() {
                 </FormControl>
                 <FormControl
                   className={classes.formControl}
-                  variant="outlined"
-                  margin="dense"
+                  variant='outlined'
+                  margin='dense'
                 >
                   <InputLabel
-                    htmlFor="ACSISC"
+                    htmlFor='ACSISC'
                     className={classes.selectorLables}
                   >
                     ISC
@@ -743,8 +743,8 @@ export function PerformanceManagementPanel() {
                       setActivityCompletionStatusISC(event.target.value)
                     }
                     inputProps={{
-                      name: "ACSISC_selector",
-                      id: "ACSISC_selector",
+                      name: 'ACSISC_selector',
+                      id: 'ACSISC_selector',
                     }}
                     style={{ maxWidth: 135 }}
                   >
@@ -757,11 +757,11 @@ export function PerformanceManagementPanel() {
               <div className={classes.filters2}>
                 <FormControl
                   className={classes.formControl}
-                  variant="outlined"
-                  margin="dense"
+                  variant='outlined'
+                  margin='dense'
                 >
                   <InputLabel
-                    htmlFor="ActivityStartQuarter"
+                    htmlFor='ActivityStartQuarter'
                     className={classes.selectorLables}
                   >
                     Start Quarter
@@ -773,8 +773,8 @@ export function PerformanceManagementPanel() {
                       setActivitiesStartQuarter(event.target.value)
                     }
                     inputProps={{
-                      name: "ActivityStartQuarter_selector",
-                      id: "ActivityStartQuarter_selector",
+                      name: 'ActivityStartQuarter_selector',
+                      id: 'ActivityStartQuarter_selector',
                     }}
                   >
                     {activitiesStartQuarterFilter}
@@ -782,11 +782,11 @@ export function PerformanceManagementPanel() {
                 </FormControl>
                 <FormControl
                   className={classes.formControl}
-                  variant="outlined"
-                  margin="dense"
+                  variant='outlined'
+                  margin='dense'
                 >
                   <InputLabel
-                    htmlFor="ActivityEndQuarter"
+                    htmlFor='ActivityEndQuarter'
                     className={classes.selectorLables}
                   >
                     End Quarter
@@ -798,8 +798,8 @@ export function PerformanceManagementPanel() {
                       setActivitiesEndQuarter(event.target.value)
                     }
                     inputProps={{
-                      name: "ActivityEndQuarter_selector",
-                      id: "ActivityEndQuarter_selector",
+                      name: 'ActivityEndQuarter_selector',
+                      id: 'ActivityEndQuarter_selector',
                     }}
                   >
                     {activitiesEndQuarterFilter}
@@ -807,11 +807,11 @@ export function PerformanceManagementPanel() {
                 </FormControl>
                 <FormControl
                   className={classes.formControl}
-                  variant="outlined"
-                  margin="dense"
+                  variant='outlined'
+                  margin='dense'
                 >
                   <InputLabel
-                    htmlFor="ActivityFSourceOrg"
+                    htmlFor='ActivityFSourceOrg'
                     className={classes.selectorLables}
                   >
                     Funding Source
@@ -823,8 +823,8 @@ export function PerformanceManagementPanel() {
                       setActivitiesFundingSourceOrg(event.target.value)
                     }
                     inputProps={{
-                      name: "ActivityFSourceOrg_selector",
-                      id: "ActivityFSourceOrg_selector",
+                      name: 'ActivityFSourceOrg_selector',
+                      id: 'ActivityFSourceOrg_selector',
                     }}
                   >
                     {activitiesFundingSourceOrgFilter}
@@ -832,11 +832,11 @@ export function PerformanceManagementPanel() {
                 </FormControl>
                 <FormControl
                   className={classes.formControl}
-                  variant="outlined"
-                  margin="dense"
+                  variant='outlined'
+                  margin='dense'
                 >
                   <InputLabel
-                    htmlFor="ActivityOrg"
+                    htmlFor='ActivityOrg'
                     className={classes.selectorLables}
                     style={{ width: 180 }}
                   >
@@ -847,22 +847,22 @@ export function PerformanceManagementPanel() {
                     value={activitiesOrg}
                     onChange={(event) => setActivitiesOrg(event.target.value)}
                     inputProps={{
-                      name: "ActivityOrg_selector",
-                      id: "ActivityOrg_selector",
+                      name: 'ActivityOrg_selector',
+                      id: 'ActivityOrg_selector',
                     }}
                   >
                     {activitiesOrgFilter}
                   </Select>
                 </FormControl>
                 <FormControl
-                  component="fieldset"
+                  component='fieldset'
                   className={classes.switchFormControl}
                 >
-                  <FormLabel component="legend" className={classes.switchLable}>
+                  <FormLabel component='legend' className={classes.switchLable}>
                     Funding Status
                   </FormLabel>
                   <FormGroup
-                    aria-label="position"
+                    aria-label='position'
                     row
                     className={classes.switch}
                   >
@@ -873,25 +873,25 @@ export function PerformanceManagementPanel() {
                       value={activitiesFundingStatus}
                       control={
                         <CustomSwitch
-                          size="small"
+                          size='small'
                           checked={activitiesFundingStatus}
                           onChange={() =>
                             setActivitiesFundingStatus(!activitiesFundingStatus)
                           }
                         />
                       }
-                      label={"Secured"}
-                      labelPlacement="start"
+                      label={'Secured'}
+                      labelPlacement='start'
                     />
                   </FormGroup>
                 </FormControl>
                 <FormControl
                   className={classes.formControl}
-                  variant="outlined"
-                  margin="dense"
+                  variant='outlined'
+                  margin='dense'
                 >
                   <InputLabel
-                    htmlFor="ActivityISC"
+                    htmlFor='ActivityISC'
                     className={classes.selectorLables}
                   >
                     ISC
@@ -901,8 +901,8 @@ export function PerformanceManagementPanel() {
                     value={activitiesISC}
                     onChange={(event) => setActivitiesISC(event.target.value)}
                     inputProps={{
-                      name: "ActivityISC_selector",
-                      id: "ActivityISC_selector",
+                      name: 'ActivityISC_selector',
+                      id: 'ActivityISC_selector',
                     }}
                     style={{ maxWidth: 135 }}
                   >
@@ -916,7 +916,7 @@ export function PerformanceManagementPanel() {
       </Grid>
 
       <Grid container spacing={3}>
-        <Grid item xs={12} style={{ width: "100vh" }}>
+        <Grid item xs={12} style={{ width: '100vh' }}>
           <TabPanel value={value} index={0}>
             <FundingStatus />
           </TabPanel>
