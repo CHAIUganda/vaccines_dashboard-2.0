@@ -6,7 +6,6 @@ import Tab from "@material-ui/core/Tab";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
-import Button from "@material-ui/core/Button";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -250,9 +249,17 @@ function Header(props) {
           classes={{
             wrapper: classes.wrapper,
           }}
+          icon={<PerformanceManagementIcon className={classes.verticalIcon} />}
+          href="/links"
+          {...a11yProps(5)}
+        />
+        <LinkTab
+          classes={{
+            wrapper: classes.wrapper,
+          }}
           icon={<SettingsIcon className={classes.verticalIcon} />}
           href="/login"
-          {...a11yProps(5)}
+          {...a11yProps(6)}
         />
       </Tabs>
     </div>
@@ -369,6 +376,19 @@ function Header(props) {
                     linkTab: classes.linkTab,
                   }}
                   icon={
+                    <PerformanceManagementIcon
+                      className={classes.iconSpacing}
+                    />
+                  }
+                  label="Links"
+                  {...a11yProps(5)}
+                />
+                <LinkTab
+                  classes={{
+                    wrapper: classes.iconLabelWrapper,
+                    linkTab: classes.linkTab,
+                  }}
+                  icon={
                     <SettingsIcon
                       className={classes.iconSpacing}
                       style={{ marginBottom: 12, fontSize: 20 }}
@@ -376,7 +396,7 @@ function Header(props) {
                   }
                   label="Settings"
                   href="/login"
-                  {...a11yProps(5)}
+                  {...a11yProps(6)}
                 />
               </Tabs>
             </div>
