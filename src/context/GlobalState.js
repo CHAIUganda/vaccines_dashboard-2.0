@@ -18,9 +18,7 @@ const OPTIONS_UNSECURE = {
 
 // Because the backend on the production runs on port 80 (default port)
 export const port =
-  apiEndpoint === 'localhost' || apiEndpoint === '104.197.111.191'
-    ? ':9000'
-    : '';
+  apiEndpoint === 'localhost' || apiEndpoint === '35.225.92.80' ? ':9000' : '';
 
 // Variables
 export const district = 'national';
@@ -73,7 +71,7 @@ export const GlobalStateProvider = ({ children }) => {
   const getUserISCs = async () => {
     try {
       const ISCdata = await axios.get(
-        `http://${apiEndpoint}${port}/performance_management/api/immunizationcomponents`,
+        `http://${apiEndpoint}${port}/performance_management/api/immunizationcomponents`
       );
 
       // const ISC = ["All", ...ISCdata.data.results.map((isc) => isc.name)];
@@ -94,7 +92,7 @@ export const GlobalStateProvider = ({ children }) => {
   const getVaccines = async () => {
     try {
       const vaccines = await axios.get(
-        `http://${apiEndpoint}${port}/api/vaccines`,
+        `http://${apiEndpoint}${port}/api/vaccines`
       );
 
       const VACCINES = vaccines.data.map((vaccines) => vaccines.name);
@@ -124,7 +122,7 @@ export const GlobalStateProvider = ({ children }) => {
 
       if (region) {
         const districtsInRegion = res.data.filter(
-          (district) => district.region__name === region,
+          (district) => district.region__name === region
         );
 
         dispatch({
@@ -148,7 +146,7 @@ export const GlobalStateProvider = ({ children }) => {
   const getRegions = async () => {
     try {
       const res = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/regions`,
+        `http://${apiEndpoint}${port}/coldchain/api/regions`
       );
 
       const regions = ['National', ...res.data.map((region) => region.name)];
@@ -168,7 +166,7 @@ export const GlobalStateProvider = ({ children }) => {
   const getQuarters = async () => {
     try {
       const res = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/quarters`,
+        `http://${apiEndpoint}${port}/coldchain/api/quarters`
       );
       dispatch({
         type: 'GET_QUARTERS',
@@ -269,7 +267,7 @@ export const GlobalStateProvider = ({ children }) => {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + _token,
           },
-        },
+        }
       );
       sessionStorage.removeItem('email');
       sessionStorage.removeItem('token');
@@ -319,7 +317,7 @@ export const GlobalStateProvider = ({ children }) => {
     const { year, module, file, month } = payload;
 
     console.log(
-      `Year: ${year} | Month: ${month} | Module: ${module} | File: ${file}`,
+      `Year: ${year} | Month: ${month} | Module: ${module} | File: ${file}`
     );
 
     let uploadUrl = '';
@@ -338,15 +336,16 @@ export const GlobalStateProvider = ({ children }) => {
       const data = new FormData();
       data.append('data_file', file);
       data.append('param1', year);
+
       try {
         await axios({
           url: uploadUrl,
           method: 'post',
           withCredentials: true,
           data: data,
-          headers: {
-            'X-CSRFToken': Cookies.get('csrftoken'),
-          },
+          // headers: {
+          //   'X-CSRFToken': Cookies.get('csrftoken'),
+          // },
         });
       } catch (err) {
         console.log(err);

@@ -1,52 +1,56 @@
-import React, { useState, useContext, useEffect } from "react";
-import Cookies from "js-cookie";
+import React, { useState, useContext, useEffect } from 'react';
+// import Cookies from "js-cookie";
+import DjangoCSRFToken from 'django-react-csrftoken';
 
 // Bring in the global and performance management context
-import { GlobalContext } from "../../../../context/GlobalState";
+import { GlobalContext } from '../../../../context/GlobalState';
 
 // Material UI components
 
-import { useStyles } from "../styles";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import Checkbox from "@material-ui/core/Checkbox";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Modal from "@material-ui/core/Modal";
-import CheckIcon from "@material-ui/icons/Check";
-import CloseIcon from "@material-ui/icons/Close";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { useStyles } from '../styles';
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import Checkbox from '@material-ui/core/Checkbox';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Modal from '@material-ui/core/Modal';
+import CheckIcon from '@material-ui/icons/Check';
+import CloseIcon from '@material-ui/icons/Close';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-const csrftoken = Cookies.get("csrftoken");
+// const csrftoken = Cookies.get("csrftoken");
 
-const CSRFToken = () => {
-  return <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken} />;
-};
+// const DjangoCSRFToken = () => {
+//   // return <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken} />;
+//   return <DjangoCSRFToken />;
+// };
+
+// console.log(DjangoCSRFToken());
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== index}
       id={`vertical-tabpanel-${index}`}
       aria-labelledby={`vertical-tab-${index}`}
       {...other}
-      style={{ width: "100%" }}
+      style={{ width: '100%' }}
     >
       {value === index && (
         <Box p={3}>
@@ -60,7 +64,7 @@ function TabPanel(props) {
 function a11yProps(index) {
   return {
     id: `data-upload-tab-${index}`,
-    "aria-controls": `data-upload-tabpanel-${index}`,
+    'aria-controls': `data-upload-tabpanel-${index}`,
   };
 }
 
@@ -85,26 +89,26 @@ const useStylesAdminPanel = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     border: `1px solid ${theme.palette.divider}`,
     borderRadius: 3,
-    display: "flex",
+    display: 'flex',
   },
   modalPaper: {
-    position: "absolute",
+    position: 'absolute',
     // width: 400,
     backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
+    border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
   buttonRoot: {
-    "& > *": {
+    '& > *': {
       margin: theme.spacing(1),
     },
   },
   manageUsers: {
-    "& > *": {
+    '& > *': {
       margin: theme.spacing(1),
-      display: "flex",
-      justifyContent: "space-between",
+      display: 'flex',
+      justifyContent: 'space-between',
     },
   },
   tabs: {
@@ -115,18 +119,18 @@ const useStylesAdminPanel = makeStyles((theme) => ({
     maxWidth: 500,
   },
   root: {
-    display: "flex",
+    display: 'flex',
     borderRadius: 5,
-    justifyContent: "space-evenly",
-    alignItems: "center",
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
     height: 500,
-    flexDirection: "column",
+    flexDirection: 'column',
   },
   usersTable: {
     minWidth: 650,
   },
   color: {
-    color: "#28354A",
+    color: '#28354A',
   },
 
   margin: {
@@ -135,20 +139,20 @@ const useStylesAdminPanel = makeStyles((theme) => ({
 
   loginContainer: {
     height: 300,
-    display: "flex",
-    justifyContent: "space-evenly",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
 
   dataUploadContainer: {
     height: 600,
-    display: "flex",
+    display: 'flex',
     width: 900,
   },
 
   h4: {
-    margin: "auto",
+    margin: 'auto',
   },
 
   formControl: {
@@ -161,18 +165,18 @@ const useStylesAdminPanel = makeStyles((theme) => ({
     padding: 0,
   },
   dataUploadForm: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
     padding: 10,
-    justifyContent: "space-evenly",
+    justifyContent: 'space-evenly',
     margin: 40,
   },
   span: {
     marginTop: 10,
   },
   loadingSpinner: {
-    display: "flex",
-    justifyContent: "center",
+    display: 'flex',
+    justifyContent: 'center',
   },
 }));
 
@@ -268,7 +272,7 @@ export function AdminPanel() {
   const [accessLevel, setAccessLevel] = useState(null);
   const [superUserStatus, setSuperUserStatus] = React.useState(false);
 
-  const accessLevels = ["Warehouse", "District", "IP"];
+  const accessLevels = ['Warehouse', 'District', 'IP'];
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -278,14 +282,14 @@ export function AdminPanel() {
   const handleEditUser = async (event) => {
     event.preventDefault();
 
-    alert("User edited");
+    alert('User edited');
   };
 
   const handleCreateUser = async (event) => {
     event.preventDefault();
 
     if (userPassword !== userPasswordConfirm) {
-      alert("Passwords do not match");
+      alert('Passwords do not match');
 
       return;
     }
@@ -361,11 +365,11 @@ export function AdminPanel() {
   const editUserModal = (user) => (
     <div style={modalStyle} className={classes.modalPaper}>
       <h4 className={classes.h4}>Edit User</h4>
-      <form autoComplete="nope" id="edit-user-form" onSubmit={handleEditUser}>
+      <form autoComplete='nope' id='edit-user-form' onSubmit={handleEditUser}>
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
+            display: 'flex',
+            flexDirection: 'column',
             marginTop: 10,
             marginLeft: 40,
             width: 500,
@@ -373,11 +377,11 @@ export function AdminPanel() {
         >
           <span className={classes.span}>Email Address</span>
           <TextField
-            id="email_address"
-            size="small"
-            type="text"
-            variant="outlined"
-            name="create_user_email_address"
+            id='email_address'
+            size='small'
+            type='text'
+            variant='outlined'
+            name='create_user_email_address'
             value={user.email}
             onChange={(e) => setEmailAddress(e.target.value)}
           />
@@ -390,14 +394,14 @@ export function AdminPanel() {
     <div style={modalStyle} className={classes.modalPaper}>
       <h4 className={classes.h4}>Add User</h4>
       <form
-        autoComplete="nope"
-        id="create-user-form"
+        autoComplete='nope'
+        id='create-user-form'
         onSubmit={handleCreateUser}
       >
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
+            display: 'flex',
+            flexDirection: 'column',
             marginTop: 10,
             marginLeft: 40,
             width: 500,
@@ -405,30 +409,30 @@ export function AdminPanel() {
         >
           <span className={classes.span}>Email Address</span>
           <TextField
-            id="email_address"
-            size="small"
-            type="text"
-            variant="outlined"
-            name="create_user_email_address"
+            id='email_address'
+            size='small'
+            type='text'
+            variant='outlined'
+            name='create_user_email_address'
             onChange={(e) => setEmailAddress(e.target.value)}
           />
 
           <span className={classes.span}>Password</span>
           <TextField
-            id="password"
-            size="small"
-            type="password"
-            variant="outlined"
-            name="create_user_password"
+            id='password'
+            size='small'
+            type='password'
+            variant='outlined'
+            name='create_user_password'
             onChange={(e) => setUserPassword(e.target.value)}
           />
           <span className={classes.span}>Password confirmation</span>
           <TextField
-            id="password_confirmation"
-            type="password"
-            size="small"
-            variant="outlined"
-            name="password_confirmation"
+            id='password_confirmation'
+            type='password'
+            size='small'
+            variant='outlined'
+            name='password_confirmation'
             onChange={(e) => setUserPasswordConfirm(e.target.value)}
           />
           <h6>Enter the same password as above, for verification.</h6>
@@ -438,8 +442,8 @@ export function AdminPanel() {
             value={accessLevel}
             onChange={(e) => setAccessLevel(e.target.value)}
             inputProps={{
-              id: "access_level",
-              name: "access_level",
+              id: 'access_level',
+              name: 'access_level',
             }}
           >
             {accessLevelsFilter}
@@ -450,8 +454,8 @@ export function AdminPanel() {
             value={accessArea}
             onChange={(e) => setAccessArea(e.target.value)}
             inputProps={{
-              id: "access_level",
-              name: "access_level",
+              id: 'access_level',
+              name: 'access_level',
             }}
           >
             {accessLevelsFilter}
@@ -462,8 +466,8 @@ export function AdminPanel() {
             value={userISC_ID}
             onChange={(e) => setUserISC_ID(e.target.value)}
             inputProps={{
-              id: "ISC",
-              name: "ISC",
+              id: 'ISC',
+              name: 'ISC',
             }}
           >
             {ISCFilter}
@@ -472,9 +476,9 @@ export function AdminPanel() {
           <span className={classes.span}>Superuser status</span>
           <Checkbox
             checked={superUserStatus}
-            color="primary"
+            color='primary'
             onChange={(e) => setSuperUserStatus(e.target.checked)}
-            inputProps={{ "aria-label": "primary checkbox" }}
+            inputProps={{ 'aria-label': 'primary checkbox' }}
           />
           <h6>
             Designates that this user has all permissions without explicitly
@@ -482,9 +486,9 @@ export function AdminPanel() {
           </h6>
           <Button
             style={{ marginTop: 20 }}
-            variant="outlined"
-            type="submit"
-            form="create-user-form"
+            variant='outlined'
+            type='submit'
+            form='create-user-form'
           >
             Submit
           </Button>
@@ -496,17 +500,17 @@ export function AdminPanel() {
   return (
     <div className={classes.root}>
       <div style={{ marginTop: 350 }}>
-        <h2 style={{ margin: 0, color: "#28354A" }}>
+        <h2 style={{ margin: 0, color: '#28354A' }}>
           UNEPI Dashboard Administration
         </h2>
       </div>
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
           padding: 40,
-          justifyContent: "space-evenly",
+          justifyContent: 'space-evenly',
         }}
       >
         {isAuthenticated ? (
@@ -515,70 +519,70 @@ export function AdminPanel() {
               <div
                 style={{
                   padding: 30,
-                  display: "flex",
-                  flexDirection: "column",
+                  display: 'flex',
+                  flexDirection: 'column',
                 }}
               >
                 <div
                   style={{
                     marginBottom: 10,
-                    marginLeft: "auto",
+                    marginLeft: 'auto',
                   }}
                 >
                   <form
                     noValidate
-                    autoComplete="off"
-                    id="logout-form"
+                    autoComplete='off'
+                    id='logout-form'
                     onSubmit={handleLogout}
                   >
-                    <Button variant="outlined" type="submit" form="logout-form">
+                    <Button variant='outlined' type='submit' form='logout-form'>
                       Logout
                     </Button>
                   </form>
                 </div>
                 <div className={classes.formRoot}>
                   <Tabs
-                    orientation="vertical"
-                    variant="scrollable"
+                    orientation='vertical'
+                    variant='scrollable'
                     value={value}
                     onChange={handleChange}
-                    aria-label="Vertical tabs example"
+                    aria-label='Vertical tabs example'
                     className={classes.tabs}
                   >
                     <Tab
                       className={classes.tabsWidth}
-                      label="Manage Users"
+                      label='Manage Users'
                       {...a11yProps(0)}
                     />
 
                     <Tab
                       className={classes.tabsWidth}
-                      label="Import Stock Management Files"
+                      label='Import Stock Management Files'
                       {...a11yProps(1)}
                     />
                     <Tab
                       className={classes.tabsWidth}
-                      label="Import Stock Requirements Data (min / max)"
+                      label='Import Stock Requirements Data (min / max)'
                       {...a11yProps(2)}
                     />
                     <Tab
                       className={classes.tabsWidth}
-                      label="Import Coverage Targets"
+                      label='Import Coverage Targets'
                       {...a11yProps(3)}
                     />
                     <Tab
                       className={classes.tabsWidth}
-                      label="Import Planned Targets"
+                      label='Import Planned Targets'
                       {...a11yProps(4)}
                     />
                     <Tab
                       className={classes.tabsWidth}
-                      label="Import Cold Chain data"
+                      label='Import Cold Chain data'
                       {...a11yProps(5)}
                     />
                     <Tab
                       className={classes.tabsWidth}
-                      label="Import Performance Management Data"
+                      label='Import Performance Management Data'
                       {...a11yProps(6)}
                     />
                   </Tabs>
@@ -586,15 +590,15 @@ export function AdminPanel() {
                     <TabPanel value={value} index={0}>
                       <div
                         style={{
-                          display: "flex",
-                          justifyContent: "space-between",
+                          display: 'flex',
+                          justifyContent: 'space-between',
                         }}
                       >
                         <h4>Manage Users</h4>
                         <div className={classes.buttonRoot}>
                           <Button
-                            variant="contained"
-                            color="primary"
+                            variant='contained'
+                            color='primary'
                             onClick={handleOpenAddUserModal}
                           >
                             Add Users
@@ -602,8 +606,8 @@ export function AdminPanel() {
                           <Modal
                             open={openAddUsers}
                             onClose={handleCloseAddUserModal}
-                            aria-labelledby="Add users"
-                            aria-describedby="Add users"
+                            aria-labelledby='Add users'
+                            aria-describedby='Add users'
                           >
                             {addUserModal}
                           </Modal>
@@ -612,28 +616,28 @@ export function AdminPanel() {
                       <TableContainer component={Paper}>
                         <Table
                           className={classes.table}
-                          size="small"
-                          aria-label="users table"
+                          size='small'
+                          aria-label='users table'
                         >
                           <TableHead>
                             <TableRow>
                               <TableCell>Id</TableCell>
-                              <TableCell align="left">Email Address</TableCell>
-                              <TableCell align="left">Access Level</TableCell>
-                              <TableCell align="left">Access Area</TableCell>
-                              <TableCell align="left">Is Admin</TableCell>
-                              <TableCell align="left">
+                              <TableCell align='left'>Email Address</TableCell>
+                              <TableCell align='left'>Access Level</TableCell>
+                              <TableCell align='left'>Access Area</TableCell>
+                              <TableCell align='left'>Is Admin</TableCell>
+                              <TableCell align='left'>
                                 Immunization Component
                               </TableCell>
-                              <TableCell align="left">Actions</TableCell>
+                              <TableCell align='left'>Actions</TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
                             {users?.isLoading ? (
                               <TableRow>
                                 <TableCell
-                                  component="th"
-                                  scope="row"
+                                  component='th'
+                                  scope='row'
                                   colSpan={7}
                                 >
                                   <div className={classes.loadingSpinner}>
@@ -645,33 +649,33 @@ export function AdminPanel() {
                               <>
                                 {users?.users?.map((user) => (
                                   <TableRow key={user.id}>
-                                    <TableCell component="th" scope="row">
+                                    <TableCell component='th' scope='row'>
                                       {user.id}
                                     </TableCell>
-                                    <TableCell align="left">
+                                    <TableCell align='left'>
                                       {user.email}
                                     </TableCell>
-                                    <TableCell align="left">
+                                    <TableCell align='left'>
                                       {user.access_level}
                                     </TableCell>
-                                    <TableCell align="left">
-                                      {user.access_area === null ? "None" : ""}
+                                    <TableCell align='left'>
+                                      {user.access_area === null ? 'None' : ''}
                                     </TableCell>
-                                    <TableCell align="left">
+                                    <TableCell align='left'>
                                       {user.is_superuser === true ? (
-                                        <CheckIcon color="action" />
+                                        <CheckIcon color='action' />
                                       ) : (
-                                        <CloseIcon color="secondary" />
+                                        <CloseIcon color='secondary' />
                                       )}
                                     </TableCell>
-                                    <TableCell align="left">
+                                    <TableCell align='left'>
                                       {user.immunization_component?.name}
                                     </TableCell>
-                                    <TableCell align="left">
+                                    <TableCell align='left'>
                                       <div className={classes.buttonRoot}>
                                         <Button
-                                          variant="contained"
-                                          color="primary"
+                                          variant='contained'
+                                          color='primary'
                                           onClick={handleOpenEditUserModal}
                                         >
                                           Edit
@@ -679,14 +683,14 @@ export function AdminPanel() {
                                         <Modal
                                           open={openEditUsers}
                                           onClose={handleCloseEditUserModal}
-                                          aria-labelledby="Edit user"
-                                          aria-describedby="Edit user"
+                                          aria-labelledby='Edit user'
+                                          aria-describedby='Edit user'
                                         >
                                           {editUserModal(user)}
                                         </Modal>
                                         <Button
-                                          variant="contained"
-                                          color="primary"
+                                          variant='contained'
+                                          color='primary'
                                         >
                                           Change Password
                                         </Button>
@@ -702,7 +706,7 @@ export function AdminPanel() {
                     </TabPanel>
                   ) : (
                     <TabPanel value={value} index={0}>
-                      <p style={{ margin: "auto" }}>
+                      <p style={{ margin: 'auto' }}>
                         You have to be an admin user to manage users
                       </p>
                     </TabPanel>
@@ -715,38 +719,38 @@ export function AdminPanel() {
                       <form
                         className={classes.dataUploadForm}
                         noValidate
-                        autoComplete="off"
-                        id="stock-management-file-form"
+                        autoComplete='off'
+                        id='stock-management-file-form'
                         onSubmit={(e) =>
                           handleDataUpload(
                             e,
                             stockManagementDataYear,
                             stockManagementDataMonth,
                             stockManagementDataFile,
-                            "stockManagement"
+                            'stockManagement'
                           )
                         }
                       >
-                        <CSRFToken />
-                        <div style={{ display: "flex", alignItems: "center" }}>
+                        <DjangoCSRFToken />
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
                           <label style={{ marginRight: 60 }}>Year</label>
                           <TextField
                             className={classes.year}
-                            id="stock_management_file_year"
-                            type="text"
-                            variant="outlined"
-                            name="year"
+                            id='stock_management_file_year'
+                            type='text'
+                            variant='outlined'
+                            name='year'
                             onChange={(e) =>
                               setStockManagementDataYear(e.target.value)
                             }
                           />
                         </div>
-                        <div style={{ display: "flex", alignItems: "center" }}>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
                           <label style={{ marginRight: 60 }}>Month</label>
                           <FormControl
                             className={classes.formControl}
-                            variant="outlined"
-                            margin="dense"
+                            variant='outlined'
+                            margin='dense'
                           >
                             <Select
                               className={globalClasses.selector_background}
@@ -755,8 +759,8 @@ export function AdminPanel() {
                                 setStockManagementDataMonth(event.target.value)
                               }
                               inputProps={{
-                                id: "stock_management_file_month",
-                                name: "stock_management_file_month",
+                                id: 'stock_management_file_month',
+                                name: 'stock_management_file_month',
                               }}
                             >
                               {stockManagementDataMonthFilter}
@@ -766,17 +770,17 @@ export function AdminPanel() {
                         <div>
                           <label style={{ marginRight: 30 }}>Data File</label>
                           <input
-                            type="file"
-                            name="import_file"
+                            type='file'
+                            name='import_file'
                             onChange={(e) =>
                               setStockManagementDataFile(e.target.files[0])
                             }
                           />
                         </div>
                         <Button
-                          variant="outlined"
-                          type="submit"
-                          form="stock-management-file-form"
+                          variant='outlined'
+                          type='submit'
+                          form='stock-management-file-form'
                         >
                           Submit
                         </Button>
@@ -784,7 +788,7 @@ export function AdminPanel() {
                     </TabPanel>
                   ) : (
                     <TabPanel value={value} index={1}>
-                      <p style={{ margin: "auto" }}>
+                      <p style={{ margin: 'auto' }}>
                         You have to be an admin user to import files
                       </p>
                     </TabPanel>
@@ -797,26 +801,26 @@ export function AdminPanel() {
                       <form
                         className={classes.dataUploadForm}
                         noValidate
-                        autoComplete="off"
-                        id="stock-requirements-form"
+                        autoComplete='off'
+                        id='stock-requirements-form'
                         onSubmit={(e) =>
                           handleDataUpload(
                             e,
                             stockRequirementsYear,
                             undefined,
                             stockRequirementsDataFile,
-                            "stockManagementMinMax"
+                            'stockManagementMinMax'
                           )
                         }
                       >
-                        <CSRFToken />
-                        <div style={{ display: "flex", alignItems: "center" }}>
+                        <DjangoCSRFToken />
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
                           <label style={{ marginRight: 60 }}>Year</label>
                           <TextField
-                            id="stock_requirement_year"
-                            type="text"
-                            variant="outlined"
-                            name="name"
+                            id='stock_requirement_year'
+                            type='text'
+                            variant='outlined'
+                            name='name'
                             onChange={(e) =>
                               setStockRequirementsYear(e.target.value)
                             }
@@ -825,25 +829,25 @@ export function AdminPanel() {
                         <div>
                           <label style={{ marginRight: 30 }}>Data File</label>
                           <input
-                            type="file"
-                            name="data_file"
+                            type='file'
+                            name='data_file'
                             onChange={(e) =>
                               setStockRequirementsDataFile(e.target.files[0])
                             }
                           />
                         </div>
                         <Button
-                          variant="outlined"
-                          type="submit"
-                          form="stock-requirements-form"
+                          variant='outlined'
+                          type='submit'
+                          form='stock-requirements-form'
                         >
                           Import
                         </Button>
-                      </form>{" "}
+                      </form>{' '}
                     </TabPanel>
                   ) : (
                     <TabPanel value={value} index={2}>
-                      <p style={{ margin: "auto" }}>
+                      <p style={{ margin: 'auto' }}>
                         You have to be an admin user to import files
                       </p>
                     </TabPanel>
@@ -854,26 +858,26 @@ export function AdminPanel() {
                       <form
                         className={classes.dataUploadForm}
                         noValidate
-                        autoComplete="off"
-                        id="coverage-targets-form"
+                        autoComplete='off'
+                        id='coverage-targets-form'
                         onSubmit={(e) =>
                           handleDataUpload(
                             e,
                             coverageTargetsYear,
                             undefined,
                             coverageTargetsDataFile,
-                            "coverageTargets"
+                            'coverageTargets'
                           )
                         }
                       >
-                        <CSRFToken />
-                        <div style={{ display: "flex", alignItems: "center" }}>
+                        <DjangoCSRFToken />
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
                           <label style={{ marginRight: 60 }}>Year</label>
                           <TextField
-                            id="coverage_targets_year"
-                            type="text"
-                            variant="outlined"
-                            name="name"
+                            id='coverage_targets_year'
+                            type='text'
+                            variant='outlined'
+                            name='name'
                             onChange={(e) =>
                               setCoverageTargetsYear(e.target.value)
                             }
@@ -882,17 +886,17 @@ export function AdminPanel() {
                         <div>
                           <label style={{ marginRight: 30 }}>Data File</label>
                           <input
-                            type="file"
-                            name="data_file"
+                            type='file'
+                            name='data_file'
                             onChange={(e) =>
                               setCoverageTargetsDataFile(e.target.files[0])
                             }
                           />
                         </div>
                         <Button
-                          variant="outlined"
-                          type="submit"
-                          form="coverage-targets-form"
+                          variant='outlined'
+                          type='submit'
+                          form='coverage-targets-form'
                         >
                           Import
                         </Button>
@@ -900,7 +904,7 @@ export function AdminPanel() {
                     </TabPanel>
                   ) : (
                     <TabPanel value={value} index={3}>
-                      <p style={{ margin: "auto" }}>
+                      <p style={{ margin: 'auto' }}>
                         You have to be an admin user to import files
                       </p>
                     </TabPanel>
@@ -912,26 +916,26 @@ export function AdminPanel() {
                       <form
                         className={classes.dataUploadForm}
                         noValidate
-                        autoComplete="off"
-                        id="planned-targets-form"
+                        autoComplete='off'
+                        id='planned-targets-form'
                         onSubmit={(e) =>
                           handleDataUpload(
                             e,
                             plannedTargetsYear,
                             undefined,
                             plannedTargetsDataFile,
-                            "plannedTargets"
+                            'plannedTargets'
                           )
                         }
                       >
-                        <CSRFToken />
-                        <div style={{ display: "flex", alignItems: "center" }}>
+                        <DjangoCSRFToken />
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
                           <label style={{ marginRight: 60 }}>Year</label>
                           <TextField
-                            id="planned_targets_year"
-                            type="text"
-                            variant="outlined"
-                            name="name"
+                            id='planned_targets_year'
+                            type='text'
+                            variant='outlined'
+                            name='name'
                             onChange={(e) =>
                               setPlannedTargetsYear(e.target.value)
                             }
@@ -940,17 +944,17 @@ export function AdminPanel() {
                         <div>
                           <label style={{ marginRight: 30 }}>Data File</label>
                           <input
-                            type="file"
-                            name="data_file"
+                            type='file'
+                            name='data_file'
                             onChange={(e) =>
                               setPlannedTargetsDataFile(e.target.files[0])
                             }
                           />
                         </div>
                         <Button
-                          variant="outlined"
-                          type="submit"
-                          form="planned-targets-form"
+                          variant='outlined'
+                          type='submit'
+                          form='planned-targets-form'
                         >
                           Import
                         </Button>
@@ -958,7 +962,7 @@ export function AdminPanel() {
                     </TabPanel>
                   ) : (
                     <TabPanel value={value} index={4}>
-                      <p style={{ margin: "auto" }}>
+                      <p style={{ margin: 'auto' }}>
                         You have to be an admin user to import files
                       </p>
                     </TabPanel>
@@ -972,43 +976,43 @@ export function AdminPanel() {
                       <form
                         className={classes.dataUploadForm}
                         noValidate
-                        autoComplete="off"
-                        id="coldchain-management-form"
+                        autoComplete='off'
+                        id='coldchain-management-form'
                         onSubmit={(e) =>
                           handleDataUpload(
                             e,
                             coldChainYear,
                             coldChainMonth,
                             coldChainDataFile,
-                            "coldChain"
+                            'coldChain'
                           )
                         }
                       >
-                        <CSRFToken />
-                        <div style={{ display: "flex", alignItems: "center" }}>
+                        <DjangoCSRFToken />
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
                           <label style={{ marginRight: 60 }}>Year</label>
                           <TextField
-                            id="coldChain_year"
-                            type="text"
-                            variant="outlined"
-                            name="name"
+                            id='coldChain_year'
+                            type='text'
+                            variant='outlined'
+                            name='name'
                             onChange={(e) => setColdChainYear(e.target.value)}
                           />
                         </div>
                         <div>
                           <label style={{ marginRight: 30 }}>Data File</label>
                           <input
-                            type="file"
-                            name="data_file"
+                            type='file'
+                            name='data_file'
                             onChange={(e) =>
                               setColdChainDataFile(e.target.files[0])
                             }
                           />
                         </div>
                         <Button
-                          variant="outlined"
-                          type="submit"
-                          form="coldchain-management-form"
+                          variant='outlined'
+                          type='submit'
+                          form='coldchain-management-form'
                         >
                           Import
                         </Button>
@@ -1016,7 +1020,7 @@ export function AdminPanel() {
                     </TabPanel>
                   ) : (
                     <TabPanel value={value} index={5}>
-                      <p style={{ margin: "auto" }}>
+                      <p style={{ margin: 'auto' }}>
                         You have to be an admin user to import files
                       </p>
                     </TabPanel>
@@ -1027,26 +1031,26 @@ export function AdminPanel() {
                       <form
                         className={classes.dataUploadForm}
                         noValidate
-                        autoComplete="off"
-                        id="performance-management-form"
+                        autoComplete='off'
+                        id='performance-management-form'
                         onSubmit={(e) =>
                           handleDataUpload(
                             e,
                             performanceManagementYear,
                             undefined,
                             performanceManagementDataFile,
-                            "performanceManagement"
+                            'performanceManagement'
                           )
                         }
                       >
-                        <CSRFToken />
-                        <div style={{ display: "flex", alignItems: "center" }}>
+                        <DjangoCSRFToken />
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
                           <label style={{ marginRight: 60 }}>Year</label>
                           <TextField
-                            id="performance_management_year"
-                            type="text"
-                            variant="outlined"
-                            name="name"
+                            id='performance_management_year'
+                            type='text'
+                            variant='outlined'
+                            name='name'
                             onChange={(e) =>
                               setPerformanceManagementYear(e.target.value)
                             }
@@ -1055,8 +1059,8 @@ export function AdminPanel() {
                         <div>
                           <label style={{ marginRight: 30 }}>Data File</label>
                           <input
-                            type="file"
-                            name="data_file"
+                            type='file'
+                            name='data_file'
                             onChange={(e) =>
                               setPerformanceManagementDataFile(
                                 e.target.files[0]
@@ -1065,9 +1069,9 @@ export function AdminPanel() {
                           />
                         </div>
                         <Button
-                          variant="outlined"
-                          type="submit"
-                          form="performance-management-form"
+                          variant='outlined'
+                          type='submit'
+                          form='performance-management-form'
                         >
                           Import
                         </Button>
@@ -1075,7 +1079,7 @@ export function AdminPanel() {
                     </TabPanel>
                   ) : (
                     <TabPanel value={value} index={6}>
-                      <p style={{ margin: "auto" }}>
+                      <p style={{ margin: 'auto' }}>
                         You have to be an admin user to import files
                       </p>
                     </TabPanel>
@@ -1089,25 +1093,25 @@ export function AdminPanel() {
             <form
               className={classes.loginContainer}
               noValidate
-              autoComplete="off"
-              id="login-form"
+              autoComplete='off'
+              id='login-form'
               onSubmit={handleLogin}
             >
               <TextField
-                id="login_username"
-                label="Email"
-                type="text"
-                variant="outlined"
+                id='login_username'
+                label='Email'
+                type='text'
+                variant='outlined'
                 onChange={(e) => setEmail(e.target.value)}
               />
               <TextField
-                id="login_password"
-                label="Password"
-                type="password"
-                variant="outlined"
+                id='login_password'
+                label='Password'
+                type='password'
+                variant='outlined'
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <Button variant="outlined" type="submit" form="login-form">
+              <Button variant='outlined' type='submit' form='login-form'>
                 Login
               </Button>
             </form>

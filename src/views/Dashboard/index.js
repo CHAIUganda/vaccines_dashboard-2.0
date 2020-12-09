@@ -16,6 +16,7 @@ import { CoveragePanel } from './components/CoveragePanel/index';
 import { StockManagementPanel } from './components/StockManagementPanel/index';
 import { PerformanceManagementPanel } from './components/PerformanceManagementPanel/index';
 import { AdminPanel } from './components/AdminPanel/index';
+import { LinksPanel } from './components/LinksPanel/index';
 
 // Dashboard components context
 import { OverviewContextProvider } from '../../context/Overview/OverviewState';
@@ -98,6 +99,9 @@ export function Dashboard() {
             </PerformanceManagementContextProvider>
           </TabPanel>
           <TabPanel value={value} index={5}>
+            <LinksPanel />
+          </TabPanel>
+          <TabPanel value={value} index={6}>
             <AdminPanel />
           </TabPanel>
         </div>
