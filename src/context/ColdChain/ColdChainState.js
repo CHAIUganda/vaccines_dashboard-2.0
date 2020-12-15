@@ -45,7 +45,7 @@ const initialColdChainState = {
   coldChainCareLevels: CARE_LEVELS,
   defaultCareLevel: 'District Store',
   district: 'national',
-  region: 'National',
+  region: 'ALL',
 };
 
 // Create context
@@ -61,7 +61,12 @@ export const ColdChainContextProvider = ({ children }) => {
   } = useContext(OverviewContext);
 
   // Actions
-  const getEligibilityData = async (startQuarter, endQuarter, district) => {
+  const getEligibilityData = async (
+    startQuarter,
+    endQuarter,
+    district,
+    region
+  ) => {
     dispatch({
       type: 'LOADING_ELIGIBILITY_DATA',
       payload: { isLoading: true },
@@ -69,11 +74,11 @@ export const ColdChainContextProvider = ({ children }) => {
 
     try {
       const eligibilityDataTableData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/eligiblefacilitiesmetrics?start_period=${startQuarter}&end_period=${endQuarter}`,
+        `http://${apiEndpoint}${port}/coldchain/api/eligiblefacilitiesmetrics?start_period=${startQuarter}&end_period=${endQuarter}&region=${region}`
       );
 
       const eligibilityMetricsChartData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/eligiblefacilitiesstats?district=${district}&start_period=${startQuarter}&end_period=${endQuarter}`,
+        `http://${apiEndpoint}${port}/coldchain/api/eligiblefacilitiesstats?district=${district}&start_period=${startQuarter}&end_period=${endQuarter}&region=${region}`
       );
 
       const payload = {
@@ -105,6 +110,7 @@ export const ColdChainContextProvider = ({ children }) => {
     endQuarter,
     district,
     careLevel,
+    region
   ) => {
     dispatch({
       type: 'LOADING_FUNCTIONALITY_DATA',
@@ -113,10 +119,10 @@ export const ColdChainContextProvider = ({ children }) => {
 
     try {
       const functionalityMetricsChartData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/functionalitymetricsgraph?carelevel=${careLevel}&district=${district}&start_period=${startQuarter}&end_period=${endQuarter}`,
+        `http://${apiEndpoint}${port}/coldchain/api/functionalitymetricsgraph?carelevel=${careLevel}&district=${district}&start_period=${startQuarter}&end_period=${endQuarter}&region=${region}`
       );
       const functionalityDataTableData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/functionalitymetrics?carelevel=${careLevel}&start_period=${startQuarter}&end_period=${endQuarter}`,
+        `http://${apiEndpoint}${port}/coldchain/api/functionalitymetrics?carelevel=${careLevel}&start_period=${startQuarter}&end_period=${endQuarter}&region=${region}`
       );
 
       const payload = {
@@ -150,6 +156,7 @@ export const ColdChainContextProvider = ({ children }) => {
     endQuarter,
     district,
     careLevel,
+    region
   ) => {
     dispatch({
       type: 'LOADING_CAPACITY_DATA',
@@ -158,11 +165,11 @@ export const ColdChainContextProvider = ({ children }) => {
 
     try {
       const capacityMetricsChartData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/capacitymetricsstats?carelevel=${careLevel}&district=${district}&start_period=${startQuarter}&end_period=${endQuarter}`,
+        `http://${apiEndpoint}${port}/coldchain/api/capacitymetricsstats?carelevel=${careLevel}&district=${district}&start_period=${startQuarter}&end_period=${endQuarter}&region=${region}`
       );
 
       const capacityDataTableData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/capacitymetrics?carelevel=${careLevel}&start_period=${startQuarter}&end_period=${endQuarter}`,
+        `http://${apiEndpoint}${port}/coldchain/api/capacitymetrics?carelevel=${careLevel}&start_period=${startQuarter}&end_period=${endQuarter}&region=${region}`
       );
 
       const payload = {
@@ -190,7 +197,7 @@ export const ColdChainContextProvider = ({ children }) => {
     }
   };
 
-  const getOptimalityData = async (year, district, careLevel) => {
+  const getOptimalityData = async (year, district, careLevel, region) => {
     dispatch({
       type: 'LOADING_OPTIMALITY_DATA',
       payload: { isLoading: true },
@@ -198,11 +205,11 @@ export const ColdChainContextProvider = ({ children }) => {
 
     try {
       const optimalityMetricsChartData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/optimalitystats?carelevel=${careLevel}&district=${district}&year=${year}`,
+        `http://${apiEndpoint}${port}/coldchain/api/optimalitystats?carelevel=${careLevel}&district=${district}&year=${year}&region=${region}`
       );
 
       const optimalityDataTableData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/optimalitymetrics?carelevel=${careLevel}&year=${year}`,
+        `http://${apiEndpoint}${port}/coldchain/api/optimalitymetrics?carelevel=${careLevel}&year=${year}&region=${region}`
       );
 
       const payload = {
@@ -235,15 +242,15 @@ export const ColdChainContextProvider = ({ children }) => {
 
     try {
       const temperatureMonitoringMetricsChartData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/tempheatfreezestats?district=${district}&year=${year}`,
+        `http://${apiEndpoint}${port}/coldchain/api/tempheatfreezestats?district=${district}&year=${year}`
       );
 
       const temperatureMonitoringDataTableData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/tempreportmetrics?year=${year}`,
+        `http://${apiEndpoint}${port}/coldchain/api/tempreportmetrics?year=${year}`
       );
 
       const temperatureMonitoringReportingRatesData = await axios.get(
-        `http://${apiEndpoint}${port}/coldchain/api/tempreportingratestats?district=${district}&year=${year}&region=${region}`,
+        `http://${apiEndpoint}${port}/coldchain/api/tempreportingratestats?district=${district}&year=${year}&region=${region}`
       );
 
       const payload = {

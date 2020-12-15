@@ -137,7 +137,7 @@ const Card = ({
                 color: '#ffff',
               }}
             >
-              80% @ Nationality
+              {metric} @ Nationality
             </span>
           </div>
           <div

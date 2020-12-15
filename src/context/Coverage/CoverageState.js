@@ -1,11 +1,11 @@
-import React, { createContext, useReducer } from "react";
-import axios from "axios";
+import React, { createContext, useReducer } from 'react';
+import axios from 'axios';
 
-import CoverageReducer from "./reducer";
+import CoverageReducer from './reducer';
 
-import { port, date } from "../GlobalState";
+import { port, date } from '../GlobalState';
 
-const apiEndpoint = require("../../env_config").default;
+const apiEndpoint = require('../../env_config').default;
 
 // Coverage Chain Years
 const generateCoverageYears = () => {
@@ -23,11 +23,12 @@ const initialColdChainState = {
   dropoutRate: {},
   redCategorisation: {},
   defaultStartYear: date.getFullYear(),
-  defaultVaccine: "ALL",
-  defaultDose: "Dose 3",
+  defaultVaccine: 'ALL',
+  defaultDose: 'Dose 3',
   coverageYears: generateCoverageYears(),
-  district: ["National"],
-  doses: ["Dose 1", "Dose 2", "Dose 3"],
+  district: ['National'],
+  doses: ['Dose 1', 'Dose 2', 'Dose 3'],
+  region: 'ALL',
 };
 
 // Create context
@@ -43,10 +44,11 @@ export const CoverageContextProvider = ({ children }) => {
     startYear,
     dose,
     vaccine,
-    district
+    district,
+    region
   ) => {
     dispatch({
-      type: "LOADING_COVERAGE_BY_MONTH_DATA",
+      type: 'LOADING_COVERAGE_BY_MONTH_DATA',
       payload: { isLoading: true },
     });
 
@@ -55,12 +57,12 @@ export const CoverageContextProvider = ({ children }) => {
 
       const vaccineDosesForCoverageByMonthData = await axios.get(
         district.length === 1
-          ? `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`
-          : `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?districts=[${quotedAndCommaSeparatedDistricts}]&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`
+          ? `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}&region=${region}`
+          : `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?districts=[${quotedAndCommaSeparatedDistricts}]&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}&region=${region}`
       );
 
       const vaccineDosesForCoverageByMonthMapData = await axios.get(
-        `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?dataType=map&endYear=${startYear}`
+        `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?dataType=map&endYear=${startYear}&region=${region}&district=${district}`
       );
 
       const payload = {
@@ -76,13 +78,13 @@ export const CoverageContextProvider = ({ children }) => {
 
       //   Dispatch
       dispatch({
-        type: "GET_COVERAGE_BY_MONTH_DATA",
+        type: 'GET_COVERAGE_BY_MONTH_DATA',
         payload: payload,
       });
     } catch (err) {
       dispatch({
-        type: "GET_COVERAGE_BY_MONTH_DATA_ERROR",
-        payload: "An error occured getting red category data from backend",
+        type: 'GET_COVERAGE_BY_MONTH_DATA_ERROR',
+        payload: 'An error occured getting red category data from backend',
       });
     }
   };
@@ -92,10 +94,11 @@ export const CoverageContextProvider = ({ children }) => {
     startYear,
     dose,
     vaccine,
-    district
+    district,
+    region
   ) => {
     dispatch({
-      type: "LOADING_COVERAGE_BY_YEAR_DATA",
+      type: 'LOADING_COVERAGE_BY_YEAR_DATA',
       payload: { isLoading: true },
     });
 
@@ -104,8 +107,8 @@ export const CoverageContextProvider = ({ children }) => {
 
       const vaccineDosesForCoverageByYearData = await axios.get(
         district.length === 1
-          ? `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`
-          : `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?districts=[${quotedAndCommaSeparatedDistricts}]&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`
+          ? `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}&region=${region}`
+          : `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?districts=[${quotedAndCommaSeparatedDistricts}]&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}&region=${region}`
       );
 
       const payload = {
@@ -120,13 +123,13 @@ export const CoverageContextProvider = ({ children }) => {
 
       //   Dispatch
       dispatch({
-        type: "GET_COVERAGE_BY_YEAR_DATA",
+        type: 'GET_COVERAGE_BY_YEAR_DATA',
         payload: payload,
       });
     } catch (err) {
       dispatch({
-        type: "GET_COVERAGE_BY_YEAR_DATA_ERROR",
-        payload: "An error occured getting red category data from backend",
+        type: 'GET_COVERAGE_BY_YEAR_DATA_ERROR',
+        payload: 'An error occured getting red category data from backend',
       });
     }
   };
@@ -136,10 +139,11 @@ export const CoverageContextProvider = ({ children }) => {
     startYear,
     dose,
     vaccine,
-    district
+    district,
+    region
   ) => {
     dispatch({
-      type: "LOADING_DROPOUT_RATE_DATA",
+      type: 'LOADING_DROPOUT_RATE_DATA',
       payload: { isLoading: true },
     });
 
@@ -148,12 +152,12 @@ export const CoverageContextProvider = ({ children }) => {
 
       const vaccineDosesForCoverageByMonthData = await axios.get(
         district.length === 1
-          ? `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`
-          : `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?districts=[${quotedAndCommaSeparatedDistricts}]&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}`
+          ? `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?district=${district}&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}&region=${region}`
+          : `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?districts=[${quotedAndCommaSeparatedDistricts}]&dose=${dose}&endYear=${endYear}&startYear=${startYear}&vaccine=${vaccine}&region=${region}`
       );
 
       const vaccineDosesForCoverageByMonthMapData = await axios.get(
-        `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?dataType=map&endYear=${startYear}`
+        `http://${apiEndpoint}${port}/coverage/api/vaccinedoses_by_period?dataType=map&endYear=${startYear}&region=${region}`
       );
 
       const payload = {
@@ -169,13 +173,13 @@ export const CoverageContextProvider = ({ children }) => {
 
       //   Dispatch
       dispatch({
-        type: "GET_DROPOUT_RATE_DATA",
+        type: 'GET_DROPOUT_RATE_DATA',
         payload: payload,
       });
     } catch (err) {
       dispatch({
-        type: "GET_DROPOUT_RATE_DATA_ERROR",
-        payload: "An error occured getting red category data from backend",
+        type: 'GET_DROPOUT_RATE_DATA_ERROR',
+        payload: 'An error occured getting red category data from backend',
       });
     }
   };
@@ -186,9 +190,10 @@ export const CoverageContextProvider = ({ children }) => {
     dose,
     vaccine,
     district
+    // region
   ) => {
     dispatch({
-      type: "LOADING_REDCAT_DATA",
+      type: 'LOADING_REDCAT_DATA',
       payload: { isLoading: true },
     });
 
@@ -215,13 +220,13 @@ export const CoverageContextProvider = ({ children }) => {
 
       //   Dispatch
       dispatch({
-        type: "GET_REDCAT_DATA",
+        type: 'GET_REDCAT_DATA',
         payload: payload,
       });
     } catch (err) {
       dispatch({
-        type: "GET_REDCAT_DATA_ERROR",
-        payload: "An error occured getting red category data from backend",
+        type: 'GET_REDCAT_DATA_ERROR',
+        payload: 'An error occured getting red category data from backend',
       });
     }
   };
@@ -238,6 +243,7 @@ export const CoverageContextProvider = ({ children }) => {
         defaultDose: state.defaultDose,
         district: state.district,
         doses: state.doses,
+        region: state.region,
         getCoverageByMonthData,
         getCoverageByYearData,
         getDropoutRateData,

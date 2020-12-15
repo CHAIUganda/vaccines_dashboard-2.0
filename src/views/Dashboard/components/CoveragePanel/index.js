@@ -125,8 +125,10 @@ export function CoveragePanel() {
   const {
     districts,
     vaccines,
+    regions,
     getDistricts,
     getVaccines,
+    getRegions,
     currentYear,
   } = useContext(GlobalContext);
 
@@ -136,6 +138,7 @@ export function CoveragePanel() {
     district,
     defaultDose,
     doses,
+    region,
     coverageYears,
     getCoverageByMonthData,
     getCoverageByYearData,
@@ -146,6 +149,8 @@ export function CoveragePanel() {
   useEffect(() => {
     getDistricts();
     getVaccines();
+    getRegions();
+
     //
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -168,6 +173,8 @@ export function CoveragePanel() {
 
   const [coverageByMonthDose, setCoverageByMonthDose] = useState(defaultDose);
 
+  const [coverageByMonthRegion, setCoverageByMonthRegion] = useState(region);
+
   const [coverageByMonthDistrict, setCoverageByMonthDistrict] = useState(
     district
   );
@@ -183,14 +190,17 @@ export function CoveragePanel() {
       coverageByMonthStartYear,
       coverageByMonthDose,
       coverageByMonthVaccine,
-      coverageByMonthDistrict
+      coverageByMonthDistrict,
+      coverageByMonthRegion
     );
+    getDistricts(coverageByMonthRegion);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     coverageByMonthStartYear,
     coverageByMonthDose,
     coverageByMonthVaccine,
     coverageByMonthDistrict,
+    coverageByMonthRegion,
   ]);
 
   // -----------------------------------------------------------------------
@@ -209,6 +219,8 @@ export function CoveragePanel() {
     defaultVaccine
   );
 
+  const [coverageByYearRegion, setCoverageByYearRegion] = useState(region);
+
   const [coverageByYearDistrict, setCoverageByYearDistrict] = useState(
     district
   );
@@ -224,14 +236,17 @@ export function CoveragePanel() {
       coverageByYearStartYear,
       defaultDose,
       coverageByYearVaccine,
-      coverageByYearDistrict
+      coverageByYearDistrict,
+      coverageByYearRegion
     );
+    getDistricts(coverageByYearRegion);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     coverageByYearStartYear,
     coverageByYearEndYear,
     coverageByYearVaccine,
     coverageByYearDistrict,
+    coverageByYearRegion,
   ]);
 
   // -----------------------------------------------------------------------
@@ -243,6 +258,10 @@ export function CoveragePanel() {
   );
   const [coverageDropoutRateVaccine, setCoverageDropoutrateVaccine] = useState(
     defaultVaccine
+  );
+
+  const [coverageDropoutRateRegion, setCoverageDropoutrateRegion] = useState(
+    region
   );
 
   const [
@@ -261,14 +280,17 @@ export function CoveragePanel() {
       coverageDropoutRateYear,
       defaultDose,
       coverageDropoutRateVaccine,
-      coverageDropoutRateDistrict
+      coverageDropoutRateDistrict,
+      coverageDropoutRateRegion
     );
+    getDistricts(coverageDropoutRateRegion);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     coverageDropoutRateYear,
     defaultDose,
     coverageDropoutRateVaccine,
     coverageDropoutRateDistrict,
+    coverageDropoutRateRegion,
   ]);
 
   // -----------------------------------------------------------------------
@@ -324,6 +346,11 @@ export function CoveragePanel() {
     </MenuItem>
   ));
 
+  const coverageByMonthRegionFilter = regions?.map((region) => (
+    <MenuItem value={region} key={region} className={classes.liItems}>
+      {region}
+    </MenuItem>
+  ));
   // -----------------------------------------------------------------------
   // Coverage By Year Filters
   // -----------------------------------------------------------------------
@@ -356,6 +383,11 @@ export function CoveragePanel() {
     </MenuItem>
   ));
 
+  const coverageByYearRegionFilter = regions?.map((region) => (
+    <MenuItem value={region} key={region} className={classes.liItems}>
+      {region}
+    </MenuItem>
+  ));
   // -----------------------------------------------------------------------
   // Dropout Rate filters
   // -----------------------------------------------------------------------
@@ -379,6 +411,12 @@ export function CoveragePanel() {
       className={classes.liItems}
     >
       {district.name}
+    </MenuItem>
+  ));
+
+  const coverageDropoutRateRegionFilter = regions?.map((region) => (
+    <MenuItem value={region} key={region} className={classes.liItems}>
+      {region}
     </MenuItem>
   ));
 
@@ -619,6 +657,31 @@ export function CoveragePanel() {
                     </Select>
                   </FormControl>
                   <FormControl
+                    className={classes.formControl}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="Regions"
+                      className={classes.selectorLables}
+                    >
+                      Region
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      value={coverageByMonthRegion}
+                      onChange={(event) =>
+                        setCoverageByMonthRegion(event.target.value)
+                      }
+                      inputProps={{
+                        name: "CM_region_selector",
+                        id: "CM_region_selector",
+                      }}
+                    >
+                      {coverageByMonthRegionFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
                     className={classes.districtSelectMargin}
                     variant="outlined"
                     margin="dense"
@@ -723,7 +786,31 @@ export function CoveragePanel() {
                       {coverageByYearVaccinesFilter}
                     </Select>
                   </FormControl>
-
+                  <FormControl
+                    className={classes.formControl}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="Regions"
+                      className={classes.selectorLables}
+                    >
+                      Region
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      value={coverageByYearRegion}
+                      onChange={(event) =>
+                        setCoverageByYearRegion(event.target.value)
+                      }
+                      inputProps={{
+                        name: "CY_region_selector",
+                        id: "CY_region_selector",
+                      }}
+                    >
+                      {coverageByYearRegionFilter}
+                    </Select>
+                  </FormControl>
                   <FormControl
                     className={classes.districtSelectMargin}
                     variant="outlined"
@@ -803,6 +890,31 @@ export function CoveragePanel() {
                       }}
                     >
                       {coverageDropoutRateVaccinesFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    className={classes.formControl}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="Regions"
+                      className={classes.selectorLables}
+                    >
+                      Region
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      value={coverageDropoutRateRegion}
+                      onChange={(event) =>
+                        setCoverageDropoutrateRegion(event.target.value)
+                      }
+                      inputProps={{
+                        name: "DR_region_selector",
+                        id: "DR_region_selector",
+                      }}
+                    >
+                      {coverageDropoutRateRegionFilter}
                     </Select>
                   </FormControl>
                   <FormControl
