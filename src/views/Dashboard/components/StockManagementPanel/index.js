@@ -123,9 +123,14 @@ const BootstrapInput = withStyles((theme) => ({
 
 export function StockManagementPanel() {
   // Extract required global state variables
-  const { districts, vaccines, getDistricts, getVaccines } = useContext(
-    GlobalContext
-  );
+  const {
+    districts,
+    vaccines,
+    regions,
+    getDistricts,
+    getVaccines,
+    getRegions,
+  } = useContext(GlobalContext);
 
   // Extract required Stock management state variables
   const {
@@ -134,6 +139,7 @@ export function StockManagementPanel() {
     defaultStartMonth,
     defaultVaccine,
     defaultDistrict,
+    region,
     getStockManagementMonths,
     getDistrictStockLevelsData,
     getRefillRateData,
@@ -148,6 +154,7 @@ export function StockManagementPanel() {
     getDistricts();
     getVaccines();
     getStockManagementMonths();
+    getRegions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -202,6 +209,7 @@ export function StockManagementPanel() {
   const [refillRateEndMonth, setRefillRateEndMonth] = useState(defaultEndMonth);
   const [refillRateVaccine, setRefillRateVaccine] = useState(defaultVaccine);
   const [refillRateDistrict, setRefillRateDistrict] = useState(defaultDistrict);
+  const [refillRateRegion, setRefillRateRegion] = useState(region);
   const [refillrateChipData, setRefillrateChipData] = useState([
     refillRateDistrict,
   ]);
@@ -213,14 +221,17 @@ export function StockManagementPanel() {
       refillRateDistrict,
       refillRateEndMonth,
       refillRateStartMonth,
-      refillRateVaccine
+      refillRateVaccine,
+      refillRateRegion
     );
+    getDistricts(refillRateRegion);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     refillRateDistrict,
     refillRateEndMonth,
     refillRateStartMonth,
     refillRateVaccine,
+    refillRateRegion,
   ]);
 
   // -----------------------------------------------------------------------
@@ -242,6 +253,10 @@ export function StockManagementPanel() {
     "National",
   ]);
 
+  const [districtStockTrendRegion, setDistrictStockTrendRegion] = useState(
+    region
+  );
+
   const [districtStockTrendChipData, setDistrictStockTrendChipData] = useState([
     districtStockTrendDistrict,
   ]);
@@ -254,14 +269,17 @@ export function StockManagementPanel() {
       districtStockTrendDistrict,
       districtStockTrendEndMonth,
       districtStockTrendStartMonth,
-      districtStockTrendVaccine
+      districtStockTrendVaccine,
+      districtStockTrendRegion
     );
+    getDistricts(districtStockTrendRegion);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     districtStockTrendDistrict,
     districtStockTrendEndMonth,
     districtStockTrendStartMonth,
     districtStockTrendVaccine,
+    districtStockTrendRegion,
   ]);
 
   // -----------------------------------------------------------------------
@@ -340,6 +358,12 @@ export function StockManagementPanel() {
       </MenuItem>
     ));
 
+  const refillRateDataRegionsFilter = regions?.map((region) => (
+    <MenuItem value={region} key={region} className={classes.liItems}>
+      {region}
+    </MenuItem>
+  ));
+
   // -----------------------------------------------------------------------
   // Uptake Rate data filters
   // -----------------------------------------------------------------------
@@ -393,6 +417,11 @@ export function StockManagementPanel() {
       </MenuItem>
     ));
 
+  const districtStockTrendRegionFilter = regions?.map((region) => (
+    <MenuItem value={region} key={region} className={classes.liItems}>
+      {region}
+    </MenuItem>
+  ));
   // ==================================================================================
 
   const handleChange = (event, newValue) => {
@@ -406,8 +435,20 @@ export function StockManagementPanel() {
     } else {
       setRefillRateDistrict(event.target.value);
       setRefillrateChipData(event.target.value);
+      setRefillRateRegion(event.target.value);
     }
   };
+
+  // const handleChangeRegion = (event, tab) => {
+  //   if (tab === 'District Stock Trends') {
+  //     // setDistrictStockTrendDistrict(event.target.value);
+  //     // setDistrictStockTrendChipData(event.target.value);
+  //   } else {
+  //     // setRefillRateDistrict(event.target.value);
+  //     setRefillrateChipData(event.target.value);
+  //     setRefillRateRegion(event.target.value);
+  //   }
+  // };
 
   // Chip stuff
 
@@ -418,6 +459,10 @@ export function StockManagementPanel() {
       );
       setRefillrateChipData(
         refillrateChipData.filter((chip) => chip !== chipToDelete)
+      );
+
+      setRefillRateRegion(
+        refillRateRegion.filter((chip) => chip !== chipToDelete)
       );
     } else if (tab === "District Stock Trends") {
       setDistrictStockTrendDistrict(
@@ -655,6 +700,37 @@ export function StockManagementPanel() {
                     </Select>
                   </FormControl>
                   <FormControl
+                    className={classes.formControl}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="Region"
+                      className={classes.selectorLables2}
+                    >
+                      Region
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      value={refillRateRegion}
+                      onChange={(event) =>
+                        setRefillRateRegion(event.target.value)
+                      }
+                      inputProps={{
+                        name: "RR_region_selector",
+                        id: "RR_region_selector",
+                      }}
+                      // displayEmpty
+                      // id='RR_region_name_selector'
+                      // input={<BootstrapInput />}
+
+                      // multiple
+                      // renderValue={(selected) => 'All'}
+                    >
+                      {refillRateDataRegionsFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
                     className={classes.districtSelectMargin}
                     variant="outlined"
                     margin="dense"
@@ -759,6 +835,31 @@ export function StockManagementPanel() {
                     </Select>
                   </FormControl>
                   <FormControl
+                    className={classes.formControl}
+                    variant="outlined"
+                    margin="dense"
+                  >
+                    <InputLabel
+                      htmlFor="Regions"
+                      className={classes.selectorLables}
+                    >
+                      Region
+                    </InputLabel>
+                    <Select
+                      className={classes.selector_background}
+                      value={districtStockTrendRegion}
+                      onChange={(event) =>
+                        setDistrictStockTrendRegion(event.target.value)
+                      }
+                      inputProps={{
+                        name: "DSL_region_name_selector",
+                        id: "DSL_region_name_selector",
+                      }}
+                    >
+                      {districtStockTrendRegionFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
                     className={classes.districtSelectMargin}
                     variant="outlined"
                     margin="dense"
@@ -806,7 +907,7 @@ export function StockManagementPanel() {
               >
                 <Grid container spacing={3}>
                   <Grid item xs={12} className={classes.chipPadding}>
-                    {refillrateChipData.map(function (district) {
+                    {refillrateChipData?.map(function (district) {
                       return (
                         <Chip
                           key={district}

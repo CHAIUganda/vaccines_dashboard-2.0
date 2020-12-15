@@ -120,7 +120,7 @@ const BootstrapInput = withStyles((theme) => ({
 
 export function ColdChainPanel() {
   const classes = useStyles();
-  const [value, setValue] = useState(4);
+  const [value, setValue] = useState(0);
 
   // Extract required global state variables
   const {
@@ -163,12 +163,14 @@ export function ColdChainPanel() {
 
   const [eligibilityDistrict, setEligibilityDistrict] = useState(district);
 
+  const [eligibilityRegion, setEligibilityRegion] = useState(region);
+
   const [eligibilityStartQuarter, setEligibilityStartQuarter] = useState(
-    `${currentYear - 1}01`,
+    `${currentYear - 1}01`
   );
 
   const [eligibilityEndQuarter, setEligibilityEndQuarter] = useState(
-    `${currentYear - 1}04`,
+    `${currentYear - 1}04`
   );
 
   // Fetch Eligibility Data
@@ -177,24 +179,34 @@ export function ColdChainPanel() {
       eligibilityStartQuarter,
       eligibilityEndQuarter,
       eligibilityDistrict,
+      eligibilityRegion
     );
+
+    getDistricts(eligibilityRegion);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eligibilityStartQuarter, eligibilityEndQuarter, eligibilityDistrict]);
+  }, [
+    eligibilityStartQuarter,
+    eligibilityEndQuarter,
+    eligibilityDistrict,
+    eligibilityRegion,
+  ]);
 
   // Functionality
 
   const [functionalityDistrict, setFunctionalityDistrict] = useState(district);
+  const [functionalityRegion, setFunctionalityRegion] = useState(region);
+
   const [functionalityCareLevel, setFunctionalityCareLevel] = useState(
     // coldChainCareLevels[0]
-    defaultCareLevel,
+    defaultCareLevel
   );
 
   const [functionalityStartQuarter, setFunctionalityStartQuarter] = useState(
-    `${currentYear - 1}01`,
+    `${currentYear - 1}01`
   );
 
   const [functionalityEndQuarter, setFunctionalityEndQuarter] = useState(
-    `${currentYear - 1}04`,
+    `${currentYear - 1}04`
   );
 
   // Fetch Functionality Data
@@ -204,25 +216,30 @@ export function ColdChainPanel() {
       functionalityEndQuarter,
       functionalityDistrict,
       functionalityCareLevel,
+      functionalityRegion
     );
+    getDistricts(functionalityRegion);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     functionalityStartQuarter,
     functionalityEndQuarter,
     functionalityDistrict,
     functionalityCareLevel,
+    functionalityRegion,
   ]);
 
   // Capacity
   const [capacityDistrict, setCapacityDistrict] = useState(district);
+  const [capacityRegion, setCapacityRegion] = useState(region);
+
   const [capacityCareLevel, setCapacityCareLevel] = useState(defaultCareLevel);
 
   const [capacityStartQuarter, setCapacityStartQuarter] = useState(
-    `${currentYear - 1}01`,
+    `${currentYear - 1}01`
   );
 
   const [capacityEndQuarter, setCapacityEndQuarter] = useState(
-    `${currentYear - 1}04`,
+    `${currentYear - 1}04`
   );
 
   // Fetch Capacity Data
@@ -232,29 +249,46 @@ export function ColdChainPanel() {
       capacityEndQuarter,
       capacityDistrict,
       capacityCareLevel,
+      capacityRegion
     );
+
+    getDistricts(capacityRegion);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     capacityStartQuarter,
     capacityEndQuarter,
     capacityDistrict,
     capacityCareLevel,
+    capacityRegion,
   ]);
 
   // Optimality
 
   const [optimalityDistrict, setOptimalityDistrict] = useState(district);
+  const [optimalityRegion, setOptimalityRegion] = useState(region);
+
   const [optimalityCareLevel, setOptimalityCareLevel] = useState(
-    defaultCareLevel,
+    defaultCareLevel
   );
 
   const [optimalityYear, setOptimalityYear] = useState(`${currentYear - 1}`);
 
   // Fetch Optimality Data
   useEffect(() => {
-    getOptimalityData(optimalityYear, optimalityDistrict, optimalityCareLevel);
+    getOptimalityData(
+      optimalityYear,
+      optimalityDistrict,
+      optimalityCareLevel,
+      optimalityRegion
+    );
+    getDistricts(optimalityRegion);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [optimalityYear, optimalityDistrict, optimalityCareLevel]);
+  }, [
+    optimalityYear,
+    optimalityDistrict,
+    optimalityCareLevel,
+    optimalityRegion,
+  ]);
 
   // Temperature Monitoring
 
@@ -276,7 +310,7 @@ export function ColdChainPanel() {
   ] = useState(district);
 
   const [temperatureMonitoringYear, setTemperatureMonitoringYear] = useState(
-    `${currentYear}`,
+    `${currentYear}`
   );
 
   // Fetch Temperature Monitoring Data
@@ -284,7 +318,7 @@ export function ColdChainPanel() {
     getTemperatureMonitoringData(
       temperatureMonitoringYear,
       temperatureMonitoringDistrict,
-      temperatureMonitoringRegion,
+      temperatureMonitoringRegion
     );
 
     getDistricts(temperatureMonitoringRegion);
@@ -332,6 +366,12 @@ export function ColdChainPanel() {
     </MenuItem>
   ));
 
+  const eligibilityRegionFilter = regions?.map((region) => (
+    <MenuItem value={region} key={region} className={classes.liItems}>
+      {region}
+    </MenuItem>
+  ));
+
   // -----------------------------------------------------------------------
   // Functionality  Filters
   // -----------------------------------------------------------------------
@@ -373,6 +413,11 @@ export function ColdChainPanel() {
     </MenuItem>
   ));
 
+  const functionalityRegionFilter = regions?.map((region) => (
+    <MenuItem value={region} key={region} className={classes.liItems}>
+      {region}
+    </MenuItem>
+  ));
   // -----------------------------------------------------------------------
   // Capacity  Filters
   // -----------------------------------------------------------------------
@@ -414,6 +459,12 @@ export function ColdChainPanel() {
     </MenuItem>
   ));
 
+  const capacityRegionFilter = regions?.map((region) => (
+    <MenuItem value={region} key={region} className={classes.liItems}>
+      {region}
+    </MenuItem>
+  ));
+
   // -----------------------------------------------------------------------
   // Optimality  Filters
   // -----------------------------------------------------------------------
@@ -436,6 +487,12 @@ export function ColdChainPanel() {
   const optimalityCareLevelFilter = coldChainCareLevels?.map((careLevel) => (
     <MenuItem value={careLevel} key={careLevel} className={classes.liItems}>
       {careLevel}
+    </MenuItem>
+  ));
+
+  const optimalityRegionFilter = regions?.map((region) => (
+    <MenuItem value={region} key={region} className={classes.liItems}>
+      {region}
     </MenuItem>
   ));
 
@@ -649,6 +706,32 @@ export function ColdChainPanel() {
                     </Select>
                   </FormControl>
                   <FormControl
+                    className={classes.formControl}
+                    variant='outlined'
+                    margin='dense'
+                  >
+                    <InputLabel
+                      htmlFor='EF_Region'
+                      className={classes.selectorLables}
+                    >
+                      Region
+                    </InputLabel>
+                    <Select
+                      renderValue={(selected) => selected}
+                      className={classes.selector_background}
+                      value={eligibilityRegion}
+                      onChange={(event) => {
+                        setEligibilityRegion(event.target.value);
+                      }}
+                      inputProps={{
+                        name: 'EL_region_selector',
+                        id: 'EL_region_selector',
+                      }}
+                    >
+                      {eligibilityRegionFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
                     className={classes.districtSelectMargin}
                     variant='outlined'
                     margin='dense'
@@ -722,6 +805,32 @@ export function ColdChainPanel() {
                       input={<BootstrapInput />}
                     >
                       {functionalityEndYearFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    className={classes.formControl}
+                    variant='outlined'
+                    margin='dense'
+                  >
+                    <InputLabel
+                      htmlFor='F_Region'
+                      className={classes.selectorLables}
+                    >
+                      Region
+                    </InputLabel>
+                    <Select
+                      renderValue={(selected) => selected}
+                      className={classes.selector_background}
+                      value={functionalityRegion}
+                      onChange={(event) => {
+                        setFunctionalityRegion(event.target.value);
+                      }}
+                      inputProps={{
+                        name: 'F_region_selector',
+                        id: 'F_region_selector',
+                      }}
+                    >
+                      {functionalityRegionFilter}
                     </Select>
                   </FormControl>
                   <FormControl
@@ -833,6 +942,32 @@ export function ColdChainPanel() {
                     margin='dense'
                   >
                     <InputLabel
+                      htmlFor='C_Region'
+                      className={classes.selectorLables}
+                    >
+                      Region
+                    </InputLabel>
+                    <Select
+                      renderValue={(selected) => selected}
+                      className={classes.selector_background}
+                      value={capacityRegion}
+                      onChange={(event) => {
+                        setCapacityRegion(event.target.value);
+                      }}
+                      inputProps={{
+                        name: 'C_region_selector',
+                        id: 'C_region_selector',
+                      }}
+                    >
+                      {capacityRegionFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    className={classes.formControl}
+                    variant='outlined'
+                    margin='dense'
+                  >
+                    <InputLabel
                       htmlFor='District'
                       className={classes.selectorLables}
                     >
@@ -905,6 +1040,32 @@ export function ColdChainPanel() {
                       }}
                     >
                       {optimalityYearFilter}
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    className={classes.formControl}
+                    variant='outlined'
+                    margin='dense'
+                  >
+                    <InputLabel
+                      htmlFor='O_Region'
+                      className={classes.selectorLables}
+                    >
+                      Region
+                    </InputLabel>
+                    <Select
+                      renderValue={(selected) => selected}
+                      className={classes.selector_background}
+                      value={optimalityRegion}
+                      onChange={(event) => {
+                        setOptimalityRegion(event.target.value);
+                      }}
+                      inputProps={{
+                        name: 'O_region_selector',
+                        id: 'O_region_selector',
+                      }}
+                    >
+                      {optimalityRegionFilter}
                     </Select>
                   </FormControl>
                   <FormControl

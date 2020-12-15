@@ -21,6 +21,7 @@ const initialStockManagementState = {
   defaultVaccine: "PENTA",
   defaultDistrict: ["Abim District"],
   district: "national",
+  region: "ALL",
 };
 
 // Create context
@@ -103,7 +104,13 @@ export const StockManagementContextProvider = ({ children }) => {
     }
   };
 
-  const getRefillRateData = async (district, endMonth, startMonth, vaccine) => {
+  const getRefillRateData = async (
+    district,
+    endMonth,
+    startMonth,
+    vaccine,
+    region
+  ) => {
     const quotedAndCommaSeparatedDistricts = "'" + district.join("','") + "'";
 
     dispatch({
@@ -114,11 +121,11 @@ export const StockManagementContextProvider = ({ children }) => {
     try {
       const stockByDistrictVaccineData = await axios.get(
         district.length === 1
-          ? `http://${apiEndpoint}${port}/api/stock/stockbydistrictvaccine?district=${district}&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}`
-          : `http://${apiEndpoint}${port}/api/stock/stockbydistrictvaccine?districts=[${quotedAndCommaSeparatedDistricts}]&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}`
+          ? `http://${apiEndpoint}${port}/api/stock/stockbydistrictvaccine?district=${district}&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}&region=${region}`
+          : `http://${apiEndpoint}${port}/api/stock/stockbydistrictvaccine?districts=[${quotedAndCommaSeparatedDistricts}]&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}&region=${region}`
       );
       const atHandStockByDistrictData = await axios.get(
-        `http://${apiEndpoint}${port}/api/stock/athandbydistrict?district=&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}`
+        `http://${apiEndpoint}${port}/api/stock/athandbydistrict?district=&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}&region=${region}`
       );
 
       const payload = {
@@ -148,7 +155,8 @@ export const StockManagementContextProvider = ({ children }) => {
     district,
     endMonth,
     startMonth,
-    vaccine
+    vaccine,
+    region
   ) => {
     const quotedAndCommaSeparatedDistricts = "'" + district.join("','") + "'";
 
@@ -165,7 +173,7 @@ export const StockManagementContextProvider = ({ children }) => {
       );
 
       const atHandStockByDistrictStockTrendData = await axios.get(
-        `http://${apiEndpoint}${port}/api/stock/athandbydistrict?district=&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}`
+        `http://${apiEndpoint}${port}/api/stock/athandbydistrict?district=&endMonth=${endMonth}&startMonth=${startMonth}&vaccine=${vaccine}&region=${region}`
       );
 
       const paylod = {
@@ -205,6 +213,7 @@ export const StockManagementContextProvider = ({ children }) => {
         defaultEndMonth: state.defaultEndMonth,
         defaultVaccine: state.defaultVaccine,
         defaultDistrict: state.defaultDistrict,
+        region: state.region,
         getStockManagementMonths,
         getDistrictStockLevelsData,
         getRefillRateData,

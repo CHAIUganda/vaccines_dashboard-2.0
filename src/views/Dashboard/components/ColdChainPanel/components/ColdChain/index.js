@@ -1,7 +1,8 @@
-import React, { useState, useMemo, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 // Bring in our cold chain context
 import { ColdChainContext } from '../../../../../../context/ColdChain/ColdChainState';
+import { OverviewContext } from '../../../../../../context/Overview/OverviewState';
 
 // Material components
 import { Grid } from '@material-ui/core';
@@ -34,12 +35,6 @@ import TemperatureMonitoringReportRateHeatMap from './TemperatureMonitoringRepor
 import { useStyles } from '../../../styles';
 const mainCardBackgroundColor =
   'linear-gradient(0deg,#1e3c72 0,#1e3c72 1%,#2a5298)';
-
-// const surplusCardBackgroundImage =
-//   'linear-gradient(0deg, rgb(36, 197, 63) 0px, rgb(36, 197, 63) 1%, rgb(93, 246, 115))';
-
-// const shortageCardBackgroundImage =
-//   'linear-gradient(0deg, #f83245 0px, #f83245 1%, #ff6372)';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -90,8 +85,14 @@ export default function ColdChain({ parentTab }) {
   // Grab our context
 
   const { eligibility, functionality, capacity, optimality } = useContext(
-    ColdChainContext,
+    ColdChainContext
   );
+
+  const { coldChainOverviewData } = useContext(OverviewContext);
+
+  const [eligibleFacilities, setEligibleFacilities] = useState('');
+  const [functionalityPercentage, setFunctionalityPercentage] = useState('');
+  const [sufficiencyAtNational, setSufficiencyAtNational] = useState('');
 
   const classes = useStyles();
   const [value, setValue] = useState(0);
@@ -100,16 +101,30 @@ export default function ColdChain({ parentTab }) {
     setValue(newValue);
   };
 
-  const eligibleFacilities = new Intl.NumberFormat('lg-UG').format(
-    eligibility?.eligibilityMetricsChartData?.total_eligible_facilities,
-  );
+  useEffect(() => {
+    setEligibleFacilities(
+      new Intl.NumberFormat('lg-UG').format(
+        eligibility?.eligibilityMetricsChartData?.total_eligible_facilities
+      )
+    );
+  }, [eligibility]);
 
-  const functionality_percentage =
-    Math.round(
-      functionality?.functionalityMetricsChartData
-        ?.filter((a) => a.functionality_percentage)
-        ?.map((d) => d.functionality_percentage),
-    ) || 0;
+  useEffect(() => {
+    setFunctionalityPercentage(
+      Math.round(
+        functionality?.functionalityMetricsChartData
+          ?.filter((a) => a.functionality_percentage)
+          ?.map((d) => d.functionality_percentage)
+      ) || 0
+    );
+  }, [functionality]);
+
+  useEffect(() => {
+    setSufficiencyAtNational(
+      coldChainOverviewData?.coldChainOverviewData
+        ?.sufficiency_percentage_at_sites
+    );
+  }, [coldChainOverviewData]);
 
   // const capacity_shortage_negative =
   //   capacity?.capacityMetricsChartData?.gap_metrics.negative_gap_percentage;
@@ -118,7 +133,7 @@ export default function ColdChain({ parentTab }) {
   //   capacity?.capacityMetricsChartData?.gap_metrics.positive_gap_percentage;
 
   const totalAvailableLiters = new Intl.NumberFormat('lg-UG').format(
-    capacity?.capacityMetricsChartData?.overall_total_available,
+    capacity?.capacityMetricsChartData?.overall_total_available
   );
 
   const CCE_dvs_optimality_percentage =
@@ -173,7 +188,7 @@ export default function ColdChain({ parentTab }) {
                             <ColdChainCard
                               title={'Functionality'}
                               type='advanced'
-                              metric={functionality_percentage}
+                              metric={functionalityPercentage}
                               isPercentage
                               backgroundImage={mainCardBackgroundColor}
                               isLoading={functionality.isLoading}
@@ -226,10 +241,10 @@ export default function ColdChain({ parentTab }) {
                       <Grid item lg={4} md={4} xl={4} xs={12}>
                         <ColdChainCard
                           title={`CCE Sufficiency`}
-                          metric={totalAvailableLiters}
+                          metric={sufficiencyAtNational}
                           sign={'ltrs'}
                           backgroundImage={mainCardBackgroundColor}
-                          isLoading={capacity.isLoading}
+                          isLoading={capacity?.isLoading}
                           module={'coldchain'}
                         />
                       </Grid>
