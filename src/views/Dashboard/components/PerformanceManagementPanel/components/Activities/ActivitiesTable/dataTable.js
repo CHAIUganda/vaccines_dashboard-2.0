@@ -755,9 +755,27 @@ export const DataTable = () => {
     lastWorkPlanQuarter,
   } = useContext(PerformanceManagementContext);
 
+  const startYear = currentYearStartQuarter.slice(0, 4);
+  const startQuarter = currentYearStartQuarter.slice(4, 6).includes("01")
+    ? "Q1"
+    : currentYearStartQuarter.slice(4, 6).includes("02")
+    ? "Q2"
+    : currentYearStartQuarter.slice(4, 6).includes("03")
+    ? "Q3"
+    : "Q4";
+
+  const endYear = lastWorkPlanQuarter.slice(0, 4);
+  const endQuarter = lastWorkPlanQuarter.slice(4, 6).includes("01")
+    ? "Q1"
+    : lastWorkPlanQuarter.slice(4, 6).includes("02")
+    ? "Q2"
+    : lastWorkPlanQuarter.slice(4, 6).includes("03")
+    ? "Q3"
+    : "Q4";
+
   const { allActivities, logEntries, isLoading } = activities;
 
-  const title = `Activities workplan for ${currentYearStartQuarter} - ${lastWorkPlanQuarter}`;
+  const title = `Activities workplan for ${startYear}-${startQuarter} to ${endYear}-${endQuarter}`;
 
   useEffect(() => {
     setData(allActivities);

@@ -68,6 +68,7 @@ export const DataTable = () => {
       cellStyle: (rowData) => ({ fontSize: 13 }),
       headerStyle: { fontSize: 15, fontWeight: 700 },
       render: (rowData) => rowData.district__name.replace(/ District/g, ""),
+      defaultSort: "asc",
     },
     {
       field: "total_eligible_facility",
