@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
   filters2: {
     float: "right",
     marginTop: "-25px",
+    width: "max-content",
   },
   appBar: {
     backgroundColor: "white",

@@ -115,11 +115,6 @@ export const GlobalStateProvider = ({ children }) => {
     try {
       const res = await axios.get(`http://${apiEndpoint}${port}/api/districts`);
 
-      // const districts = [
-      //   'National',
-      //   ...res.data.map((district) => district.name),
-      // ];
-
       if (region) {
         const districtsInRegion = res.data.filter(
           (district) => district.region__name === region
@@ -127,7 +122,10 @@ export const GlobalStateProvider = ({ children }) => {
 
         dispatch({
           type: 'GET_DISTRICTS',
-          payload: districtsInRegion,
+          payload:
+            region === 'ALL' || region === 'National'
+              ? res.data
+              : districtsInRegion,
         });
       } else {
         dispatch({
@@ -149,7 +147,11 @@ export const GlobalStateProvider = ({ children }) => {
         `http://${apiEndpoint}${port}/coldchain/api/regions`
       );
 
-      const regions = ['National', ...res.data.map((region) => region.name)];
+      const filteredRegions = [
+        ...res.data.map((region) => region.name),
+      ].filter((region) => region.includes('Region'));
+
+      const regions = ['ALL', ...filteredRegions];
 
       dispatch({
         type: 'GET_REGIONS',

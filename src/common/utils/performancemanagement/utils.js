@@ -279,22 +279,22 @@ export const getActivityCompletionStatusChartData = (data = []) => {
         {
           name: "Ongoing",
           y: data?.percentages?.ongoing_percentage,
-          color: "#FC6F6F",
+          color: gradients.ongoing,
         },
         {
           name: "Not Completed",
           y: data?.percentages?.not_done_percentage,
-          color: "#F8E658",
+          color: gradients.not_done,
         },
         {
           name: "Completed",
           y: data?.percentages?.completed_percentage,
-          color: "#4E596A",
+          color: gradients.completed,
         },
         {
           name: "Partially Done",
           y: data?.percentages?.partially_done_percentage,
-          color: "#45BA34",
+          color: gradients.partially_done,
         },
       ],
       size: "80%",
@@ -320,7 +320,7 @@ export const getActivityByResponsibleOrganisationChartData = (data = []) => {
       color: gradients.completed,
     },
     {
-      name: "Not Done",
+      name: "Not Completed",
       data: data?.map((a) => a.not_done).sort((a, b) => a - b),
       color: gradients.not_done,
     },
