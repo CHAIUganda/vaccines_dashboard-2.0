@@ -23,7 +23,7 @@
     "react-virtualized": "^9.21.2",
     "serialize-javascript": "^2.1.1",
     "typeface-roboto": "^0.0.75",
-    "underscore": "^1.9.2"
+    "underscore": "^1.12.1"
   },
   "scripts": {
     "start": "react-scripts start",
