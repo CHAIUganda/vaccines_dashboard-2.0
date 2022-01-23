@@ -33,7 +33,7 @@ const generate_quarters = () => {
 
   // Work around for staging. Uncomment and use above when in prod 23.01.2022
   for (let i = year - 5; i < year + 1; i++) {
-    x.push(i);
+    years.push(i);
   }
 
   for (let i = 0; i <= years.length - 1; i++) {
