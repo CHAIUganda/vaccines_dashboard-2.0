@@ -1,17 +1,17 @@
-import React, { createContext, useReducer } from "react";
-import axios from "axios";
+import React, { createContext, useReducer } from 'react';
+import axios from 'axios';
 
-import PerformanceManagementReducer from "./reducer";
+import PerformanceManagementReducer from './reducer';
 
-import { port, date } from "../GlobalState";
+import { port, date } from '../GlobalState';
 
-const apiEndpoint = require("../../env_config").default;
+const apiEndpoint = require('../../env_config').default;
 const sessionStorage = window.sessionStorage;
-const token = sessionStorage.getItem("token");
+const token = sessionStorage.getItem('token');
 
 const OPTIONS = {
-  "Content-Type": "application/json",
-  Authorization: "Token " + token,
+  'Content-Type': 'application/json',
+  Authorization: 'Token ' + token,
 };
 
 const generate_quarters = () => {
@@ -20,21 +20,26 @@ const generate_quarters = () => {
   let years = [];
   let year = date.getFullYear();
   let quarters_list = [
-    ["01", "Q1"],
-    ["02", "Q2"],
-    ["03", "Q3"],
-    ["04", "Q4"],
+    ['01', 'Q1'],
+    ['02', 'Q2'],
+    ['03', 'Q3'],
+    ['04', 'Q4'],
   ];
 
   // Get workplan time range (18 months, ~ 2 years)
-  for (let i = year + 1; i > year - 1; i--) {
-    years.push(i);
+  // for (let i = year + 1; i > year - 1; i--) {
+  //   years.push(i);
+  // }
+
+  // Work around for staging. Uncomment and use above when in prod 23.01.2022
+  for (let i = year - 5; i < year + 1; i++) {
+    x.push(i);
   }
 
   for (let i = 0; i <= years.length - 1; i++) {
     for (let j = 0; j <= quarters_list.length - 1; j++) {
       quarters.push({
-        name: `${years[i] + " - " + quarters_list[j][1]} `,
+        name: `${years[i] + ' - ' + quarters_list[j][1]} `,
         value: `${years[i] + quarters_list[j][0]}`,
       });
     }
@@ -64,9 +69,9 @@ const initialColdChainState = {
   ISC: [],
   organisations: [],
   fundingSources: [],
-  defaultOrganisation: "All",
-  defaultISC: "All",
-  defaultFundingSource: "All",
+  defaultOrganisation: 'All',
+  defaultISC: 'All',
+  defaultFundingSource: 'All',
   defaultFundingStatus: true,
   activityCompletionStatus: {},
   fundingStatus: {},
@@ -92,16 +97,16 @@ export const PerformanceManagementContextProvider = ({ children }) => {
         `http://${apiEndpoint}${port}/performance_management/api/immunizationcomponents`
       );
 
-      const ISC = ["All", ...ISCdata.data.results.map((isc) => isc.name)];
+      const ISC = ['All', ...ISCdata.data.results.map((isc) => isc.name)];
 
       dispatch({
-        type: "GET_ISCs",
+        type: 'GET_ISCs',
         payload: ISC,
       });
     } catch (err) {
       dispatch({
-        type: "GET_ISCs_ERROR",
-        payload: "An error occured getting ISCs from backend",
+        type: 'GET_ISCs_ERROR',
+        payload: 'An error occured getting ISCs from backend',
       });
     }
   };
@@ -113,18 +118,18 @@ export const PerformanceManagementContextProvider = ({ children }) => {
       );
 
       const ORGS = [
-        "All",
+        'All',
         ...organisations.data.results.map((org) => org.name),
       ];
 
       dispatch({
-        type: "GET_ORGANISATIONS",
+        type: 'GET_ORGANISATIONS',
         payload: ORGS,
       });
     } catch (err) {
       dispatch({
-        type: "GET_ORGANISATIONS_ERROR",
-        payload: "An error occured getting organisations from backend",
+        type: 'GET_ORGANISATIONS_ERROR',
+        payload: 'An error occured getting organisations from backend',
       });
     }
   };
@@ -136,18 +141,18 @@ export const PerformanceManagementContextProvider = ({ children }) => {
       );
 
       const FUNDING_SOURCES = [
-        "All",
+        'All',
         ...organisations.data.results.map((org) => org.name),
       ];
 
       dispatch({
-        type: "GET_FUNDING_SOURCES",
+        type: 'GET_FUNDING_SOURCES',
         payload: FUNDING_SOURCES,
       });
     } catch (err) {
       dispatch({
-        type: "GET_FUNDING_SOURCES_ERROR",
-        payload: "An error occured getting funding sources from backend",
+        type: 'GET_FUNDING_SOURCES_ERROR',
+        payload: 'An error occured getting funding sources from backend',
       });
     }
   };
@@ -159,7 +164,7 @@ export const PerformanceManagementContextProvider = ({ children }) => {
     isc
   ) => {
     dispatch({
-      type: "LOADING_PLANNED_ACTIVITIES_DATA",
+      type: 'LOADING_PLANNED_ACTIVITIES_DATA',
       payload: { isLoading: true },
     });
 
@@ -185,12 +190,12 @@ export const PerformanceManagementContextProvider = ({ children }) => {
       };
 
       dispatch({
-        type: "GET_PLANNED_ACTIVITIES_DATA",
+        type: 'GET_PLANNED_ACTIVITIES_DATA',
         payload: payload,
       });
     } catch (err) {
       dispatch({
-        type: "GET_PLANNED_ACTIVITIES_PER_QUARTER_DATA_ERROR",
+        type: 'GET_PLANNED_ACTIVITIES_PER_QUARTER_DATA_ERROR',
         payload: { isLoading: true },
       });
     }
@@ -204,10 +209,10 @@ export const PerformanceManagementContextProvider = ({ children }) => {
     isc,
     fundingStatus
   ) => {
-    const status = fundingStatus === true ? "Secured" : "Unsecured";
+    const status = fundingStatus === true ? 'Secured' : 'Unsecured';
 
     dispatch({
-      type: "LOADING_FUNDING_STATUS_DATA",
+      type: 'LOADING_FUNDING_STATUS_DATA',
       payload: { isLoading: true },
     });
 
@@ -242,12 +247,12 @@ export const PerformanceManagementContextProvider = ({ children }) => {
       };
 
       dispatch({
-        type: "GET_FUNDING_STATUS_DATA",
+        type: 'GET_FUNDING_STATUS_DATA',
         payload: payload,
       });
     } catch (err) {
       dispatch({
-        type: "GET_FUNDING_STATUS_DATA_ERROR",
+        type: 'GET_FUNDING_STATUS_DATA_ERROR',
         payload: { isLoading: true },
       });
     }
@@ -261,9 +266,9 @@ export const PerformanceManagementContextProvider = ({ children }) => {
     isc,
     fundingStatus
   ) => {
-    const status = fundingStatus === true ? "Secured" : "Unsecured";
+    const status = fundingStatus === true ? 'Secured' : 'Unsecured';
     dispatch({
-      type: "LOADING_ALL_ACTIVITIES_DATA",
+      type: 'LOADING_ALL_ACTIVITIES_DATA',
       payload: { isLoading: true },
     });
 
@@ -273,7 +278,7 @@ export const PerformanceManagementContextProvider = ({ children }) => {
       );
 
       dispatch({
-        type: "GET_ALL_ACTIVITIES_DATA",
+        type: 'GET_ALL_ACTIVITIES_DATA',
         payload: {
           allActivities: allActivities.data.results,
           isLoading: false,
@@ -281,7 +286,7 @@ export const PerformanceManagementContextProvider = ({ children }) => {
       });
     } catch (err) {
       dispatch({
-        type: "GET_ALL_ACTIVITIES_ERROR",
+        type: 'GET_ALL_ACTIVITIES_ERROR',
         payload: { isLoading: true },
       });
     }
@@ -296,7 +301,7 @@ export const PerformanceManagementContextProvider = ({ children }) => {
     statusIndex,
     loggedInUser,
   }) => {
-    if (status === "" && comment === "") {
+    if (status === '' && comment === '') {
       // silent fail (No changes)
       return;
     }
@@ -336,8 +341,8 @@ export const PerformanceManagementContextProvider = ({ children }) => {
     editQuarterBudgetUSD,
   }) => {
     if (
-      editActivityName === "" &&
-      editISC === "" &&
+      editActivityName === '' &&
+      editISC === '' &&
       editObjective &&
       editFundingSource &&
       editFundingState &&
@@ -389,7 +394,7 @@ export const PerformanceManagementContextProvider = ({ children }) => {
 
     try {
       ids.forEach(async (id) => {
-        const _data = dataUpdate[index]["activity_status"];
+        const _data = dataUpdate[index]['activity_status'];
         const new_status = _data
           .filter((a) => a.id === id)
           .map((a) => a.status);
@@ -414,7 +419,7 @@ export const PerformanceManagementContextProvider = ({ children }) => {
 
       // trigger data reload to reflect new changes
       dispatch({
-        type: "GET_ALL_ACTIVITIES_DATA",
+        type: 'GET_ALL_ACTIVITIES_DATA',
         payload: {
           allActivities: [...dataUpdate],
           isLoading: false,
@@ -422,7 +427,7 @@ export const PerformanceManagementContextProvider = ({ children }) => {
       });
     } catch (err) {
       dispatch({
-        type: "UPDATE_ACTIVITIES_ERROR",
+        type: 'UPDATE_ACTIVITIES_ERROR',
         payload: { isLoading: true },
       });
     }

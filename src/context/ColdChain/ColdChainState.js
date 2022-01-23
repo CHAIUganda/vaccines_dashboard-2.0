@@ -10,9 +10,10 @@ import { OverviewContext } from '../../context/Overview/OverviewState';
 const apiEndpoint = require('../../env_config').default;
 
 // Cold Chain Years
+/** Generates 10 years ago including this year */
 const generateColdChainYears = () => {
   let years = [];
-  for (let i = date.getFullYear(); i > date.getFullYear() - 2; i--) {
+  for (let i = date.getFullYear(); i > date.getFullYear() - 10; i--) {
     years.push(i);
   }
 
