@@ -18,7 +18,9 @@ const OPTIONS_UNSECURE = {
 
 // Because the backend on the production runs on port 80 (default port)
 export const port =
-  apiEndpoint === 'localhost' || apiEndpoint === '35.225.92.80' ? ':9000' : '';
+  apiEndpoint === 'localhost' || apiEndpoint === '139.162.214.191'
+    ? ':9000'
+    : '';
 
 // Variables
 export const district = 'national';
@@ -147,9 +149,9 @@ export const GlobalStateProvider = ({ children }) => {
         `http://${apiEndpoint}${port}/coldchain/api/regions`
       );
 
-      const filteredRegions = [
-        ...res.data.map((region) => region.name),
-      ].filter((region) => region.includes('Region'));
+      const filteredRegions = [...res.data.map((region) => region.name)].filter(
+        (region) => region.includes('Region')
+      );
 
       const regions = ['ALL', ...filteredRegions];
 
